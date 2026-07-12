@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AmplifyHub — Emotional Journey Section</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+/* ══════════════════════════════════════════════════════════════
+   AmplifyHub · Emotional Journey — self-contained section (.ej)
+   All styles scoped under .ej so it drops into any page cleanly.
+   ══════════════════════════════════════════════════════════════ */
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+body{background:#000;font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif}
+
+.ej{
+  --gold:#FFD54A;
+  --gold-deep:#FFA726;
+  --ink:#050508;
+  --txt:#9a9ab2;
+  position:relative;
+  padding:100px 24px;
+  background:radial-gradient(120% 90% at 50% 8%,#0a0a12 0%,#050508 52%,#000 100%);
+  color:#fff;
+  font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
+  overflow:hidden;
+  isolation:isolate;
+}
+/* faint section-wide aura */
+.ej::before{
+  content:'';position:absolute;top:-10%;left:50%;width:1100px;height:700px;
+  transform:translateX(-50%);
+  background:radial-gradient(ellipse at center,rgba(255,213,74,.06),transparent 60%);
+  filter:blur(30px);pointer-events:none;z-index:-1;
+}
+.ej-wrap{max-width:1120px;margin:0 auto;position:relative}
+
+/* ── HEADING ── */
+.ej-title{
+  text-align:center;margin:0 auto 52px;max-width:18ch;
+  font-weight:800;letter-spacing:-1.5px;line-height:1.08;
+  font-size:clamp(28px,5.2vw,54px);
+}
+.ej-line{display:block;opacity:0;transform:translateY(22px);
+  transition:opacity .9s cubic-bezier(.16,1,.3,1),transform .9s cubic-bezier(.16,1,.3,1)}
+.ej.is-in .ej-line{opacity:1;transform:none}
+.ej.is-in .ej-line:nth-child(2){transition-delay:.12s}
+.ej-dim{color:#7f7f98;font-weight:700}
+.ej-gold{color:var(--gold);text-shadow:0 0 34px rgba(255,213,74,.4)}
+
+/* ── STAGE ── */
+.ej-stage{position:relative;width:100%;max-width:1120px;margin:0 auto}
+
+.ej-scene-wrap{
+  position:relative;width:100%;height:clamp(230px,62vw,330px);
+  border-radius:24px;overflow:hidden;
+  background:linear-gradient(180deg,#07070e 0%,#040407 70%,#020204 100%);
+  box-shadow:0 40px 120px rgba(0,0,0,.6),inset 0 0 0 1px rgba(255,255,255,.03);
+}
+/* cinematic vignette + top fade */
+.ej-scene-wrap::after{
+  content:'';position:absolute;inset:0;pointer-events:none;border-radius:inherit;
+  box-shadow:inset 0 0 140px 30px rgba(2,2,6,.75);
+  background:linear-gradient(180deg,rgba(5,5,8,.5) 0%,transparent 22%,transparent 78%,rgba(2,2,4,.7) 100%);
+  z-index:4;
+}
+
+/* background atmosphere layers */
+.ej-bg{position:absolute;inset:0;z-index:0;overflow:hidden}
+.ej-aura{
+  position:absolute;left:50%;top:74%;width:900px;height:640px;
+  transform:translate(-50%,-50%) translate3d(calc(var(--px,0)*-10px),calc(var(--py,0)*-8px),0);
+  background:
+    radial-gradient(circle at 50% 50%,rgba(255,183,60,.20),transparent 55%),
+    radial-gradient(circle at 42% 60%,rgba(255,213,74,.10),transparent 60%);
+  filter:blur(30px);
+  animation:ejAura 9s ease-in-out infinite;
+}
+@keyframes ejAura{0%,100%{opacity:.8}50%{opacity:1}}
+/* god-rays fanning from the sun */
+.ej-rays{
+  position:absolute;left:50%;top:76%;width:1200px;height:1200px;
+  transform:translate(-50%,-50%) translate3d(calc(var(--px,0)*-18px),calc(var(--py,0)*-11px),0);
+  background:repeating-conic-gradient(from 0deg,
+    rgba(255,213,74,.05) 0deg 1.6deg,transparent 1.6deg 13deg);
+  -webkit-mask:radial-gradient(circle,#000 2%,transparent 46%);
+  mask:radial-gradient(circle,#000 2%,transparent 46%);
+  opacity:.55;animation:ejSpin 70s linear infinite;
+}
+@keyframes ejSpin{to{transform:translate(-50%,-50%) rotate(360deg)}}
+/* moving noise grain */
+.ej-noise{
+  position:absolute;inset:-40px;opacity:.05;mix-blend-mode:overlay;pointer-events:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation:ejGrain 8s steps(6) infinite;
+}
+@keyframes ejGrain{0%{transform:translate(0,0)}50%{transform:translate(-14px,10px)}100%{transform:translate(0,0)}}
+/* drifting particles (DOM, no canvas) */
+.ej-particles{position:absolute;inset:0}
+.ej-p{
+  position:absolute;bottom:-12px;border-radius:50%;
+  background:radial-gradient(circle,var(--gold),rgba(255,213,74,0) 70%);
+  opacity:var(--o,.4);
+  animation:ejRise var(--dur,16s) linear var(--delay,0s) infinite;
+  will-change:transform,opacity;
+}
+@keyframes ejRise{
+  0%{transform:translate(0,0);opacity:0}
+  8%{opacity:var(--o,.4)}
+  90%{opacity:var(--o,.4)}
+  100%{transform:translate(var(--drift,0),-360px);opacity:0}
+}
+
+/* the mountain scene */
+.ej-scene{
+  position:absolute;inset:0;width:100%;height:100%;z-index:1;
+  transform:translate3d(calc(var(--px,0)*13px),calc(var(--py,0)*9px),0);
+}
+.ej-sun-bloom{transform-box:fill-box;transform-origin:center;animation:ejBloom 6s ease-in-out infinite}
+@keyframes ejBloom{0%,100%{opacity:.72;transform:scale(1)}50%{opacity:1;transform:scale(1.09)}}
+.ej-sun-core{transform-box:fill-box;transform-origin:center;animation:ejCore 3.6s ease-in-out infinite}
+@keyframes ejCore{0%,100%{opacity:.85;transform:scale(1)}50%{opacity:1;transform:scale(1.18)}}
+.ej-roadline{stroke-dasharray:2 14;animation:ejRoad 1.7s linear infinite}
+@keyframes ejRoad{to{stroke-dashoffset:-16}}
+.ej-fig-glow{transform-box:fill-box;transform-origin:center;animation:ejBloom 5s ease-in-out infinite}
+
+/* connector paths */
+.ej-links{display:none}
+.ej-link{fill:none;stroke:rgba(255,213,74,.13);stroke-width:1.1}
+.ej-link-c{
+  fill:none;stroke:var(--gold);stroke-width:2;stroke-linecap:round;
+  stroke-dasharray:90 1000;stroke-dashoffset:0;
+  filter:drop-shadow(0 0 5px rgba(255,213,74,.75));
+  animation:ejDash 5.5s linear infinite;
+}
+@keyframes ejDash{to{stroke-dashoffset:-1090}}
+
+/* ── GLASS CARDS ── */
+.ej-cards{display:grid;grid-template-columns:1fr;gap:12px;margin-top:18px}
+.ej-card{
+  position:relative;opacity:0;
+  transition:opacity .8s cubic-bezier(.16,1,.3,1);
+  transition-delay:calc(var(--i,0)*.12s + .15s);
+}
+.ej.is-in .ej-card{opacity:1}
+.ej-card__float{animation:ejFloat var(--fdur,7s) ease-in-out var(--fdelay,0s) infinite}
+@keyframes ejFloat{0%,100%{transform:translateY(0) rotate(0deg)}50%{transform:translateY(-9px) rotate(var(--rot,.6deg))}}
+.ej-card__body{
+  display:flex;align-items:center;gap:14px;padding:16px 18px;
+  background:rgba(255,255,255,.04);
+  backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);
+  border:1px solid rgba(255,213,74,.15);
+  border-radius:22px;
+  box-shadow:0 18px 44px rgba(0,0,0,.42),0 0 26px rgba(255,213,74,.05);
+  transition:transform .4s cubic-bezier(.16,1,.3,1),box-shadow .4s ease,border-color .4s ease;
+  cursor:default;
+}
+.ej-card:hover .ej-card__body{
+  transform:translateY(-8px) scale(1.03);
+  border-color:rgba(255,213,74,.42);
+  box-shadow:0 30px 70px rgba(0,0,0,.55),0 0 46px rgba(255,213,74,.14);
+}
+.ej-ic{
+  width:46px;height:46px;min-width:46px;border-radius:50%;
+  display:grid;place-items:center;
+  border:1px solid rgba(255,213,74,.22);
+  background:radial-gradient(circle at 50% 38%,rgba(255,213,74,.14),rgba(255,213,74,.03));
+  transition:border-color .4s ease,box-shadow .4s ease;
+}
+.ej-ic svg{width:22px;height:22px;fill:none;stroke:var(--gold);stroke-width:1.6;
+  stroke-linecap:round;stroke-linejoin:round;transition:filter .4s ease}
+.ej-card:hover .ej-ic{border-color:rgba(255,213,74,.5);box-shadow:0 0 22px rgba(255,213,74,.3)}
+.ej-card:hover .ej-ic svg{filter:drop-shadow(0 0 6px rgba(255,213,74,.75))}
+.ej-card__txt strong{display:block;font-size:14px;font-weight:700;color:#fff;letter-spacing:-.2px}
+.ej-card__txt span{display:block;font-size:12.5px;color:var(--txt);margin-top:3px;line-height:1.4}
+
+/* ── FOOTER PILL ── */
+.ej-foot{text-align:center;margin-top:28px}
+.ej-foot-text{
+  display:inline-flex;align-items:center;justify-content:center;
+  padding:14px 30px;border-radius:100px;
+  background:rgba(255,255,255,.03);
+  border:1px solid rgba(255,213,74,.14);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  box-shadow:0 14px 44px rgba(0,0,0,.45);
+  font-size:clamp(15px,2.2vw,19px);font-weight:700;letter-spacing:-.2px;
+  opacity:0;transform:translateY(16px);
+  transition:opacity .9s ease .5s,transform .9s cubic-bezier(.16,1,.3,1) .5s;
+}
+.ej.is-in .ej-foot-text{opacity:1;transform:none}
+
+/* ══ DESKTOP: cinematic absolute layout ══ */
+@media(min-width:560px){.ej-cards{grid-template-columns:1fr 1fr}}
+@media(min-width:920px){
+  .ej-stage{aspect-ratio:1120/580}
+  .ej-scene-wrap{position:absolute;inset:0;height:auto;border-radius:30px}
+  .ej-links{display:block;position:absolute;inset:0;width:100%;height:100%;z-index:3;
+    transform:translate3d(calc(var(--px,0)*7px),calc(var(--py,0)*5px),0)}
+  .ej-cards{position:absolute;inset:0;margin:0;display:block;z-index:5}
+  .ej-card{
+    position:absolute;left:var(--x);top:var(--y);width:252px;
+    transform:translate(calc(-50% + var(--px,0)*var(--d,16)*1px),
+                        calc(-50% + var(--py,0)*var(--d,16)*.55px));
+  }
+  /* opacity reveal only — transform reserved for centering + parallax */
+  .ej-card{transition:opacity .8s cubic-bezier(.16,1,.3,1);
+    transition-delay:calc(var(--i,0)*.12s + .15s)}
+  .ej-foot{position:absolute;left:50%;bottom:14px;transform:translateX(-50%);margin:0;z-index:6}
+  .ej.is-in .ej-foot-text{transform:none}
+}
+
+/* ══ REDUCED MOTION ══ */
+@media(prefers-reduced-motion:reduce){
+  .ej-aura,.ej-rays,.ej-noise,.ej-p,.ej-sun-bloom,.ej-sun-core,.ej-roadline,
+  .ej-fig-glow,.ej-card__float,.ej-link-c{animation:none!important}
+  .ej-line,.ej-card,.ej-foot-text{opacity:1!important;transition:none!important}
+  .ej-line{transform:none!important}
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════════════ EMOTIONAL JOURNEY SECTION ══════════════════ -->
+<section class="ej" id="ejSection" aria-labelledby="ejHeading">
+  <div class="ej-wrap">
+
+    <h2 class="ej-title" id="ejHeading">
+      <span class="ej-line ej-dim">Every confident closer</span>
+      <span class="ej-line">started exactly where <span class="ej-gold">you are.</span></span>
+    </h2>
+
+    <div class="ej-stage" id="ejStage">
+
+      <!-- MOUNTAIN SCENE -->
+      <div class="ej-scene-wrap">
+        <div class="ej-bg" aria-hidden="true">
+          <div class="ej-aura"></div>
+          <div class="ej-rays"></div>
+          <div class="ej-noise"></div>
+          <div class="ej-particles" id="ejParticles"></div>
+        </div>
+
+        <svg class="ej-scene" viewBox="0 0 1000 600" preserveAspectRatio="xMidYMax slice"
+             role="img" aria-label="A lone figure walking a glowing golden road toward a sunrise between mountains.">
+          <defs>
+            <radialGradient id="ejBloomG" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#FFE9A8" stop-opacity=".55"/>
+              <stop offset="45%" stop-color="#FFB63C" stop-opacity=".22"/>
+              <stop offset="100%" stop-color="#FFB63C" stop-opacity="0"/>
+            </radialGradient>
+            <radialGradient id="ejSunG" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#ffffff"/>
+              <stop offset="30%" stop-color="#FFE9A8"/>
+              <stop offset="70%" stop-color="#FFC24A" stop-opacity=".8"/>
+              <stop offset="100%" stop-color="#FFB63C" stop-opacity="0"/>
+            </radialGradient>
+            <linearGradient id="ejRoadG" gradientUnits="objectBoundingBox" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#FFE7A0" stop-opacity=".9"/>
+              <stop offset="40%" stop-color="#FFD54A" stop-opacity=".4"/>
+              <stop offset="100%" stop-color="#FFD54A" stop-opacity="0"/>
+            </linearGradient>
+            <linearGradient id="ejBackPeak" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#15131f"/>
+              <stop offset="100%" stop-color="#08070d"/>
+            </linearGradient>
+          </defs>
+
+          <!-- horizon bloom -->
+          <ellipse class="ej-sun-bloom" cx="502" cy="452" rx="300" ry="120" fill="url(#ejBloomG)"/>
+
+          <!-- distant ridge (depth) -->
+          <path d="M-40,470 L180,360 L360,440 L520,395 L700,455 L1040,380 L1040,600 L-40,600 Z"
+                fill="#0a0912" opacity=".7"/>
+
+          <!-- tall back peak with gold rim light -->
+          <path d="M250,540 L560,150 L850,540 Z" fill="url(#ejBackPeak)"/>
+          <path d="M560,150 L850,540" stroke="#FFD54A" stroke-opacity=".4" stroke-width="2" fill="none"/>
+          <path d="M560,150 L602,238 L582,232 L560,262 L540,230 L520,240 Z" fill="#FFD54A" opacity=".12"/>
+
+          <!-- sun core -->
+          <circle class="ej-sun-core" cx="502" cy="446" r="56" fill="url(#ejSunG)"/>
+          <circle class="ej-sun-core" cx="502" cy="446" r="13" fill="#fff" opacity=".92"/>
+
+          <!-- foreground valley ridges (near-black) framing the road -->
+          <path d="M-40,600 L-40,438 C 150,478 300,492 502,500 L502,600 Z" fill="#040406"/>
+          <path d="M1040,600 L1040,438 C 850,478 700,492 502,500 L502,600 Z" fill="#040406"/>
+
+          <!-- golden road up the valley -->
+          <path d="M454,600 C 482,548 496,500 500,458 L508,458 C 514,500 526,548 552,600 Z"
+                fill="url(#ejRoadG)"/>
+          <line class="ej-roadline" x1="503" y1="600" x2="503" y2="462"
+                stroke="#FFF3C8" stroke-width="2.4" stroke-linecap="round"
+                filter="drop-shadow(0 0 4px rgba(255,213,74,.9))"/>
+
+          <!-- lone figure, backlit silhouette -->
+          <ellipse class="ej-fig-glow" cx="503" cy="592" rx="30" ry="9" fill="url(#ejBloomG)"/>
+          <g fill="#010102" stroke="rgba(255,224,130,.7)" stroke-width="1">
+            <circle cx="503" cy="512" r="9"/>
+            <path d="M503 523 c-8 0-13 7-13 16 l-3 31 h7 l4-27 h4 l4 27 h7 l-3-31 c0-9-5-16-13-16 z"/>
+          </g>
+        </svg>
+      </div>
+
+      <!-- CONNECTOR PATHS -->
+      <svg class="ej-links" viewBox="0 0 1000 600" preserveAspectRatio="none" aria-hidden="true">
+        <path class="ej-link" d="M150,126 C 380,44 620,44 850,126"/>
+        <path class="ej-link" d="M150,126 C 96,250 104,360 150,456"/>
+        <path class="ej-link" d="M850,126 C 904,250 896,352 850,438"/>
+        <path class="ej-link" d="M150,456 C 380,548 620,548 850,438"/>
+        <path class="ej-link-c" d="M150,126 C 380,44 620,44 850,126" pathLength="1000" style="animation-delay:0s"/>
+        <path class="ej-link-c" d="M150,126 C 96,250 104,360 150,456" pathLength="1000" style="animation-delay:-1.4s"/>
+        <path class="ej-link-c" d="M850,126 C 904,250 896,352 850,438" pathLength="1000" style="animation-delay:-2.8s"/>
+        <path class="ej-link-c" d="M150,456 C 380,548 620,548 850,438" pathLength="1000" style="animation-delay:-4.1s"/>
+      </svg>
+
+      <!-- GLASS CARDS -->
+      <div class="ej-cards">
+        <article class="ej-card" style="--x:15%;--y:21%;--d:18;--i:0;--fdur:7.5s;--fdelay:0s;--rot:.7deg">
+          <div class="ej-card__float"><div class="ej-card__body">
+            <span class="ej-ic" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M22 16.9v2.1a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h2.1a2 2 0 0 1 2 1.7c.13.9.34 1.8.63 2.7a2 2 0 0 1-.45 2.1L7.5 9.6a16 16 0 0 0 6 6l1.1-1a2 2 0 0 1 2.1-.44c.87.29 1.77.5 2.7.63a2 2 0 0 1 1.7 2Z"/></svg>
+            </span>
+            <p class="ej-card__txt"><strong>Fear of rejection</strong><span>before you even dial</span></p>
+          </div></div>
+        </article>
+
+        <article class="ej-card" style="--x:85%;--y:21%;--d:18;--i:1;--fdur:8.2s;--fdelay:-2s;--rot:-.6deg">
+          <div class="ej-card__float"><div class="ej-card__body">
+            <span class="ej-ic" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M21 11.5a8.4 8.4 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.4 8.4 0 0 1-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.4 8.4 0 0 1 3.8-.9h.5a8.5 8.5 0 0 1 8 8v.5Z"/></svg>
+            </span>
+            <p class="ej-card__txt"><strong>Not knowing what to say</strong><span>when they actually pick up</span></p>
+          </div></div>
+        </article>
+
+        <article class="ej-card" style="--x:15%;--y:76%;--d:22;--i:2;--fdur:8.8s;--fdelay:-4s;--rot:.6deg">
+          <div class="ej-card__float"><div class="ej-card__body">
+            <span class="ej-ic" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/><line x1="12" y1="9" x2="12" y2="13.5"/><line x1="12" y1="17.5" x2="12.01" y2="17.5"/></svg>
+            </span>
+            <p class="ej-card__txt"><strong>&ldquo;We&rsquo;re not interested.&rdquo;</strong><span>&mdash; and freezing on the spot</span></p>
+          </div></div>
+        </article>
+
+        <article class="ej-card" style="--x:85%;--y:73%;--d:22;--i:3;--fdur:7.8s;--fdelay:-6s;--rot:-.7deg">
+          <div class="ej-card__float"><div class="ej-card__body">
+            <span class="ej-ic" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+            </span>
+            <p class="ej-card__txt"><strong>Not knowing how</strong><span>to actually get better</span></p>
+          </div></div>
+        </article>
+      </div>
+
+      <!-- FOOTER PILL -->
+      <div class="ej-foot">
+        <p class="ej-foot-text">This is why <span class="ej-gold">AmplifyHub</span> exists.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<script>
+(function(){
+  'use strict';
+  const root = document.getElementById('ejSection');
+  const stage = document.getElementById('ejStage');
+  const reduce = matchMedia('(prefers-reduced-motion:reduce)').matches;
+  const fine = matchMedia('(pointer:fine)').matches;
+
+  // Reveal on scroll
+  if('IntersectionObserver' in window){
+    const io = new IntersectionObserver(es=>{
+      es.forEach(e=>{ if(e.isIntersecting){ root.classList.add('is-in'); io.disconnect(); } });
+    },{threshold:.2});
+    io.observe(root);
+  } else {
+    root.classList.add('is-in');
+  }
+
+  // Golden particles (DOM elements — no canvas)
+  const pc = document.getElementById('ejParticles');
+  if(pc && !reduce){
+    const N = matchMedia('(max-width:600px)').matches ? 14 : 24;
+    const frag = document.createDocumentFragment();
+    for(let i=0;i<N;i++){
+      const p = document.createElement('span');
+      p.className = 'ej-p';
+      const s = (Math.random()*2.4 + 1).toFixed(1);
+      p.style.left = (Math.random()*100).toFixed(2) + '%';
+      p.style.width = p.style.height = s + 'px';
+      p.style.setProperty('--dur', (Math.random()*10 + 13).toFixed(1) + 's');
+      p.style.setProperty('--delay', (-Math.random()*22).toFixed(1) + 's');
+      p.style.setProperty('--drift', (Math.random()*70 - 35).toFixed(0) + 'px');
+      p.style.setProperty('--o', (Math.random()*0.5 + 0.2).toFixed(2));
+      frag.appendChild(p);
+    }
+    pc.appendChild(frag);
+  }
+
+  // Smooth mouse parallax via CSS custom properties (lerped rAF, desktop pointers only)
+  if(stage && fine && !reduce){
+    let tx=0, ty=0, cx=0, cy=0, running=false;
+    function loop(){
+      cx += (tx-cx)*0.07;
+      cy += (ty-cy)*0.07;
+      stage.style.setProperty('--px', cx.toFixed(4));
+      stage.style.setProperty('--py', cy.toFixed(4));
+      if(Math.abs(tx-cx) > 0.0005 || Math.abs(ty-cy) > 0.0005){
+        requestAnimationFrame(loop);
+      } else { running = false; }
+    }
+    function kick(){ if(!running){ running = true; requestAnimationFrame(loop); } }
+    stage.addEventListener('pointermove', e=>{
+      const r = stage.getBoundingClientRect();
+      tx = (e.clientX - r.left)/r.width - 0.5;
+      ty = (e.clientY - r.top)/r.height - 0.5;
+      kick();
+    });
+    stage.addEventListener('pointerleave', ()=>{ tx=0; ty=0; kick(); });
+  }
+})();
+</script>
+</body>
+</html>

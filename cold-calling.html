@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AmplifyHub — Cold Calling</title>
+<meta name="description" content="Cold calling fundamentals: scripts, frameworks, and practice drills to build real confidence on the phone.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="AmplifyHub">
+<meta property="og:title" content="AmplifyHub — Cold Calling">
+<meta property="og:description" content="Cold calling fundamentals: scripts, frameworks, and practice drills to build real confidence on the phone.">
+<meta property="og:image" content="og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#07070e;--bg2:#0b0b16;--card:#13132a;--card2:#181838;
+  --accent:#FFD54A;--accent-dim:rgba(255,213,74,.1);--accent-glow:rgba(255,213,74,.3);
+  --warm:#FFA726;--green:#00e696;--white:#fff;--text:#b0b0c8;--muted:#8a8aa4;
+  --border:rgba(255,213,74,.07);--border-h:rgba(255,213,74,.22);
+  --font:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--font);background:var(--bg);color:var(--white);overflow-x:hidden;line-height:1.6}
+
+/* SIDEBAR (same as Dashboard) */
+body{display:flex;min-height:100vh}
+.sidebar{width:240px;position:fixed;top:0;left:0;bottom:0;background:var(--bg2);border-right:1px solid var(--border);padding:24px 16px;display:flex;flex-direction:column;z-index:100;transition:transform .3s}
+.sb-logo{font-size:20px;font-weight:800;letter-spacing:-.5px;padding:0 8px 28px}
+.sb-logo span{color:var(--accent)}
+.sb-nav{display:flex;flex-direction:column;gap:4px;flex:1}
+.sb-item{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:10px;font-size:14px;font-weight:500;color:var(--muted);cursor:pointer;transition:all .2s;text-decoration:none;border:1px solid transparent}
+.sb-item:hover{color:var(--text);background:rgba(255,255,255,.03)}
+.sb-item.active{color:var(--accent);background:var(--accent-dim);border-color:var(--border)}
+.sb-icon{width:20px;text-align:center;font-size:15px}
+.sb-divider{height:1px;background:var(--border);margin:12px 8px}
+.sb-user{display:flex;align-items:center;gap:10px;padding:12px 8px;border-top:1px solid var(--border);margin-top:auto}
+.sb-avatar{width:32px;height:32px;border-radius:8px;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:var(--bg)}
+.sb-uname{font-size:13px;font-weight:600}.sb-urole{font-size:11px;color:var(--muted)}
+.main{margin-left:240px;flex:1;min-width:0}
+
+/* MOBILE HEADER */
+.mob-header{display:none;position:fixed;top:0;left:0;right:0;z-index:200;padding:14px 20px;background:rgba(7,7,14,.95);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);align-items:center;justify-content:space-between}
+.mob-header .logo{font-size:18px;font-weight:800;text-decoration:none;color:var(--white)}
+.mob-header .logo span{color:var(--accent)}
+.mob-menu-btn{background:none;border:none;cursor:pointer;padding:4px}
+.mob-menu-btn span{display:block;width:20px;height:2px;background:#fff;margin:4px 0}
+.sb-close{display:none;position:absolute;top:16px;right:16px;background:none;border:none;color:var(--muted);font-size:20px;cursor:pointer}
+@media(max-width:860px){
+  .sidebar{transform:translateX(-100%)}.sidebar.open{transform:translateX(0)}
+  .sb-close{display:block}
+  .mob-header{display:flex}
+  .main{margin-left:0}
+  .hero{padding-top:96px!important}
+}
+
+/* HERO */
+.hero{padding:150px 48px 60px;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-20%;left:50%;transform:translateX(-50%);width:700px;height:500px;border-radius:50%;background:radial-gradient(ellipse,rgba(255,213,74,.06),transparent 70%);pointer-events:none}
+.eyebrow{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:3px;color:var(--accent);margin-bottom:16px;position:relative;z-index:2}
+.hero h1{font-size:clamp(36px,5.5vw,56px);font-weight:900;letter-spacing:-2.5px;line-height:1.05;margin-bottom:20px;position:relative;z-index:2}
+.hero h1 em{font-style:normal;color:var(--accent)}
+.hero-sub{font-size:17px;color:var(--text);max-width:580px;margin:0 auto 36px;line-height:1.7;position:relative;z-index:2}
+.hero-cta{display:inline-flex;align-items:center;gap:8px;background:var(--accent);color:#07070e;border:none;padding:16px 36px;border-radius:14px;font-size:16px;font-weight:700;cursor:pointer;transition:all .3s;text-decoration:none;position:relative;z-index:2}
+.hero-cta:hover{box-shadow:0 8px 28px var(--accent-glow);transform:translateY(-2px)}
+
+/* STAT BAR */
+.stat-bar{max-width:860px;margin:0 auto;padding:0 48px 72px;display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.stat{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:24px;text-align:center;transition:all .3s}
+.stat:hover{border-color:var(--border-h);transform:translateY(-3px)}
+.stat-v{font-size:32px;font-weight:900;letter-spacing:-1px;color:var(--accent);margin-bottom:4px}
+.stat-l{font-size:12px;color:var(--muted);font-weight:500}
+
+/* CONTENT */
+.wrap{max-width:780px;margin:0 auto;padding:0 48px 100px}
+.prose-card{background:rgba(19,19,42,.5);backdrop-filter:blur(14px);border:1px solid var(--border);border-radius:22px;padding:40px;margin-bottom:24px;opacity:0;transform:translateY(20px);transition:all .7s cubic-bezier(.16,1,.3,1)}
+.prose-card.v{opacity:1;transform:translateY(0)}
+.prose-card h2{font-size:24px;font-weight:800;letter-spacing:-.5px;margin-bottom:16px;display:flex;align-items:center;gap:12px}
+.prose-card h2 .ic{width:40px;height:40px;border-radius:11px;background:var(--accent-dim);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.prose-card p{font-size:15px;color:var(--text);line-height:1.8;margin-bottom:14px}
+.prose-card p:last-child{margin-bottom:0}
+.prose-card ul{list-style:none;margin-top:4px}
+.prose-card ul li{font-size:15px;color:var(--text);line-height:1.7;padding:10px 0;border-bottom:1px solid rgba(255,213,74,.05);display:flex;align-items:flex-start;gap:12px}
+.prose-card ul li:last-child{border-bottom:none}
+.li-dot{width:6px;height:6px;border-radius:50%;background:var(--accent);margin-top:8px;flex-shrink:0}
+.prose-card strong{color:var(--white);font-weight:600}
+
+/* QUOTE */
+.quote-card{background:linear-gradient(135deg,rgba(255,213,74,.07),rgba(255,167,38,.03),var(--card));border:1px solid var(--border-h);border-radius:22px;padding:36px;margin-bottom:24px;text-align:center;opacity:0;transform:translateY(20px);transition:all .7s cubic-bezier(.16,1,.3,1)}
+.quote-card.v{opacity:1;transform:translateY(0)}
+.quote-card blockquote{font-size:clamp(18px,2.5vw,22px);font-weight:700;letter-spacing:-.3px;line-height:1.5;color:var(--white);font-style:italic}
+.quote-card blockquote em{font-style:normal;color:var(--accent)}
+.quote-source{font-size:12px;color:var(--muted);margin-top:14px}
+
+/* BENEFITS GRID */
+.benefits-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:24px}
+.benefit{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:24px;transition:all .3s;opacity:0;transform:translateY(16px);transition:all .6s cubic-bezier(.16,1,.3,1)}
+.benefit.v{opacity:1;transform:translateY(0)}
+.benefit:hover{border-color:var(--border-h);transform:translateY(-3px)!important}
+.benefit-ic{font-size:26px;margin-bottom:12px}
+.benefit h3{font-size:15px;font-weight:700;margin-bottom:6px}
+.benefit p{font-size:13px;color:var(--text);line-height:1.55}
+
+/* CTA BOTTOM */
+.cta-bottom{background:linear-gradient(135deg,rgba(255,213,74,.06),var(--card));border:1px solid var(--border-h);border-radius:22px;padding:40px;text-align:center;margin-bottom:24px}
+.cta-bottom h2{font-size:24px;font-weight:900;letter-spacing:-.5px;margin-bottom:10px}
+.cta-bottom p{font-size:14px;color:var(--text);margin-bottom:24px}
+
+/* FOOTER */
+footer{border-top:1px solid var(--border);padding:48px 48px 28px;background:var(--bg);position:relative}
+footer::before{content:'';position:absolute;top:-30%;left:8%;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(255,213,74,.03),transparent 70%);pointer-events:none}
+.ft-grid{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr;gap:40px;position:relative;z-index:2}
+.ft-brand p{font-size:14px;color:var(--text);margin-top:14px;line-height:1.7;max-width:280px}
+.ft-trust{display:flex;flex-direction:column;gap:9px;margin-top:20px}
+.ft-trust-item{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--muted);font-weight:500}
+.ft-trust-item .ck{color:var(--accent);font-weight:700}
+.ft-col h4{font-size:12px;font-weight:700;margin-bottom:16px;text-transform:uppercase;letter-spacing:1.5px;color:var(--text)}
+.ft-col a{display:block;position:relative;font-size:13px;color:var(--muted);text-decoration:none;margin-bottom:11px;transition:color .3s}
+.ft-col a::after{content:'';position:absolute;left:0;bottom:-2px;width:0;height:1px;background:var(--accent);transition:width .35s cubic-bezier(.16,1,.3,1);box-shadow:0 0 8px var(--accent-glow)}
+.ft-col a:hover{color:var(--white)}.ft-col a:hover::after{width:100%}
+.ft-bottom-row{max-width:1100px;margin:32px auto 0;padding-top:24px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;position:relative;z-index:2}
+.ft-bot{font-size:12px;color:var(--muted)}
+.ft-status{display:inline-flex;align-items:center;gap:7px;font-size:12px;color:var(--muted);padding:6px 14px;border:1px solid var(--border);border-radius:100px}
+.ft-status-dot{width:6px;height:6px;border-radius:50%;background:var(--accent);animation:ftPulse 2s ease-in-out infinite}
+@keyframes ftPulse{0%,100%{opacity:1}50%{opacity:.4}}
+
+@media(max-width:860px){
+  .hero{padding:120px 24px 40px}.stat-bar{padding:0 24px 48px;grid-template-columns:1fr 1fr}.wrap{padding:0 24px 64px}
+  .benefits-grid{grid-template-columns:1fr}.ft-grid{grid-template-columns:1fr 1fr;gap:28px}
+  .prose-card{padding:28px}
+}
+@media(max-width:480px){.stat-bar{grid-template-columns:1fr}.ft-grid{grid-template-columns:1fr}}
+
+a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+</style>
+</head>
+<body>
+
+<div class="mob-header">
+  <a href="index.html" class="logo">Amplify<span>Hub</span></a>
+  <button class="mob-menu-btn" id="mobMenuBtn" aria-label="Open navigation menu"><span></span><span></span><span></span></button>
+</div>
+
+<aside class="sidebar" id="sidebar">
+  <button class="sb-close" id="sbClose" aria-label="Close navigation menu">✕</button>
+  <div class="sb-logo">Amplify<span>Hub</span></div>
+  <nav class="sb-nav">
+    <a class="sb-item" href="dashboard.html"><span class="sb-icon">🏠</span>Dashboard</a>
+    <a class="sb-item" href="journey.html"><span class="sb-icon">🛤</span>Journey</a>
+    <a class="sb-item" href="coach-home.html"><span class="sb-icon">🤖</span>AI Coach</a>
+    <a class="sb-item" href="dashboard.html#challenge"><span class="sb-icon">⚡</span>Challenges</a>
+    <a class="sb-item" href="dashboard.html#resources"><span class="sb-icon">📚</span>Resources</a>
+    <div class="sb-divider"></div>
+    <a class="sb-item" href="settings.html"><span class="sb-icon">⚙️</span>Settings</a>
+  </nav>
+  <div class="sb-user">
+    <div class="sb-avatar">J</div>
+    <div><div class="sb-uname">Jawad</div><div class="sb-urole">Pro Member</div></div>
+  </div>
+</aside>
+
+<div class="main">
+<!-- HERO -->
+<section class="hero">
+  <div class="eyebrow">Resources</div>
+  <h1>What is <em>Cold Calling?</em></h1>
+  <p class="hero-sub">The most direct sales skill in existence. Misunderstood by most, mastered by a few — and still one of the highest-ROI activities in business.</p>
+  <a href="signup.html?redirect=journey.html" class="hero-cta">Start Learning Cold Calling →</a>
+</section>
+
+<!-- STATS -->
+<div class="stat-bar">
+  <div class="stat"><div class="stat-v">82%</div><div class="stat-l">of buyers accept meetings from cold outreach</div></div>
+  <div class="stat"><div class="stat-v">2x</div><div class="stat-l">more pipeline generated vs inbound alone</div></div>
+  <div class="stat"><div class="stat-v">6–8</div><div class="stat-l">touches needed to reach a prospect</div></div>
+  <div class="stat"><div class="stat-v">#1</div><div class="stat-l">skill that separates top SDRs from average ones</div></div>
+</div>
+
+<!-- CONTENT -->
+<div class="wrap">
+
+  <div class="prose-card">
+    <h2><span class="ic">📞</span>What is Cold Calling?</h2>
+    <p>Cold calling is the act of contacting a potential customer who has had <strong>no prior relationship</strong> with you or your business — by phone — with the goal of starting a conversation that could lead to a meeting, a sale, or a relationship.</p>
+    <p>The word "cold" simply means the prospect isn't expecting your call and doesn't know you yet. That's it. It's not aggressive, it's not spam — done right, it's one of the most <strong>respectful, direct, and human</strong> ways to reach someone.</p>
+    <p>Unlike email or social media, a cold call is a live, two-way conversation. You can hear tone, respond in real time, answer objections on the spot, and build rapport in 60 seconds that would take weeks by email.</p>
+  </div>
+
+  <div class="quote-card">
+    <blockquote>"The phone is the <em>fastest path</em> from stranger to booked meeting. Every other channel makes you wait. The phone puts you in the room right now."</blockquote>
+    <div class="quote-source">— AmplifyHub Training Framework</div>
+  </div>
+
+  <div class="prose-card">
+    <h2><span class="ic">⚡</span>How Powerful is Cold Calling?</h2>
+    <p>Cold calling has been declared "dead" dozens of times over the past 20 years. It never died. What died was <strong>bad cold calling</strong> — the robotic, script-reading, high-pressure approach that treats prospects like numbers.</p>
+    <p>Modern cold calling, built around <strong>curiosity, discovery, and genuine value</strong>, is more effective than ever. Here's why:</p>
+    <ul>
+      <li><span class="li-dot"></span><strong>Direct access.</strong> A phone call bypasses every filter — spam folders, LinkedIn message queues, ignored ads. When someone picks up, you have their full attention.</li>
+      <li><span class="li-dot"></span><strong>Real-time feedback.</strong> You learn what works and what doesn't within hours, not weeks. Every call sharpens your message.</li>
+      <li><span class="li-dot"></span><strong>Human connection.</strong> Your voice carries warmth, confidence, and credibility that no email can replicate. People buy from people they like and trust.</li>
+      <li><span class="li-dot"></span><strong>Speed to pipeline.</strong> A great cold call can create a qualified opportunity in under 5 minutes. No other channel comes close to that speed.</li>
+      <li><span class="li-dot"></span><strong>Scalable skill.</strong> Once you learn it, you can apply it in any industry, for any product, for the rest of your career.</li>
+    </ul>
+  </div>
+
+  <h2 style="font-size:20px;font-weight:800;margin-bottom:16px;letter-spacing:-.3px">Benefits of Cold Calling</h2>
+  <div class="benefits-grid">
+    <div class="benefit">
+      <div class="benefit-ic">📈</div>
+      <h3>Immediate Revenue Impact</h3>
+      <p>Every booked meeting is a direct result of your call. The link between effort and outcome is clear — and motivating.</p>
+    </div>
+    <div class="benefit">
+      <div class="benefit-ic">🧠</div>
+      <h3>Deep Market Intelligence</h3>
+      <p>You hear real objections, real pain points, and real language from real buyers — insights no market research report can provide.</p>
+    </div>
+    <div class="benefit">
+      <div class="benefit-ic">💪</div>
+      <h3>Builds Resilience</h3>
+      <p>Rejection is part of the process. Learning to handle "no" professionally is one of the most valuable skills in any career, not just sales.</p>
+    </div>
+    <div class="benefit">
+      <div class="benefit-ic">🎯</div>
+      <h3>Precise Targeting</h3>
+      <p>You decide exactly who to call, when, and why. Cold calling gives you full control over your pipeline that no algorithm can take away.</p>
+    </div>
+    <div class="benefit">
+      <div class="benefit-ic">🚀</div>
+      <h3>Career Acceleration</h3>
+      <p>SDRs who master cold calling get promoted faster, earn more, and have more options. It's the foundation of every top sales career.</p>
+    </div>
+    <div class="benefit">
+      <div class="benefit-ic">🔄</div>
+      <h3>Compound Learning</h3>
+      <p>Every call makes the next one better. Within 90 days of consistent practice, most people's conversion rates double or triple.</p>
+    </div>
+  </div>
+
+  <div class="prose-card">
+    <h2><span class="ic">❌</span>Common Myths About Cold Calling</h2>
+    <ul>
+      <li><span class="li-dot"></span><strong>"Cold calling is dead."</strong> — Studies consistently show that 82% of buyers accept meetings from proactive outreach. The phone is alive. Bad scripts are dead.</li>
+      <li><span class="li-dot"></span><strong>"You need to be naturally confident."</strong> — Confidence on a call is a trained skill, not a personality trait. Every top caller was once terrified of the phone.</li>
+      <li><span class="li-dot"></span><strong>"It's about reading a script."</strong> — The best cold callers use a flexible framework, not a rigid script. They sound human because they think, not recite.</li>
+      <li><span class="li-dot"></span><strong>"Rejection means failure."</strong> — A "no" is just a data point. Every rejection teaches you something that gets you closer to a "yes."</li>
+      <li><span class="li-dot"></span><strong>"AI and email will replace it."</strong> — AI can help you prepare and follow up. But the live, human conversation that builds real trust? Only a call does that.</li>
+    </ul>
+  </div>
+
+  <div class="prose-card">
+    <h2><span class="ic">🛤</span>How to Actually Get Good at It</h2>
+    <p>Reading about cold calling won't make you confident. <strong>Doing it will.</strong> But doing it blind — with no system, no feedback, and no structured practice — is how most people burn out and quit.</p>
+    <p>The fastest path from nervous to confident goes through three things:</p>
+    <ul>
+      <li><span class="li-dot"></span><strong>A structured learning system</strong> that builds skills in the right order — mindset before mechanics, discovery before closing.</li>
+      <li><span class="li-dot"></span><strong>Safe repetition</strong> where you can fail, adjust, and try again before you're on a real call.</li>
+      <li><span class="li-dot"></span><strong>Honest feedback</strong> on what you're actually doing, not just what you think you're doing.</li>
+    </ul>
+    <p>That's exactly what the AmplifyHub Journey is built around — a step-by-step path with AI-powered practice so you can build real confidence before your first dial.</p>
+  </div>
+
+  <div class="cta-bottom">
+    <h2>Ready to Start Practicing?</h2>
+    <p>Your guided cold calling Journey is one step away. Sign up free and start your first lesson today.</p>
+    <a href="signup.html?redirect=journey.html" class="hero-cta">Start Your Journey Free →</a>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="ft-grid">
+    <div class="ft-brand">
+      <a href="index.html" class="logo">Amplify<span>Hub</span></a>
+      <p>Helping the next generation of SDRs and BDRs master cold calling through guided learning and AI coaching.</p>
+      <div class="ft-trust">
+        <div class="ft-trust-item"><span class="ck">✓</span> Built for future SDRs</div>
+        <div class="ft-trust-item"><span class="ck">✓</span> AI-powered learning</div>
+        <div class="ft-trust-item"><span class="ck">✓</span> Launching soon</div>
+      </div>
+    </div>
+    <div class="ft-col">
+      <h4>Product</h4>
+      <a href="signup.html?redirect=journey.html">Journey</a>
+      <a href="signup.html?redirect=coach-home.html">AI Coach</a>
+      <a href="signup.html?redirect=progress.html">Progress</a>
+      <a href="signup.html?redirect=profile.html">Profile</a>
+    </div>
+    <div class="ft-col">
+      <h4>Resources</h4>
+      <a href="roadmap.html">Learning Roadmap</a>
+      <a href="cold-calling.html">Cold Calling</a>
+      <a href="sdr-career-guide.html">SDR Career Guide</a>
+      <a href="faq.html">FAQ</a>
+    </div>
+    <div class="ft-col">
+      <h4>Company</h4>
+      <a href="about.html">About AmplifyHub</a>
+      <a href="why-we-built.html">Why We Built AmplifyHub</a>
+      <a href="contact.html">Contact</a>
+      <a href="privacy.html">Privacy Policy</a>
+      <a href="terms.html">Terms of Service</a>
+    </div>
+  </div>
+  <div class="ft-bottom-row">
+    <div class="ft-bot">© 2026 AmplifyHub. All rights reserved.</div>
+    <div class="ft-status"><span class="ft-status-dot"></span>Building in public — MVP launching soon</div>
+  </div>
+</footer>
+</div>
+
+<script>
+// Sidebar mobile toggle
+document.getElementById('mobMenuBtn').addEventListener('click',()=>document.getElementById('sidebar').classList.add('open'));
+document.getElementById('sbClose').addEventListener('click',()=>document.getElementById('sidebar').classList.remove('open'));
+
+// Scroll reveal
+const obs = new IntersectionObserver(es => {
+  es.forEach((e, i) => { if (e.isIntersecting) setTimeout(() => e.target.classList.add('v'), i * 80) });
+}, { threshold: .1 });
+document.querySelectorAll('.prose-card, .quote-card, .benefit').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>

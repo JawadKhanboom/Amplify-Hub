@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AmplifyHub — AI Coach</title>
+<meta name="description" content="Your AmplifyHub AI sales coach — ask questions, roleplay conversations, review documents, and track progress.">
+<meta name="robots" content="noindex">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="auth-config.js"></script>
+<script src="auth.js"></script>
+<script>requireAuth();</script>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#07070e;--bg2:#0b0b16;--card:#13132a;--card2:#181838;
+  --glass:rgba(19,19,42,.55);
+  --accent:#FFD54A;--accent-dim:rgba(255,213,74,.1);--accent-glow:rgba(255,213,74,.3);
+  --warm:#FFA726;--green:#00e696;--blue:#64B5F6;--purple:#BA68C8;--red:#ff5f57;
+  --white:#fff;--text:#b0b0c8;--muted:#8a8aa4;
+  --border:rgba(255,213,74,.07);--border-h:rgba(255,213,74,.22);
+  --font:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;--sb:240px;
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--font);background:var(--bg);color:var(--white);display:flex;min-height:100vh;overflow-x:hidden}
+
+/* ── SIDEBAR (identical to AmplifyHub app pages) ── */
+.sb{width:var(--sb);position:fixed;top:0;left:0;bottom:0;background:var(--bg2);border-right:1px solid var(--border);padding:24px 16px;display:flex;flex-direction:column;z-index:100;transition:transform .3s}
+.sb-logo{font-size:20px;font-weight:800;letter-spacing:-.5px;padding:0 8px 28px}.sb-logo span{color:var(--accent)}
+.sb-nav{display:flex;flex-direction:column;gap:4px;flex:1}
+.sbi{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:10px;font-size:14px;font-weight:500;color:var(--muted);cursor:pointer;transition:all .2s;text-decoration:none;border:1px solid transparent}
+.sbi:hover{color:var(--text);background:rgba(255,255,255,.03)}.sbi.act{color:var(--accent);background:var(--accent-dim);border-color:var(--border)}
+.sbi-ic{width:20px;text-align:center;font-size:15px}
+.sb-div{height:1px;background:var(--border);margin:12px 8px}
+.sb-u{display:flex;align-items:center;gap:10px;padding:12px 8px;border-top:1px solid var(--border);margin-top:auto}
+.sb-av{width:32px;height:32px;border-radius:8px;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:var(--bg)}
+.sb-un{font-size:13px;font-weight:600}.sb-ur{font-size:11px;color:var(--muted)}
+.sb-x{display:none;position:absolute;top:16px;right:16px;background:none;border:none;color:var(--muted);font-size:20px;cursor:pointer}
+.mob-h{display:none;position:fixed;top:0;left:0;right:0;z-index:200;padding:14px 20px;background:rgba(7,7,14,.95);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);align-items:center;justify-content:space-between}
+.mob-h .logo{font-size:18px;font-weight:800}.mob-h .logo span{color:var(--accent)}
+.mob-btn{background:none;border:none;cursor:pointer}.mob-btn span{display:block;width:20px;height:2px;background:#fff;margin:4px 0}
+
+/* ── MAIN ── */
+.main{margin-left:var(--sb);flex:1;padding:32px 40px 80px;min-width:0;max-width:1080px}
+.fu{opacity:0;transform:translateY(22px);transition:all .6s cubic-bezier(.16,1,.3,1)}.fu.v{opacity:1;transform:translateY(0)}
+
+/* ── HERO ── */
+.hero{background:linear-gradient(135deg,rgba(255,213,74,.06),rgba(255,167,38,.03),var(--card));border:1px solid var(--border-h);border-radius:24px;padding:34px;position:relative;overflow:hidden;margin-bottom:28px}
+.hero::before{content:'';position:absolute;top:-40%;right:-10%;width:380px;height:380px;border-radius:50%;background:radial-gradient(circle,rgba(255,213,74,.06),transparent 70%);pointer-events:none}
+.hero h1{font-size:clamp(22px,3vw,30px);font-weight:900;letter-spacing:-.5px;line-height:1.15;margin-bottom:8px;position:relative;z-index:2}
+.hero h1 em{font-style:normal;color:var(--accent)}
+.hero p{font-size:14px;color:var(--text);max-width:520px;line-height:1.6;position:relative;z-index:2}
+.hero-badge{display:inline-flex;align-items:center;gap:6px;margin-top:16px;padding:6px 14px;background:rgba(0,230,150,.08);border:1px solid rgba(0,230,150,.15);border-radius:100px;font-size:12px;font-weight:600;color:var(--green);position:relative;z-index:2}
+.live-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+
+/* ── VIEW ROUTING ── */
+.panel{display:none}.panel.active{display:block;animation:panelIn .45s cubic-bezier(.16,1,.3,1)}
+@keyframes panelIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── HUB GRID (4 modes) ── */
+.hub-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.mode-card{background:var(--glass);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid var(--border);border-radius:20px;padding:24px;cursor:pointer;transition:all .3s;position:relative;overflow:hidden;text-align:left}
+.mode-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--accent);opacity:0;transition:opacity .3s}
+.mode-card:hover{border-color:var(--border-h);transform:translateY(-4px);box-shadow:0 12px 40px rgba(0,0,0,.25)}
+.mode-card:hover::before{opacity:1}
+.mc-top{display:flex;align-items:center;gap:14px;margin-bottom:14px}
+.mc-ic{width:50px;height:50px;min-width:50px;border-radius:14px;background:var(--accent-dim);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:24px}
+.mc-label{font-size:17px;font-weight:800;letter-spacing:-.3px;color:var(--white)}
+.mc-tag{font-size:13px;color:var(--text);line-height:1.5}
+.mc-arrow{position:absolute;top:24px;right:24px;color:var(--accent);font-size:18px;opacity:0;transform:translateX(-6px);transition:all .3s}
+.mode-card:hover .mc-arrow{opacity:1;transform:translateX(0)}
+
+/* ── PANEL HEADER / BACK ── */
+.back-link{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--muted);cursor:pointer;text-decoration:none;margin-bottom:18px;transition:color .2s}
+.back-link:hover{color:var(--accent)}
+.ph{margin-bottom:22px}
+.ph h1{font-size:clamp(22px,3vw,28px);font-weight:900;letter-spacing:-.5px;display:flex;align-items:center;gap:12px}
+.ph h1 .ph-ic{width:42px;height:42px;border-radius:12px;background:var(--accent-dim);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:20px}
+.ph p{font-size:14px;color:var(--text);margin-top:8px}
+
+/* ── HONEST STATUS BANNER (no fake AI) ── */
+.sys-note{display:flex;align-items:flex-start;gap:10px;background:rgba(100,181,246,.06);border:1px solid rgba(100,181,246,.16);border-left:3px solid var(--blue);border-radius:12px;padding:12px 16px;font-size:12.5px;color:var(--text);line-height:1.5;margin-bottom:20px}
+.sys-note .sn-ic{font-size:15px;line-height:1.3}
+
+/* ── CARD SHELL ── */
+.card{background:var(--glass);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid var(--border);border-radius:20px;padding:22px}
+.card+.card{margin-top:20px}
+.card-title{font-size:15px;font-weight:700;margin-bottom:4px}
+.card-sub{font-size:12px;color:var(--muted);margin-bottom:16px}
+
+/* ── QUESTION CHIPS ── */
+.q-chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px}
+.q-chip{background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:20px;padding:8px 15px;font-size:12.5px;font-weight:500;color:var(--text);cursor:pointer;transition:all .2s;font-family:var(--font)}
+.q-chip:hover{border-color:var(--border-h);color:var(--white);background:var(--accent-dim)}
+
+/* ── THREAD (shows YOUR entries only — no fabricated replies) ── */
+.thread{display:flex;flex-direction:column;gap:14px;min-height:120px;margin-bottom:16px}
+.tmsg{display:flex;gap:10px;max-width:90%;animation:msgIn .35s cubic-bezier(.16,1,.3,1)}
+@keyframes msgIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.tmsg.user{margin-left:auto;flex-direction:row-reverse}
+.tav{width:30px;height:30px;min-width:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700}
+.tav.u{background:var(--accent-dim);color:var(--accent)}
+.tav.a{background:rgba(0,230,150,.1);color:var(--green);border:1px solid rgba(0,230,150,.15)}
+.bub{padding:11px 15px;border-radius:14px;font-size:14px;line-height:1.6}
+.tmsg.user .bub{background:linear-gradient(135deg,rgba(255,213,74,.12),rgba(255,213,74,.06));border:1px solid var(--accent-dim);border-radius:14px 14px 4px 14px;color:var(--white)}
+.tmsg.ai .bub{background:var(--card2);border:1px solid var(--border);border-radius:14px 14px 14px 4px;color:var(--text)}
+.empty{font-size:13px;color:var(--muted);text-align:center;padding:26px 12px;line-height:1.6}
+.empty a{color:var(--accent);text-decoration:none;font-weight:600}
+
+/* ── COMPOSER ── */
+.composer{display:flex;gap:10px;align-items:flex-end}
+.ta{flex:1;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:12px;padding:12px 15px;color:var(--white);font-size:14px;font-family:var(--font);outline:none;transition:all .25s;resize:none;min-height:46px;max-height:140px;line-height:1.5}
+.ta:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-dim)}
+.ta::placeholder{color:var(--muted)}
+.btn{background:var(--accent);color:var(--bg);border:none;padding:0 22px;height:46px;border-radius:12px;font-size:14px;font-weight:700;cursor:pointer;font-family:var(--font);transition:all .3s;white-space:nowrap}
+.btn:hover{box-shadow:0 6px 24px var(--accent-glow);transform:translateY(-2px)}
+.saved-tag{font-size:11.5px;color:var(--green);font-weight:600;opacity:0;transition:opacity .3s;margin-top:10px;display:inline-block}
+.saved-tag.show{opacity:1}
+
+/* ── SCENARIOS (roleplay) ── */
+.scen-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.scen-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px;cursor:pointer;transition:all .25s}
+.scen-card:hover{border-color:var(--border-h);transform:translateY(-2px)}
+.scen-emoji{font-size:22px;margin-bottom:8px;display:block}
+.scen-name{font-size:14px;font-weight:700;margin-bottom:3px}
+.scen-desc{font-size:12px;color:var(--muted);line-height:1.4}
+.rp-practice{display:none;flex-direction:column}
+.rp-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px;flex-wrap:wrap}
+.rp-scenario{display:flex;align-items:center;gap:10px;font-size:14px;font-weight:700}
+.rp-scenario .rp-badge{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--green);background:rgba(0,230,150,.08);border:1px solid rgba(0,230,150,.15);padding:4px 10px;border-radius:100px}
+.rp-back{background:none;border:1px solid var(--border);color:var(--muted);padding:7px 14px;border-radius:10px;font-size:12px;font-weight:600;cursor:pointer;font-family:var(--font);transition:all .2s}
+.rp-back:hover{color:var(--white);border-color:var(--border-h)}
+.rp-sub{font-size:11.5px;color:var(--muted);margin:-8px 0 14px}
+.step-label{font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px}
+#personaStep .rp-back{margin-bottom:14px}
+.rp-scenario .rp-badge-2{color:var(--blue);background:rgba(100,181,246,.08);border-color:rgba(100,181,246,.15)}
+.rp-head-btns{display:flex;gap:8px;flex-wrap:wrap}
+.rp-end-btn{background:none;border:1px solid rgba(0,230,150,.25);color:var(--green);padding:7px 14px;border-radius:10px;font-size:12px;font-weight:700;cursor:pointer;font-family:var(--font);transition:all .2s}
+.rp-end-btn:hover{background:rgba(0,230,150,.08)}
+.rp-end-btn:disabled{opacity:.5;cursor:default}
+
+/* ── FEEDBACK REPORT ── */
+.fb-report{display:none;flex-direction:column}
+.fb-head{margin-bottom:18px}
+.fb-title{font-size:18px;font-weight:800;margin-bottom:4px}
+.fb-meta{font-size:12px;color:var(--muted)}
+.fb-scores{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:22px}
+.fb-score-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px 10px;text-align:center}
+.fb-score-v{font-size:22px;font-weight:900}
+.fb-score-v.good{color:var(--green)}
+.fb-score-v.mid{color:var(--warm)}
+.fb-score-v.low{color:var(--red)}
+.fb-score-l{font-size:10.5px;color:var(--muted);margin-top:3px;text-transform:uppercase;letter-spacing:.4px}
+.fb-section{margin-bottom:18px}
+.fb-section h4{font-size:13px;font-weight:700;margin-bottom:8px}
+.fb-section ul{list-style:none;display:flex;flex-direction:column;gap:8px}
+.fb-section li{font-size:13px;color:var(--text);line-height:1.5;padding-left:18px;position:relative}
+.fb-section li::before{content:'—';position:absolute;left:0;color:var(--muted)}
+.fb-loading{display:none;text-align:center;padding:40px 12px;font-size:13px;color:var(--muted)}
+
+/* ── DOCUMENT REVIEW ── */
+.doc-type-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:18px}
+.doc-type{background:var(--card);border:2px solid var(--border);border-radius:14px;padding:16px;text-align:center;cursor:pointer;transition:all .25s}
+.doc-type:hover{border-color:var(--border-h);transform:translateY(-2px)}
+.doc-type.active{border-color:var(--accent);background:linear-gradient(160deg,rgba(255,213,74,.07),var(--card))}
+.doc-type-ic{font-size:24px;margin-bottom:8px;display:block}
+.doc-type-name{font-size:13px;font-weight:700}
+.doc-type-desc{font-size:11px;color:var(--muted);margin-top:2px}
+.upload-zone{border:2px dashed var(--border);border-radius:14px;padding:32px 20px;text-align:center;cursor:pointer;transition:all .25s}
+.upload-zone:hover{border-color:var(--border-h);background:var(--accent-dim)}
+.upload-zone.drag{border-color:var(--accent);background:var(--accent-dim)}
+.uz-ic{font-size:28px;margin-bottom:8px}
+.uz-txt{font-size:13px;color:var(--text);font-weight:600}
+.uz-sub{font-size:11px;color:var(--muted);margin-top:4px}
+.doc-list{margin-top:8px}
+.doc-row{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid rgba(255,213,74,.05)}
+.doc-row:last-child{border-bottom:none}
+.doc-row-ic{width:36px;height:36px;min-width:36px;border-radius:10px;background:var(--accent-dim);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:16px}
+.doc-row-info{flex:1;min-width:0}
+.doc-row-name{font-size:13px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.doc-row-meta{font-size:11px;color:var(--muted)}
+.doc-tag{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--warm);background:rgba(255,167,38,.08);border:1px solid rgba(255,167,38,.15);padding:4px 10px;border-radius:100px;white-space:nowrap}
+
+/* ── PROGRESS ── */
+.prog-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px}
+.stat{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px;text-align:center}
+.stat-v{font-size:26px;font-weight:900;color:var(--accent)}
+.stat-l{font-size:11px;color:var(--muted);margin-top:3px}
+.sess-list{display:flex;flex-direction:column}
+.sess-row{display:flex;align-items:center;gap:12px;padding:14px 0;border-bottom:1px solid rgba(255,213,74,.05)}
+.sess-row:last-child{border-bottom:none}
+.sess-date{font-size:11px;color:var(--muted);min-width:60px}
+.sess-info{flex:1;min-width:0}.sess-info h4{font-size:13px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.sess-info p{font-size:11px;color:var(--muted);margin-top:2px}
+.view-report-link{font-size:11px;color:var(--accent);font-weight:600;text-decoration:none;display:inline-block;margin-top:4px}
+.view-report-link:hover{text-decoration:underline}
+.sess-score{font-size:14px;font-weight:800;color:var(--accent)}
+
+/* ── PROGRESS — SKILL BARS ── */
+.skill-bars{display:flex;flex-direction:column;gap:10px;margin-bottom:4px}
+.skill-row{display:flex;align-items:center;gap:10px}
+.skill-label{font-size:11.5px;color:var(--muted);min-width:130px}
+.skill-track{flex:1;height:6px;background:rgba(255,255,255,.07);border-radius:100px;overflow:hidden}
+.skill-fill{height:100%;border-radius:100px;background:var(--accent);transition:width .6s ease}
+.skill-fill.mid{background:var(--warm)}
+.skill-fill.low{background:var(--red)}
+.skill-val{font-size:11.5px;font-weight:700;min-width:28px;text-align:right}
+.streak-row{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:var(--warm);margin-bottom:4px}
+.weakest-tag{display:inline-flex;align-items:center;gap:6px;background:rgba(255,95,87,.08);border:1px solid rgba(255,95,87,.18);border-radius:8px;padding:6px 12px;font-size:12px;font-weight:600;color:var(--red);margin-top:8px}
+.view-report-link{font-size:11px;color:var(--accent);font-weight:600;text-decoration:none;display:inline-block;margin-top:4px}
+.view-report-link:hover{text-decoration:underline}
+.view-transcript-link{font-size:11px;color:var(--blue);font-weight:600;text-decoration:none;display:inline-block;margin-top:4px;margin-left:10px}
+.view-transcript-link:hover{text-decoration:underline}
+
+/* ── TRANSCRIPT MODAL ── */
+.modal-backdrop{display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:300;align-items:center;justify-content:center;padding:20px}
+.modal-backdrop.open{display:flex}
+.modal{background:var(--card2);border:1px solid var(--border);border-radius:20px;width:100%;max-width:600px;max-height:80vh;display:flex;flex-direction:column;overflow:hidden}
+.modal-head{display:flex;align-items:center;justify-content:space-between;padding:18px 22px;border-bottom:1px solid var(--border)}
+.modal-title{font-size:15px;font-weight:700}
+.modal-close{background:none;border:none;color:var(--muted);font-size:20px;cursor:pointer;line-height:1;padding:0}
+.modal-close:hover{color:var(--white)}
+.transcript-body{padding:18px 22px;overflow-y:auto;display:flex;flex-direction:column;gap:12px}
+.tx-msg{display:flex;gap:10px;max-width:88%}
+.tx-msg.user{margin-left:auto;flex-direction:row-reverse}
+.tx-av{width:28px;height:28px;min-width:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0}
+.tx-av.u{background:var(--accent-dim);color:var(--accent)}
+.tx-av.a{background:rgba(0,230,150,.1);color:var(--green);border:1px solid rgba(0,230,150,.15)}
+.tx-bub{padding:10px 13px;border-radius:12px;font-size:13px;line-height:1.6}
+.tx-msg.user .tx-bub{background:linear-gradient(135deg,rgba(255,213,74,.12),rgba(255,213,74,.06));border:1px solid var(--accent-dim);border-radius:12px 12px 4px 12px;color:var(--white)}
+.tx-msg.ai .tx-bub{background:var(--card);border:1px solid var(--border);border-radius:12px 12px 12px 4px;color:var(--text)}
+.tx-empty{font-size:13px;color:var(--muted);text-align:center;padding:20px}
+
+/* ── TYPING INDICATOR ── */
+.typing{display:flex;align-items:center;gap:5px;padding:10px 14px}
+.typing span{width:6px;height:6px;border-radius:50%;background:var(--muted);animation:typDot 1.4s infinite}
+.typing span:nth-child(2){animation-delay:.2s}
+.typing span:nth-child(3){animation-delay:.4s}
+@keyframes typDot{0%,60%,100%{opacity:.3;transform:translateY(0)}30%{opacity:1;transform:translateY(-4px)}}
+#askThread{max-height:500px;overflow-y:auto;scroll-behavior:smooth}
+.bub .hi{color:var(--accent);font-weight:600}
+
+/* ── RESPONSIVE ── */
+@media(max-width:860px){
+  .sb{transform:translateX(-100%)}.sb.open{transform:translateX(0)}.sb-x{display:block}
+  .mob-h{display:flex}.main{margin-left:0;padding:72px 20px 48px}
+  .hub-grid{grid-template-columns:1fr}
+  .scen-grid{grid-template-columns:1fr}
+  .doc-type-grid{grid-template-columns:1fr}
+  .prog-stats{grid-template-columns:1fr 1fr}
+}
+@media(prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+</style>
+</head>
+<body>
+
+<!-- MOBILE -->
+<div class="mob-h"><div class="logo">Amplify<span>Hub</span></div><button class="mob-btn" id="mobBtn" aria-label="Open navigation menu"><span></span><span></span><span></span></button></div>
+
+<!-- SIDEBAR -->
+<aside class="sb" id="sb">
+  <button class="sb-x" id="sbX" aria-label="Close navigation menu">✕</button>
+  <div class="sb-logo">Amplify<span>Hub</span></div>
+  <nav class="sb-nav">
+    <a class="sbi" href="dashboard.html"><span class="sbi-ic">🏠</span>Dashboard</a>
+    <a class="sbi" href="journey.html"><span class="sbi-ic">🛤</span>Journey</a>
+    <a class="sbi act" href="#"><span class="sbi-ic">🤖</span>AI Coach</a>
+    <a class="sbi" href="dashboard.html#challenge"><span class="sbi-ic">⚡</span>Challenges</a>
+    <a class="sbi" href="dashboard.html#resources"><span class="sbi-ic">📚</span>Resources</a>
+    <div class="sb-div"></div>
+    <a class="sbi" href="settings.html"><span class="sbi-ic">⚙️</span>Settings</a>
+  </nav>
+  <div class="sb-u"><div class="sb-av">J</div><div><div class="sb-un">Jawad</div><div class="sb-ur">Pro Member</div></div></div>
+</aside>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- ══════════ HUB (default view) ══════════ -->
+  <section class="panel" id="hubView">
+    <div class="hero fu">
+      <h1>Your personal<br><em>AI sales coach.</em></h1>
+      <p>Pick how you want to train today — ask a question, run a roleplay, get a document reviewed, or check your progress.</p>
+      <div class="hero-badge"><span class="live-dot"></span>Coach ready</div>
+    </div>
+
+    <div class="hub-grid fu">
+      <button class="mode-card" data-go="ask">
+        <div class="mc-top"><div class="mc-ic">💬</div><div class="mc-label">Ask Coach</div></div>
+        <div class="mc-tag">Ask any sales question — objections, openers, closing, mindset — and build your question log.</div>
+        <span class="mc-arrow">→</span>
+      </button>
+      <button class="mode-card" data-go="roleplay">
+        <div class="mc-top"><div class="mc-ic">🎭</div><div class="mc-label">Roleplay</div></div>
+        <div class="mc-tag">Practice real sales conversations by picking a scenario and rehearsing your lines.</div>
+        <span class="mc-arrow">→</span>
+      </button>
+      <button class="mode-card" data-go="documents">
+        <div class="mc-top"><div class="mc-ic">📄</div><div class="mc-label">Document Review</div></div>
+        <div class="mc-tag">Upload a resume, cold email, or cold call script to queue it up for review.</div>
+        <span class="mc-arrow">→</span>
+      </button>
+      <button class="mode-card" data-go="progress">
+        <div class="mc-top"><div class="mc-ic">📊</div><div class="mc-label">Progress</div></div>
+        <div class="mc-tag">Review your previous coaching sessions, questions asked, and documents shared.</div>
+        <span class="mc-arrow">→</span>
+      </button>
+    </div>
+  </section>
+
+  <!-- ══════════ ASK COACH ══════════ -->
+  <section class="panel" id="askView">
+    <a class="back-link" data-go="home">← Back to AI Coach</a>
+    <div class="ph"><h1><span class="ph-ic">💬</span>Ask Coach</h1><p>Ask any sales question. Your questions are saved to your session log.</p></div>
+    <div class="card">
+      <div class="q-chips">
+        <button class="q-chip" data-q="How do I handle 'we're not interested'?">Handle "not interested"</button>
+        <button class="q-chip" data-q="What's a strong cold call opener?">Strong opener</button>
+        <button class="q-chip" data-q="How do I book the meeting at the end of a call?">Book the meeting</button>
+        <button class="q-chip" data-q="How do I stay confident after rejection?">Stay confident</button>
+      </div>
+      <div class="thread" id="askThread"><div class="empty">Ask any sales question to start chatting.</div></div>
+      <div class="composer">
+        <textarea class="ta" id="askInput" rows="1" placeholder="Ask a sales question..."></textarea>
+        <button class="btn" id="askSend">Ask</button>
+      </div>
+      <span class="saved-tag" id="askSaved">✓ Saved to your session</span>
+    </div>
+  </section>
+
+  <!-- ══════════ ROLEPLAY ══════════ -->
+  <section class="panel" id="roleplayView">
+    <a class="back-link" data-go="home">← Back to AI Coach</a>
+    <div class="ph"><h1><span class="ph-ic">🎭</span>Roleplay</h1><p>Pick a scenario, then who you're practicing on. Difficulty and coaching style come from your Settings.</p></div>
+    <div class="sys-note" id="rpStatusNote" style="display:none"><span class="sn-ic">ℹ️</span><span id="rpStatusText"></span></div>
+    <div class="card">
+      <!-- STEP 1: scenario — cards render from CoachConfig.scenarios -->
+      <div id="scenarioStep">
+        <div class="step-label">Step 1 — Pick a scenario</div>
+        <div class="scen-grid" id="scenarioGrid"></div>
+      </div>
+
+      <!-- STEP 2: persona — cards render from CoachConfig.personas -->
+      <div id="personaStep" style="display:none">
+        <button class="rp-back" id="scenarioBack">← Change scenario</button>
+        <div class="step-label">Step 2 — Who are you practicing on?</div>
+        <div class="scen-grid" id="scenGrid"></div>
+      </div>
+
+      <!-- PRACTICE -->
+      <div class="rp-practice" id="rpPractice">
+        <div class="rp-head">
+          <div class="rp-scenario">
+            <span class="rp-badge" id="rpScenarioBadge">—</span>
+            <span class="rp-badge rp-badge-2" id="rpPersonaBadge">—</span>
+          </div>
+          <div class="rp-head-btns">
+            <button class="rp-end-btn" id="rpEndBtn">End Session</button>
+            <button class="rp-back" id="rpBack">← Start Over</button>
+          </div>
+        </div>
+        <div class="rp-sub" id="rpGoalNote"></div>
+        <div class="rp-sub" id="rpDifficultyNote"></div>
+        <div class="thread" id="rpThread"></div>
+        <div class="composer">
+          <textarea class="ta" id="rpInput" rows="1" placeholder="Type your line..."></textarea>
+          <button class="btn" id="rpSend">Send</button>
+        </div>
+      </div>
+
+      <!-- Loading state while the feedback report is being generated -->
+      <div class="fb-loading" id="fbLoading">Generating your feedback report…</div>
+
+      <!-- FEEDBACK REPORT -->
+      <div class="fb-report" id="fbReport">
+        <div class="fb-head">
+          <div class="fb-title">📊 Session Report</div>
+          <div class="fb-meta" id="fbMeta"></div>
+        </div>
+        <div class="fb-scores" id="fbScores"></div>
+        <div class="fb-section"><h4>Strengths</h4><ul id="fbStrengths"></ul></div>
+        <div class="fb-section"><h4>Areas to Improve</h4><ul id="fbWeaknesses"></ul></div>
+        <div class="fb-section"><h4>Recommendations</h4><ul id="fbRecommendations"></ul></div>
+        <button class="btn" id="fbAgainBtn">Practice Again</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ DOCUMENT REVIEW ══════════ -->
+  <section class="panel" id="docsView">
+    <a class="back-link" data-go="home">← Back to AI Coach</a>
+    <div class="ph"><h1><span class="ph-ic">📄</span>Document Review</h1><p>Upload a resume, cold email, or cold call script to queue it for review.</p></div>
+    <div class="sys-note"><span class="sn-ic">ℹ️</span><span>Uploaded files are saved to your document list and marked <strong>Pending review</strong>. Automated review isn't connected yet.</span></div>
+    <div class="card">
+      <div class="card-title">1. Choose a document type</div>
+      <div class="card-sub">This tags your upload so reviews stay organized.</div>
+      <div class="doc-type-grid">
+        <div class="doc-type active" data-kind="resume"><span class="doc-type-ic">📋</span><div class="doc-type-name">Resume</div><div class="doc-type-desc">Your SDR resume</div></div>
+        <div class="doc-type" data-kind="email"><span class="doc-type-ic">✉️</span><div class="doc-type-name">Cold Email</div><div class="doc-type-desc">Outreach copy</div></div>
+        <div class="doc-type" data-kind="script"><span class="doc-type-ic">📝</span><div class="doc-type-name">Call Script</div><div class="doc-type-desc">Cold call script</div></div>
+      </div>
+      <div class="card-title" style="margin-top:6px">2. Upload the file</div>
+      <div class="card-sub" id="docZoneLabel">Upload your Resume</div>
+      <div class="upload-zone" id="docZone">
+        <div class="uz-ic">📄</div>
+        <div class="uz-txt">Click or drag a file to upload</div>
+        <div class="uz-sub">PDF, DOCX, or TXT · up to 5 MB</div>
+      </div>
+      <input type="file" id="docFile" accept=".pdf,.doc,.docx,.txt" style="display:none">
+    </div>
+    <div class="card">
+      <div class="card-title">Your documents</div>
+      <div class="card-sub">Everything you've shared for review</div>
+      <div class="doc-list" id="docList"><div class="empty">No documents yet. Upload a resume, cold email, or script above.</div></div>
+    </div>
+  </section>
+
+  <!-- ══════════ PROGRESS ══════════ -->
+  <section class="panel" id="progressView">
+    <a class="back-link" data-go="home">← Back to AI Coach</a>
+    <div class="ph"><h1><span class="ph-ic">📊</span>Progress</h1><p>Track your improvement across every training session.</p></div>
+
+    <!-- Top stats row -->
+    <div class="prog-stats" style="grid-template-columns:repeat(4,1fr)">
+      <div class="stat"><div class="stat-v" id="statSessions">0</div><div class="stat-l">Sessions</div></div>
+      <div class="stat"><div class="stat-v" id="statQuestions">0</div><div class="stat-l">Questions Asked</div></div>
+      <div class="stat"><div class="stat-v" id="statDocs">0</div><div class="stat-l">Documents</div></div>
+      <div class="stat"><div class="stat-v" id="statOverall">—</div><div class="stat-l">Avg Score</div></div>
+    </div>
+
+    <!-- Skill breakdown -->
+    <div class="card" id="skillCard" style="display:none">
+      <div class="card-title">Skill Breakdown</div>
+      <div class="card-sub" id="skillCardSub">Average scores across completed sessions</div>
+      <div class="streak-row" id="streakRow" style="display:none"><span id="streakVal"></span></div>
+      <div class="skill-bars" id="skillBars"></div>
+      <div id="weakestTag"></div>
+    </div>
+
+    <!-- Session history -->
+    <div class="card">
+      <div class="card-title">Session History</div>
+      <div class="card-sub">Your Ask Coach and Roleplay sessions</div>
+      <div class="sess-list" id="sessList"><div class="empty">No coaching sessions yet.</div></div>
+    </div>
+  </section>
+
+</div>
+
+<!-- Transcript modal — shown when user clicks "View Transcript" on a session -->
+<div class="modal-backdrop" id="transcriptModal">
+  <div class="modal">
+    <div class="modal-head">
+      <div class="modal-title" id="transcriptTitle">Session Transcript</div>
+      <button class="modal-close" id="transcriptClose">✕</button>
+    </div>
+    <div class="transcript-body" id="transcriptBody"></div>
+  </div>
+</div>
+
+<!-- Reuse existing modules, then the homepage controller (documented load order) -->
+<script src="coach-config.js"></script>
+<script src="coach-store.js"></script>
+<script src="coach-engine.js"></script>
+<script src="coach-home.js"></script>
+</body>
+</html>

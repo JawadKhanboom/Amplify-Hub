@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AmplifyHub — Settings</title>
+<meta name="description" content="Your AmplifyHub settings.">
+<meta name="robots" content="noindex">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="auth-config.js"></script>
+<script src="auth.js"></script>
+<script>requireAuth();</script>
+<script src="coach-config.js"></script>
+<script src="coach-store.js"></script>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#07070e;--bg2:#0b0b16;--card:#13132a;--card2:#181838;--glass:rgba(19,19,42,.55);
+  --accent:#FFD54A;--accent-dim:rgba(255,213,74,.1);--accent-glow:rgba(255,213,74,.3);
+  --warm:#FFA726;--green:#00e696;--blue:#64B5F6;--purple:#BA68C8;--red:#ff5f57;
+  --white:#fff;--text:#b0b0c8;--muted:#8a8aa4;
+  --border:rgba(255,213,74,.07);--border-h:rgba(255,213,74,.22);
+  --font:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;--sb:240px;
+}
+html{scroll-behavior:smooth}body{font-family:var(--font);background:var(--bg);color:var(--white);display:flex;min-height:100vh;overflow-x:hidden}
+
+.sb{width:var(--sb);position:fixed;top:0;left:0;bottom:0;background:var(--bg2);border-right:1px solid var(--border);padding:24px 16px;display:flex;flex-direction:column;z-index:100;transition:transform .3s}
+.sb-logo{font-size:20px;font-weight:800;padding:0 8px 24px}.sb-logo span{color:var(--accent)}
+.sb-nav{display:flex;flex-direction:column;gap:4px;flex:1}
+.si{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:10px;font-size:14px;font-weight:500;color:var(--muted);cursor:pointer;transition:all .2s;text-decoration:none;border:1px solid transparent}
+.si:hover{color:var(--text);background:rgba(255,255,255,.03)}.si.act{color:var(--accent);background:var(--accent-dim);border-color:var(--border)}
+.si-ic{width:20px;text-align:center;font-size:15px}
+.sb-d{height:1px;background:var(--border);margin:10px 8px}
+.sb-u{display:flex;align-items:center;gap:10px;padding:12px 8px;border-top:1px solid var(--border);margin-top:auto;cursor:pointer}
+.sb-av{width:32px;height:32px;border-radius:8px;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:var(--bg)}
+.sb-un{font-size:13px;font-weight:600}.sb-ur{font-size:11px;color:var(--muted)}
+.sb-x{display:none;position:absolute;top:16px;right:16px;background:none;border:none;color:var(--muted);font-size:20px;cursor:pointer}
+.mh{display:none;position:fixed;top:0;left:0;right:0;z-index:200;padding:14px 20px;background:rgba(7,7,14,.95);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);align-items:center;justify-content:space-between}
+.mh .logo{font-size:18px;font-weight:800}.mh .logo span{color:var(--accent)}
+.mb{background:none;border:none;cursor:pointer}.mb span{display:block;width:20px;height:2px;background:#fff;margin:4px 0}
+
+.page{margin-left:var(--sb);flex:1;display:grid;grid-template-columns:210px 1fr;min-height:100vh}
+.fu{opacity:0;transform:translateY(16px);transition:all .55s cubic-bezier(.16,1,.3,1)}.fu.v{opacity:1;transform:translateY(0)}
+
+/* SETTINGS NAV */
+.snav{padding:32px 14px;border-right:1px solid var(--border);position:sticky;top:0;height:100vh;overflow-y:auto;scrollbar-width:none}
+.snav::-webkit-scrollbar{display:none}
+.snav h1{font-size:20px;font-weight:900;padding:0 10px 20px;letter-spacing:-.5px}
+.cat{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;font-size:13px;font-weight:500;color:var(--text);cursor:pointer;transition:all .2s;margin-bottom:2px}
+.cat:hover{background:rgba(255,255,255,.03);color:var(--white)}
+.cat.act{color:var(--accent);background:var(--accent-dim)}
+.cat-ic{font-size:15px;width:18px;text-align:center}
+
+/* MAIN CONTENT */
+.content{padding:32px 40px 100px;max-width:680px}
+.panel{display:none}.panel.act{display:block}
+.p-h{margin-bottom:28px}
+.p-h h2{font-size:22px;font-weight:800;letter-spacing:-.4px;margin-bottom:4px}
+.p-h p{font-size:13px;color:var(--text)}
+
+.card{background:var(--glass);backdrop-filter:blur(14px);border:1px solid var(--border);border-radius:18px;padding:24px;margin-bottom:16px;transition:border-color .3s}
+.card:hover{border-color:var(--border-h)}
+.card-t{font-size:14px;font-weight:700;margin-bottom:14px;display:flex;align-items:center;justify-content:between;gap:8px}
+
+/* FORM FIELDS */
+.field{margin-bottom:16px}
+.field label{display:block;font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
+.field input,.field select,.field textarea{width:100%;padding:12px 14px;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:10px;color:var(--white);font-size:14px;font-family:var(--font);outline:none;transition:all .25s}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-dim)}
+.field textarea{resize:vertical;min-height:70px}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+
+/* AVATAR UPLOAD */
+.av-row{display:flex;align-items:center;gap:16px;margin-bottom:20px}
+.av-big{width:64px;height:64px;border-radius:16px;background:linear-gradient(135deg,var(--accent),var(--warm));display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:800;color:var(--bg)}
+.av-btn{background:rgba(255,255,255,.05);border:1px solid var(--border);color:var(--text);padding:9px 18px;border-radius:10px;font-size:12px;font-weight:600;cursor:pointer;font-family:var(--font);transition:all .25s}
+.av-btn:hover{border-color:var(--border-h);color:var(--white)}
+
+/* TOGGLE ROW */
+.t-row{display:flex;align-items:center;justify-content:space-between;padding:13px 0;border-bottom:1px solid rgba(255,213,74,.04)}
+.t-row:last-child{border-bottom:none}
+.t-info h4{font-size:13px;font-weight:600}.t-info p{font-size:11px;color:var(--muted);margin-top:2px}
+.toggle{width:42px;height:24px;border-radius:12px;background:rgba(255,255,255,.08);border:1px solid var(--border);position:relative;cursor:pointer;transition:all .25s;flex-shrink:0}
+.toggle::after{content:'';position:absolute;top:2px;left:2px;width:18px;height:18px;border-radius:50%;background:var(--muted);transition:all .25s}
+.toggle.on{background:var(--accent-dim);border-color:var(--accent)}
+.toggle.on::after{transform:translateX(18px);background:var(--accent)}
+
+/* APPEARANCE */
+.theme-row{display:flex;gap:12px;margin-bottom:18px}
+.theme-card{flex:1;border:2px solid var(--border);border-radius:14px;padding:16px;text-align:center;cursor:pointer;transition:all .25s;background:var(--card)}
+.theme-card.sel{border-color:var(--accent);background:var(--accent-dim)}
+.theme-card.dis{opacity:.4;cursor:not-allowed}
+.theme-prev{height:40px;border-radius:8px;margin-bottom:8px}
+.theme-prev.dark{background:linear-gradient(135deg,#13132a,#07070e)}
+.theme-prev.light{background:linear-gradient(135deg,#f5f5f5,#e0e0e0)}
+.theme-name{font-size:12px;font-weight:600}
+.color-row{display:flex;gap:10px;margin-bottom:16px}
+.color-dot{width:32px;height:32px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:all .2s}
+.color-dot.sel{border-color:var(--white);transform:scale(1.1)}
+
+/* RANGE SLIDER */
+.range-wrap{margin-bottom:18px}
+.range-row{display:flex;justify-content:space-between;margin-bottom:8px}
+.range-label{font-size:13px;font-weight:600}.range-val{font-size:12px;color:var(--accent);font-weight:700}
+input[type=range]{width:100%;height:5px;border-radius:3px;background:rgba(255,255,255,.08);outline:none;-webkit-appearance:none}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:var(--accent);cursor:pointer;box-shadow:0 0 8px var(--accent-glow)}
+
+/* CONNECTED ACCOUNTS */
+.conn-item{display:flex;align-items:center;gap:14px;padding:14px 0;border-bottom:1px solid rgba(255,213,74,.04)}
+.conn-item:last-child{border-bottom:none}
+.conn-ic{width:38px;height:38px;border-radius:10px;background:rgba(255,255,255,.05);display:flex;align-items:center;justify-content:center;font-size:18px}
+.conn-info{flex:1}.conn-n{font-size:13px;font-weight:700}.conn-s{font-size:11px;color:var(--muted)}
+.conn-btn{background:none;border:1px solid var(--border);color:var(--text);padding:8px 18px;border-radius:10px;font-size:12px;font-weight:600;cursor:pointer;font-family:var(--font);transition:all .25s}
+.conn-btn:hover{border-color:var(--border-h);color:var(--white)}
+.conn-btn.connected{color:var(--green);border-color:rgba(0,230,150,.2)}
+
+/* BILLING */
+.plan-card{background:linear-gradient(135deg,rgba(255,213,74,.06),var(--card));border:1px solid var(--border-h);border-radius:16px;padding:22px;margin-bottom:16px}
+.plan-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+.plan-name{font-size:18px;font-weight:800}
+.plan-badge{background:var(--accent-dim);color:var(--accent);padding:4px 12px;border-radius:100px;font-size:11px;font-weight:700}
+.plan-renew{font-size:12px;color:var(--text);margin-bottom:16px}
+.plan-btns{display:flex;gap:10px;flex-wrap:wrap}
+
+/* ADVANCED */
+.adv-item{display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:1px solid rgba(255,213,74,.04)}
+.adv-item:last-child{border-bottom:none}
+.adv-danger .t-info h4{color:var(--red)}
+
+/* BUTTONS */
+.btn{padding:11px 24px;border-radius:11px;font-size:13px;font-weight:700;cursor:pointer;font-family:var(--font);border:none;transition:all .3s}
+.btn-gold{background:var(--accent);color:var(--bg)}.btn-gold:hover{box-shadow:0 5px 20px var(--accent-glow);transform:translateY(-1px)}
+.btn-outline{background:transparent;color:var(--text);border:1px solid var(--border)}.btn-outline:hover{border-color:var(--border-h);color:var(--white)}
+.btn-danger{background:rgba(255,95,87,.1);color:var(--red);border:1px solid rgba(255,95,87,.2)}.btn-danger:hover{background:rgba(255,95,87,.18)}
+
+/* SAVE BAR */
+.savebar{position:fixed;bottom:0;left:var(--sb);right:0;background:rgba(11,11,22,.95);backdrop-filter:blur(20px);border-top:1px solid var(--border-h);padding:16px 40px;display:flex;align-items:center;justify-content:space-between;z-index:500;transform:translateY(100%);transition:transform .4s cubic-bezier(.16,1,.3,1)}
+.savebar.show{transform:translateY(0)}
+.savebar-msg{font-size:13px;color:var(--text);display:flex;align-items:center;gap:8px}
+.savebar-msg .dot{width:7px;height:7px;border-radius:50%;background:var(--accent);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.savebar-btns{display:flex;gap:10px}
+
+@media(max-width:900px){
+  .page{grid-template-columns:1fr;margin-left:0}.snav{display:none}
+  .sb{transform:translateX(-100%)}.sb.open{transform:translateX(0)}.sb-x{display:block}
+  .mh{display:flex}.content{padding:72px 20px 100px}
+  .savebar{left:0;padding:14px 20px}
+  .field-row,.theme-row{grid-template-columns:1fr;flex-direction:column}
+}
+@media(prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+
+a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+/* ── Added: Compact Mode / Animations / reveal panels / toast (additive only) ── */
+body.compact .card{padding:16px}
+body.compact .field{margin-bottom:10px}
+body.compact .t-row{padding:9px 0}
+body.compact .content{padding:24px 40px 100px}
+body.no-animations *{animation-duration:.01ms!important;transition-duration:.01ms!important}
+
+.reveal{max-height:0;overflow:hidden;transition:max-height .3s ease}
+.reveal.open{max-height:600px;margin-top:14px}
+.reveal-inner{border-top:1px solid rgba(255,213,74,.08);padding-top:14px}
+.inline-error{color:var(--red);font-size:12px;margin-top:8px;min-height:16px}
+.inline-note{color:var(--muted);font-size:11px;margin-top:8px;line-height:1.5}
+.mfa-qr{background:#fff;padding:10px;border-radius:10px;width:160px;height:160px;margin-bottom:12px}
+.mfa-qr img{width:100%;height:100%}
+.danger-box{border:1px solid rgba(255,95,87,.25);background:rgba(255,95,87,.06);border-radius:12px;padding:16px;margin-top:12px}
+.danger-box input{margin-bottom:10px}
+</style>
+</head>
+<body>
+
+<div class="mh"><div class="logo">Amplify<span>Hub</span></div><button class="mb" id="mobBtn" aria-label="Open navigation menu"><span></span><span></span><span></span></button></div>
+
+<aside class="sb" id="sb">
+  <button class="sb-x" id="sbX" aria-label="Close navigation menu">✕</button>
+  <div class="sb-logo">Amplify<span>Hub</span></div>
+  <nav class="sb-nav">
+    <a class="si" href="dashboard.html"><span class="si-ic">🏠</span>Dashboard</a>
+    <a class="si" href="journey.html"><span class="si-ic">🛤</span>Journey</a>
+    <a class="si" href="coach-home.html"><span class="si-ic">🤖</span>AI Coach</a>
+    <a class="si" href="dashboard.html#challenge"><span class="si-ic">⚡</span>Challenges</a>
+    <a class="si" href="dashboard.html#resources"><span class="si-ic">📚</span>Resources</a>
+    <div class="sb-d"></div>
+    <a class="si act"><span class="si-ic">⚙️</span>Settings</a>
+  </nav>
+  <div class="sb-u" onclick="location.href='profile.html'"><div class="sb-av">J</div><div><div class="sb-un">Jawad</div><div class="sb-ur">Pro Member</div></div></div>
+</aside>
+
+<div class="page">
+
+  <!-- SETTINGS NAV -->
+  <div class="snav">
+    <h1>Settings</h1>
+    <div class="cat act" data-p="account"><span class="cat-ic">👤</span>Account</div>
+    <div class="cat" data-p="security"><span class="cat-ic">🔒</span>Security</div>
+    <div class="cat" data-p="appearance"><span class="cat-ic">🎨</span>Appearance</div>
+    <div class="cat" data-p="aicoach"><span class="cat-ic">🤖</span>AI Coach</div>
+    <div class="cat" data-p="learning"><span class="cat-ic">📚</span>Learning</div>
+    <div class="cat" data-p="language"><span class="cat-ic">🌐</span>Language & Region</div>
+    <div class="cat" data-p="connected"><span class="cat-ic">🔗</span>Connected Accounts</div>
+    <div class="cat" data-p="billing"><span class="cat-ic">💳</span>Billing</div>
+    <div class="cat" data-p="advanced"><span class="cat-ic">⚙️</span>Advanced</div>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="content">
+
+    <!-- ACCOUNT -->
+    <div class="panel act" id="p-account">
+      <div class="p-h fu"><h2>Account</h2><p>Manage your personal information and public profile.</p></div>
+      <div class="card fu">
+        <div class="av-row"><div class="av-big">J</div><button class="av-btn">Upload New Photo</button></div>
+        <div class="field-row">
+          <div class="field"><label for="fullNameInput">Full Name</label><input type="text" id="fullNameInput" value="Jawad Khan" class="track"></div>
+          <div class="field"><label for="usernameInput">Username</label><input type="text" id="usernameInput" value="jawadkhan" class="track"></div>
+        </div>
+        <div class="field"><label for="emailInput">Email</label><input type="email" id="emailInput" value="jawad@amplifyhub.com" readonly style="opacity:.6;cursor:not-allowed"></div>
+        <div class="inline-note" style="margin-top:-10px;margin-bottom:16px">Email changes require verification — contact support to update it.</div>
+        <div class="field"><label>Bio</label><textarea id="bioInput" class="track">Building DetailAmplify and AmplifyHub. Learning to master cold calling one conversation at a time. 🎯</textarea></div>
+        <button class="btn btn-gold" id="accountSaveBtn">Save Changes</button>
+      </div>
+      <div class="card fu"><div class="t-row"><div class="t-info"><h4>Log Out</h4><p>Sign out of AmplifyHub on this device</p></div><button class="btn btn-outline" id="logoutBtn">Log Out</button></div></div>
+    </div>
+
+    <!-- SECURITY -->
+    <div class="panel" id="p-security">
+      <div class="p-h fu"><h2>Security</h2><p>Keep your account safe and manage active sessions.</p></div>
+      <div class="card fu">
+        <div class="t-row"><div class="t-info"><h4>Password</h4><p>Change your account password</p></div><button class="btn btn-outline" id="pwChangeBtn">Change</button></div>
+        <div class="reveal" id="pwPanel"><div class="reveal-inner">
+          <div class="field"><label for="newPasswordInput">New Password</label><input type="password" id="newPasswordInput" placeholder="At least 8 characters"></div>
+          <div class="field"><label for="confirmPasswordInput">Confirm New Password</label><input type="password" id="confirmPasswordInput"></div>
+          <div class="inline-error" id="pwError"></div>
+          <div style="display:flex;gap:10px"><button class="btn btn-gold" id="pwSaveBtn">Update Password</button><button class="btn btn-outline" id="pwCancelBtn">Cancel</button></div>
+        </div></div>
+      </div>
+      <div class="card fu">
+        <div class="t-row"><div class="t-info"><h4>Two-Factor Authentication</h4><p>Add an extra layer of security with an authenticator app</p></div><div class="toggle" id="mfaToggle"></div></div>
+        <div class="reveal" id="mfaPanel"><div class="reveal-inner">
+          <div class="mfa-qr" id="mfaQrWrap"><img id="mfaQrImg" alt="2FA QR code"></div>
+          <div class="inline-note" id="mfaSecretNote"></div>
+          <div class="field" style="max-width:200px"><label for="mfaCodeInput">6-Digit Code</label><input type="text" id="mfaCodeInput" maxlength="6" inputmode="numeric" placeholder="123456"></div>
+          <div class="inline-error" id="mfaError"></div>
+          <div style="display:flex;gap:10px"><button class="btn btn-gold" id="mfaVerifyBtn">Verify & Enable</button><button class="btn btn-outline" id="mfaCancelBtn">Cancel</button></div>
+        </div></div>
+      </div>
+      <div class="card fu">
+        <div class="t-row"><div class="t-info"><h4>Login Sessions</h4><p>View info about your signed-in session</p></div><button class="btn btn-outline" id="sessionsBtn">Manage</button></div>
+        <div class="reveal" id="sessionsPanel"><div class="reveal-inner inline-note" id="sessionsInfo"></div></div>
+      </div>
+      <div class="card fu">
+        <div class="t-row"><div class="t-info"><h4>Device Management</h4><p>View this device's connection details</p></div><button class="btn btn-outline" id="devicesBtn">View</button></div>
+        <div class="reveal" id="devicesPanel"><div class="reveal-inner inline-note" id="devicesInfo"></div></div>
+      </div>
+      <div class="card fu">
+        <div class="t-row"><div class="t-info"><h4>Privacy Settings</h4><p>Control who can see your profile</p></div><button class="btn btn-outline" id="privacyBtn">Configure</button></div>
+        <div class="reveal" id="privacyPanel"><div class="reveal-inner">
+          <div class="field" style="max-width:220px;margin-bottom:0"><label for="visibilitySel">Profile Visibility</label><select id="visibilitySel" class="track"><option value="public">Public</option><option value="private">Private</option></select></div>
+        </div></div>
+      </div>
+    </div>
+
+    <!-- APPEARANCE -->
+    <div class="panel" id="p-appearance">
+      <div class="p-h fu"><h2>Appearance</h2><p>Customize how AmplifyHub looks for you.</p></div>
+      <div class="card fu">
+        <div class="card-t">Theme</div>
+        <div class="theme-row">
+          <div class="theme-card sel" data-theme="dark"><div class="theme-prev dark"></div><div class="theme-name">Dark Mode</div></div>
+          <div class="theme-card dis"><div class="theme-prev light"></div><div class="theme-name">Light Mode (Soon)</div></div>
+        </div>
+        <div class="card-t">Accent Color</div>
+        <div class="color-row">
+          <div class="color-dot sel" data-color="#FFD54A" style="background:#FFD54A"></div>
+          <div class="color-dot" data-color="#64B5F6" style="background:#64B5F6"></div>
+          <div class="color-dot" data-color="#00e696" style="background:#00e696"></div>
+          <div class="color-dot" data-color="#BA68C8" style="background:#BA68C8"></div>
+          <div class="color-dot" data-color="#f06292" style="background:#f06292"></div>
+        </div>
+        <div class="range-wrap"><div class="range-row"><span class="range-label">Font Size</span><span class="range-val" id="fontVal">15px</span></div><input type="range" min="12" max="20" value="15" id="fontRange" class="track"></div>
+        <div class="t-row"><div class="t-info"><h4>Compact Mode</h4><p>Reduce spacing for denser layout</p></div><div class="toggle track" id="compactToggle"></div></div>
+        <div class="t-row"><div class="t-info"><h4>Animations</h4><p>Enable smooth transitions and motion</p></div><div class="toggle on track" id="animToggle"></div></div>
+      </div>
+    </div>
+
+    <!-- AI COACH -->
+    <div class="panel" id="p-aicoach">
+      <div class="p-h fu"><h2>AI Coach</h2><p>Configure how Coach Alex trains with you.</p></div>
+      <div class="card fu">
+        <div class="field"><label for="difficultySel">Practice Difficulty</label><select id="difficultySel" class="track"><option value="easy">Easy</option><option value="medium" selected>Medium</option><option value="hard">Hard</option><option value="adaptive">Adaptive</option></select></div>
+        <div class="field"><label for="speedSel">Response Speed</label><select id="speedSel" class="track"><option value="instant">Instant</option><option value="natural" selected>Natural</option><option value="slow">Slow & Thoughtful</option></select></div>
+        <div class="field"><label>Voice Mode (Coming Soon)</label><select disabled class="track"><option>Text Only</option></select></div>
+        <div class="field"><label for="feedbackSel">Feedback Detail Level</label><select id="feedbackSel" class="track"><option value="brief">Brief</option><option value="detailed" selected>Detailed</option><option value="comprehensive">Comprehensive</option></select></div>
+        <div class="field"><label for="styleSel">Conversation Style</label><select id="styleSel" class="track"><option value="friendly">Friendly</option><option value="professional" selected>Professional</option><option value="tough-coach">Tough Coach</option></select></div>
+        <div class="field"><label for="practiceLangSel">Practice Language</label><select id="practiceLangSel" class="track"><option value="english" selected>English</option><option value="spanish">Spanish</option><option value="urdu">Urdu</option><option value="french">French</option></select></div>
+      </div>
+    </div>
+
+    <!-- LEARNING -->
+    <div class="panel" id="p-learning">
+      <div class="p-h fu"><h2>Learning</h2><p>Set your pace and goals.</p></div>
+      <div class="card fu">
+        <div class="range-wrap"><div class="range-row"><span class="range-label">Daily Goal (minutes)</span><span class="range-val" id="dailyVal">20 min</span></div><input type="range" min="5" max="60" value="20" id="dailyRange" class="track"></div>
+        <div class="range-wrap"><div class="range-row"><span class="range-label">Weekly Goal (lessons)</span><span class="range-val" id="weeklyVal">5 lessons</span></div><input type="range" min="1" max="14" value="5" id="weeklyRange" class="track"></div>
+        <div class="t-row"><div class="t-info"><h4>XP Visibility</h4><p>Show your XP on your public profile</p></div><div class="toggle on track" id="xpToggle"></div></div>
+        <div class="t-row"><div class="t-info"><h4>Streak Reminder</h4><p>Remind me before my streak resets</p></div><div class="toggle on track" id="streakToggle"></div></div>
+        <div class="field"><label for="challengeDiffSel">Challenge Difficulty</label><select id="challengeDiffSel" class="track"><option value="easy">Easy</option><option value="balanced" selected>Balanced</option><option value="hard">Hard</option></select></div>
+        <div class="field"><label for="paceSel">Learning Pace</label><select id="paceSel" class="track"><option value="relaxed">Relaxed</option><option value="steady" selected>Steady</option><option value="intensive">Intensive</option></select></div>
+      </div>
+    </div>
+
+    <!-- LANGUAGE & REGION -->
+    <div class="panel" id="p-language">
+      <div class="p-h fu"><h2>Language & Region</h2><p>Set your language, timezone, and formats.</p></div>
+      <div class="card fu">
+        <div class="field"><label for="uiLangSel">Language</label><select id="uiLangSel" class="track"><option selected>English (US)</option><option>English (UK)</option><option>Urdu</option><option>Spanish</option><option>French</option></select></div>
+        <div class="field"><label for="timezoneSel">Timezone</label><select id="timezoneSel" class="track"><option selected>(GMT+5:00) Islamabad, Karachi</option><option>(GMT-5:00) New York</option><option>(GMT+0:00) London</option><option>(GMT+10:00) Sydney</option></select></div>
+        <div class="field-row">
+          <div class="field"><label for="dateFormatSel">Date Format</label><select id="dateFormatSel" class="track"><option selected>MM/DD/YYYY</option><option>DD/MM/YYYY</option><option>YYYY-MM-DD</option></select></div>
+          <div class="field"><label for="timeFormatSel">Time Format</label><select id="timeFormatSel" class="track"><option selected>12-hour</option><option>24-hour</option></select></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONNECTED ACCOUNTS -->
+    <div class="panel" id="p-connected">
+      <div class="p-h fu"><h2>Connected Accounts</h2><p>Link external accounts for faster sign-in.</p></div>
+      <div class="card fu">
+        <div class="conn-item"><div class="conn-ic">🔵</div><div class="conn-info"><div class="conn-n">Google</div><div class="conn-s">Connected as jawad@gmail.com</div></div><button class="conn-btn connected">Connected</button></div>
+        <div class="conn-item"><div class="conn-ic">⚫</div><div class="conn-info"><div class="conn-n">GitHub</div><div class="conn-s">Not connected</div></div><button class="conn-btn" id="connectGithubBtn">Connect</button></div>
+        <div class="conn-item"><div class="conn-ic">🔷</div><div class="conn-info"><div class="conn-n">LinkedIn</div><div class="conn-s">Not connected</div></div><button class="conn-btn" id="connectLinkedinBtn">Connect</button></div>
+        <div class="conn-item"><div class="conn-ic">🟦</div><div class="conn-info"><div class="conn-n">Microsoft</div><div class="conn-s">Not connected</div></div><button class="conn-btn" id="connectMicrosoftBtn">Connect</button></div>
+      </div>
+    </div>
+
+    <!-- BILLING -->
+    <div class="panel" id="p-billing">
+      <div class="p-h fu"><h2>Billing</h2><p>Manage your subscription and payment.</p></div>
+      <div class="plan-card fu">
+        <div class="plan-top"><span class="plan-name">Pro Plan</span><span class="plan-badge">Active</span></div>
+        <div class="plan-renew">$29/month · Renews on July 28, 2026</div>
+        <div class="plan-btns"><button class="btn btn-gold" id="upgradeBtn">Upgrade Plan</button><button class="btn btn-outline" id="manageSubBtn">Manage Subscription</button></div>
+      </div>
+    </div>
+
+    <!-- ADVANCED -->
+    <div class="panel" id="p-advanced">
+      <div class="p-h fu"><h2>Advanced</h2><p>Data management and account controls.</p></div>
+      <div class="card fu">
+        <div class="adv-item"><div class="t-info"><h4>Export Data</h4><p>Download a copy of your AmplifyHub data</p></div><button class="btn btn-outline" id="exportDataBtn">Export</button></div>
+        <div class="adv-item"><div class="t-info"><h4>Download Progress</h4><p>Print or save your journey and stats as a PDF</p></div><button class="btn btn-outline" id="downloadProgressBtn">Download</button></div>
+        <div class="adv-item"><div class="t-info"><h4>Clear Cache</h4><p>Free up local storage space</p></div><button class="btn btn-outline" id="clearCacheBtn">Clear</button></div>
+        <div class="adv-item adv-danger"><div class="t-info"><h4>Delete Account</h4><p>Permanently remove your account and data</p></div><button class="btn btn-danger" id="deleteAccountBtn">Delete</button></div>
+        <div class="reveal" id="deletePanel"><div class="reveal-inner">
+          <div class="danger-box">
+            <p class="inline-note" style="margin-top:0">This permanently deletes your account and all data. Type <strong>DELETE</strong> to confirm.</p>
+            <input type="text" id="deleteConfirmInput" placeholder="Type DELETE">
+            <div style="display:flex;gap:10px"><button class="btn btn-danger" id="deleteConfirmBtn" disabled>Permanently Delete</button><button class="btn btn-outline" id="deleteCancelBtn">Cancel</button></div>
+          </div>
+        </div></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- SAVE BAR -->
+<div class="savebar" id="savebar">
+  <div class="savebar-msg"><span class="dot"></span>You have unsaved changes.</div>
+  <div class="savebar-btns"><button class="btn btn-outline" id="discardBtn">Discard</button><button class="btn btn-gold" id="saveBtn">Save Changes</button></div>
+</div>
+
+<script>
+// Scroll reveal
+const obs=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('v')})},{threshold:.1});
+document.querySelectorAll('.fu').forEach(el=>obs.observe(el));
+
+// Panel switching
+document.querySelectorAll('.cat').forEach(cat=>{
+  cat.addEventListener('click',()=>{
+    document.querySelectorAll('.cat').forEach(c=>c.classList.remove('act'));
+    document.querySelectorAll('.panel').forEach(p=>p.classList.remove('act'));
+    cat.classList.add('act');
+    document.getElementById('p-'+cat.dataset.p).classList.add('act');
+    document.querySelectorAll('.fu').forEach(el=>{if(el.closest('.panel.act'))el.classList.add('v')});
+  });
+});
+
+// Theme cards
+document.querySelectorAll('.theme-card:not(.dis)').forEach(t=>{
+  t.addEventListener('click',()=>{document.querySelectorAll('.theme-card').forEach(x=>x.classList.remove('sel'));t.classList.add('sel');markDirty()});
+});
+
+// Save bar
+const savebar=document.getElementById('savebar');
+function markDirty(){savebar.classList.add('show')}
+
+// Toggle switches — mfaToggle is handled separately below since it needs a real
+// enroll/verify flow before it's allowed to flip on.
+document.querySelectorAll('.toggle').forEach(t=>{
+  if (t.id === 'mfaToggle') return;
+  t.addEventListener('click',()=>{
+    t.classList.toggle('on');
+    markDirty();
+    if (t.id === 'compactToggle') document.body.classList.toggle('compact', t.classList.contains('on'));
+    if (t.id === 'animToggle') document.body.classList.toggle('no-animations', !t.classList.contains('on'));
+  });
+});
+
+// Color dots — also apply the accent color live
+document.querySelectorAll('.color-dot').forEach(d=>{
+  d.addEventListener('click',()=>{
+    document.querySelectorAll('.color-dot').forEach(x=>x.classList.remove('sel'));
+    d.classList.add('sel');
+    document.documentElement.style.setProperty('--accent', d.dataset.color);
+    markDirty();
+  });
+});
+
+// Range sliders
+function bindRange(rangeId,valId,suffix){
+  const r=document.getElementById(rangeId),v=document.getElementById(valId);
+  if(!r)return;
+  r.addEventListener('input',()=>{
+    v.textContent=r.value+suffix;
+    markDirty();
+    if (rangeId === 'fontRange') document.querySelector('.content').style.fontSize = r.value + 'px';
+  });
+}
+bindRange('fontRange','fontVal','px');
+bindRange('dailyRange','dailyVal',' min');
+bindRange('weeklyRange','weeklyVal',' lessons');
+
+// Track any input/select/textarea change
+document.querySelectorAll('.track').forEach(el=>{
+  el.addEventListener('input',markDirty);
+  el.addEventListener('change',markDirty);
+});
+
+// Mobile
+document.getElementById('mobBtn').addEventListener('click',()=>document.getElementById('sb').classList.add('open'));
+document.getElementById('sbX').addEventListener('click',()=>document.getElementById('sb').classList.remove('open'));
+
+// Logout
+document.getElementById('logoutBtn')?.addEventListener('click', signOutUser);
+
+// ─────────────────────────────────────────────
+// Toast helper
+// ─────────────────────────────────────────────
+function showToast(msg){
+  let t=document.getElementById('appToast');
+  if(!t){
+    t=document.createElement('div');
+    t.id='appToast';
+    t.style.cssText='position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:#181838;color:#fff;padding:12px 20px;border-radius:10px;border:1px solid rgba(255,213,74,.22);font-size:13px;z-index:999;opacity:0;transition:opacity .3s;max-width:360px;text-align:center;pointer-events:none';
+    document.body.appendChild(t);
+  }
+  t.textContent=msg;
+  t.style.opacity='1';
+  clearTimeout(t._hideTimer);
+  t._hideTimer=setTimeout(()=>{t.style.opacity='0';},3500);
+}
+function toggleReveal(el){ el.classList.toggle('open'); }
+
+// ─────────────────────────────────────────────
+// AI Coach / Appearance / Learning / etc. preferences
+// ─────────────────────────────────────────────
+function applySettingsToDOM(p){
+  document.getElementById('fullNameInput').value = p.full_name || 'Jawad Khan';
+  document.getElementById('usernameInput').value = p.username || 'jawadkhan';
+  document.getElementById('bioInput').value = p.bio || '';
+
+  document.querySelectorAll('.color-dot').forEach(d=>d.classList.toggle('sel', d.dataset.color === p.accent_color));
+  document.documentElement.style.setProperty('--accent', p.accent_color);
+  document.getElementById('fontRange').value = p.font_size;
+  document.getElementById('fontVal').textContent = p.font_size + 'px';
+  document.querySelector('.content').style.fontSize = p.font_size + 'px';
+  document.getElementById('compactToggle').classList.toggle('on', !!p.compact_mode);
+  document.body.classList.toggle('compact', !!p.compact_mode);
+  document.getElementById('animToggle').classList.toggle('on', !!p.animations);
+  document.body.classList.toggle('no-animations', !p.animations);
+
+  document.getElementById('difficultySel').value = p.difficulty;
+  document.getElementById('speedSel').value = p.response_speed;
+  document.getElementById('feedbackSel').value = p.feedback_detail;
+  document.getElementById('styleSel').value = p.conversation_style;
+  document.getElementById('practiceLangSel').value = p.practice_language;
+
+  document.getElementById('dailyRange').value = p.daily_goal_minutes;
+  document.getElementById('dailyVal').textContent = p.daily_goal_minutes + ' min';
+  document.getElementById('weeklyRange').value = p.weekly_goal_lessons;
+  document.getElementById('weeklyVal').textContent = p.weekly_goal_lessons + ' lessons';
+  document.getElementById('xpToggle').classList.toggle('on', !!p.xp_visibility);
+  document.getElementById('streakToggle').classList.toggle('on', !!p.streak_reminder);
+  document.getElementById('challengeDiffSel').value = p.challenge_difficulty;
+  document.getElementById('paceSel').value = p.learning_pace;
+
+  document.getElementById('uiLangSel').value = p.ui_language;
+  document.getElementById('timezoneSel').value = p.timezone;
+  document.getElementById('dateFormatSel').value = p.date_format;
+  document.getElementById('timeFormatSel').value = p.time_format;
+
+  const visSel = document.getElementById('visibilitySel');
+  if (visSel) visSel.value = p.profile_visibility;
+}
+
+function collectSettingsFromDOM(){
+  const selDot = document.querySelector('.color-dot.sel');
+  return {
+    full_name: document.getElementById('fullNameInput').value.trim(),
+    username: document.getElementById('usernameInput').value.trim(),
+    bio: document.getElementById('bioInput').value.trim(),
+    accent_color: selDot ? selDot.dataset.color : '#FFD54A',
+    font_size: parseInt(document.getElementById('fontRange').value, 10),
+    compact_mode: document.getElementById('compactToggle').classList.contains('on'),
+    animations: document.getElementById('animToggle').classList.contains('on'),
+    difficulty: document.getElementById('difficultySel').value,
+    response_speed: document.getElementById('speedSel').value,
+    feedback_detail: document.getElementById('feedbackSel').value,
+    conversation_style: document.getElementById('styleSel').value,
+    practice_language: document.getElementById('practiceLangSel').value,
+    daily_goal_minutes: parseInt(document.getElementById('dailyRange').value, 10),
+    weekly_goal_lessons: parseInt(document.getElementById('weeklyRange').value, 10),
+    xp_visibility: document.getElementById('xpToggle').classList.contains('on'),
+    streak_reminder: document.getElementById('streakToggle').classList.contains('on'),
+    challenge_difficulty: document.getElementById('challengeDiffSel').value,
+    learning_pace: document.getElementById('paceSel').value,
+    ui_language: document.getElementById('uiLangSel').value,
+    timezone: document.getElementById('timezoneSel').value,
+    date_format: document.getElementById('dateFormatSel').value,
+    time_format: document.getElementById('timeFormatSel').value,
+    profile_visibility: (document.getElementById('visibilitySel') || {}).value || 'public'
+  };
+}
+
+async function loadSettings(){
+  const prefs = await CoachStore.getPreferences(true);
+  applySettingsToDOM(prefs);
+}
+
+async function saveAllSettings(){
+  const patch = collectSettingsFromDOM();
+  const saved = await CoachStore.savePreferences(patch);
+  return !!saved;
+}
+
+async function runSave(btn){
+  const orig = btn.textContent;
+  btn.textContent = 'Saving…'; btn.disabled = true;
+  const ok = await saveAllSettings();
+  savebar.classList.remove('show');
+  btn.disabled = false;
+  btn.textContent = ok ? 'Saved ✓' : orig;
+  showToast(ok ? 'Settings saved.' : "Couldn't save settings — please try again.");
+  setTimeout(()=>{btn.textContent=orig;}, 1500);
+}
+document.getElementById('saveBtn').addEventListener('click', () => runSave(document.getElementById('saveBtn')));
+document.getElementById('accountSaveBtn').addEventListener('click', () => runSave(document.getElementById('accountSaveBtn')));
+document.getElementById('discardBtn').addEventListener('click', async () => {
+  savebar.classList.remove('show');
+  await loadSettings();
+  showToast('Changes discarded.');
+});
+
+// ─────────────────────────────────────────────
+// Security — Password
+// ─────────────────────────────────────────────
+document.getElementById('pwChangeBtn').addEventListener('click', () => toggleReveal(document.getElementById('pwPanel')));
+document.getElementById('pwCancelBtn').addEventListener('click', () => {
+  document.getElementById('pwPanel').classList.remove('open');
+  document.getElementById('newPasswordInput').value = '';
+  document.getElementById('confirmPasswordInput').value = '';
+  document.getElementById('pwError').textContent = '';
+});
+document.getElementById('pwSaveBtn').addEventListener('click', async () => {
+  const p1 = document.getElementById('newPasswordInput').value;
+  const p2 = document.getElementById('confirmPasswordInput').value;
+  const errEl = document.getElementById('pwError');
+  errEl.textContent = '';
+  if (p1.length < 8) { errEl.textContent = 'Password must be at least 8 characters.'; return; }
+  if (p1 !== p2) { errEl.textContent = 'Passwords do not match.'; return; }
+  const btn = document.getElementById('pwSaveBtn');
+  btn.disabled = true; btn.textContent = 'Updating…';
+  const { error } = await supabaseClient.auth.updateUser({ password: p1 });
+  btn.disabled = false; btn.textContent = 'Update Password';
+  if (error) { errEl.textContent = error.message; return; }
+  document.getElementById('pwPanel').classList.remove('open');
+  document.getElementById('newPasswordInput').value = '';
+  document.getElementById('confirmPasswordInput').value = '';
+  showToast('Password updated.');
+});
+
+// ─────────────────────────────────────────────
+// Security — Two-Factor Authentication (Supabase TOTP)
+// ─────────────────────────────────────────────
+const mfaToggle = document.getElementById('mfaToggle');
+let pendingFactorId = null;
+
+async function refreshMfaState(){
+  try {
+    const { data, error } = await supabaseClient.auth.mfa.listFactors();
+    if (error) return null;
+    const factors = (data && data.totp) || [];
+    const verified = factors.find(f => f.status === 'verified');
+    mfaToggle.classList.toggle('on', !!verified);
+    return verified || null;
+  } catch (e) { return null; }
+}
+
+mfaToggle.addEventListener('click', async () => {
+  const mfaPanel = document.getElementById('mfaPanel');
+  if (mfaToggle.classList.contains('on')) {
+    const verified = await refreshMfaState();
+    if (!verified) return;
+    const { error } = await supabaseClient.auth.mfa.unenroll({ factorId: verified.id });
+    if (error) { showToast('Could not disable 2FA: ' + error.message); return; }
+    mfaToggle.classList.remove('on');
+    showToast('Two-factor authentication disabled.');
+    return;
+  }
+  document.getElementById('mfaError').textContent = '';
+  const { data, error } = await supabaseClient.auth.mfa.enroll({ factorType: 'totp' });
+  if (error) { showToast("Couldn't start 2FA setup: " + error.message); return; }
+  pendingFactorId = data.id;
+  document.getElementById('mfaQrImg').src = data.totp.qr_code;
+  document.getElementById('mfaSecretNote').textContent = 'Or enter this code manually: ' + data.totp.secret;
+  mfaPanel.classList.add('open');
+});
+
+document.getElementById('mfaVerifyBtn').addEventListener('click', async () => {
+  const code = document.getElementById('mfaCodeInput').value.trim();
+  const errEl = document.getElementById('mfaError');
+  if (!pendingFactorId) { errEl.textContent = 'Start over — session expired.'; return; }
+  if (!/^\d{6}$/.test(code)) { errEl.textContent = 'Enter the 6-digit code from your authenticator app.'; return; }
+  const btn = document.getElementById('mfaVerifyBtn');
+  btn.disabled = true; btn.textContent = 'Verifying…';
+  const { error } = await supabaseClient.auth.mfa.challengeAndVerify({ factorId: pendingFactorId, code });
+  btn.disabled = false; btn.textContent = 'Verify & Enable';
+  if (error) { errEl.textContent = error.message; return; }
+  document.getElementById('mfaPanel').classList.remove('open');
+  document.getElementById('mfaCodeInput').value = '';
+  mfaToggle.classList.add('on');
+  pendingFactorId = null;
+  showToast('Two-factor authentication enabled.');
+});
+
+document.getElementById('mfaCancelBtn').addEventListener('click', async () => {
+  document.getElementById('mfaPanel').classList.remove('open');
+  document.getElementById('mfaCodeInput').value = '';
+  document.getElementById('mfaError').textContent = '';
+  if (pendingFactorId) {
+    await supabaseClient.auth.mfa.unenroll({ factorId: pendingFactorId }).catch(()=>{});
+    pendingFactorId = null;
+  }
+});
+
+// ─────────────────────────────────────────────
+// Security — Sessions / Devices (single-device info; Supabase's client SDK
+// doesn't expose other devices without a dedicated backend table)
+// ─────────────────────────────────────────────
+async function loadDeviceSessionInfo(infoElId){
+  const { data } = await supabaseClient.auth.getSession();
+  const session = data && data.session;
+  const el = document.getElementById(infoElId);
+  if (!session) { el.textContent = 'No active session found.'; return; }
+  const lastSignIn = session.user && session.user.last_sign_in_at ? new Date(session.user.last_sign_in_at).toLocaleString() : 'unknown';
+  el.innerHTML = 'Signed in on this device since <strong>' + lastSignIn + '</strong>.<br>Browser: ' + navigator.userAgent +
+    '<br><br>This shows details for the current device only — listing every signed-in device needs a dedicated backend table to track logins, which isn\'t built yet.';
+}
+document.getElementById('sessionsBtn').addEventListener('click', async () => {
+  const panel = document.getElementById('sessionsPanel');
+  panel.classList.toggle('open');
+  if (panel.classList.contains('open')) await loadDeviceSessionInfo('sessionsInfo');
+});
+document.getElementById('devicesBtn').addEventListener('click', async () => {
+  const panel = document.getElementById('devicesPanel');
+  panel.classList.toggle('open');
+  if (panel.classList.contains('open')) await loadDeviceSessionInfo('devicesInfo');
+});
+
+// ─────────────────────────────────────────────
+// Security — Privacy
+// ─────────────────────────────────────────────
+document.getElementById('privacyBtn').addEventListener('click', () => toggleReveal(document.getElementById('privacyPanel')));
+
+// ─────────────────────────────────────────────
+// Connected Accounts (real Supabase identity linking — the provider must
+// also be enabled in Supabase Dashboard → Authentication → Providers)
+// ─────────────────────────────────────────────
+async function connectProvider(btn, provider){
+  const orig = btn.textContent;
+  btn.textContent = 'Connecting…'; btn.disabled = true;
+  const { error } = await supabaseClient.auth.linkIdentity({ provider });
+  if (error) {
+    btn.textContent = orig; btn.disabled = false;
+    showToast("Couldn't connect: " + error.message);
+  }
+  // On success the browser redirects to the provider, so no further UI update needed here.
+}
+document.getElementById('connectGithubBtn').addEventListener('click', e => connectProvider(e.currentTarget, 'github'));
+document.getElementById('connectLinkedinBtn').addEventListener('click', e => connectProvider(e.currentTarget, 'linkedin_oidc'));
+document.getElementById('connectMicrosoftBtn').addEventListener('click', e => connectProvider(e.currentTarget, 'azure'));
+
+// ─────────────────────────────────────────────
+// Billing (no payment processor connected yet — see chat summary)
+// ─────────────────────────────────────────────
+document.getElementById('upgradeBtn').addEventListener('click', () => showToast("Billing isn't connected yet — reach out to enable plan upgrades."));
+document.getElementById('manageSubBtn').addEventListener('click', () => showToast("Billing isn't connected yet — reach out to enable subscription management."));
+
+// ─────────────────────────────────────────────
+// Advanced
+// ─────────────────────────────────────────────
+document.getElementById('exportDataBtn').addEventListener('click', async () => {
+  const btn = document.getElementById('exportDataBtn');
+  const orig = btn.textContent; btn.textContent = 'Exporting…'; btn.disabled = true;
+  try {
+    const [prefs, sessions, docs] = await Promise.all([
+      CoachStore.getPreferences(),
+      CoachStore.listSessions(),
+      CoachStore.listDocs()
+    ]);
+    const payload = { exportedAt: new Date().toISOString(), preferences: prefs, sessions, documents: docs };
+    const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = 'amplifyhub-data-' + Date.now() + '.json';
+    document.body.appendChild(a); a.click(); a.remove();
+    URL.revokeObjectURL(url);
+    showToast('Export downloaded.');
+  } finally {
+    btn.textContent = orig; btn.disabled = false;
+  }
+});
+
+document.getElementById('downloadProgressBtn').addEventListener('click', async () => {
+  const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const sessions = (await CoachStore.listSessions()).filter(s => s.turns > 0);
+  const win = window.open('', '_blank');
+  if (!win) { showToast('Please allow pop-ups to download your progress.'); return; }
+  const rows = sessions.map(s => '<tr><td>' + (s.started_at ? new Date(s.started_at).toLocaleDateString() : '') +
+    '<\/td><td>' + esc(s.mode) + '<\/td><td>' + s.turns + '<\/td><td>' + (s.score != null ? s.score : '—') + '<\/td><\/tr>').join('');
+  win.document.write('<html><head><title>AmplifyHub Progress<\/title><style>body{font-family:sans-serif;padding:32px}h1{margin-bottom:4px}table{width:100%;border-collapse:collapse;margin-top:20px}td,th{border-bottom:1px solid #ddd;padding:8px;text-align:left;font-size:13px}<\/style><\/head><body><h1>AmplifyHub — Progress Report<\/h1><p>Generated ' +
+    new Date().toLocaleString() + '<\/p><table><thead><tr><th>Date<\/th><th>Mode<\/th><th>Turns<\/th><th>Score<\/th><\/tr><\/thead><tbody>' +
+    (rows || '<tr><td colspan="4">No sessions yet.<\/td><\/tr>') + '<\/tbody><\/table><\/body><\/html>');
+  win.document.close();
+  win.focus();
+  win.print();
+});
+
+document.getElementById('clearCacheBtn').addEventListener('click', () => {
+  Object.keys(localStorage).filter(k => k.startsWith('amplifyHub_')).forEach(k => localStorage.removeItem(k));
+  showToast('Local cache cleared.');
+});
+
+document.getElementById('deleteAccountBtn').addEventListener('click', () => toggleReveal(document.getElementById('deletePanel')));
+document.getElementById('deleteCancelBtn').addEventListener('click', () => {
+  document.getElementById('deletePanel').classList.remove('open');
+  document.getElementById('deleteConfirmInput').value = '';
+  document.getElementById('deleteConfirmBtn').disabled = true;
+});
+document.getElementById('deleteConfirmInput').addEventListener('input', e => {
+  document.getElementById('deleteConfirmBtn').disabled = e.target.value.trim() !== 'DELETE';
+});
+document.getElementById('deleteConfirmBtn').addEventListener('click', async () => {
+  const btn = document.getElementById('deleteConfirmBtn');
+  btn.disabled = true; btn.textContent = 'Deleting…';
+  try {
+    const { error } = await supabaseClient.functions.invoke('delete-account');
+    if (error) throw error;
+    showToast('Account deleted. Signing you out…');
+    setTimeout(() => signOutUser(), 1500);
+  } catch (err) {
+    btn.textContent = 'Permanently Delete';
+    document.getElementById('deleteConfirmInput').value = '';
+    showToast("Account deletion isn't wired to a backend yet — nothing was deleted. This needs a secure delete-account Edge Function.");
+  }
+});
+
+// ─────────────────────────────────────────────
+// Init
+// ─────────────────────────────────────────────
+(async () => {
+  await loadSettings();
+  await refreshMfaState();
+})();
+
+// Show the real logged-in user's email instead of the placeholder
+getCurrentUser().then(user => {
+  if (user) {
+    const emailField = document.getElementById('emailInput');
+    if (emailField) emailField.value = user.email;
+  }
+});
+</script>
+</body>
+</html>

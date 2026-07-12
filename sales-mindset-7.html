@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AmplifyHub — Think Like a Consultant</title>
+<meta name="description" content="Sales Mindset, part 7 of the AmplifyHub series - mental frameworks for confident cold calling.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="AmplifyHub">
+<meta property="og:title" content="AmplifyHub — Think Like a Consultant">
+<meta property="og:description" content="Sales Mindset, part 7 of the AmplifyHub series - mental frameworks for confident cold calling.">
+<meta property="og:image" content="og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#07070e;--bg2:#0b0b16;--card:#13132a;--card2:#181838;--glass:rgba(19,19,42,.55);
+  --accent:#FFD54A;--accent-dim:rgba(255,213,74,.1);--accent-glow:rgba(255,213,74,.3);
+  --warm:#FFA726;--green:#00e696;--blue:#64B5F6;--purple:#BA68C8;--red:#ff5f57;
+  --white:#fff;--text:#b0b0c8;--muted:#8a8aa4;
+  --border:rgba(255,213,74,.07);--border-h:rgba(255,213,74,.22);
+  --font:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;--sb:240px;
+}
+body{font-family:var(--font);background:var(--bg);color:var(--white);display:flex;min-height:100vh;overflow-x:hidden}
+
+.sb{width:var(--sb);position:fixed;top:0;left:0;bottom:0;background:var(--bg2);border-right:1px solid var(--border);padding:24px 16px;display:flex;flex-direction:column;z-index:100;transition:transform .3s}
+.sb-logo{font-size:20px;font-weight:800;padding:0 8px 24px}.sb-logo span{color:var(--accent)}
+.sb-nav{display:flex;flex-direction:column;gap:4px;flex:1}
+.si{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:10px;font-size:14px;font-weight:500;color:var(--muted);cursor:pointer;transition:all .2s;text-decoration:none;border:1px solid transparent}
+.si:hover{color:var(--text);background:rgba(255,255,255,.03)}.si.act{color:var(--accent);background:var(--accent-dim);border-color:var(--border)}
+.si-ic{width:20px;text-align:center;font-size:15px}
+.sb-d{height:1px;background:var(--border);margin:10px 8px}
+.sb-u{display:flex;align-items:center;gap:10px;padding:12px 8px;border-top:1px solid var(--border);margin-top:auto}
+.sb-av{width:32px;height:32px;border-radius:8px;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:var(--bg)}
+.sb-un{font-size:13px;font-weight:600}.sb-ur{font-size:11px;color:var(--muted)}
+.sb-x{display:none;position:absolute;top:16px;right:16px;background:none;border:none;color:var(--muted);font-size:20px;cursor:pointer}
+.mh{display:none;position:fixed;top:0;left:0;right:0;z-index:200;padding:14px 20px;background:rgba(7,7,14,.95);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);align-items:center;justify-content:space-between}
+.mh .logo{font-size:18px;font-weight:800}.mh .logo span{color:var(--accent)}
+.mb{background:none;border:none;cursor:pointer}.mb span{display:block;width:20px;height:2px;background:#fff;margin:4px 0}
+
+.main{margin-left:var(--sb);flex:1;padding:32px 40px 80px;max-width:780px}
+.back{display:inline-flex;align-items:center;gap:6px;color:var(--muted);font-size:13px;font-weight:600;text-decoration:none;margin-bottom:20px;transition:color .2s}.back:hover{color:var(--accent)}
+.lesson-badge{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--accent);margin-bottom:8px}
+.lesson-title{font-size:clamp(22px,3vw,28px);font-weight:900;letter-spacing:-.5px;margin-bottom:6px}
+.lesson-meta{display:flex;gap:16px;font-size:12px;color:var(--muted);margin-bottom:28px;flex-wrap:wrap}
+
+.lcard{background:var(--glass);backdrop-filter:blur(14px);border:1px solid var(--border);border-radius:20px;padding:28px;margin-bottom:20px;transition:border-color .3s}
+.lcard:hover{border-color:var(--border-h)}
+.lcard h2{font-size:17px;font-weight:800;letter-spacing:-.2px;margin-bottom:12px;display:flex;align-items:center;gap:10px}
+.lcard h2 .ic{font-size:20px}
+.lcard p,.lcard li{font-size:14px;color:var(--text);line-height:1.75}
+.lcard p{margin-bottom:12px}.lcard p:last-child{margin-bottom:0}
+.lcard strong{color:var(--white);font-weight:600}
+.lcard em{color:var(--accent);font-style:normal}
+.lcard blockquote{background:var(--accent-dim);border-left:3px solid var(--accent);border-radius:0 10px 10px 0;padding:14px 18px;margin:14px 0;font-size:14px;color:var(--text);font-style:italic;line-height:1.6}
+
+.reflect{background:linear-gradient(135deg,rgba(255,213,74,.06),var(--card));border:1px solid var(--border-h);border-radius:16px;padding:22px;text-align:center;margin-bottom:20px}
+.reflect-q{font-size:15px;font-weight:700;font-style:italic;line-height:1.5}
+
+/* QUIZ */
+.q-item{margin-bottom:18px;padding-bottom:18px;border-bottom:1px solid rgba(255,213,74,.04)}
+.q-item:last-child{border-bottom:none;margin-bottom:0}
+.q-num{font-size:10px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
+.q-text{font-size:14px;font-weight:600;margin-bottom:10px}
+.q-opts{display:flex;flex-direction:column;gap:6px}
+.qopt{display:flex;align-items:center;gap:10px;padding:10px 14px;border:1px solid var(--border);border-radius:10px;cursor:pointer;transition:all .25s;font-size:13px;color:var(--text)}
+.qopt:hover{border-color:var(--border-h);color:var(--white)}
+.qopt input{display:none}
+.qopt.correct{border-color:rgba(0,230,150,.3);background:rgba(0,230,150,.08);color:var(--green)}
+.qopt.wrong{border-color:rgba(255,95,87,.3);background:rgba(255,95,87,.08);color:var(--red)}
+.q-fb{font-size:12px;font-weight:600;margin-top:8px;min-height:18px}
+
+/* AI COACH */
+.ai-card{background:linear-gradient(135deg,rgba(0,230,150,.05),var(--card));border:1px solid rgba(0,230,150,.12);border-radius:18px;padding:22px;margin-bottom:20px}
+.ai-card h2{color:var(--green)}
+.ai-meta{display:flex;gap:12px;flex-wrap:wrap;margin:10px 0 14px;font-size:12px;color:var(--muted)}
+.ai-btn{background:var(--green);color:var(--bg);border:none;padding:12px 24px;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:var(--font);transition:all .3s;margin-top:10px}
+.ai-btn:hover{box-shadow:0 4px 16px rgba(0,230,150,.3)}
+
+/* INTERVIEW */
+.iv-card{background:linear-gradient(135deg,rgba(100,181,246,.05),var(--card));border:1px solid rgba(100,181,246,.12);border-radius:18px;padding:22px;margin-bottom:20px}
+.iv-card h2{color:var(--blue)}
+.iv-tip{background:rgba(100,181,246,.08);border:1px solid rgba(100,181,246,.15);border-radius:10px;padding:12px 14px;font-size:12px;color:var(--blue);margin-top:10px;font-weight:500}
+
+/* TAKEAWAY */
+.takeaway{background:var(--accent-dim);border:1px solid var(--border-h);border-radius:16px;padding:22px;text-align:center;margin-bottom:24px}
+.takeaway p{font-size:16px;font-weight:700;color:var(--accent)}
+
+/* BOTTOM NAV */
+.bnav{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:20px}
+.bnav-btn{flex:1;min-width:140px;padding:14px 20px;border-radius:12px;font-size:14px;font-weight:700;cursor:pointer;font-family:var(--font);transition:all .3s;text-align:center;text-decoration:none;display:flex;align-items:center;justify-content:center;gap:6px}
+.bnav-prev{background:transparent;color:var(--white);border:1px solid var(--border-h)}.bnav-prev:hover{background:var(--accent-dim)}
+.bnav-complete{background:var(--accent);color:var(--bg);border:none}.bnav-complete:hover{box-shadow:0 6px 24px var(--accent-glow);transform:translateY(-2px)}
+.bnav-complete.done{background:var(--green);pointer-events:none}
+.bnav-next{background:transparent;color:var(--white);border:1px solid var(--border-h)}.bnav-next:hover{background:var(--accent-dim)}
+.toast{position:fixed;bottom:32px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--green);color:var(--bg);padding:14px 28px;border-radius:14px;font-size:14px;font-weight:700;z-index:999;transition:transform .4s cubic-bezier(.16,1,.3,1);pointer-events:none}
+.toast.show{transform:translateX(-50%) translateY(0)}
+
+@media(max-width:860px){
+  .sb{transform:translateX(-100%)}.sb.open{transform:translateX(0)}.sb-x{display:block}
+  .mh{display:flex}.main{margin-left:0;padding:72px 20px 48px}
+}
+
+a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+</style>
+</head>
+<body>
+
+<div class="mh"><div class="logo">Amplify<span>Hub</span></div><button class="mb" id="mobBtn" aria-label="Open navigation menu"><span></span><span></span><span></span></button></div>
+
+<aside class="sb" id="sb">
+  <button class="sb-x" id="sbX" aria-label="Close navigation menu">✕</button>
+  <div class="sb-logo">Amplify<span>Hub</span></div>
+  <nav class="sb-nav">
+    <a class="si" href="dashboard.html"><span class="si-ic">🏠</span>Dashboard</a>
+    <a class="si act" href="journey.html"><span class="si-ic">🛤</span>Journey</a>
+    <a class="si" href="coach-home.html"><span class="si-ic">🤖</span>AI Coach</a>
+    <a class="si" href="dashboard.html#challenge"><span class="si-ic">⚡</span>Challenges</a>
+    <a class="si" href="dashboard.html#resources"><span class="si-ic">📚</span>Resources</a>
+    <div class="sb-d"></div>
+    <a class="si" href="settings.html"><span class="si-ic">⚙️</span>Settings</a>
+  </nav>
+  <div class="sb-u"><div class="sb-av">J</div><div><div class="sb-un">Jawad</div><div class="sb-ur">Pro Member</div></div></div>
+</aside>
+
+<div class="main">
+  <a href="journey.html" class="back">← Back to Journey</a>
+  <div class="lesson-badge">Sales Mindset · Lesson 7 of 8</div>
+  <h1 class="lesson-title">Think Like a Consultant</h1>
+  <div class="lesson-meta"><span>⏱ ~8 min</span><span>🏆 +50 XP</span><span>📖 Module 1: Sales Mindset</span></div>
+
+  <!-- EXPLANATION -->
+  <div class="lcard"><h2><span class="ic">📖</span> Lesson</h2><p>The worst cold callers sound like they're selling something. The best ones sound like they're <strong>helping with something.</strong></p><p>The shift from "salesperson" to "consultant" isn't about what you say — it's about how you think. A salesperson thinks: "How do I get this person to buy?" A consultant thinks: "Does this person have a problem I can actually solve?"</p><p>This mindset changes everything: your tone becomes calmer, your questions become sharper, and your pitch becomes a natural recommendation instead of a pressure tactic. Prospects can feel the difference instantly — and they respond to it.</p></div>
+
+  <!-- EXAMPLE -->
+  <div class="lcard"><h2><span class="ic">💼</span> Real-World Example</h2><p><strong>Real SDR Example:</strong> Kira sold digital marketing services. Instead of pitching features, she'd say: "I was looking at your Google Business profile and noticed a few things that might be costing you leads. Would it be helpful if I walked you through what I saw?" This wasn't a pitch — it was a genuine observation. Prospects said yes to that conversation 40% of the time, compared to 8% with her old feature-based opener.</p></div>
+
+  <!-- EXERCISE -->
+  <div class="lcard"><h2><span class="ic">✏️</span> Practical Exercise</h2><p><strong>Exercise — The Value Audit:</strong> Before your next call (or practice call), write down three specific things you genuinely believe your product/service solves for the prospect. Not features — problems. Then rewrite your opener so it references one of those problems instead of any feature. Test it on your next call.</p></div>
+
+  <!-- REFLECTION -->
+  <div class="reflect"><div class="reflect-q">💭 If you were the prospect, would you want to talk to you? What would make you say yes?</div></div>
+
+  <!-- QUIZ -->
+  <div class="lcard"><h2><span class="ic">🧠</span> Knowledge Check</h2><div class="q-item"><div class="q-num">Q1</div><div class="q-text">What's the key difference between a salesperson and a consultant?</div><div class="q-opts"><label class="qopt" data-qi="0" data-oi="0"><input type="radio" name="q0"><span class="qo-text">Consultants charge more</span></label><label class="qopt" data-qi="0" data-oi="1"><input type="radio" name="q0"><span class="qo-text">Consultants focus on solving problems, not pushing products</span></label><label class="qopt" data-qi="0" data-oi="2"><input type="radio" name="q0"><span class="qo-text">Salespeople are less experienced</span></label><label class="qopt" data-qi="0" data-oi="3"><input type="radio" name="q0"><span class="qo-text">There is no difference</span></label></div><div class="q-fb" id="qfb0"></div></div><div class="q-item"><div class="q-num">Q2</div><div class="q-text">Kira improved her success rate by:</div><div class="q-opts"><label class="qopt" data-qi="1" data-oi="0"><input type="radio" name="q1"><span class="qo-text">Pitching more aggressively</span></label><label class="qopt" data-qi="1" data-oi="1"><input type="radio" name="q1"><span class="qo-text">Offering discounts</span></label><label class="qopt" data-qi="1" data-oi="2"><input type="radio" name="q1"><span class="qo-text">Leading with a genuine observation about the prospect's business</span></label><label class="qopt" data-qi="1" data-oi="3"><input type="radio" name="q1"><span class="qo-text">Calling more people</span></label></div><div class="q-fb" id="qfb1"></div></div><div class="q-item"><div class="q-num">Q3</div><div class="q-text">The consultant mindset changes your:</div><div class="q-opts"><label class="qopt" data-qi="2" data-oi="0"><input type="radio" name="q2"><span class="qo-text">Script length</span></label><label class="qopt" data-qi="2" data-oi="1"><input type="radio" name="q2"><span class="qo-text">Tone, questions, and how prospects perceive you</span></label><label class="qopt" data-qi="2" data-oi="2"><input type="radio" name="q2"><span class="qo-text">Working hours</span></label><label class="qopt" data-qi="2" data-oi="3"><input type="radio" name="q2"><span class="qo-text">Product knowledge</span></label></div><div class="q-fb" id="qfb2"></div></div><div class="q-item"><div class="q-num">Q4</div><div class="q-text">A 'Value Audit' helps you:</div><div class="q-opts"><label class="qopt" data-qi="3" data-oi="0"><input type="radio" name="q3"><span class="qo-text">List product features</span></label><label class="qopt" data-qi="3" data-oi="1"><input type="radio" name="q3"><span class="qo-text">Identify the real problems you solve for the prospect</span></label><label class="qopt" data-qi="3" data-oi="2"><input type="radio" name="q3"><span class="qo-text">Calculate your commission</span></label><label class="qopt" data-qi="3" data-oi="3"><input type="radio" name="q3"><span class="qo-text">Write longer emails</span></label></div><div class="q-fb" id="qfb3"></div></div><button class="ai-btn" style="background:var(--accent);color:var(--bg);margin-top:14px" id="checkQuiz">Check Answers</button></div>
+
+  <!-- DRILL -->
+  <div class="lcard"><h2><span class="ic">🎯</span> Today's Drill</h2><p>Rewrite this pushy opener into a consultative one:</p><p>Before: <em>"We offer the best auto detailing leads in the city."</em></p><p>After (say aloud): <strong>"I noticed your shop doesn't show up in a few searches where your competitors do. Would it be worth a quick look at what's happening there?"</strong></p><p>Focus on: genuine helpfulness, specific observation, low-pressure question.</p></div>
+
+  <!-- AI COACH -->
+  <div class="ai-card">
+    <h2><span class="ic">🤖</span> Practice with AI Coach</h2>
+    <p style="font-size:14px;color:var(--text);margin:8px 0"><strong>Prospect says:</strong> "We already have a provider for that."</p>
+    <p style="font-size:13px;color:var(--text)"><strong>Your objective:</strong> Respond consultatively — acknowledge their current provider and ask what they'd improve about the experience if they could.</p>
+    <div class="ai-meta"><span>Difficulty: Hard</span><span>Goal: The learner practices the consultant reframe when facing competitive objections.</span></div>
+    <a href="coach-home.html" class="ai-btn">Open AI Coach →</a>
+  </div>
+
+  <!-- INTERVIEW PREP -->
+  <div class="iv-card">
+    <h2><span class="ic">🎤</span> Interview Question</h2>
+    <blockquote style="background:rgba(100,181,246,.06);border-left:3px solid var(--blue);border-radius:0 10px 10px 0;padding:14px 18px;margin:12px 0;font-style:italic;font-size:14px;color:var(--text)">"How would you describe your sales style?"</blockquote>
+    <p style="font-size:13px;color:var(--text);margin:8px 0"><strong>Example answer:</strong> Consultative. My goal on every call is to understand whether the prospect has a problem I can genuinely help with — not to push a product. I've found that when you lead with real value and curiosity, the sale happens naturally.</p>
+    <div class="iv-tip">💡 Every hiring manager prefers 'consultative' over 'aggressive.' This answer signals coachability and customer focus.</div>
+  </div>
+
+  <!-- TAKEAWAY -->
+  <div class="takeaway"><p>🔑 Stop trying to sell. Start trying to help. The pipeline follows.</p></div>
+
+  <!-- BOTTOM NAV -->
+  <div class="bnav">
+    <a href="sales-mindset-6.html" class="bnav-btn bnav-prev">← Previous Lesson</a>
+    <button class="bnav-btn bnav-complete" id="completeBtn">Mark as Complete ✓</button>
+    <a href="sales-mindset-8.html" class="bnav-btn bnav-next">Next Lesson →</a>
+  </div>
+</div>
+
+<div class="toast" id="toast">🎉 Lesson Complete! +50 XP</div>
+
+<script>
+// ── PROGRESS SYNC (shared with journey.html) ──
+const STORAGE_KEY='amplifyHub_journeyProgress';
+const MODULE_INDEX=0; // Sales Mindset is module 0
+const LESSON_INDEX=6; // 0-indexed
+const TOTAL_MODULE_LESSONS=8;
+
+function readProgress(){
+  try{ const d=JSON.parse(localStorage.getItem(STORAGE_KEY)); return new Set(d?.completedLessons||[]); }catch(e){ return new Set(); }
+}
+function saveProgress(completed){
+  localStorage.setItem(STORAGE_KEY,JSON.stringify({
+    completedLessons:[...completed],
+    updatedAt:Date.now()
+  }));
+}
+function lid(m,l){ return `m${m}l${l}`; }
+
+// ── INIT STATE ──
+const completed=readProgress();
+const thisLid=lid(MODULE_INDEX,LESSON_INDEX);
+const btn=document.getElementById('completeBtn');
+if(completed.has(thisLid)){ btn.textContent='✓ Completed'; btn.classList.add('done'); }
+
+// ── MARK COMPLETE ──
+btn.addEventListener('click',function(){
+  if(completed.has(thisLid)) return;
+  completed.add(thisLid);
+  saveProgress(completed);
+  btn.textContent='✓ Completed';
+  btn.classList.add('done');
+  const toast=document.getElementById('toast');
+  toast.classList.add('show');
+  setTimeout(()=>toast.classList.remove('show'),2500);
+});
+
+// ── QUIZ ──
+const answers=[1, 2, 1, 1];
+document.getElementById('checkQuiz').addEventListener('click',function(){
+  document.querySelectorAll('.qopt').forEach(opt=>{
+    const qi=parseInt(opt.dataset.qi), oi=parseInt(opt.dataset.oi);
+    const input=opt.querySelector('input');
+    if(!input.checked) return;
+    if(oi===answers[qi]){ opt.classList.add('correct'); document.getElementById('qfb'+qi).textContent='✓ Correct!'; document.getElementById('qfb'+qi).style.color='var(--green)'; }
+    else{ opt.classList.add('wrong'); document.getElementById('qfb'+qi).textContent='✗ Try again'; document.getElementById('qfb'+qi).style.color='var(--red)'; }
+  });
+});
+
+// ── MOBILE ──
+document.getElementById('mobBtn').addEventListener('click',()=>document.getElementById('sb').classList.add('open'));
+document.getElementById('sbX').addEventListener('click',()=>document.getElementById('sb').classList.remove('open'));
+</script>
+</body>
+</html>

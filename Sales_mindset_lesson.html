@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AmplifyHub — Dashboard</title>
+<meta name="description" content="Your AmplifyHub dashboard.">
+<meta name="robots" content="noindex">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<!-- Tailwind CSS Play CDN -->
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        fontFamily: { sans: ['Inter', 'sans-serif'] },
+        colors: {
+          brand: {
+            bg: '#07070e', bg2: '#0b0b16', bg3: '#0f0f1e',
+            card: '#13132a', card2: '#181838',
+            accent: '#FFD54A', warm: '#FFA726',
+            green: '#00e696', red: '#ff5f57',
+            blue: '#64B5F6', purple: '#BA68C8',
+            text: '#b0b0c8', muted: '#8a8aa4'
+          }
+        }
+      }
+    }
+  }
+</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="auth-config.js"></script>
+<script src="auth.js"></script>
+<script>requireAuth();</script>
+<style>
+  /* Core state handling & utility overlays */
+  body.state-loading .skel-wrap { display: flex; }
+  body.state-loading .main-content { display: none; }
+  body.state-new .only-active { display: none !important; }
+  body.state-active .only-new { display: none !important; }
+  
+  .fade-up { opacity: 0; transform: translateY(20px); transition: all .6s cubic-bezier(.16,1,.3,1); }
+  .fade-up.vis { opacity: 1; transform: translateY(0); }
+  
+  @keyframes shimmer { from { transform: translateX(-100%) } to { transform: translateX(100%) } }
+  .animate-shimmer::after {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,.05), transparent);
+    animation: shimmer 1.4s infinite;
+  }
+</style>
+</head>
+<body class="bg-brand-bg text-white font-sans min-height-screen flex flex-col md:flex-row antialiased">
+<script>document.body.classList.add('state-loading')</script>
+
+<!-- MOBILE HEADER -->
+<div class="md:hidden fixed top-0 left-0 right-0 z-50 px-5 py-4 bg-brand-bg/95 backdrop-blur-md border-b border-white/5 flex items-center justify-between">
+  <div class="text-lg font-black tracking-tight">Amplify<span class="text-brand-accent">Hub</span></div>
+  <button class="flex flex-col gap-1 p-1" id="mobMenuBtn" aria-label="Open navigation menu">
+    <span class="block w-5 h-0.5 bg-white"></span>
+    <span class="block w-5 h-0.5 bg-white"></span>
+    <span class="block w-5 h-0.5 bg-white"></span>
+  </button>
+</div>
+
+<!-- SIDEBAR -->
+<aside class="w-60 fixed top-0 left-0 bottom-0 bg-brand-bg2 border-r border-white/5 p-6 flex flex-col z-40 transition-transform duration-300 -translate-x-full md:translate-x-0" id="sidebar">
+  <button class="md:hidden absolute top-4 right-4 text-brand-muted text-xl" id="sbClose" aria-label="Close navigation menu">✕</button>
+  <div class="text-xl font-black tracking-tight px-2 pb-7">Amplify<span class="text-brand-accent">Hub</span></div>
+  <nav class="flex flex-col gap-1 flex-1">
+    <a class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-brand-accent bg-brand-accent/10 border border-white/5 transition-all" href="dashboard.html"><span class="w-5 text-center text-base">🏠</span>Dashboard</a>
+    <a class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-brand-muted hover:text-brand-text hover:bg-white/5 border border-transparent transition-all" href="journey.html"><span class="w-5 text-center text-base">🛤</span>Journey</a>
+    <a class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-brand-muted hover:text-brand-text hover:bg-white/5 border border-transparent transition-all" href="coach-home.html"><span class="w-5 text-center text-base">🤖</span>AI Coach</a>
+    <a class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-brand-muted hover:text-brand-text hover:bg-white/5 border border-transparent transition-all" href="#challenge"><span class="w-5 text-center text-base">⚡</span>Challenges</a>
+    <a class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-brand-muted hover:text-brand-text hover:bg-white/5 border border-transparent transition-all" href="#resources"><span class="w-5 text-center text-base">📚</span>Resources</a>
+    <div class="h-px bg-white/5 my-3 mx-2"></div>
+    <a class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-brand-muted hover:text-brand-text hover:bg-white/5 border border-transparent transition-all" href="settings.html"><span class="w-5 text-center text-base">⚙️</span>Settings</a>
+  </nav>
+  <div class="flex items-center gap-3 p-2 border-t border-white/5 mt-auto">
+    <div class="w-8 h-8 rounded-lg bg-brand-accent flex items-center justify-center text-sm font-bold text-brand-bg">J</div>
+    <div><div class="text-xs font-semibold">Jawad</div><div class="text-[11px] text-brand-muted">Pro Member</div></div>
+  </div>
+</aside>
+
+<!-- MAIN CONTENT CONTAINER -->
+<div class="md:ml-60 flex-1 px-5 py-24 md:px-10 md:py-8 max-w-[1100px] min-w-0">
+
+  <!-- LOADING SKELETON -->
+  <div class="skel-wrap hidden flex-col gap-6" aria-hidden="true">
+    <div class="relative overflow-hidden bg-white/5 border border-white/5 rounded-3xl h-[180px] animate-shimmer"></div>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div class="relative overflow-hidden bg-white/5 border border-white/5 rounded-2xl h-[110px] animate-shimmer"></div>
+      <div class="relative overflow-hidden bg-white/5 border border-white/5 rounded-2xl h-[110px] animate-shimmer"></div>
+      <div class="relative overflow-hidden bg-white/5 border border-white/5 rounded-2xl h-[110px] animate-shimmer"></div>
+      <div class="relative overflow-hidden bg-white/5 border border-white/5 rounded-2xl h-[110px] animate-shimmer"></div>
+    </div>
+    <div class="relative overflow-hidden bg-white/5 border border-white/5 rounded-2xl h-[200px] animate-shimmer"></div>
+  </div>
+
+  <!-- MAIN SCRIPTABLE VIEW MODULES -->
+  <div class="main-content flex flex-col gap-8">
+    
+    <!-- WELCOME HERO -->
+    <div class="welcome fade-up bg-gradient-to-br from-brand-accent/[0.06] via-brand-warm/[0.03] to-brand-card border border-brand-accent/20 rounded-3xl p-6 md:p-10 relative overflow-hidden">
+      <div class="absolute -top-[40%] -right-[10%] w-[400px] height-[400px] rounded-full bg-radial from-brand-accent/[0.06] to-transparent pointer-events-none"></div>
+      <div class="flex flex-col sm:flex-row items-start justify-between gap-6 relative z-10">
+        <div>
+          <h1 class="text-2xl md:text-3xl font-extrabold tracking-tight mb-1.5">Welcome back, Jawad 👋</h1>
+          <p class="text-sm md:text-base text-brand-text">You're on a 14-day streak. Keep the momentum going.</p>
+        </div>
+        <div class="flex items-center gap-2 px-4 py-2 bg-brand-accent/10 border border-white/5 rounded-full text-xs font-semibold text-brand-accent whitespace-nowrap">🔥 14 Day Streak</div>
+      </div>
+      <div class="flex flex-col sm:flex-row items-start sm:items-center gap-5 mt-6 relative z-10">
+        <div class="relative w-16 h-16 shrink-0 flex items-center justify-center">
+          <svg class="-rotate-90" width="64" height="64" viewBox="0 0 64 64">
+            <circle class="fill-none stroke-white/5 stroke-[5px]" cx="32" cy="32" r="28"/>
+            <circle class="fill-none stroke-brand-accent stroke-[5px] transition-[stroke-dashoffset] duration-2000 ease-[cubic-bezier(0.16,1,0.3,1)]" id="ringFill" cx="32" cy="32" r="28" stroke-dasharray="176" stroke-dashoffset="176"/>
+          </svg>
+          <div class="absolute text-sm font-extrabold text-brand-accent" id="ringPct">0%</div>
+        </div>
+        <div class="flex-1">
+          <div class="text-[11px] text-brand-muted font-semibold uppercase tracking-wider mb-1">Current Milestone</div>
+          <div class="text-base font-bold" id="wMilestoneText">Step 3: Practice With AI</div>
+        </div>
+        <a class="bg-brand-accent text-brand-bg px-8 py-3.5 rounded-xl text-sm font-bold transition hover:shadow-[0_6px_24px_rgba(255,213,74,0.3)] hover:-translate-y-0.5 whitespace-nowrap" href="journey.html" id="wCta">Continue Journey →</a>
+      </div>
+    </div>
+
+    <!-- JOURNEY ROADMAP -->
+    <div class="sec fade-up">
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="text-lg font-extrabold tracking-tight">Your Journey</h2>
+        <a class="text-xs text-brand-accent font-semibold hover:opacity-70 transition" href="journey.html">View Full Path →</a>
+      </div>
+      
+      <!-- NEW USER MAP -->
+      <div class="roadmap only-new flex flex-col items-center max-w-[500px] mx-auto">
+        <div class="flex items-center gap-4 w-full p-4 border-2 border-white/5 bg-brand-card rounded-2xl hover:border-white/20 hover:translate-x-1 transition-all cursor-pointer">
+          <div class="w-10 h-10 shrink-0 bg-brand-accent text-brand-bg font-bold rounded-xl flex items-center justify-center text-lg shadow-[0_0_16px_rgba(255,213,74,0.3)]">1</div>
+          <div class="flex-1">
+            <h3 class="text-sm font-bold">Find Your Leads</h3>
+            <p class="text-xs text-brand-text mt-0.5">Identify ideal prospects</p>
+          </div>
+          <span class="text-[11px] font-semibold px-2.5 py-1 bg-brand-accent/10 text-brand-accent rounded-full">Start Here</span>
+        </div>
+        <div class="w-0.5 h-5 bg-white/5 self-start ml-9"></div>
+        <div class="flex items-center gap-4 w-full p-4 border-2 border-white/5 bg-brand-card rounded-2xl opacity-35 pointer-events-none">
+          <div class="w-10 h-10 shrink-0 bg-white/5 rounded-xl flex items-center justify-center text-lg">🔒</div>
+          <div class="flex-1">
+            <h3 class="text-sm font-bold">Build Your Script</h3>
+            <p class="text-xs text-brand-text mt-0.5">Create your framework</p>
+          </div>
+          <span class="text-[11px] font-semibold text-brand-muted">Locked</span>
+        </div>
+        <!-- (Truncated path items for cleaner responsive markup scaling) -->
+      </div>
+
+      <!-- ACTIVE USER MAP -->
+      <div class="roadmap only-active flex flex-col items-center max-w-[500px] mx-auto">
+        <div class="flex items-center gap-4 w-full p-4 border-2 border-brand-green/20 bg-brand-card rounded-2xl opacity-70">
+          <div class="w-10 h-10 shrink-0 bg-brand-green/10 border border-brand-green/20 rounded-xl flex items-center justify-center text-lg">✓</div>
+          <div class="flex-1">
+            <h3 class="text-sm font-bold text-brand-green">Find Your Leads</h3>
+            <p class="text-xs text-brand-text mt-0.5">Identify ideal prospects</p>
+          </div>
+          <span class="text-[11px] font-semibold px-2.5 py-1 bg-brand-green/10 text-brand-green rounded-full">Complete</span>
+        </div>
+        <div class="w-0.5 h-5 bg-brand-green self-start ml-9"></div>
+        <div class="flex items-center gap-4 w-full p-4 border-2 border-brand-green/20 bg-brand-card rounded-2xl opacity-70">
+          <div class="w-10 h-10 shrink-0 bg-brand-green/10 border border-brand-green/20 rounded-xl flex items-center justify-center text-lg">✓</div>
+          <div class="flex-1">
+            <h3 class="text-sm font-bold text-brand-green">Build Your Script</h3>
+            <p class="text-xs text-brand-text mt-0.5">Create your framework</p>
+          </div>
+          <span class="text-[11px] font-semibold px-2.5 py-1 bg-brand-green/10 text-brand-green rounded-full">Complete</span>
+        </div>
+        <div class="w-0.5 h-5 bg-gradient-to-b from-brand-accent to-white/5 self-start ml-9"></div>
+        <div class="flex items-center gap-4 w-full p-4 border-2 border-brand-accent bg-brand-card rounded-2xl shadow-[0_0_32px_rgba(255,213,74,0.06)] hover:translate-x-1 transition-all cursor-pointer">
+          <div class="w-10 h-10 shrink-0 bg-brand-accent text-brand-bg font-bold rounded-xl flex items-center justify-center text-lg shadow-[0_0_16px_rgba(255,213,74,0.3)]">3</div>
+          <div class="flex-1">
+            <h3 class="text-sm font-bold">Practice With AI</h3>
+            <p class="text-xs text-brand-text mt-0.5">Roleplay realistic calls</p>
+          </div>
+          <span class="text-[11px] font-semibold px-2.5 py-1 bg-brand-accent/10 text-brand-accent rounded-full">In Progress</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONTINUE LEARNING CARDS -->
+    <div class="sec fade-up">
+      <div class="mb-4"><h2 class="text-lg font-extrabold tracking-tight only-active">Continue Learning</h2><h2 class="text-lg font-extrabold tracking-tight only-new">Start Learning</h2></div>
+      
+      <!-- CARDS ROW NEW USER -->
+      <div class="cards-row only-new grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="bg-brand-card border border-white/5 rounded-2xl p-7 relative overflow-hidden transition hover:-translate-y-1 group hover:border-brand-accent/30">
+          <div class="absolute top-0 left-0 right-0 h-[3px] bg-brand-accent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+          <div class="w-11 h-11 bg-brand-accent/10 border border-white/5 rounded-xl flex items-center justify-center text-xl mb-4">📞</div>
+          <h3 class="text-base font-bold mb-1">Lesson 1: Why Cold Calling Works</h3>
+          <p class="text-xs text-brand-text leading-relaxed mb-4">Your first step — learn the mindset that separates callers who book meetings from callers who burn out.</p>
+          <a class="inline-flex items-center gap-1.5 bg-brand-accent text-brand-bg px-4 py-2 rounded-lg text-xs font-semibold transition hover:shadow-[0_4px_16px_rgba(255,213,74,0.3)]" href="journey.html">Start Lesson →</a>
+          <div class="flex gap-3 text-[11px] text-brand-muted mt-3"><span>⏱ 6 min</span><span>🎯 +50 XP</span></div>
+        </div>
+        <div class="bg-brand-card border border-white/5 rounded-2xl p-7 relative overflow-hidden transition hover:-translate-y-1 group hover:border-brand-green/30">
+          <div class="absolute top-0 left-0 right-0 h-[3px] bg-brand-green opacity-0 group-hover:opacity-100 transition-opacity"></div>
+          <div class="w-11 h-11 bg-brand-green/10 border border-white/5 rounded-xl flex items-center justify-center text-xl mb-4">🤖</div>
+          <h3 class="text-base font-bold mb-1">AI Coach: First Practice Call</h3>
+          <p class="text-xs text-brand-text leading-relaxed mb-4">No pressure, no real prospect — try a practice call with the AI and see how it feels.</p>
+          <a class="inline-flex items-center gap-1.5 bg-brand-green text-brand-bg px-4 py-2 rounded-lg text-xs font-semibold transition hover:shadow-[0_4px_16px_rgba(0,230,150,0.3)]" href="coach-home.html">Try It →</a>
+          <div class="flex gap-3 text-[11px] text-brand-muted mt-3"><span>⏱ 5 min</span><span>📈 Builds confidence</span></div>
+        </div>
+      </div>
+
+      <!-- CARDS ROW ACTIVE USER -->
+      <div class="cards-row only-active grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="bg-brand-card border border-white/5 rounded-2xl p-7 relative overflow-hidden transition hover:-translate-y-1 group hover:border-brand-accent/30">
+          <div class="absolute top-0 left-0 right-0 h-[3px] bg-brand-accent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+          <div class="w-11 h-11 bg-brand-accent/10 border border-white/5 rounded-xl flex items-center justify-center text-xl mb-4">📞</div>
+          <h3 class="text-base font-bold mb-1">Lesson 7: The Opening Line</h3>
+          <p class="text-xs text-brand-text leading-relaxed mb-4">Learn the 3-second hook that keeps prospects from hanging up.</p>
+          <button class="inline-flex items-center gap-1.5 bg-brand-accent text-brand-bg px-4 py-2 rounded-lg text-xs font-semibold transition hover:shadow-[0_4px_16px_rgba(255,213,74,0.3)]">Resume Lesson →</button>
+          <div class="flex gap-3 text-[11px] text-brand-muted mt-3"><span>⏱ 8 min</span><span>🎯 +50 XP</span></div>
+        </div>
+        <div class="bg-brand-card border border-white/5 rounded-2xl p-7 relative overflow-hidden transition hover:-translate-y-1 group hover:border-brand-green/30">
+          <div class="absolute top-0 left-0 right-0 h-[3px] bg-brand-green opacity-0 group-hover:opacity-100 transition-opacity"></div>
+          <div class="w-11 h-11 bg-brand-green/10 border border-white/5 rounded-xl flex items-center justify-center text-xl mb-4">🤖</div>
+          <h3 class="text-base font-bold mb-1">AI Coach: Practice Call</h3>
+          <p class="text-xs text-brand-text leading-relaxed mb-4">Roleplay a cold call to an auto detailing shop. AI plays the prospect.</p>
+          <button class="inline-flex items-center gap-1.5 bg-brand-green text-brand-bg px-4 py-2 rounded-lg text-xs font-semibold transition hover:shadow-[0_4px_16px_rgba(0,230,150,0.3)]">Start Practice →</button>
+          <div class="flex gap-3 text-[11px] text-brand-muted mt-3"><span>⏱ 5 min</span><span>📈 Builds confidence</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DAILY CHALLENGE -->
+    <div class="sec fade-up" id="challenge">
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="text-lg font-extrabold tracking-tight">Daily Challenge</h2>
+        <a class="text-xs text-brand-accent font-semibold hover:opacity-70 transition cursor-pointer">View All →</a>
+      </div>
+      <div class="bg-gradient-to-br from-brand-warm/[0.06] to-brand-card border border-brand-warm/20 rounded-2xl p-6 flex flex-col sm:flex-row items-start sm:items-center gap-6 hover:border-brand-warm/40 hover:-translate-y-0.5 transition duration-300 cursor-pointer">
+        <div class="w-14 h-14 bg-brand-warm/10 rounded-2xl flex items-center justify-center text-2xl shrink-0">⚡</div>
+        <div class="flex-1">
+          <h3 class="text-base font-bold mb-1">Handle the "We Already Have Someone" Objection</h3>
+          <p class="text-xs text-brand-text">Practice turning this common pushback into a conversation that uncovers real opportunity.</p>
+          <div class="flex gap-4 mt-2">
+            <span class="text-xs font-semibold text-brand-accent flex items-center gap-1">🏆 +100 XP</span>
+            <span class="text-xs font-semibold text-brand-muted flex items-center gap-1">⏱ ~4 min</span>
+          </div>
+        </div>
+        <button class="bg-brand-warm text-brand-bg px-7 py-3 rounded-xl text-xs font-bold whitespace-nowrap self-stretch sm:self-auto text-center transition hover:shadow-[0_4px_20px_rgba(255,167,38,0.3)] hover:-translate-y-0.5">Start Challenge</button>
+      </div>
+    </div>
+
+    <!-- PROGRESS GRID COUNTERS -->
+    <div class="sec fade-up">
+      <div class="mb-4"><h2 class="text-lg font-extrabold tracking-tight">Your Progress</h2></div>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4.5" id="statsGrid">
+        <div class="bg-brand-card border border-white/5 rounded-2xl p-[22px] text-center hover:border-brand-accent/20 hover:-translate-y-0.5 transition duration-300">
+          <div class="text-3xl font-black tracking-tight text-brand-accent mb-0.5" data-count="247">0</div>
+          <div class="text-xs text-brand-muted font-medium">Calls Practiced</div>
+          <div class="h-1 bg-white/5 rounded-full mt-2.5 overflow-hidden"><div class="st-fill h-full rounded-full transition-[width] duration-[1800ms] cubic-bezier(0.16,1,0.3,1) bg-brand-accent" data-w="78"></div></div>
+        </div>
+        <div class="bg-brand-card border border-white/5 rounded-2xl p-[22px] text-center hover:border-brand-green/20 hover:-translate-y-0.5 transition duration-300">
+          <div class="text-3xl font-black tracking-tight text-brand-green mb-0.5" data-count="31">0</div>
+          <div class="text-xs text-brand-muted font-medium">Meetings Simulated</div>
+          <div class="h-1 bg-white/5 rounded-full mt-2.5 overflow-hidden"><div class="st-fill h-full rounded-full transition-[width] duration-[1800ms] cubic-bezier(0.16,1,0.3,1) bg-brand-green" data-w="62"></div></div>
+        </div>
+        <div class="bg-brand-card border border-white/5 rounded-2xl p-[22px] text-center hover:border-brand-warm/20 hover:-translate-y-0.5 transition duration-300">
+          <div class="text-3xl font-black tracking-tight text-brand-warm mb-0.5" data-count="87">0</div>
+          <div class="text-xs text-brand-muted font-medium">Confidence Score</div>
+          <div class="h-1 bg-white/5 rounded-full mt-2.5 overflow-hidden"><div class="st-fill h-full rounded-full transition-[width] duration-[1800ms] cubic-bezier(0.16,1,0.3,1) bg-brand-warm" data-w="87"></div></div>
+        </div>
+        <div class="bg-brand-card border border-white/5 rounded-2xl p-[22px] text-center hover:border-brand-blue/20 hover:-translate-y-0.5 transition duration-300">
+          <div class="text-3xl font-black tracking-tight text-brand-blue mb-0.5" data-count="14">0</div>
+          <div class="text-xs text-brand-muted font-medium">Day Streak</div>
+          <div class="h-1 bg-white/5 rounded-full mt-2.5 overflow-hidden"><div class="st-fill h-full rounded-full transition-[width] duration-[1800ms] cubic-bezier(0.16,1,0.3,1) bg-brand-blue" data-w="46"></div></div>
+        </div>
+      </div>
+      <div class="text-center text-xs text-brand-muted mt-3 only-new">Your stats begin with your first practice call — they'll fill in as you go.</div>
+    </div>
+
+    <!-- ACHIEVEMENTS BADGES -->
+    <div class="sec fade-up">
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="text-lg font-extrabold tracking-tight">Achievements</h2>
+        <a class="text-xs text-brand-accent font-semibold hover:opacity-70 transition cursor-pointer">View All →</a>
+      </div>
+      <div class="flex gap-3 flex-wrap">
+        <div class="badge earned w-20 flex flex-col items-center gap-1.5 py-3.5 px-2 rounded-2xl border border-white/5 bg-brand-card transition duration-300 hover:-translate-y-1 hover:border-white/20 hover:shadow-[0_8px_24px_rgba(255,213,74,0.1)] group">
+          <div class="text-2xl group-hover:scale-115 transition-transform duration-300">🔥</div><div class="text-[10px] font-semibold text-brand-accent text-center leading-tight">Hot Streak</div>
+        </div>
+        <div class="badge earned w-20 flex flex-col items-center gap-1.5 py-3.5 px-2 rounded-2xl border border-white/5 bg-brand-card transition duration-300 hover:-translate-y-1 hover:border-white/20 hover:shadow-[0_8px_24px_rgba(255,213,74,0.1)] group">
+          <div class="text-2xl group-hover:scale-115 transition-transform duration-300">📞</div><div class="text-[10px] font-semibold text-brand-accent text-center leading-tight">100 Calls</div>
+        </div>
+        <div class="badge earned w-20 flex flex-col items-center gap-1.5 py-3.5 px-2 rounded-2xl border border-white/5 bg-brand-card transition duration-300 hover:-translate-y-1 hover:border-white/20 hover:shadow-[0_8px_24px_rgba(255,213,74,0.1)] group">
+          <div class="text-2xl group-hover:scale-115 transition-transform duration-300">🎯</div><div class="text-[10px] font-semibold text-brand-accent text-center leading-tight">10 Bookings</div>
+        </div>
+        <div class="badge earned w-20 flex flex-col items-center gap-1.5 py-3.5 px-2 rounded-2xl border border-white/5 bg-brand-card transition duration-300 hover:-translate-y-1 hover:border-white/20 hover:shadow-[0_8px_24px_rgba(255,213,74,0.1)] group">
+          <div class="text-2xl group-hover:scale-115 transition-transform duration-300">📝</div><div class="text-[10px] font-semibold text-brand-accent text-center leading-tight">Script Master</div>
+        </div>
+        <div class="badge locked w-20 flex flex-col items-center gap-1.5 py-3.5 px-2 rounded-2xl border border-white/5 bg-brand-card opacity-30 grayscale pointer-events-none group">
+          <div class="text-2xl">💎</div><div class="text-[10px] font-semibold text-brand-text text-center leading-tight">Objection Pro</div>
+        </div>
+      </div>
+      <div class="text-center text-xs text-brand-muted mt-3 only-new">Complete your first lesson to earn your first badge.</div>
+    </div>
+
+    <!-- FEED ACTIVITY -->
+    <div class="sec fade-up">
+      <div class="mb-4"><h2 class="text-lg font-extrabold tracking-tight">Recent Activity</h2></div>
+      
+      <!-- EMPTY USER STATE -->
+      <div class="empty-state only-new bg-brand-card border border-dashed border-white/20 rounded-2xl py-9 px-6 text-center">
+        <div class="text-4xl mb-2.5">📭</div>
+        <h3 class="text-sm font-bold mb-1.5">No activity yet</h3>
+        <p class="text-xs text-brand-text max-w-[380px] mx-auto mb-4 leading-relaxed">Complete your first lesson or practice call and your wins will show up here.</p>
+        <a class="inline-flex items-center gap-1.5 bg-brand-accent text-brand-bg px-[22px] py-2.5 rounded-lg text-xs font-bold transition hover:shadow-[0_4px_16px_rgba(255,213,74,0.3)] hover:-translate-y-0.5" href="journey.html">Start Your Journey →</a>
+      </div>
+
+      <!-- ACTIVE FEED LIST -->
+      <div class="feed-list only-active flex flex-col gap-3">
+        <div class="bg-brand-card border border-white/5 rounded-2xl p-[18px] md:p-5 flex items-start gap-3 hover:border-white/20 hover:translate-x-1 transition duration-200">
+          <div class="w-[34px] h-[34px] shrink-0 rounded-full flex items-center justify-center text-sm font-bold bg-brand-accent text-brand-bg">🛤</div>
+          <div class="flex-1">
+            <div class="flex items-center justify-between"><span class="text-xs font-semibold">Journey</span><span class="text-[11px] text-brand-muted">2 hrs ago</span></div>
+            <p class="text-sm text-brand-text mt-1 leading-relaxed">Completed Lesson 6: Building Your Script — moved on to Lesson 7.</p>
+            <div class="flex gap-3 mt-2"><span class="text-xs font-semibold text-brand-warm transition duration-200 hover:scale-105 cursor-pointer">🎯 +50 XP</span></div>
+          </div>
+        </div>
+        <div class="bg-brand-card border border-white/5 rounded-2xl p-[18px] md:p-5 flex items-start gap-3 hover:border-white/20 hover:translate-x-1 transition duration-200">
+          <div class="w-[34px] h-[34px] shrink-0 rounded-full flex items-center justify-center text-sm font-bold bg-brand-green text-brand-bg">🤖</div>
+          <div class="flex-1">
+            <div class="flex items-center justify-between"><span class="text-xs font-semibold">AI Coach</span><span class="text-[11px] text-brand-muted">5 hrs ago</span></div>
+            <p class="text-sm text-brand-text mt-1 leading-relaxed">Practiced a cold call roleplay for an auto detailing shop. Scored 87% confidence.</p>
+            <div class="flex gap-3 mt-2"><span class="text-xs font-semibold text-brand-warm transition duration-200 hover:scale-105 cursor-pointer">📈 Confidence +9%</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- QUICK ACTIONS -->
+    <div class="sec fade-up">
+      <div class="mb-4"><h2 class="text-lg font-extrabold tracking-tight">AI Quick Actions</h2></div>
+      <div class="grid grid-cols-3 md:grid-cols-5 gap-3">
+        <div class="bg-brand-card border border-white/5 rounded-2xl py-5 px-3 text-center cursor-pointer hover:border-white/20 hover:-translate-y-1 hover:bg-brand-card2 transition duration-300">
+          <div class="text-2xl mb-2">👋</div><div class="text-xs font-semibold text-brand-text">Opening</div>
+        </div>
+        <div class="bg-brand-card border border-white/5 rounded-2xl py-5 px-3 text-center cursor-pointer hover:border-white/20 hover:-translate-y-1 hover:bg-brand-card2 transition duration-300">
+          <div class="text-2xl mb-2">🔍</div><div class="text-xs font-semibold text-brand-text">Discovery</div>
+        </div>
+        <div class="bg-brand-card border border-white/5 rounded-2xl py-5 px-3 text-center cursor-pointer hover:border-white/20 hover:-translate-y-1 hover:bg-brand-card2 transition duration-300">
+          <div class="text-2xl mb-2">🛡</div><div class="text-xs font-semibold text-brand-text">Objections</div>
+        </div>
+        <div class="bg-brand-card border border-white/5 rounded-2xl py-5 px-3 text-center cursor-pointer hover:border-white/20 hover:-translate-y-1 hover:bg-brand-card2 transition duration-300">
+          <div class="text-2xl mb-2">🤝</div><div class="text-xs font-semibold text-brand-text">Closing</div>
+        </div>
+        <div class="bg-brand-card border border-white/5 rounded-2xl py-5 px-3 text-center cursor-pointer hover:border-white/20 hover:-translate-y-1 hover:bg-brand-card2 transition duration-300">
+          <div class="text-2xl mb-2">💪</div><div class="text-xs font-semibold text-brand-text">Confidence</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LIBRARY RESOURCES -->
+    <div class="sec fade-up" id="resources">
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="text-lg font-extrabold tracking-tight">Resources</h2>
+        <a class="text-xs text-brand-accent font-semibold hover:opacity-70 transition cursor-pointer">Browse Library →</a>
+      </div>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-3.5">
+        <a class="bg-brand-card border border-white/5 rounded-2xl p-[22px] transition hover:border-white/20 hover:-translate-y-1 cursor-pointer block" href="interview-prep.html">
+          <div class="text-2xl mb-3">🎤</div>
+          <div class="text-sm font-bold mb-1">Interview Prep</div>
+          <div class="text-xs text-brand-muted line-clamp-2 leading-relaxed">Your SDR portfolio and first-call challenge</div>
+          <div class="text-[11px] text-brand-accent font-semibold mt-2.5">Build yours →</div>
+        </a>
+        <div class="bg-brand-card border border-white/5 rounded-2xl p-[22px] transition hover:border-white/20 hover:-translate-y-1 cursor-pointer">
+          <div class="text-2xl mb-3">📝</div>
+          <div class="text-sm font-bold mb-1">Scripts</div>
+          <div class="text-xs text-brand-muted line-clamp-2 leading-relaxed">Industry-specific cold call frameworks</div>
+          <div class="text-[11px] text-brand-accent font-semibold mt-2.5">24 scripts</div>
+        </div>
+        <div class="bg-brand-card border border-white/5 rounded-2xl p-[22px] transition hover:border-white/20 hover:-translate-y-1 cursor-pointer">
+          <div class="text-2xl mb-3">📋</div>
+          <div class="text-sm font-bold mb-1">Templates</div>
+          <div class="text-xs text-brand-muted line-clamp-2 leading-relaxed">Email follow-ups, voicemail drops</div>
+          <div class="text-[11px] text-brand-accent font-semibold mt-2.5">18 templates</div>
+        </div>
+        <div class="bg-brand-card border border-white/5 rounded-2xl p-[22px] transition hover:border-white/20 hover:-translate-y-1 cursor-pointer">
+          <div class="text-2xl mb-3">⚡</div>
+          <div class="text-sm font-bold mb-1">Cheat Sheets</div>
+          <div class="text-xs text-brand-muted line-clamp-2 leading-relaxed">Quick-reference objection handlers</div>
+          <div class="text-[11px] text-brand-accent font-semibold mt-2.5">12 sheets</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+// Scroll reveal using DOM class assignment
+const obs=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('vis')})},{threshold:.1});
+document.querySelectorAll('.fade-up').forEach(el=>obs.observe(el));
+
+// Journey state sync functions
+function readJourneyProgress(){
+  try{
+    const raw = localStorage.getItem('amplifyHub_journeyProgress');
+    if(raw){
+      const d = JSON.parse(raw);
+      return { pct: d.overallProgress ?? 0, milestone: d.currentModuleName || 'Getting Started', lessonsDone: d.lessonsCompleted ?? 0 };
+    }
+  }catch(e){}
+  return { pct: 0, milestone: 'Getting Started', lessonsDone: 0 };
+}
+function applyJourneyProgress(animate){
+  const jp = readJourneyProgress();
+  const milestoneEl = document.getElementById('wMilestoneText');
+  if(milestoneEl) milestoneEl.textContent = jp.milestone;
+  const pctEl = document.getElementById('ringPct');
+  const circ = document.getElementById('ringFill');
+  if(!pctEl || !circ) return;
+  const dashTotal = 176;
+  circ.style.transition = animate ? '' : 'none';
+  circ.style.strokeDashoffset = dashTotal-(dashTotal*jp.pct/100);
+  if(animate){
+    let c=parseInt(pctEl.textContent)||0;
+    const dir = jp.pct>c?1:-1;
+    const iv=setInterval(()=>{ if(c===jp.pct){clearInterval(iv);return;} c+=dir; pctEl.textContent=c+'%'; },20);
+  } else {
+    pctEl.textContent = jp.pct+'%';
+  }
+}
+
+const ringObs=new IntersectionObserver(es=>{es.forEach(e=>{if(!e.isIntersecting)return;
+  applyJourneyProgress(true);
+  ringObs.unobserve(e.target)})},{threshold:.3});
+ringObs.observe(document.querySelector('.welcome'));
+
+window.addEventListener('storage', (e)=>{
+  if(e.key==='amplifyHub_journeyProgress') applyJourneyProgress(false);
+});
+
+// Stat counting micro-animations
+const statObs=new IntersectionObserver(es=>{es.forEach(e=>{if(!e.isIntersecting)return;
+  e.target.querySelectorAll('[data-count]').forEach(el=>{
+    const t=parseInt(el.dataset.count);let c=0;
+    const iv=setInterval(()=>{c+=Math.ceil(t/40);if(c>=t){c=t;clearInterval(iv)}el.textContent=c},30);
+  });
+  e.target.querySelectorAll('.st-fill').forEach(f=>{f.style.width=f.dataset.w+'%'});
+  statObs.unobserve(e.target)})},{threshold:.3});
+statObs.observe(document.getElementById('statsGrid'));
+
+// Dynamic view state updates (Responsive Menu Toggles)
+document.getElementById('mobMenuBtn').addEventListener('click',()=>document.getElementById('sidebar').classList.remove('-translate-x-full'));
+document.getElementById('sbClose').addEventListener('click',()=>document.getElementById('sidebar').classList.add('-translate-x-full'));
+
+document.querySelectorAll('.sb-item').forEach(item=>{
+  item.addEventListener('click',()=>{
+    document.querySelectorAll('.sb-item').forEach(i=>i.classList.add('text-brand-muted'), i=>i.classList.remove('text-brand-accent','bg-brand-accent/10'));
+    item.classList.remove('text-brand-muted');
+    item.classList.add('text-brand-accent','bg-brand-accent/10');
+    document.getElementById('sidebar').classList.add('-translate-x-full');
+  });
+});
+
+// Conditional initialization
+function ahUserState(){
+  try{
+    const d=JSON.parse(localStorage.getItem('amplifyHub_journeyProgress')||'null');
+    if(d&&((d.overallProgress||0)>0||(d.lessonsCompleted||0)>0))return 'active';
+  }catch(e){}
+  return 'new';
+}
+setTimeout(()=>{
+  const st=ahUserState();
+  if(st==='new'){
+    document.querySelector('.w-greeting h1').textContent='Welcome to AmplifyHub 👋';
+    document.querySelector('.w-greeting p').textContent='Your journey starts today — one call at a time.';
+    document.querySelector('.w-streak').textContent='🌱 Day 1';
+    document.getElementById('wCta').textContent='Start Your Journey →';
+    document.querySelectorAll('#statsGrid [data-count]').forEach(el=>{el.dataset.count='0'});
+    document.querySelectorAll('#statsGrid .st-fill').forEach(f=>{f.dataset.w='0'});
+    document.querySelectorAll('.badge').forEach(b=>{b.classList.remove('earned','opacity-100'); b.classList.add('locked','opacity-30','grayscale','pointer-events-none')});
+  }
+  document.body.classList.remove('state-loading');
+  document.body.classList.add(st==='new'?'state-new':'state-active');
+},450);
+</script>
+</body>
+</html>

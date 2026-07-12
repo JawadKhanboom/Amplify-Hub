@@ -1,0 +1,11 @@
+# ── OS junk ──
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# ── Editor / tool-local state ──
+.vscode/
+.claude/settings.local.json
+
+# ── Personal files (not part of the site) ──
+assets/docs/About_Me.pdf

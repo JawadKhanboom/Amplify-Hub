@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AmplifyHub — Dashboard</title>
+<meta name="description" content="Your AmplifyHub dashboard.">
+<meta name="robots" content="noindex">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="auth-config.js"></script>
+<script src="auth.js"></script>
+<script src="coach-config.js"></script>
+<script src="coach-store.js"></script>
+<script>requireAuth();</script>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#07070e;--bg2:#0b0b16;--bg3:#0f0f1e;--card:#13132a;--card2:#181838;
+  --accent:#FFD54A;--accent-dim:rgba(255,213,74,.1);--accent-glow:rgba(255,213,74,.3);
+  --warm:#FFA726;--green:#00e696;--red:#ff5f57;--blue:#64B5F6;--purple:#BA68C8;
+  --white:#fff;--text:#b0b0c8;--muted:#8a8aa4;
+  --border:rgba(255,213,74,.07);--border-h:rgba(255,213,74,.22);
+  --glass:rgba(19,19,42,.55);
+  --font:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
+  --sb:240px;
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--font);background:var(--bg);color:var(--white);overflow-x:hidden;display:flex;min-height:100vh}
+
+/* ═══ SIDEBAR ═══ */
+.sidebar{width:var(--sb);position:fixed;top:0;left:0;bottom:0;background:var(--bg2);border-right:1px solid var(--border);padding:24px 16px;display:flex;flex-direction:column;z-index:100;transition:transform .3s}
+.sb-logo{font-size:20px;font-weight:800;letter-spacing:-.5px;padding:0 8px 28px}
+.sb-logo span{color:var(--accent)}
+.sb-nav{display:flex;flex-direction:column;gap:4px;flex:1}
+.sb-item{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:10px;font-size:14px;font-weight:500;color:var(--muted);cursor:pointer;transition:all .2s;text-decoration:none;border:1px solid transparent}
+.sb-item:hover{color:var(--text);background:rgba(255,255,255,.03)}
+.sb-item.active{color:var(--accent);background:var(--accent-dim);border-color:var(--border)}
+.sb-icon{width:20px;text-align:center;font-size:15px}
+.sb-divider{height:1px;background:var(--border);margin:12px 8px}
+.sb-user{display:flex;align-items:center;gap:10px;padding:12px 8px;border-top:1px solid var(--border);margin-top:auto}
+.sb-avatar{width:32px;height:32px;border-radius:8px;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:var(--bg)}
+.sb-uname{font-size:13px;font-weight:600}.sb-urole{font-size:11px;color:var(--muted)}
+
+/* ═══ MAIN ═══ */
+.main{margin-left:var(--sb);flex:1;padding:32px 40px 64px;max-width:1100px;min-width:0}
+
+/* ═══ WELCOME ═══ */
+.welcome{background:linear-gradient(135deg,rgba(255,213,74,.06),rgba(255,167,38,.03),var(--card));border:1px solid var(--border-h);border-radius:24px;padding:40px;position:relative;overflow:hidden;margin-bottom:32px}
+.welcome::before{content:'';position:absolute;top:-40%;right:-10%;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(255,213,74,.06),transparent 70%);pointer-events:none}
+.w-top{display:flex;align-items:flex-start;justify-content:space-between;gap:24px;position:relative;z-index:2;flex-wrap:wrap}
+.w-greeting h1{font-size:28px;font-weight:800;letter-spacing:-.5px;margin-bottom:6px}
+.w-greeting p{font-size:15px;color:var(--text)}
+.w-streak{display:flex;align-items:center;gap:8px;padding:8px 16px;background:var(--accent-dim);border:1px solid var(--border);border-radius:100px;font-size:13px;font-weight:600;color:var(--accent)}
+.w-progress{display:flex;align-items:center;gap:20px;margin-top:24px;position:relative;z-index:2;flex-wrap:wrap}
+.w-ring{position:relative;width:64px;height:64px}
+.w-ring svg{transform:rotate(-90deg)}
+.w-ring-bg{fill:none;stroke:rgba(255,255,255,.06);stroke-width:5}
+.w-ring-fill{fill:none;stroke:var(--accent);stroke-width:5;stroke-linecap:round;stroke-dasharray:176;stroke-dashoffset:176;transition:stroke-dashoffset 2s cubic-bezier(.16,1,.3,1)}
+.w-ring-pct{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:800;color:var(--accent)}
+.w-milestone{flex:1}
+.w-milestone-label{font-size:11px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px}
+.w-milestone-text{font-size:16px;font-weight:700}
+.w-cta{background:var(--accent);color:var(--bg);border:none;padding:14px 32px;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;transition:all .3s;font-family:var(--font);text-decoration:none;display:inline-block}
+.w-cta:hover{box-shadow:0 6px 24px var(--accent-glow);transform:translateY(-2px)}
+
+/* ═══ SECTION HEADERS ═══ */
+.sec{margin-bottom:32px}
+.sec-h{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.sec-h h2{font-size:18px;font-weight:800;letter-spacing:-.3px}
+.sec-link{font-size:13px;color:var(--accent);font-weight:600;cursor:pointer;text-decoration:none;transition:opacity .2s}
+.sec-link:hover{opacity:.7}
+
+/* ═══ JOURNEY ROADMAP ═══ */
+.roadmap{display:flex;flex-direction:column;align-items:center;gap:0;padding:8px 0}
+.rm-node{display:flex;align-items:center;gap:16px;width:100%;max-width:500px;padding:16px 20px;border-radius:16px;border:2px solid var(--border);background:var(--card);transition:all .3s;cursor:pointer;position:relative}
+.rm-node:hover{border-color:var(--border-h);transform:translateX(4px)}
+.rm-node.current{border-color:var(--accent);background:linear-gradient(135deg,rgba(255,213,74,.07),var(--card));box-shadow:0 0 32px rgba(255,213,74,.06)}
+.rm-node.done{border-color:rgba(0,230,150,.2);opacity:.7}
+.rm-node.locked{opacity:.35;cursor:default;pointer-events:none}
+.rm-dot{width:40px;height:40px;min-width:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:18px;background:var(--accent-dim);border:1px solid var(--border)}
+.rm-node.done .rm-dot{background:rgba(0,230,150,.1);border-color:rgba(0,230,150,.2)}
+.rm-node.current .rm-dot{background:var(--accent);color:var(--bg);font-weight:700;box-shadow:0 0 16px var(--accent-glow)}
+.rm-node.locked .rm-dot{background:rgba(255,255,255,.03)}
+.rm-info h3{font-size:15px;font-weight:700}.rm-info p{font-size:12px;color:var(--text);margin-top:2px}
+.rm-node.done .rm-info h3{color:var(--green)}
+.rm-tag{margin-left:auto;font-size:11px;font-weight:600;padding:4px 10px;border-radius:100px}
+.rm-tag.done-tag{background:rgba(0,230,150,.1);color:var(--green)}
+.rm-tag.curr-tag{background:var(--accent-dim);color:var(--accent)}
+.rm-tag.lock-tag{color:var(--muted)}
+.rm-line{width:2px;height:20px;background:var(--border);margin:0 auto 0 35px}
+.rm-line.done-line{background:var(--green)}
+.rm-line.curr-line{background:linear-gradient(var(--accent),var(--border))}
+
+/* ═══ CARDS ROW ═══ */
+.cards-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+
+/* Continue Learning */
+.learn-card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:28px;transition:all .3s;cursor:pointer;position:relative;overflow:hidden}
+.learn-card:hover{border-color:var(--border-h);transform:translateY(-3px)}
+.learn-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:20px 20px 0 0;opacity:0;transition:opacity .3s}
+.learn-card:hover::before{opacity:1}
+.learn-card.lesson::before{background:var(--accent)}
+.learn-card.coach::before{background:var(--green)}
+.lc-icon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:16px}
+.lc-icon.gold{background:var(--accent-dim);border:1px solid var(--border)}
+.lc-icon.green{background:rgba(0,230,150,.1);border:1px solid rgba(0,230,150,.15)}
+.lc-h{font-size:16px;font-weight:700;margin-bottom:4px}
+.lc-p{font-size:13px;color:var(--text);line-height:1.5;margin-bottom:16px}
+.lc-btn{display:inline-flex;align-items:center;gap:6px;padding:8px 18px;border-radius:8px;font-size:13px;font-weight:600;border:none;cursor:pointer;transition:all .25s;font-family:var(--font)}
+.lc-btn.gold{background:var(--accent);color:var(--bg)}.lc-btn.gold:hover{box-shadow:0 4px 16px var(--accent-glow)}
+.lc-btn.green{background:var(--green);color:var(--bg)}.lc-btn.green:hover{box-shadow:0 4px 16px rgba(0,230,150,.3)}
+.lc-meta{font-size:11px;color:var(--muted);margin-top:12px;display:flex;gap:12px}
+
+/* ═══ DAILY CHALLENGE ═══ */
+.challenge{background:linear-gradient(135deg,rgba(255,167,38,.06),var(--card));border:1px solid rgba(255,167,38,.12);border-radius:20px;padding:28px;display:flex;align-items:center;gap:24px;transition:all .3s;cursor:pointer;flex-wrap:wrap}
+.challenge:hover{border-color:rgba(255,167,38,.25);transform:translateY(-2px)}
+.ch-icon{width:56px;height:56px;min-width:56px;border-radius:16px;background:rgba(255,167,38,.12);display:flex;align-items:center;justify-content:center;font-size:28px}
+.ch-info{flex:1;min-width:200px}
+.ch-info h3{font-size:16px;font-weight:700;margin-bottom:4px}
+.ch-info p{font-size:13px;color:var(--text)}
+.ch-meta{display:flex;gap:16px;margin-top:8px}
+.ch-badge{font-size:12px;font-weight:600;display:flex;align-items:center;gap:4px}
+.ch-badge.xp{color:var(--accent)}.ch-badge.time{color:var(--muted)}
+.ch-start{background:var(--warm);color:var(--bg);border:none;padding:12px 28px;border-radius:12px;font-size:14px;font-weight:700;cursor:pointer;transition:all .3s;font-family:var(--font);white-space:nowrap}
+.ch-start:hover{box-shadow:0 4px 20px rgba(255,167,38,.3);transform:translateY(-2px)}
+
+/* ═══ STATS ═══ */
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.stat-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:22px;text-align:center;transition:all .3s}
+.stat-card:hover{border-color:var(--border-h);transform:translateY(-2px)}
+.st-val{font-size:32px;font-weight:900;letter-spacing:-1px;margin-bottom:2px}
+.st-val.gold{color:var(--accent)}.st-val.grn{color:var(--green)}.st-val.wrm{color:var(--warm)}.st-val.blu{color:var(--blue)}
+.st-label{font-size:12px;color:var(--muted);font-weight:500}
+.st-bar{height:4px;background:rgba(255,255,255,.05);border-radius:2px;margin-top:10px;overflow:hidden}
+.st-fill{height:100%;border-radius:2px;transition:width 1.8s cubic-bezier(.16,1,.3,1)}
+
+/* ═══ BADGES ═══ */
+.badges-grid{display:flex;gap:12px;flex-wrap:wrap}
+.badge{width:80px;display:flex;flex-direction:column;align-items:center;gap:6px;padding:14px 8px;border-radius:16px;border:1px solid var(--border);background:var(--card);transition:all .3s;cursor:default}
+.badge:hover{transform:translateY(-3px);border-color:var(--border-h)}
+.badge.earned:hover{box-shadow:0 8px 24px rgba(255,213,74,.1)}
+.badge-icon{font-size:28px;transition:transform .3s}
+.badge:hover .badge-icon{transform:scale(1.15)}
+.badge.locked{opacity:.3;filter:grayscale(1)}
+.badge-name{font-size:10px;font-weight:600;color:var(--text);text-align:center;line-height:1.2}
+.badge.earned .badge-name{color:var(--accent)}
+
+/* ═══ RECENT ACTIVITY ═══ */
+.feed-list{display:flex;flex-direction:column;gap:12px}
+.feed-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px 20px;display:flex;align-items:flex-start;gap:12px;transition:all .25s}
+.feed-card:hover{border-color:var(--border-h);transform:translateX(3px)}
+.fd-ava{width:34px;height:34px;min-width:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:var(--bg)}
+.fd-body{flex:1}
+.fd-head{display:flex;align-items:center;justify-content:space-between}
+.fd-name{font-size:13px;font-weight:600}.fd-time{font-size:11px;color:var(--muted)}
+.fd-msg{font-size:14px;color:var(--text);margin-top:4px;line-height:1.5}
+.fd-foot{display:flex;gap:12px;margin-top:8px}
+.fd-stat{font-size:12px;font-weight:600;cursor:pointer;transition:transform .2s}
+.fd-stat:hover{transform:scale(1.05)}
+.fd-stat.fr{color:var(--warm)}
+
+/* ═══ QUICK ACTIONS ═══ */
+.qa-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
+.qa{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px 12px;text-align:center;cursor:pointer;transition:all .3s}
+.qa:hover{border-color:var(--border-h);transform:translateY(-3px);background:var(--card2)}
+.qa-emoji{font-size:24px;margin-bottom:8px}
+.qa-label{font-size:12px;font-weight:600;color:var(--text)}
+
+/* ═══ RESOURCES ═══ */
+.res-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.res{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:22px;cursor:pointer;transition:all .3s}
+.res:hover{border-color:var(--border-h);transform:translateY(-3px)}
+.res-icon{font-size:24px;margin-bottom:12px}
+.res-name{font-size:14px;font-weight:700;margin-bottom:4px}
+.res-desc{font-size:12px;color:var(--muted);line-height:1.4}
+.res-count{font-size:11px;color:var(--accent);font-weight:600;margin-top:10px}
+
+/* ═══ SCROLL ANIMATIONS ═══ */
+.fade-up{opacity:0;transform:translateY(20px);transition:all .6s cubic-bezier(.16,1,.3,1)}
+.fade-up.vis{opacity:1;transform:translateY(0)}
+
+/* ═══ LOADING & EMPTY STATES ═══ */
+.skel-wrap{display:none;flex-direction:column;gap:24px}
+body.state-loading .skel-wrap{display:flex}
+body.state-loading .main>:not(.skel-wrap){display:none}
+body.state-new .only-active{display:none!important}
+body.state-active .only-new{display:none!important}
+.skel{position:relative;overflow:hidden;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:20px}
+.skel::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.05),transparent);animation:shimmer 1.4s infinite}
+@keyframes shimmer{from{transform:translateX(-100%)}to{transform:translateX(100%)}}
+.skel-hero{height:180px}
+.skel-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.skel-stat{height:110px;border-radius:16px}
+.skel-list{height:200px}
+@media(max-width:860px){.skel-row{grid-template-columns:1fr 1fr}}
+.empty-state{background:var(--card);border:1px dashed var(--border-h);border-radius:16px;padding:36px 24px;text-align:center}
+.empty-state .es-emoji{font-size:36px;margin-bottom:10px}
+.empty-state h3{font-size:15px;font-weight:700;margin-bottom:6px}
+.empty-state p{font-size:13px;color:var(--text);max-width:380px;margin:0 auto 16px;line-height:1.6}
+.empty-state a{display:inline-flex;align-items:center;gap:6px;background:var(--accent);color:var(--bg);padding:10px 22px;border-radius:10px;font-size:13px;font-weight:700;text-decoration:none;transition:all .25s}
+.empty-state a:hover{box-shadow:0 4px 16px var(--accent-glow);transform:translateY(-1px)}
+.es-hint{font-size:12px;color:var(--muted);margin-top:12px;text-align:center}
+
+/* ═══ MOBILE ═══ */
+.mob-header{display:none;position:fixed;top:0;left:0;right:0;z-index:200;padding:14px 20px;background:rgba(7,7,14,.95);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);align-items:center;justify-content:space-between}
+.mob-header .logo{font-size:18px;font-weight:800}.mob-header .logo span{color:var(--accent)}
+.mob-menu-btn{background:none;border:none;cursor:pointer;padding:4px}
+.mob-menu-btn span{display:block;width:20px;height:2px;background:#fff;margin:4px 0}
+.sb-close{display:none;position:absolute;top:16px;right:16px;background:none;border:none;color:var(--muted);font-size:20px;cursor:pointer}
+
+@media(max-width:860px){
+  .sidebar{transform:translateX(-100%)}.sidebar.open{transform:translateX(0)}
+  .sb-close{display:block}
+  .mob-header{display:flex}
+  .main{margin-left:0;padding:72px 20px 48px}
+  .cards-row,.stats-grid,.qa-grid,.res-grid{grid-template-columns:1fr}
+  .w-top{flex-direction:column}
+  .challenge{flex-direction:column;align-items:flex-start}
+}
+@media(max-width:480px){
+  .stats-grid{grid-template-columns:1fr 1fr}
+  .qa-grid{grid-template-columns:repeat(3,1fr)}
+  .res-grid{grid-template-columns:1fr 1fr}
+}
+@media(prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+
+a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+</style>
+</head>
+<body>
+<script>document.body.classList.add('state-loading')</script>
+
+<!-- MOBILE HEADER -->
+<div class="mob-header">
+  <div class="logo">Amplify<span>Hub</span></div>
+  <button class="mob-menu-btn" id="mobMenuBtn" aria-label="Open navigation menu"><span></span><span></span><span></span></button>
+</div>
+
+<!-- SIDEBAR -->
+<aside class="sidebar" id="sidebar">
+  <button class="sb-close" id="sbClose" aria-label="Close navigation menu">✕</button>
+  <div class="sb-logo">Amplify<span>Hub</span></div>
+  <nav class="sb-nav">
+    <a class="sb-item active" href="dashboard.html"><span class="sb-icon">🏠</span>Dashboard</a>
+    <a class="sb-item" href="journey.html"><span class="sb-icon">🛤</span>Journey</a>
+    <a class="sb-item" href="coach-home.html"><span class="sb-icon">🤖</span>AI Coach</a>
+    <a class="sb-item" href="#challenge"><span class="sb-icon">⚡</span>Challenges</a>
+    <a class="sb-item" href="#resources"><span class="sb-icon">📚</span>Resources</a>
+    <div class="sb-divider"></div>
+    <a class="sb-item" href="settings.html"><span class="sb-icon">⚙️</span>Settings</a>
+  </nav>
+  <div class="sb-user">
+    <div class="sb-avatar">J</div>
+    <div><div class="sb-uname">Jawad</div><div class="sb-urole">Pro Member</div></div>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- LOADING SKELETON -->
+  <div class="skel-wrap" aria-hidden="true">
+    <div class="skel skel-hero"></div>
+    <div class="skel-row"><div class="skel skel-stat"></div><div class="skel skel-stat"></div><div class="skel skel-stat"></div><div class="skel skel-stat"></div></div>
+    <div class="skel skel-list"></div>
+  </div>
+
+  <!-- WELCOME -->
+  <div class="welcome fade-up">
+    <div class="w-top">
+      <div class="w-greeting">
+        <h1>Welcome back, Jawad 👋</h1>
+        <p>You're on a 14-day streak. Keep the momentum going.</p>
+      </div>
+      <div class="w-streak">🔥 14 Day Streak</div>
+    </div>
+    <div class="w-progress">
+      <div class="w-ring">
+        <svg width="64" height="64" viewBox="0 0 64 64"><circle class="w-ring-bg" cx="32" cy="32" r="28"/><circle class="w-ring-fill" id="ringFill" cx="32" cy="32" r="28"/></svg>
+        <div class="w-ring-pct" id="ringPct">0%</div>
+      </div>
+      <div class="w-milestone">
+        <div class="w-milestone-label">Current Milestone</div>
+        <div class="w-milestone-text" id="wMilestoneText">Step 3: Practice With AI</div>
+      </div>
+      <a class="w-cta" href="journey.html" id="wCta">Continue Journey →</a>
+    </div>
+  </div>
+
+  <!-- JOURNEY ROADMAP -->
+  <div class="sec fade-up">
+    <div class="sec-h"><h2>Your Journey</h2><a class="sec-link" href="journey.html">View Full Path →</a></div>
+    <div class="roadmap only-new">
+      <div class="rm-node current"><div class="rm-dot">1</div><div class="rm-info"><h3>Find Your Leads</h3><p>Identify ideal prospects</p></div><span class="rm-tag curr-tag">Start Here</span></div>
+      <div class="rm-line"></div>
+      <div class="rm-node locked"><div class="rm-dot">🔒</div><div class="rm-info"><h3>Build Your Script</h3><p>Create your framework</p></div><span class="rm-tag lock-tag">Locked</span></div>
+      <div class="rm-line"></div>
+      <div class="rm-node locked"><div class="rm-dot">🔒</div><div class="rm-info"><h3>Practice With AI</h3><p>Roleplay realistic calls</p></div><span class="rm-tag lock-tag">Locked</span></div>
+      <div class="rm-line"></div>
+      <div class="rm-node locked"><div class="rm-dot">🔒</div><div class="rm-info"><h3>Handle Objections</h3><p>Turn every "no" around</p></div><span class="rm-tag lock-tag">Locked</span></div>
+      <div class="rm-line"></div>
+      <div class="rm-node locked"><div class="rm-dot">🔒</div><div class="rm-info"><h3>Book Meetings</h3><p>Close real appointments</p></div><span class="rm-tag lock-tag">Locked</span></div>
+      <div class="rm-line"></div>
+      <div class="rm-node locked"><div class="rm-dot">🔒</div><div class="rm-info"><h3>Scale & Refine</h3><p>Optimize your system</p></div><span class="rm-tag lock-tag">Locked</span></div>
+    </div>
+    <div class="roadmap only-active">
+      <div class="rm-node done"><div class="rm-dot">✓</div><div class="rm-info"><h3>Find Your Leads</h3><p>Identify ideal prospects</p></div><span class="rm-tag done-tag">Complete</span></div>
+      <div class="rm-line done-line"></div>
+      <div class="rm-node done"><div class="rm-dot">✓</div><div class="rm-info"><h3>Build Your Script</h3><p>Create your framework</p></div><span class="rm-tag done-tag">Complete</span></div>
+      <div class="rm-line curr-line"></div>
+      <div class="rm-node current"><div class="rm-dot">3</div><div class="rm-info"><h3>Practice With AI</h3><p>Roleplay realistic calls</p></div><span class="rm-tag curr-tag">In Progress</span></div>
+      <div class="rm-line"></div>
+      <div class="rm-node locked"><div class="rm-dot">🔒</div><div class="rm-info"><h3>Handle Objections</h3><p>Turn every "no" around</p></div><span class="rm-tag lock-tag">Locked</span></div>
+      <div class="rm-line"></div>
+      <div class="rm-node locked"><div class="rm-dot">🔒</div><div class="rm-info"><h3>Book Meetings</h3><p>Close real appointments</p></div><span class="rm-tag lock-tag">Locked</span></div>
+      <div class="rm-line"></div>
+      <div class="rm-node locked"><div class="rm-dot">🔒</div><div class="rm-info"><h3>Scale & Refine</h3><p>Optimize your system</p></div><span class="rm-tag lock-tag">Locked</span></div>
+    </div>
+  </div>
+
+  <!-- CONTINUE LEARNING -->
+  <div class="sec fade-up">
+    <div class="sec-h"><h2 class="only-active">Continue Learning</h2><h2 class="only-new">Start Learning</h2></div>
+    <div class="cards-row only-new">
+      <div class="learn-card lesson">
+        <div class="lc-icon gold">📞</div>
+        <div class="lc-h">Lesson 1: Why Cold Calling Works</div>
+        <div class="lc-p">Your first step — learn the mindset that separates callers who book meetings from callers who burn out.</div>
+        <a class="lc-btn gold" href="journey.html" style="text-decoration:none">Start Lesson →</a>
+        <div class="lc-meta"><span>⏱ 6 min</span><span>🎯 +50 XP</span></div>
+      </div>
+      <div class="learn-card coach">
+        <div class="lc-icon green">🤖</div>
+        <div class="lc-h">AI Coach: First Practice Call</div>
+        <div class="lc-p">No pressure, no real prospect — try a practice call with the AI and see how it feels.</div>
+        <a class="lc-btn green" href="coach-home.html" style="text-decoration:none">Try It →</a>
+        <div class="lc-meta"><span>⏱ 5 min</span><span>📈 Builds confidence</span></div>
+      </div>
+    </div>
+    <div class="cards-row only-active">
+      <div class="learn-card lesson">
+        <div class="lc-icon gold">📞</div>
+        <div class="lc-h">Lesson 7: The Opening Line</div>
+        <div class="lc-p">Learn the 3-second hook that keeps prospects from hanging up.</div>
+        <button class="lc-btn gold">Resume Lesson →</button>
+        <div class="lc-meta"><span>⏱ 8 min</span><span>🎯 +50 XP</span></div>
+      </div>
+      <div class="learn-card coach">
+        <div class="lc-icon green">🤖</div>
+        <div class="lc-h">AI Coach: Practice Call</div>
+        <div class="lc-p">Roleplay a cold call to an auto detailing shop. AI plays the prospect.</div>
+        <button class="lc-btn green">Start Practice →</button>
+        <div class="lc-meta"><span>⏱ 5 min</span><span>📈 Builds confidence</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DAILY CHALLENGE -->
+  <div class="sec fade-up" id="challenge">
+    <div class="sec-h"><h2>Daily Challenge</h2><a class="sec-link">View All →</a></div>
+    <div class="challenge">
+      <div class="ch-icon">⚡</div>
+      <div class="ch-info">
+        <h3>Handle the "We Already Have Someone" Objection</h3>
+        <p>Practice turning this common pushback into a conversation that uncovers real opportunity.</p>
+        <div class="ch-meta">
+          <span class="ch-badge xp">🏆 +100 XP</span>
+          <span class="ch-badge time">⏱ ~4 min</span>
+        </div>
+      </div>
+      <button class="ch-start">Start Challenge</button>
+    </div>
+  </div>
+
+  <!-- PROGRESS OVERVIEW -->
+  <div class="sec fade-up">
+    <div class="sec-h"><h2>Your Progress</h2></div>
+    <div class="stats-grid" id="statsGrid">
+      <div class="stat-card"><div class="st-val gold" data-count="247">0</div><div class="st-label">Calls Practiced</div><div class="st-bar"><div class="st-fill" data-w="78" style="background:var(--accent)"></div></div></div>
+      <div class="stat-card"><div class="st-val grn" data-count="31">0</div><div class="st-label">Meetings Simulated</div><div class="st-bar"><div class="st-fill" data-w="62" style="background:var(--green)"></div></div></div>
+      <div class="stat-card"><div class="st-val wrm" data-count="87">0</div><div class="st-label">Confidence Score</div><div class="st-bar"><div class="st-fill" data-w="87" style="background:var(--warm)"></div></div></div>
+      <div class="stat-card"><div class="st-val blu" data-count="14">0</div><div class="st-label">Day Streak</div><div class="st-bar"><div class="st-fill" data-w="46" style="background:var(--blue)"></div></div></div>
+    </div>
+    <div class="es-hint only-new">Your stats begin with your first practice call — they'll fill in as you go.</div>
+  </div>
+
+  <!-- BADGES -->
+  <div class="sec fade-up">
+    <div class="sec-h"><h2>Achievements</h2><a class="sec-link">View All →</a></div>
+    <div class="badges-grid">
+      <div class="badge earned"><div class="badge-icon">🔥</div><div class="badge-name">Hot Streak</div></div>
+      <div class="badge earned"><div class="badge-icon">📞</div><div class="badge-name">100 Calls</div></div>
+      <div class="badge earned"><div class="badge-icon">🎯</div><div class="badge-name">10 Bookings</div></div>
+      <div class="badge earned"><div class="badge-icon">📝</div><div class="badge-name">Script Master</div></div>
+      <div class="badge earned"><div class="badge-icon">🌱</div><div class="badge-name">First Call</div></div>
+      <div class="badge locked"><div class="badge-icon">💎</div><div class="badge-name">Objection Pro</div></div>
+      <div class="badge locked"><div class="badge-icon">🏆</div><div class="badge-name">Top Performer</div></div>
+      <div class="badge locked"><div class="badge-icon">👑</div><div class="badge-name">Mentor</div></div>
+      <div class="badge locked"><div class="badge-icon">⭐</div><div class="badge-name">500 Calls</div></div>
+    </div>
+    <div class="es-hint only-new">Complete your first lesson to earn your first badge.</div>
+  </div>
+
+  <!-- RECENT ACTIVITY -->
+  <div class="sec fade-up">
+    <div class="sec-h"><h2>Recent Activity</h2></div>
+    <div class="empty-state only-new">
+      <div class="es-emoji">📭</div>
+      <h3>No activity yet</h3>
+      <p>Complete your first lesson or practice call and your wins will show up here.</p>
+      <a href="journey.html">Start Your Journey →</a>
+    </div>
+    <div class="feed-list only-active" id="activityFeed">
+      <div class="feed-card"><div class="fd-ava" style="background:var(--accent)">🛤</div><div class="fd-body"><div class="fd-head"><span class="fd-name">Journey</span><span class="fd-time">2 hrs ago</span></div><div class="fd-msg">Completed Lesson 6: Building Your Script — moved on to Lesson 7.</div><div class="fd-foot"><span class="fd-stat fr">🎯 +50 XP</span></div></div></div>
+      <div class="feed-card"><div class="fd-ava" style="background:var(--green)">🤖</div><div class="fd-body"><div class="fd-head"><span class="fd-name">AI Coach</span><span class="fd-time">5 hrs ago</span></div><div class="fd-msg">Practiced a cold call roleplay for an auto detailing shop. Scored 87% confidence.</div><div class="fd-foot"><span class="fd-stat fr">📈 Confidence +9%</span></div></div></div>
+      <div class="feed-card"><div class="fd-ava" style="background:var(--blue)">🛤</div><div class="fd-body"><div class="fd-head"><span class="fd-name">Journey</span><span class="fd-time">Yesterday</span></div><div class="fd-msg">Unlocked "Practice With AI" — Step 3 of your Journey is now in progress.</div><div class="fd-foot"><span class="fd-stat fr">🔓 Milestone unlocked</span></div></div></div>
+    </div>
+  </div>
+
+  <!-- AI QUICK ACTIONS -->
+  <div class="sec fade-up">
+    <div class="sec-h"><h2>AI Quick Actions</h2></div>
+    <div class="qa-grid">
+      <div class="qa"><div class="qa-emoji">👋</div><div class="qa-label">Opening</div></div>
+      <div class="qa"><div class="qa-emoji">🔍</div><div class="qa-label">Discovery</div></div>
+      <div class="qa"><div class="qa-emoji">🛡</div><div class="qa-label">Objections</div></div>
+      <div class="qa"><div class="qa-emoji">🤝</div><div class="qa-label">Closing</div></div>
+      <div class="qa"><div class="qa-emoji">💪</div><div class="qa-label">Confidence</div></div>
+    </div>
+  </div>
+
+  <!-- RESOURCES -->
+  <div class="sec fade-up" id="resources">
+    <div class="sec-h"><h2>Resources</h2><a class="sec-link">Browse Library →</a></div>
+    <div class="res-grid">
+      <a class="res" href="interview-prep.html" style="text-decoration:none;color:inherit"><div class="res-icon">🎤</div><div class="res-name">Interview Prep</div><div class="res-desc">Your SDR portfolio and first-call challenge</div><div class="res-count">Build yours →</div></a>
+      <div class="res"><div class="res-icon">📝</div><div class="res-name">Scripts</div><div class="res-desc">Industry-specific cold call frameworks</div><div class="res-count">24 scripts</div></div>
+      <div class="res"><div class="res-icon">📋</div><div class="res-name">Templates</div><div class="res-desc">Email follow-ups, voicemail drops</div><div class="res-count">18 templates</div></div>
+      <div class="res"><div class="res-icon">⚡</div><div class="res-name">Cheat Sheets</div><div class="res-desc">Quick-reference objection handlers</div><div class="res-count">12 sheets</div></div>
+      <div class="res"><div class="res-icon">🎬</div><div class="res-name">Videos</div><div class="res-desc">Live call breakdowns and tutorials</div><div class="res-count">36 videos</div></div>
+    </div>
+  </div>
+
+</div>
+
+
+
+<script>
+const obs = new IntersectionObserver(es => { es.forEach(e => { if (e.isIntersecting) e.target.classList.add('vis'); }); }, { threshold: .1 });
+document.querySelectorAll('.fade-up').forEach(el => obs.observe(el));
+document.getElementById('mobMenuBtn').addEventListener('click', () => document.getElementById('sidebar').classList.add('open'));
+document.getElementById('sbClose').addEventListener('click', () => document.getElementById('sidebar').classList.remove('open'));
+document.querySelectorAll('.sb-item').forEach(item => { item.addEventListener('click', () => { document.querySelectorAll('.sb-item').forEach(i => i.classList.remove('active')); item.classList.add('active'); document.getElementById('sidebar').classList.remove('open'); }); });
+
+function readJourneyProgress() { try { const raw = localStorage.getItem('amplifyHub_journeyProgress'); if (raw) { const d = JSON.parse(raw); return { pct: d.overallProgress ?? 0, milestone: d.currentModuleName || 'Getting Started', lessonsDone: d.lessonsCompleted ?? 0 }; } } catch(e) {} return { pct: 0, milestone: 'Getting Started', lessonsDone: 0 }; }
+function applyJourneyProgress(animate) { const jp = readJourneyProgress(); const milestoneEl = document.getElementById('wMilestoneText'); if (milestoneEl) milestoneEl.textContent = jp.milestone; const pctEl = document.getElementById('ringPct'); const circ = document.getElementById('ringFill'); if (!pctEl || !circ) return; const dashTotal = 176; circ.style.transition = animate ? '' : 'none'; circ.style.strokeDashoffset = dashTotal - (dashTotal * jp.pct / 100); if (animate) { let c = parseInt(pctEl.textContent) || 0; const dir = jp.pct > c ? 1 : -1; const iv = setInterval(() => { if (c === jp.pct) { clearInterval(iv); return; } c += dir; pctEl.textContent = c + '%'; }, 20); } else { pctEl.textContent = jp.pct + '%'; } }
+const ringObs = new IntersectionObserver(es => { es.forEach(e => { if (!e.isIntersecting) return; applyJourneyProgress(true); ringObs.unobserve(e.target); }); }, { threshold: .3 });
+const welcomeEl = document.querySelector('.welcome');
+if (welcomeEl) ringObs.observe(welcomeEl);
+window.addEventListener('storage', e => { if (e.key === 'amplifyHub_journeyProgress') applyJourneyProgress(false); });
+
+const _esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function fmtAgo(ts) { if (!ts) return ''; const mins = Math.floor((Date.now() - new Date(ts)) / 60000); if (mins < 2) return 'Just now'; if (mins < 60) return mins + 'm ago'; const hrs = Math.floor(mins / 60); if (hrs < 24) return hrs + 'h ago'; const days = Math.floor(hrs / 24); return days === 1 ? 'Yesterday' : days + 'd ago'; }
+function animateCount(el, target) { let c = 0; el.textContent = 0; const iv = setInterval(() => { c += Math.ceil(target / 40); if (c >= target) { c = target; clearInterval(iv); } el.textContent = c; }, 30); }
+function calcStreak(sessions) { const days = new Set(sessions.filter(s => s.ended_at).map(s => new Date(s.ended_at).toLocaleDateString())); let streak = 0; const d = new Date(); while (days.has(d.toLocaleDateString())) { streak++; d.setDate(d.getDate() - 1); } return streak; }
+function modeLabel(m) { return ({ask:'Ask Coach',roleplay:'Roleplay',docreview:'Document Review'}[m]||m); }
+function sessionColor(m) { return ({ask:'var(--blue)',roleplay:'var(--green)',docreview:'var(--warm)'}[m]||'var(--accent)'); }
+function sessionEmoji(m) { return ({ask:'\u{1F916}',roleplay:'\u{1F3AD}',docreview:'\u{1F4C4}'}[m]||'\u{1F3CB}'); }
+
+async function loadDashboard() {
+  try {
+    const [sessions, stats, docs] = await Promise.all([CoachStore.listSessions(), CoachStore.getProgressStats(), CoachStore.listDocs()]);
+    const completed = sessions.filter(s => s.status === 'completed' || s.ended_at);
+    const roleplay = completed.filter(s => s.mode === 'roleplay');
+    const streak = calcStreak(completed);
+    const avgScore = stats && stats.avg_overall ? Math.round(parseFloat(stats.avg_overall)) : null;
+    const hasActivity = completed.length > 0;
+
+    document.body.classList.remove('state-loading');
+    document.body.classList.add(hasActivity ? 'state-active' : 'state-new');
+
+    const user = await getCurrentUser();
+    const firstName = user && user.user_metadata && user.user_metadata.full_name ? user.user_metadata.full_name.split(' ')[0] : null;
+
+    if (!hasActivity) {
+      document.querySelector('.w-greeting h1').textContent = 'Welcome to AmplifyHub \u{1F44B}';
+      document.querySelector('.w-greeting p').textContent = 'Your journey starts today — one call at a time.';
+      document.querySelector('.w-streak').textContent = '\u{1F331} Day 1';
+      document.getElementById('wCta').textContent = 'Start Your Journey \u2192';
+    } else {
+      if (firstName) document.querySelector('.w-greeting h1').textContent = 'Welcome back, ' + firstName + ' \u{1F44B}';
+      document.querySelector('.w-streak').textContent = streak > 0 ? '\u{1F525} ' + streak + '-Day Streak' : '\u{1F4AA} Keep going!';
+    }
+
+    const ctaBtn = document.getElementById('wCta');
+    const lastSession = sessions.find(s => !s.ended_at) || sessions[0];
+    if (ctaBtn && lastSession && hasActivity) { ctaBtn.textContent = 'Continue Training \u2192'; ctaBtn.href = 'coach-home.html#' + (lastSession.mode === 'ask' ? 'ask' : 'roleplay'); }
+
+    const statEls = document.querySelectorAll('#statsGrid [data-count]');
+    if (statEls.length >= 4) { statEls[0].dataset.count = roleplay.length; statEls[1].dataset.count = completed.filter(s => s.score !== null).length; statEls[2].dataset.count = avgScore !== null ? avgScore : 0; statEls[3].dataset.count = streak; statEls.forEach(el => animateCount(el, parseInt(el.dataset.count) || 0)); }
+    const barEls = document.querySelectorAll('#statsGrid .st-fill');
+    if (barEls.length >= 4) { barEls[0].dataset.w = Math.min(100, roleplay.length * 4); barEls[1].dataset.w = Math.min(100, completed.filter(s => s.score !== null).length * 6); barEls[2].dataset.w = avgScore !== null ? avgScore * 10 : 0; barEls[3].dataset.w = Math.min(100, streak * 7); barEls.forEach(f => { f.style.width = f.dataset.w + '%'; }); }
+
+    const feed = document.getElementById('activityFeed');
+    if (feed) {
+      const recent = sessions.filter(s => s.turns > 0).slice(0, 4);
+      if (recent.length) {
+        feed.innerHTML = recent.map(s => { const sc = s.score != null ? '<span class="fd-stat fr">\u2B50 Score: ' + s.score + '/10</span>' : ''; const tc = '<span class="fd-stat fr" style="color:var(--muted)">\u{1F4AC} ' + s.turns + ' msg' + (s.turns === 1 ? '' : 's') + '</span>'; return '<div class="feed-card"><div class="fd-ava" style="background:' + sessionColor(s.mode) + '">' + sessionEmoji(s.mode) + '</div><div class="fd-body"><div class="fd-head"><span class="fd-name">' + modeLabel(s.mode) + '</span><span class="fd-time">' + fmtAgo(s.started_at) + '</span></div><div class="fd-msg">' + _esc(s.title || modeLabel(s.mode) + ' session') + '</div><div class="fd-foot">' + sc + tc + '</div></div></div>'; }).join('');
+      } else {
+        feed.innerHTML = '<div class="empty-state"><div class="es-emoji">\u{1F3AF}</div><h3>No sessions yet</h3><p>Complete your first roleplay to see your activity here.</p><a href="coach-home.html#roleplay">Start Practicing \u2192</a></div>';
+      }
+    }
+
+    const badges = document.querySelectorAll('.badges-grid .badge');
+    if (badges.length) { badges.forEach(b => b.classList.add('locked')); if (sessions.length >= 1 && badges[0]) { badges[0].classList.remove('locked'); badges[0].classList.add('earned'); } if (roleplay.length >= 1 && badges[1]) { badges[1].classList.remove('locked'); badges[1].classList.add('earned'); } if (streak >= 3 && badges[2]) { badges[2].classList.remove('locked'); badges[2].classList.add('earned'); } if (avgScore !== null && avgScore >= 7 && badges[3]) { badges[3].classList.remove('locked'); badges[3].classList.add('earned'); } if (docs.length >= 1 && badges[4]) { badges[4].classList.remove('locked'); badges[4].classList.add('earned'); } }
+
+  } catch (err) { console.error('Dashboard load error:', err); document.body.classList.remove('state-loading'); document.body.classList.add('state-new'); }
+}
+
+getCurrentUser().then(user => { if (user) loadDashboard(); });
+</script>
+</body>
+</html>
