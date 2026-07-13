@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AmplifyHub — Scripts</title>
+<meta name="description" content="Ready-to-use cold calling scripts by industry, plus a universal script that works for any business.">
+<meta name="robots" content="noindex">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="auth-config.js"></script>
+<script src="auth.js"></script>
+<script>requireAuth();</script>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#07070e;--bg2:#0b0b16;--card:#13132a;--card2:#181838;
+  --glass:rgba(19,19,42,.55);
+  --accent:#FFD54A;--accent-dim:rgba(255,213,74,.1);--accent-glow:rgba(255,213,74,.3);
+  --warm:#FFA726;--green:#00e696;--blue:#64B5F6;--red:#ff5f57;
+  --white:#fff;--text:#b0b0c8;--muted:#8a8aa4;
+  --border:rgba(255,213,74,.07);--border-h:rgba(255,213,74,.22);
+  --font:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;--sb:240px;
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--font);background:var(--bg);color:var(--white);display:flex;min-height:100vh;overflow-x:hidden}
+
+/* SIDEBAR (same pattern as other app pages) */
+.sb{width:var(--sb);position:fixed;top:0;left:0;bottom:0;background:var(--bg2);border-right:1px solid var(--border);padding:24px 16px;display:flex;flex-direction:column;z-index:100;transition:transform .3s}
+.sb-logo{font-size:20px;font-weight:800;padding:0 8px 24px}.sb-logo span{color:var(--accent)}
+.sb-nav{display:flex;flex-direction:column;gap:4px;flex:1}
+.si{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:10px;font-size:14px;font-weight:500;color:var(--muted);cursor:pointer;transition:all .2s;text-decoration:none;border:1px solid transparent}
+.si:hover{color:var(--text);background:rgba(255,255,255,.03)}.si.act{color:var(--accent);background:var(--accent-dim);border-color:var(--border)}
+.si-ic{width:20px;text-align:center;font-size:15px}
+.sb-d{height:1px;background:var(--border);margin:10px 8px}
+.sb-u{display:flex;align-items:center;gap:10px;padding:12px 8px;border-top:1px solid var(--border);margin-top:auto}
+.sb-av{width:32px;height:32px;border-radius:8px;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:var(--bg)}
+.sb-un{font-size:13px;font-weight:600}.sb-ur{font-size:11px;color:var(--muted)}
+.sb-x{display:none;position:absolute;top:16px;right:16px;background:none;border:none;color:var(--muted);font-size:20px;cursor:pointer}
+.mh{display:none;position:fixed;top:0;left:0;right:0;z-index:200;padding:14px 20px;background:rgba(7,7,14,.95);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);align-items:center;justify-content:space-between}
+.mh .logo{font-size:18px;font-weight:800}.mh .logo span{color:var(--accent)}
+.mb{background:none;border:none;cursor:pointer}.mb span{display:block;width:20px;height:2px;background:#fff;margin:4px 0}
+
+.main{margin-left:var(--sb);flex:1;padding:32px 40px 80px;max-width:1100px;min-width:0}
+.fu{opacity:0;transform:translateY(18px);transition:all .6s cubic-bezier(.16,1,.3,1)}.fu.v{opacity:1;transform:translateY(0)}
+
+/* HERO */
+.hero{background:linear-gradient(135deg,rgba(255,213,74,.06),rgba(255,167,38,.03),var(--card));border:1px solid var(--border-h);border-radius:24px;padding:36px;position:relative;overflow:hidden;margin-bottom:28px}
+.hero::before{content:'';position:absolute;top:-40%;right:-10%;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(255,213,74,.06),transparent 70%);pointer-events:none}
+.hero h1{font-size:clamp(24px,3vw,32px);font-weight:900;letter-spacing:-.5px;margin-bottom:6px;position:relative;z-index:2}
+.hero h1 em{font-style:normal;color:var(--accent)}
+.hero-sub{font-size:14px;color:var(--text);position:relative;z-index:2;max-width:560px;line-height:1.6}
+
+/* INDUSTRY PICKER */
+.ind-row{display:flex;gap:10px;overflow-x:auto;padding:4px 0;margin-bottom:28px;scrollbar-width:none}
+.ind-row::-webkit-scrollbar{display:none}
+.ind{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:12px 18px;display:flex;align-items:center;gap:9px;cursor:pointer;transition:all .2s;white-space:nowrap;font-size:13.5px;font-weight:700;color:var(--text)}
+.ind:hover{border-color:var(--border-h)}
+.ind.act{border-color:var(--accent);background:var(--accent-dim);color:var(--accent)}
+.ind-emoji{font-size:16px}
+.ind.soon{opacity:.45;cursor:default}
+.ind.soon:hover{border-color:var(--border)}
+.ind-tag{font-size:9px;font-weight:700;background:rgba(255,255,255,.06);padding:2px 6px;border-radius:100px;margin-left:2px}
+.ind.universal{border-color:rgba(0,230,150,.25);color:var(--green)}
+.ind.universal.act{background:rgba(0,230,150,.08);border-color:var(--green)}
+
+/* SCRIPT CARDS */
+.sec{margin-bottom:20px}
+.sec-h{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.sec-h h2{font-size:17px;font-weight:800;letter-spacing:-.3px}
+.sec-h span{font-size:12px;color:var(--muted)}
+
+.scr-list{display:flex;flex-direction:column;gap:16px}
+.scr{background:var(--glass);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid var(--border);border-radius:20px;padding:24px;transition:all .3s}
+.scr:hover{border-color:var(--border-h)}
+.scr-top{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:16px;flex-wrap:wrap}
+.scr-title{font-size:16px;font-weight:800;letter-spacing:-.2px;margin-bottom:4px}
+.scr-sub{font-size:12.5px;color:var(--muted);line-height:1.5}
+.scr-copy{background:none;border:1px solid var(--border);color:var(--text);padding:8px 16px;border-radius:10px;font-size:12.5px;font-weight:700;cursor:pointer;font-family:var(--font);transition:all .2s;white-space:nowrap}
+.scr-copy:hover{border-color:var(--border-h);color:var(--white)}
+.scr-copy.copied{border-color:var(--green);color:var(--green)}
+
+.scr-block{margin-bottom:14px}
+.scr-block:last-child{margin-bottom:0}
+.scr-label{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--accent);margin-bottom:6px;display:flex;align-items:center;gap:6px}
+.scr-line{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:13px 16px;font-size:13.5px;line-height:1.65;color:var(--text)}
+.scr-line em{color:var(--white);font-style:normal;font-weight:600}
+.scr-obj-list{display:flex;flex-direction:column;gap:8px}
+.scr-obj{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px 16px}
+.scr-obj-q{font-size:12.5px;font-weight:700;color:var(--warm);margin-bottom:4px}
+.scr-obj-a{font-size:13px;color:var(--text);line-height:1.6}
+
+/* UNIVERSAL MERGE FORM */
+.merge-box{background:linear-gradient(135deg,rgba(0,230,150,.05),rgba(0,230,150,.02),var(--card));border:1px solid rgba(0,230,150,.16);border-radius:20px;padding:24px;margin-bottom:20px}
+.merge-title{font-size:15px;font-weight:800;margin-bottom:4px}
+.merge-sub{font-size:12.5px;color:var(--muted);margin-bottom:18px;line-height:1.5}
+.merge-fields{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.merge-field label{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;display:block}
+.merge-field input{width:100%;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:10px;padding:11px 14px;color:var(--white);font-size:13.5px;font-family:var(--font);outline:none;transition:all .25s}
+.merge-field input:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(0,230,150,.1)}
+.merge-field input::placeholder{color:var(--muted)}
+
+/* RESPONSIVE */
+@media(max-width:860px){
+  .sb{transform:translateX(-100%)}.sb.open{transform:translateX(0)}.sb-x{display:block}
+  .mh{display:flex}.main{margin-left:0;padding:72px 20px 48px}
+  .merge-fields{grid-template-columns:1fr}
+}
+@media(prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+</style>
+</head>
+<body>
+
+<div class="mh"><div class="logo">Amplify<span>Hub</span></div><button class="mb" id="mobBtn" aria-label="Open navigation menu"><span></span><span></span><span></span></button></div>
+
+<aside class="sb" id="sb">
+  <button class="sb-x" id="sbX" aria-label="Close navigation menu">✕</button>
+  <div class="sb-logo">Amplify<span>Hub</span></div>
+  <nav class="sb-nav">
+    <a class="si" href="dashboard.html"><span class="si-ic">🏠</span>Dashboard</a>
+    <a class="si" href="journey.html"><span class="si-ic">🛤</span>Journey</a>
+    <a class="si" href="coach-home.html"><span class="si-ic">🤖</span>AI Coach</a>
+    <a class="si" href="challenges.html"><span class="si-ic">⚡</span>Challenges</a>
+    <a class="si" href="resources.html"><span class="si-ic">📚</span>Resources</a>
+    <a class="si act" href="scripts.html"><span class="si-ic">📝</span>Scripts</a>
+    <div class="sb-d"></div>
+    <a class="si" href="profile.html"><span class="si-ic">👤</span>Profile</a>
+    <a class="si" href="settings.html"><span class="si-ic">⚙️</span>Settings</a>
+  </nav>
+  <div class="sb-u"><div class="sb-av">J</div><div><div class="sb-un">Jawad</div><div class="sb-ur">Pro Member</div></div></div>
+</aside>
+
+<div class="main">
+
+  <div class="hero fu">
+    <h1>Cold Calling <em>Scripts</em></h1>
+    <p class="hero-sub">Word-for-word scripts by industry — opener, discovery, objection handling, and close. Pick your industry below, or use the Universal script for anything not listed yet.</p>
+  </div>
+
+  <div class="ind-row fu" id="indRow">
+    <button class="ind act" data-ind="auto-detailing"><span class="ind-emoji">🚗</span>Auto Detailing</button>
+    <button class="ind universal" data-ind="universal"><span class="ind-emoji">🌐</span>Universal — Any Industry</button>
+    <button class="ind soon" disabled><span class="ind-emoji">🏠</span>Real Estate<span class="ind-tag">Soon</span></button>
+    <button class="ind soon" disabled><span class="ind-emoji">🔧</span>HVAC / Home Services<span class="ind-tag">Soon</span></button>
+    <button class="ind soon" disabled><span class="ind-emoji">🛡</span>Insurance<span class="ind-tag">Soon</span></button>
+    <button class="ind soon" disabled><span class="ind-emoji">💻</span>SaaS / B2B<span class="ind-tag">Soon</span></button>
+  </div>
+
+  <!-- ═══ AUTO DETAILING ═══ -->
+  <div class="sec fu" id="panel-auto-detailing">
+    <div class="sec-h"><h2>🚗 Auto Detailing</h2><span>5 scripts</span></div>
+    <div class="scr-list">
+
+      <div class="scr">
+        <div class="scr-top">
+          <div><div class="scr-title">1. Cold Call — New Residential Prospect</div><div class="scr-sub">Calling a homeowner who's never used a detailing service before.</div></div>
+          <button class="scr-copy" data-copy="s1">📋 Copy</button>
+        </div>
+        <div class="scr-block"><div class="scr-label">📞 Opener</div><div class="scr-line">"Hey, is this <em>[Name]</em>? Hi <em>[Name]</em>, this is <em>[Your Name]</em> calling from <em>[Your Company]</em> — we detail cars right here in <em>[Town/Neighborhood]</em>. I'll keep this quick — I'm not calling to sell you anything today, just wanted to introduce ourselves since we're doing a few driveways on your street this week."</div></div>
+        <div class="scr-block"><div class="scr-label">🔍 Discovery</div><div class="scr-line">"Out of curiosity — when's the last time your car actually got a real detail, not just a drive-through wash? ... Yeah, that's normal, most people wait until it really bothers them. What's usually the thing that annoys you most — the outside, or more the inside?"</div></div>
+        <div class="scr-block">
+          <div class="scr-label">🛡 Objection Handling</div>
+          <div class="scr-obj-list">
+            <div class="scr-obj"><div class="scr-obj-q">"I usually just wash it myself."</div><div class="scr-obj-a">"Totally get it — a lot of my customers did too. The difference is we're pulling stuff out of the carpets and cracks a hose never touches. Most people are shocked at what comes out. Want me to show you free on the first visit, no pressure?"</div></div>
+            <div class="scr-obj"><div class="scr-obj-q">"How much does it cost?"</div><div class="scr-obj-a">"Depends on the size and condition — for most sedans it's between $X and $Y. Rather than quote blind, can I take two minutes to look at it in person and give you an exact number? Costs you nothing to find out."</div></div>
+          </div>
+        </div>
+        <div class="scr-block"><div class="scr-label">🤝 Close</div><div class="scr-line">"I've actually got Thursday afternoon or Saturday morning open this week — which works better for a quick look at your car?"</div></div>
+      </div>
+
+      <div class="scr">
+        <div class="scr-top">
+          <div><div class="scr-title">2. Reactivation Call — Past Customer</div><div class="scr-sub">Calling someone who used your service before but hasn't returned in a while.</div></div>
+          <button class="scr-copy" data-copy="s2">📋 Copy</button>
+        </div>
+        <div class="scr-block"><div class="scr-label">📞 Opener</div><div class="scr-line">"Hey <em>[Name]</em>, it's <em>[Your Name]</em> from <em>[Your Company]</em> — we detailed your <em>[Car Model]</em> back in <em>[Month]</em>. Hope it's still looking sharp! I was going through our records and realized we haven't seen you in a bit, so I wanted to personally check in."</div></div>
+        <div class="scr-block"><div class="scr-label">🔍 Discovery</div><div class="scr-line">"How's the car holding up? ... Nice. Are you still parking outside, or garaged now? That usually changes how fast it needs another round."</div></div>
+        <div class="scr-block">
+          <div class="scr-label">🛡 Objection Handling</div>
+          <div class="scr-obj-list">
+            <div class="scr-obj"><div class="scr-obj-q">"It's been fine, I don't think it needs it yet."</div><div class="scr-obj-a">"Fair enough — most cars go 3 to 4 months before it's really worth it. Want me to just pencil you in for around then so you don't have to remember to call?"</div></div>
+            <div class="scr-obj"><div class="scr-obj-q">"I've been busy, maybe another time."</div><div class="scr-obj-a">"No worries at all. Since you're already in our system, want me to text you a link so you can book whenever it's actually convenient — no call needed?"</div></div>
+          </div>
+        </div>
+        <div class="scr-block"><div class="scr-label">🤝 Close</div><div class="scr-line">"As a returning customer I can get you 15% off if you book this week — want me to lock in a time before I let this slot go?"</div></div>
+      </div>
+
+      <div class="scr">
+        <div class="scr-top">
+          <div><div class="scr-title">3. B2B Call — Car Dealership Partnership</div><div class="scr-sub">Pitching a recurring detailing contract for used-car lot prep.</div></div>
+          <button class="scr-copy" data-copy="s3">📋 Copy</button>
+        </div>
+        <div class="scr-block"><div class="scr-label">📞 Opener</div><div class="scr-line">"Hi, this is <em>[Your Name]</em> with <em>[Your Company]</em> — is the person who handles your used-car reconditioning or lot prep available? ... Great, quick reason for the call: we detail vehicles for a couple of dealerships in the area to get them lot-ready faster, and I wanted to see if that's something you're currently outsourcing or handling in-house."</div></div>
+        <div class="scr-block"><div class="scr-label">🔍 Discovery</div><div class="scr-line">"How are you handling detailing right now — in-house team, or a vendor? ... Got it. What's your average turnaround time from trade-in to lot-ready right now?"</div></div>
+        <div class="scr-block">
+          <div class="scr-label">🛡 Objection Handling</div>
+          <div class="scr-obj-list">
+            <div class="scr-obj"><div class="scr-obj-q">"We already have someone who handles this."</div><div class="scr-obj-a">"Makes sense, most dealerships do. Quick question — are they able to turn a car around same-day when you're slammed, or does it back up your lot? That's usually the gap we fill as a backup vendor."</div></div>
+            <div class="scr-obj"><div class="scr-obj-q">"We're not looking to switch vendors."</div><div class="scr-obj-a">"Totally understand, not asking you to switch anything today. Would it be worth a free trial detail on one vehicle so you have us as an option if your current vendor ever falls behind?"</div></div>
+          </div>
+        </div>
+        <div class="scr-block"><div class="scr-label">🤝 Close</div><div class="scr-line">"Can I swing by this week and detail one car on the house, so you can see the turnaround and quality for yourself?"</div></div>
+      </div>
+
+      <div class="scr">
+        <div class="scr-top">
+          <div><div class="scr-title">4. Inbound Follow-Up — Google/Yelp Lead</div><div class="scr-sub">Calling someone who submitted a quote request online.</div></div>
+          <button class="scr-copy" data-copy="s4">📋 Copy</button>
+        </div>
+        <div class="scr-block"><div class="scr-label">📞 Opener</div><div class="scr-line">"Hi <em>[Name]</em>, this is <em>[Your Name]</em> from <em>[Your Company]</em> — you requested a quote for a detail online, I'm just following up. Good time to talk for a minute?"</div></div>
+        <div class="scr-block"><div class="scr-label">🔍 Discovery</div><div class="scr-line">"Tell me about the car — what's the make and model, and what made you look into getting it detailed right now? Anything specific bothering you, like pet hair, stains, odor?"</div></div>
+        <div class="scr-block">
+          <div class="scr-label">🛡 Objection Handling</div>
+          <div class="scr-obj-list">
+            <div class="scr-obj"><div class="scr-obj-q">"I'm also getting quotes from a couple other places."</div><div class="scr-obj-a">"Smart, you should. Just so you're comparing apples to apples — ask the other shops if their price includes interior shampoo and paint decontamination, a lot of the cheaper quotes don't. Happy to send you exactly what's included on ours."</div></div>
+            <div class="scr-obj"><div class="scr-obj-q">"Your price is higher than I expected."</div><div class="scr-obj-a">"I hear you. The reason is we don't rush it — most jobs take us 2-3 hours because we're doing it right the first time. If budget's the main thing, I can put together a smaller package that covers the parts that bother you most."</div></div>
+          </div>
+        </div>
+        <div class="scr-block"><div class="scr-label">🤝 Close</div><div class="scr-line">"I can get you on the schedule this week — does morning or afternoon work better for you?"</div></div>
+      </div>
+
+      <div class="scr">
+        <div class="scr-top">
+          <div><div class="scr-title">5. Mobile Detailing — Office / Business Park</div><div class="scr-sub">Pitching on-site detailing to employees at a workplace parking lot.</div></div>
+          <button class="scr-copy" data-copy="s5">📋 Copy</button>
+        </div>
+        <div class="scr-block"><div class="scr-label">📞 Opener</div><div class="scr-line">"Hi, this is <em>[Your Name]</em> with <em>[Your Company]</em> — I run a mobile detailing service, and I'm reaching out to see if <em>[Company Name]</em> would be open to us setting up in the parking lot one day so employees can get their car detailed while they work, no time off needed."</div></div>
+        <div class="scr-block"><div class="scr-label">🔍 Discovery</div><div class="scr-line">"Have you ever had a vendor like this come on-site before — like a food truck day or something similar? Who would be the right person to run this idea by?"</div></div>
+        <div class="scr-block">
+          <div class="scr-label">🛡 Objection Handling</div>
+          <div class="scr-obj-list">
+            <div class="scr-obj"><div class="scr-obj-q">"We don't really do outside vendors on-site."</div><div class="scr-obj-a">"Totally fair — a lot of places say that until they see it as an employee perk instead of a vendor pitch. Would it help if I framed it that way for whoever approves it — a free perk day, not an ad?"</div></div>
+            <div class="scr-obj"><div class="scr-obj-q">"I'd have to check with someone else."</div><div class="scr-obj-a">"No problem — who's that, and would it be okay if I sent you a one-page rundown you could forward to them?"</div></div>
+          </div>
+        </div>
+        <div class="scr-block"><div class="scr-label">🤝 Close</div><div class="scr-line">"Can we pencil in a trial date — say, one Friday next month — so employees can try it out and we see how it goes?"</div></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══ UNIVERSAL ═══ -->
+  <div class="sec fu" id="panel-universal" style="display:none">
+    <div class="sec-h"><h2>🌐 Universal Script — Any Industry</h2><span>Works for any business</span></div>
+
+    <div class="merge-box">
+      <div class="merge-title">Fill in your details</div>
+      <div class="merge-sub">Type your info below — the script updates live so it's ready to read or copy.</div>
+      <div class="merge-fields">
+        <div class="merge-field"><label>Your Name</label><input type="text" id="mName" placeholder="e.g. Alex" value="[Your Name]"></div>
+        <div class="merge-field"><label>Your Company</label><input type="text" id="mCompany" placeholder="e.g. Peak Home Services" value="[Your Company]"></div>
+        <div class="merge-field"><label>Your Industry / Service</label><input type="text" id="mService" placeholder="e.g. window cleaning" value="[your service]"></div>
+      </div>
+    </div>
+
+    <div class="scr">
+      <div class="scr-top">
+        <div><div class="scr-title">The Universal Cold Call Script</div><div class="scr-sub">Works for real estate, home services, B2B, insurance — anything not listed above yet.</div></div>
+        <button class="scr-copy" id="universalCopy">📋 Copy</button>
+      </div>
+      <div class="scr-block"><div class="scr-label">📞 Opener</div><div class="scr-line" id="mOpener"></div></div>
+      <div class="scr-block"><div class="scr-label">🔍 Discovery</div><div class="scr-line" id="mDiscovery"></div></div>
+      <div class="scr-block">
+        <div class="scr-label">🛡 Objection Handling</div>
+        <div class="scr-obj-list">
+          <div class="scr-obj"><div class="scr-obj-q">"I'm not interested."</div><div class="scr-obj-a" id="mObj1"></div></div>
+          <div class="scr-obj"><div class="scr-obj-q">"Send me some information instead."</div><div class="scr-obj-a" id="mObj2"></div></div>
+          <div class="scr-obj"><div class="scr-obj-q">"How much does it cost?"</div><div class="scr-obj-a" id="mObj3"></div></div>
+        </div>
+      </div>
+      <div class="scr-block"><div class="scr-label">🤝 Close</div><div class="scr-line" id="mClose"></div></div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ── Industry switching ──
+const panels = { 'auto-detailing': document.getElementById('panel-auto-detailing'), 'universal': document.getElementById('panel-universal') };
+document.querySelectorAll('.ind:not(.soon)').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.ind').forEach(b => b.classList.remove('act'));
+    btn.classList.add('act');
+    const key = btn.dataset.ind;
+    Object.entries(panels).forEach(([k, el]) => { if (el) el.style.display = k === key ? '' : 'none'; });
+  });
+});
+
+// ── Copy buttons (auto-detailing scripts) ──
+function scrText(card) {
+  const title = card.querySelector('.scr-title').textContent.trim();
+  const blocks = [...card.querySelectorAll('.scr-block')].map(b => {
+    const label = b.querySelector('.scr-label').textContent.trim();
+    if (b.querySelector('.scr-obj-list')) {
+      const objs = [...b.querySelectorAll('.scr-obj')].map(o =>
+        `Q: ${o.querySelector('.scr-obj-q').textContent.trim()}\nA: ${o.querySelector('.scr-obj-a').textContent.trim()}`).join('\n\n');
+      return `${label}\n${objs}`;
+    }
+    return `${label}\n${b.querySelector('.scr-line').textContent.trim()}`;
+  }).join('\n\n');
+  return `${title}\n\n${blocks}`;
+}
+document.querySelectorAll('.scr-copy[data-copy]').forEach(btn => {
+  btn.addEventListener('click', async () => {
+    const card = btn.closest('.scr');
+    try {
+      await navigator.clipboard.writeText(scrText(card));
+      btn.textContent = '✓ Copied'; btn.classList.add('copied');
+      setTimeout(() => { btn.textContent = '📋 Copy'; btn.classList.remove('copied'); }, 1800);
+    } catch (e) { btn.textContent = 'Copy failed'; }
+  });
+});
+
+// ── Universal script merge ──
+const mName = document.getElementById('mName'), mCompany = document.getElementById('mCompany'), mService = document.getElementById('mService');
+function renderUniversal() {
+  const name = mName.value.trim() || '[Your Name]';
+  const company = mCompany.value.trim() || '[Your Company]';
+  const service = mService.value.trim() || '[your service]';
+  document.getElementById('mOpener').innerHTML = `"Hi, is this [Prospect Name]? Hi [Prospect Name], this is <em>${name}</em> with <em>${company}</em> — we help people with ${service} here in the area. I'll keep this short — do you have 30 seconds?"`;
+  document.getElementById('mDiscovery').innerHTML = `"Quick question — how are you currently handling ${service}, if at all? ... Got it. And what's the biggest frustration with how it's working right now?"`;
+  document.getElementById('mObj1').textContent = `"Totally understand — most people say that before they hear what we actually do. Can I ask what would need to be true for this to even be worth a conversation?"`;
+  document.getElementById('mObj2').textContent = `"Happy to — but honestly the info only makes sense once you know your specific situation. Can I ask two quick questions first so what I send actually applies to you?"`;
+  document.getElementById('mObj3').textContent = `"Depends on a couple factors specific to you, so I don't want to quote a number that doesn't apply. Can I ask a couple quick questions so I can give you an accurate number instead of a guess?"`;
+  document.getElementById('mClose').innerHTML = `"I've got some time either [Day 1] or [Day 2] this week — which works better for a quick 15-minute call to see if this is even a fit?"`;
+}
+[mName, mCompany, mService].forEach(el => el.addEventListener('input', renderUniversal));
+renderUniversal();
+
+document.getElementById('universalCopy').addEventListener('click', async function () {
+  const card = this.closest('.scr');
+  const text = scrText(card);
+  try {
+    await navigator.clipboard.writeText(text);
+    this.textContent = '✓ Copied'; this.classList.add('copied');
+    setTimeout(() => { this.textContent = '📋 Copy'; this.classList.remove('copied'); }, 1800);
+  } catch (e) { this.textContent = 'Copy failed'; }
+});
+
+// ── Scroll reveal ──
+const obs = new IntersectionObserver(es => { es.forEach((e, i) => { if (e.isIntersecting) setTimeout(() => e.target.classList.add('v'), i * 60); }); }, { threshold: .08 });
+document.querySelectorAll('.fu').forEach(el => obs.observe(el));
+
+// ── Mobile nav ──
+document.getElementById('mobBtn').addEventListener('click', () => document.getElementById('sb').classList.add('open'));
+document.getElementById('sbX').addEventListener('click', () => document.getElementById('sb').classList.remove('open'));
+</script>
+</body>
+</html>
