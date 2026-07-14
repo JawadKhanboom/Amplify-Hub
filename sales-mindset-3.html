@@ -104,6 +104,30 @@ body{font-family:var(--font);background:var(--bg);color:var(--white);display:fle
 }
 
 a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+/* Interactive reveals */
+details{background:var(--card);border:1px solid var(--border);border-radius:14px;margin:14px 0;overflow:hidden}
+details summary{padding:14px 18px;cursor:pointer;font-size:14px;font-weight:600;color:var(--white);list-style:none;display:flex;align-items:center;gap:8px;transition:background .2s;user-select:none}
+details summary:hover{background:rgba(255,255,255,.03)}
+details summary::-webkit-details-marker{display:none}
+details[open] summary{border-bottom:1px solid var(--border)}
+.det-body{padding:16px 18px}
+.det-body p,.det-body li{font-size:14px;color:var(--text);line-height:1.75}
+.det-body p{margin-bottom:10px}.det-body p:last-child{margin-bottom:0}
+.det-body strong{color:var(--white);font-weight:600}
+.det-body ol,.det-body ul{padding-left:20px;margin-bottom:10px}
+/* Comparison tables */
+.cx-tbl{width:100%;border-collapse:collapse;margin:14px 0;font-size:13px;overflow-x:auto;display:block}
+.cx-tbl th{padding:10px 14px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;text-align:left;white-space:nowrap}
+.cx-tbl td{padding:10px 14px;border-top:1px solid var(--border);vertical-align:top;line-height:1.65;color:var(--text)}
+.cx-tbl .bad{background:rgba(255,95,87,.04)}.cx-tbl .good{background:rgba(0,230,150,.04)}
+.cx-tbl th.bad{color:var(--red);border-bottom:2px solid rgba(255,95,87,.2)}
+.cx-tbl th.good{color:var(--green);border-bottom:2px solid rgba(0,230,150,.2)}
+/* Framework tables */
+.fw-tbl{width:100%;border-collapse:collapse;margin:14px 0;font-size:13px;overflow-x:auto;display:block}
+.fw-tbl th{padding:10px 14px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--accent);text-align:left;border-bottom:2px solid var(--border-h);white-space:nowrap}
+.fw-tbl td{padding:10px 14px;border-bottom:1px solid var(--border);color:var(--text);line-height:1.6}
+.fw-tbl tr:last-child td{border-bottom:none}
+.fw-tbl td:first-child{color:var(--white);font-weight:600}
 </style>
 </head>
 <body>
@@ -132,13 +156,56 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
   <div class="lesson-meta"><span>⏱ ~8 min</span><span>🏆 +50 XP</span><span>📖 Module 1: Sales Mindset</span></div>
 
   <!-- EXPLANATION -->
-  <div class="lcard"><h2><span class="ic">📖</span> Lesson</h2><p>Confidence on a cold call doesn't come from reading scripts, watching videos, or psyching yourself up in the mirror. It comes from <strong>having done the thing enough times that it feels familiar.</strong></p><p>This is why structured practice matters more than motivation. You don't need to feel confident before you start — you need to start before you feel confident. The feeling follows the reps.</p><p>Think about the first time you drove a car. You were hyper-aware of every input — mirrors, pedals, steering, other cars. Now you drive without thinking about it. Cold calling works the same way. The first 50 calls feel like controlled panic. After 200, you're having conversations. After 500, you sound like you've been doing this for years.</p></div>
+  <div class="lcard">
+    <h2><span class="ic">📖</span> Lesson</h2>
+    <p>Confidence on a cold call doesn't come from reading scripts, watching videos, or psyching yourself up in the mirror.</p>
+    <p>It comes from <strong>having done the thing enough times that it feels familiar.</strong></p>
+    <p>This is why structured practice matters more than motivation. You don't need to feel confident before you start — you need to <strong>start before you feel confident.</strong> The feeling follows the reps.</p>
+    <blockquote>💡 <strong>Pro-Tip:</strong> Confidence is not a prerequisite. It's a byproduct. You earn it through repetition, not preparation.</blockquote>
+    <p>Think about the first time you drove a car. Hyper-aware of every input — mirrors, pedals, steering, other cars. Now you drive without thinking about it.</p>
+    <p><strong>Cold calling works the same way:</strong></p>
+    <table class="fw-tbl">
+      <tr><th>Stage</th><th>What It Feels Like</th><th>What's Happening</th></tr>
+      <tr><td>First 50 calls</td><td>Controlled panic. Every word feels forced.</td><td>You're building raw familiarity with the process</td></tr>
+      <tr><td>After 200 calls</td><td>You're having real conversations</td><td>Pattern recognition is replacing conscious effort</td></tr>
+      <tr><td>After 500 calls</td><td>You sound like a 10-year veteran</td><td>Execution is largely unconscious and repeatable</td></tr>
+    </table>
+  </div>
 
   <!-- EXAMPLE -->
-  <div class="lcard"><h2><span class="ic">💼</span> Real-World Example</h2><p><strong>Real SDR Example:</strong> Jenna recorded herself practicing her cold call opener every morning for 30 days straight — just 5 minutes, speaking into her phone's voice recorder. She'd listen back, notice one thing to fix, and try again. By day 15, she stopped needing to read her script. By day 25, prospects started commenting that she sounded "really natural." She hadn't changed her script at all — she'd just repeated it enough that it became hers.</p></div>
+  <div class="lcard">
+    <h2><span class="ic">💼</span> Real-World Example</h2>
+    <p><strong>Jenna recorded herself practicing her opener every morning for 30 days straight.</strong> Just 5 minutes. Speaking into her phone's voice recorder.</p>
+    <p>She'd listen back, notice <strong>one thing</strong> to fix, and try again. That's it.</p>
+    <table class="fw-tbl">
+      <tr><th>Day</th><th>What Changed</th></tr>
+      <tr><td>Day 1</td><td>Reading the script word-for-word. Robotic. Tense.</td></tr>
+      <tr><td>Day 15</td><td>Stopped needing to read the script entirely</td></tr>
+      <tr><td>Day 25</td><td>Prospects started commenting she sounded "really natural"</td></tr>
+    </table>
+    <p>She hadn't changed her script at all. She'd just <strong>repeated it enough that it became hers.</strong></p>
+    <blockquote>💡 <strong>Pro-Tip:</strong> The script didn't get better — Jenna's <em>delivery</em> did. Remember the 85/15 Rule from Lesson 1: delivery carries 85% of the call's outcome.</blockquote>
+  </div>
 
   <!-- EXERCISE -->
-  <div class="lcard"><h2><span class="ic">✏️</span> Practical Exercise</h2><p><strong>Exercise — The 5-5-5 Drill:</strong> Choose your cold call opener. Set a timer for 5 minutes. Say it out loud 5 times, recording yourself each time. Listen back and pick the ONE version that sounded most natural. Tomorrow, start from that version and do it again. Repeat for 5 days. By day 5, you will sound noticeably different than day 1.</p></div>
+  <div class="lcard">
+    <h2><span class="ic">✏️</span> Practical Exercise</h2>
+    <details>
+      <summary>🔍 Click to reveal: The 5-5-5 Drill</summary>
+      <div class="det-body">
+        <p><strong>The 5-5-5 Drill — 5 minutes, 5 reps, 5 days.</strong></p>
+        <ol>
+          <li>Choose your cold call opener</li>
+          <li>Set a timer for <strong>5 minutes</strong></li>
+          <li>Say it out loud <strong>5 times</strong>, recording yourself each time</li>
+          <li>Listen back and pick the <strong>ONE version</strong> that sounded most natural</li>
+          <li>Tomorrow, start from that version and do it again</li>
+        </ol>
+        <p>Repeat for <strong>5 consecutive days.</strong></p>
+        <p>By day 5, you will sound noticeably different than day 1. This isn't theory — it's how muscle memory works.</p>
+      </div>
+    </details>
+  </div>
 
   <!-- REFLECTION -->
   <div class="reflect"><div class="reflect-q">💭 What would change in your life if you practiced one sales skill for just 5 minutes every single day for 90 days?</div></div>

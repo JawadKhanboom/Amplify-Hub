@@ -104,6 +104,30 @@ body{font-family:var(--font);background:var(--bg);color:var(--white);display:fle
 }
 
 a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+/* Interactive reveals */
+details{background:var(--card);border:1px solid var(--border);border-radius:14px;margin:14px 0;overflow:hidden}
+details summary{padding:14px 18px;cursor:pointer;font-size:14px;font-weight:600;color:var(--white);list-style:none;display:flex;align-items:center;gap:8px;transition:background .2s;user-select:none}
+details summary:hover{background:rgba(255,255,255,.03)}
+details summary::-webkit-details-marker{display:none}
+details[open] summary{border-bottom:1px solid var(--border)}
+.det-body{padding:16px 18px}
+.det-body p,.det-body li{font-size:14px;color:var(--text);line-height:1.75}
+.det-body p{margin-bottom:10px}.det-body p:last-child{margin-bottom:0}
+.det-body strong{color:var(--white);font-weight:600}
+.det-body ol,.det-body ul{padding-left:20px;margin-bottom:10px}
+/* Comparison tables */
+.cx-tbl{width:100%;border-collapse:collapse;margin:14px 0;font-size:13px;overflow-x:auto;display:block}
+.cx-tbl th{padding:10px 14px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;text-align:left;white-space:nowrap}
+.cx-tbl td{padding:10px 14px;border-top:1px solid var(--border);vertical-align:top;line-height:1.65;color:var(--text)}
+.cx-tbl .bad{background:rgba(255,95,87,.04)}.cx-tbl .good{background:rgba(0,230,150,.04)}
+.cx-tbl th.bad{color:var(--red);border-bottom:2px solid rgba(255,95,87,.2)}
+.cx-tbl th.good{color:var(--green);border-bottom:2px solid rgba(0,230,150,.2)}
+/* Framework tables */
+.fw-tbl{width:100%;border-collapse:collapse;margin:14px 0;font-size:13px;overflow-x:auto;display:block}
+.fw-tbl th{padding:10px 14px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--accent);text-align:left;border-bottom:2px solid var(--border-h);white-space:nowrap}
+.fw-tbl td{padding:10px 14px;border-bottom:1px solid var(--border);color:var(--text);line-height:1.6}
+.fw-tbl tr:last-child td{border-bottom:none}
+.fw-tbl td:first-child{color:var(--white);font-weight:600}
 </style>
 </head>
 <body>
@@ -132,13 +156,56 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
   <div class="lesson-meta"><span>⏱ ~8 min</span><span>🏆 +50 XP</span><span>📖 Module 1: Sales Mindset</span></div>
 
   <!-- EXPLANATION -->
-  <div class="lcard"><h2><span class="ic">📖</span> Lesson</h2><p>Rejection is the #1 reason people quit cold calling. Not because the rejection itself is unbearable, but because they <strong>interpret it as personal failure.</strong></p><p>Here's the reframe that changes everything: rejection is not about you. A "no" is information. It tells you something — wrong timing, wrong person, wrong approach, or simply not a fit. That data is valuable because it helps you adjust.</p><p>The best SDRs don't avoid rejection. They <strong>collect it deliberately</strong>, because every "no" narrows the path to "yes." Think of it like a scientist running experiments: a failed experiment isn't failure — it's a data point.</p></div>
+  <div class="lcard">
+    <h2><span class="ic">📖</span> Lesson</h2>
+    <p>Rejection is the <strong>#1 reason people quit</strong> cold calling.</p>
+    <p>Not because the rejection is unbearable. Because they <strong>interpret it as personal failure.</strong></p>
+    <p>Here's the reframe that changes everything:</p>
+    <p><strong>A "no" is information.</strong> It tells you something — wrong timing, wrong person, wrong approach, or simply not a fit. That data is gold because it helps you adjust.</p>
+    <blockquote>💡 <strong>Pro-Tip:</strong> The best SDRs don't avoid rejection. They <em>collect it deliberately</em>, because every "no" narrows the path to "yes." Think like a scientist — a failed experiment isn't failure, it's a data point.</blockquote>
+    <p>Here's what a "no" actually looks like when you decode it:</p>
+    <table class="fw-tbl">
+      <tr><th>What They Say</th><th>What It Actually Means</th><th>What You Do Next</th></tr>
+      <tr><td>"Not interested"</td><td>Your opener didn't hook them fast enough</td><td>Refine your first 8 seconds</td></tr>
+      <tr><td>"We already have someone"</td><td>They have a provider — doesn't mean they're happy</td><td>Ask a curiosity question about their current setup</td></tr>
+      <tr><td>"Send me an email"</td><td>They want you off the phone, not your email</td><td>Acknowledge it, then ask one quick question first</td></tr>
+      <tr><td>"Bad timing"</td><td>Might be real, might be a brush-off</td><td>Lock in a specific callback time</td></tr>
+    </table>
+  </div>
 
   <!-- EXAMPLE -->
-  <div class="lcard"><h2><span class="ic">💼</span> Real-World Example</h2><p><strong>Real SDR Example:</strong> Marcus tracked every rejection for a month. He logged the objection, his response, and the outcome. After 200 calls, he noticed that 60% of his "not interested" responses came within the first 8 seconds — before he even reached his value statement. He adjusted his opener to lead with a question instead of a pitch. His booking rate doubled in two weeks. The rejections didn't stop — but they started happening later in the call, which meant more conversations and more opportunities.</p></div>
+  <div class="lcard">
+    <h2><span class="ic">💼</span> Real-World Example</h2>
+    <p><strong>Marcus tracked every rejection for a month.</strong> He logged the objection, his response, and the outcome.</p>
+    <p>After 200 calls, he spotted the pattern: <strong>60% of his "not interested" responses came within the first 8 seconds</strong> — before he even reached his value statement.</p>
+    <p>The diagnosis was clear. His opener was the problem, not his pitch.</p>
+    <p>He adjusted his opener to <strong>lead with a question instead of a pitch.</strong> His booking rate doubled in two weeks.</p>
+    <table class="cx-tbl">
+      <tr><th class="bad">❌ Marcus's Old Opener</th><th class="good">✅ Marcus's New Opener</th></tr>
+      <tr><td class="bad">"Hi, I'm Marcus from XYZ. We help businesses increase revenue with our platform..."</td><td class="good">"Quick question — what's the biggest challenge you're facing with [specific thing] right now?"</td></tr>
+      <tr><td class="bad">Rejection at 8 seconds. Prospect never heard the value.</td><td class="good">Rejection moved to 45+ seconds. More conversations, more opportunities.</td></tr>
+    </table>
+    <blockquote>💡 <strong>Pro-Tip:</strong> The rejections didn't stop — but they started happening <em>later</em> in the call. That's the difference between a brush-off and a real conversation.</blockquote>
+  </div>
 
   <!-- EXERCISE -->
-  <div class="lcard"><h2><span class="ic">✏️</span> Practical Exercise</h2><p><strong>Exercise — The Rejection Log:</strong> Create a simple spreadsheet or notebook with three columns: Date | Objection Heard | What I Learned. For your next 10 practice calls (or real calls), log every rejection. After 10 entries, look for patterns. What objection appears most? What happens right before it? This log turns rejection from an emotional event into a diagnostic tool.</p></div>
+  <div class="lcard">
+    <h2><span class="ic">✏️</span> Practical Exercise</h2>
+    <details>
+      <summary>🔍 Click to reveal: The Rejection Log exercise</summary>
+      <div class="det-body">
+        <p><strong>Build your own Rejection Log.</strong> Create a simple spreadsheet or notebook with three columns:</p>
+        <table class="fw-tbl">
+          <tr><th>Date</th><th>Objection Heard</th><th>What I Learned</th></tr>
+          <tr><td>e.g. July 14</td><td>"We already have someone"</td><td>I rushed past the opener — need to slow down</td></tr>
+          <tr><td>e.g. July 14</td><td>"Not interested"</td><td>Came at 6 seconds — they checked out before my value statement</td></tr>
+        </table>
+        <p>For your next <strong>10 practice calls</strong> (or real calls), log every rejection. After 10 entries, look for patterns:</p>
+        <p><strong>What objection appears most? What happens right before it?</strong></p>
+        <p>This log turns rejection from an emotional event into a <strong>diagnostic tool.</strong></p>
+      </div>
+    </details>
+  </div>
 
   <!-- REFLECTION -->
   <div class="reflect"><div class="reflect-q">💭 If you knew that your next 50 rejections would lead directly to your best booking ever, would you start dialing faster?</div></div>
@@ -147,7 +214,16 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
   <div class="lcard"><h2><span class="ic">🧠</span> Knowledge Check</h2><div class="q-item"><div class="q-num">Q1</div><div class="q-text">Why do most people quit cold calling?</div><div class="q-opts"><label class="qopt" data-qi="0" data-oi="0"><input type="radio" name="q0"><span class="qo-text">The pay is too low</span></label><label class="qopt" data-qi="0" data-oi="1"><input type="radio" name="q0"><span class="qo-text">They interpret rejection as personal failure</span></label><label class="qopt" data-qi="0" data-oi="2"><input type="radio" name="q0"><span class="qo-text">The hours are too long</span></label><label class="qopt" data-qi="0" data-oi="3"><input type="radio" name="q0"><span class="qo-text">They don't like phones</span></label></div><div class="q-fb" id="qfb0"></div></div><div class="q-item"><div class="q-num">Q2</div><div class="q-text">What is the healthiest way to think about a 'no'?</div><div class="q-opts"><label class="qopt" data-qi="1" data-oi="0"><input type="radio" name="q1"><span class="qo-text">It means you're bad at this</span></label><label class="qopt" data-qi="1" data-oi="1"><input type="radio" name="q1"><span class="qo-text">It's a personal attack</span></label><label class="qopt" data-qi="1" data-oi="2"><input type="radio" name="q1"><span class="qo-text">It's a data point that helps you adjust</span></label><label class="qopt" data-qi="1" data-oi="3"><input type="radio" name="q1"><span class="qo-text">It means the product is bad</span></label></div><div class="q-fb" id="qfb1"></div></div><div class="q-item"><div class="q-num">Q3</div><div class="q-text">Marcus improved his booking rate by:</div><div class="q-opts"><label class="qopt" data-qi="2" data-oi="0"><input type="radio" name="q2"><span class="qo-text">Calling more people</span></label><label class="qopt" data-qi="2" data-oi="1"><input type="radio" name="q2"><span class="qo-text">Tracking rejections and adjusting his opener</span></label><label class="qopt" data-qi="2" data-oi="2"><input type="radio" name="q2"><span class="qo-text">Switching to email outreach</span></label><label class="qopt" data-qi="2" data-oi="3"><input type="radio" name="q2"><span class="qo-text">Asking his manager for help</span></label></div><div class="q-fb" id="qfb2"></div></div><div class="q-item"><div class="q-num">Q4</div><div class="q-text">A 'rejection log' helps you:</div><div class="q-opts"><label class="qopt" data-qi="3" data-oi="0"><input type="radio" name="q3"><span class="qo-text">Feel worse about your performance</span></label><label class="qopt" data-qi="3" data-oi="1"><input type="radio" name="q3"><span class="qo-text">Identify patterns in objections</span></label><label class="qopt" data-qi="3" data-oi="2"><input type="radio" name="q3"><span class="qo-text">Avoid difficult prospects</span></label><label class="qopt" data-qi="3" data-oi="3"><input type="radio" name="q3"><span class="qo-text">Reduce the number of calls you make</span></label></div><div class="q-fb" id="qfb3"></div></div><button class="ai-btn" style="background:var(--accent);color:var(--bg);margin-top:14px" id="checkQuiz">Check Answers</button></div>
 
   <!-- DRILL -->
-  <div class="lcard"><h2><span class="ic">🎯</span> Today's Drill</h2><p>Say this response to "not interested" aloud five times:</p><p><strong>"Totally fair — most people say that before they see the numbers. Quick question though..."</strong></p><p>Focus on: warm tone, no defensiveness, natural pause after "quick question though."</p></div>
+  <div class="lcard">
+    <h2><span class="ic">🎯</span> Today's Drill</h2>
+    <p>Say this response to "not interested" aloud <strong>five times:</strong></p>
+    <table class="cx-tbl">
+      <tr><th class="bad">❌ The Weak Way</th><th class="good">✅ The Elite Way</th></tr>
+      <tr><td class="bad">"Oh, okay. Sorry to bother you."</td><td class="good">"Totally fair — most people say that before they see the numbers. Quick question though..."</td></tr>
+    </table>
+    <p>Focus on: <strong>warm tone</strong>, no defensiveness, natural pause after "quick question though."</p>
+    <blockquote>💡 <strong>Pro-Tip:</strong> The pause after "quick question though" is doing the heavy lifting. It signals confidence. Don't rush past it.</blockquote>
+  </div>
 
   <!-- AI COACH -->
   <div class="ai-card">
