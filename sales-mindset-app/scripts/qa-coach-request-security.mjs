@@ -3,6 +3,7 @@ import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { HttpError, MAX_BODY_BYTES, validateRequest } from '../../supabase/functions/coach-chat/request-security.ts';
+import { buildCorsHeaders, parseAllowedOrigins } from '../../supabase/functions/coach-chat/cors-security.ts';
 
 const appDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const siteRoot = path.resolve(appDir, '..');
@@ -39,6 +40,11 @@ expectError(() => validateRequest({ action: 'feedback', messages: feedbackMessag
 expectError(() => validateRequest({ action: 'feedback', messages: Array.from({ length: 81 }, (_, i) => message(i % 2 ? 'coach' : 'user')) }, catalog), 400, 'INVALID_MESSAGES');
 
 assert.equal(MAX_BODY_BYTES, 64 * 1024);
+
+const allowedOrigins = parseAllowedOrigins('http://localhost:8742/, https://amplify-hub-six.vercel.app/');
+assert.equal(buildCorsHeaders('http://localhost:8742', allowedOrigins)['Access-Control-Allow-Origin'], 'http://localhost:8742');
+assert.equal(buildCorsHeaders('https://amplify-hub-six.vercel.app', allowedOrigins)['Access-Control-Allow-Origin'], 'https://amplify-hub-six.vercel.app');
+assert.equal(buildCorsHeaders('https://evil.example', allowedOrigins)['Access-Control-Allow-Origin'], undefined);
 
 const edgeSource = await readFile(path.join(siteRoot, 'supabase/functions/coach-chat/index.ts'), 'utf8');
 assert.match(edgeSource, /req\.method !== 'POST'/, 'Edge Function rejects non-POST methods');
