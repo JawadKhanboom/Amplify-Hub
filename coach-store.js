@@ -16,7 +16,7 @@ const CoachStore = (() => {
     conversation_style: 'professional', practice_language: 'english',
     daily_goal_minutes: 20, weekly_goal_lessons: 5, xp_visibility: true, streak_reminder: true,
     challenge_difficulty: 'balanced', learning_pace: 'steady',
-    ui_language: 'English (US)', timezone: '(GMT+5:00) Islamabad, Karachi',
+    ui_language: 'English (US)', timezone: 'Asia/Karachi',
     date_format: 'MM/DD/YYYY', time_format: '12-hour',
     profile_visibility: 'public'
   };
