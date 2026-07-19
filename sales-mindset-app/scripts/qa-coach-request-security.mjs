@@ -54,4 +54,10 @@ assert.match(migration, /when 'feedback'.*10/s, 'feedback quota is 10');
 assert.match(migration, /interval '1 hour'/, 'feedback window is one hour');
 assert.match(migration, /revoke all on private\.coach_api_usage from public, anon, authenticated/, 'quota table has no direct client grants');
 
-console.log('Coach request security QA passed: validation, limits, structured errors, and quota migration.');
+const coachStoreSource = await readFile(path.join(siteRoot, 'coach-store.js'), 'utf8');
+assert.doesNotMatch(coachStoreSource, /\.upsert\(sessionData\)/, 'partial session saves do not use insert-style upserts');
+assert.match(coachStoreSource, /table\.insert\(sessionData\)/, 'new sessions use INSERT with required columns');
+assert.match(coachStoreSource, /table[\s\S]*\.update\(sessionData\)[\s\S]*\.eq\('id', sessionId\)/, 'existing sessions use UPDATE by ID');
+assert.match(coachStoreSource, /Calling saveSession\(\{ id \}\)[\s\S]*\.select\('\*'\)/, 'activating an existing session performs a read-only lookup');
+
+console.log('Coach request security QA passed: validation, limits, quota migration, and safe session updates.');

@@ -68,7 +68,7 @@ const CoachStore = (() => {
     // Send defaults only when CREATING. For updates, send only the fields the
     // caller actually provided — a partial patch like {id, score} must not
     // clobber an existing row's mode/title/turns back to defaults.
-    const sessionData = { id: sessionId, user_id: uid };
+    const sessionData = isNew ? { id: sessionId, user_id: uid } : {};
 
     if (isNew) {
       sessionData.mode = patch.mode || 'roleplay';
@@ -93,11 +93,31 @@ const CoachStore = (() => {
 
     if (patch.endedAt) sessionData.ended_at = new Date(patch.endedAt).toISOString();
 
-    const { data, error } = await supabaseClient
-      .from('coaching_sessions')
-      .upsert(sessionData)
-      .select()
-      .single();
+    const table = supabaseClient.from('coaching_sessions');
+    let request;
+    if (isNew) {
+      request = table.insert(sessionData).select().single();
+    } else if (Object.keys(sessionData).length) {
+      // Partial updates must use UPDATE. An UPSERT first builds a new row, so
+      // omitted required columns such as mode become null before PostgreSQL can
+      // resolve the ID conflict.
+      request = table
+        .update(sessionData)
+        .eq('id', sessionId)
+        .eq('user_id', uid)
+        .select()
+        .single();
+    } else {
+      // Calling saveSession({ id }) only switches the active session. Read the
+      // existing row without attempting an empty update.
+      request = table
+        .select('*')
+        .eq('id', sessionId)
+        .eq('user_id', uid)
+        .single();
+    }
+
+    const { data, error } = await request;
 
     if (error) {
       console.error("Error saving coaching session:", error.message);
