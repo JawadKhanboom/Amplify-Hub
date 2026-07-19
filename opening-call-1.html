@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AmplifyHub — The 3-Second Hook</title>
+<meta name="description" content="Opening the Call, Lesson 1 — earn the right to one more sentence with a first impression that lands in under 15 seconds.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="AmplifyHub">
+<meta property="og:title" content="AmplifyHub — The 3-Second Hook">
+<meta property="og:description" content="Opening the Call, Lesson 1 — earn the right to one more sentence with a first impression that lands in under 15 seconds.">
+<meta property="og:image" content="og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#07070e;--bg2:#0b0b16;--card:#13132a;--card2:#181838;--glass:rgba(19,19,42,.55);
+  --accent:#FFD54A;--accent-dim:rgba(255,213,74,.1);--accent-glow:rgba(255,213,74,.3);
+  --warm:#FFA726;--green:#00e696;--blue:#64B5F6;--purple:#BA68C8;--red:#ff5f57;
+  --white:#fff;--text:#b0b0c8;--muted:#8a8aa4;
+  --border:rgba(255,213,74,.07);--border-h:rgba(255,213,74,.22);
+  --font:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;--sb:240px;
+}
+body{font-family:var(--font);background:var(--bg);color:var(--white);display:flex;min-height:100vh;overflow-x:hidden}
+
+.sb{width:var(--sb);position:fixed;top:0;left:0;bottom:0;background:var(--bg2);border-right:1px solid var(--border);padding:24px 16px;display:flex;flex-direction:column;z-index:100;transition:transform .3s}
+.sb-logo{font-size:20px;font-weight:800;padding:0 8px 24px}.sb-logo span{color:var(--accent)}
+.sb-nav{display:flex;flex-direction:column;gap:4px;flex:1}
+.si{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:10px;font-size:14px;font-weight:500;color:var(--muted);cursor:pointer;transition:all .2s;text-decoration:none;border:1px solid transparent}
+.si:hover{color:var(--text);background:rgba(255,255,255,.03)}.si.act{color:var(--accent);background:var(--accent-dim);border-color:var(--border)}
+.si-ic{width:20px;text-align:center;font-size:15px}
+.sb-d{height:1px;background:var(--border);margin:10px 8px}
+.sb-u{display:flex;align-items:center;gap:10px;padding:12px 8px;border-top:1px solid var(--border);margin-top:auto}
+.sb-av{width:32px;height:32px;border-radius:8px;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:var(--bg)}
+.sb-un{font-size:13px;font-weight:600}.sb-ur{font-size:11px;color:var(--muted)}
+.sb-x{display:none;position:absolute;top:16px;right:16px;background:none;border:none;color:var(--muted);font-size:20px;cursor:pointer}
+.mh{display:none;position:fixed;top:0;left:0;right:0;z-index:200;padding:14px 20px;background:rgba(7,7,14,.95);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);align-items:center;justify-content:space-between}
+.mh .logo{font-size:18px;font-weight:800}.mh .logo span{color:var(--accent)}
+.mb{background:none;border:none;cursor:pointer}.mb span{display:block;width:20px;height:2px;background:#fff;margin:4px 0}
+
+.main{margin-left:var(--sb);flex:1;padding:32px 40px 80px;max-width:780px}
+.back{display:inline-flex;align-items:center;gap:6px;color:var(--muted);font-size:13px;font-weight:600;text-decoration:none;margin-bottom:20px;transition:color .2s}.back:hover{color:var(--accent)}
+.lesson-badge{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--accent);margin-bottom:8px}
+.lesson-title{font-size:clamp(22px,3vw,28px);font-weight:900;letter-spacing:-.5px;margin-bottom:6px}
+.lesson-meta{display:flex;gap:16px;font-size:12px;color:var(--muted);margin-bottom:28px;flex-wrap:wrap}
+
+.lcard{background:var(--glass);backdrop-filter:blur(14px);border:1px solid var(--border);border-radius:20px;padding:28px;margin-bottom:20px;transition:border-color .3s}
+.lcard:hover{border-color:var(--border-h)}
+.lcard h2{font-size:17px;font-weight:800;letter-spacing:-.2px;margin-bottom:12px;display:flex;align-items:center;gap:10px}
+.lcard h2 .ic{font-size:20px}
+.lcard p,.lcard li{font-size:14px;color:var(--text);line-height:1.75}
+.lcard p{margin-bottom:12px}.lcard p:last-child{margin-bottom:0}
+.lcard strong{color:var(--white);font-weight:600}
+.lcard em{color:var(--accent);font-style:normal}
+.lcard blockquote{background:var(--accent-dim);border-left:3px solid var(--accent);border-radius:0 10px 10px 0;padding:14px 18px;margin:14px 0;font-size:14px;color:var(--text);font-style:italic;line-height:1.6}
+.lcard ul{padding-left:20px;margin:10px 0}
+
+.reflect{background:linear-gradient(135deg,rgba(255,213,74,.06),var(--card));border:1px solid var(--border-h);border-radius:16px;padding:22px;text-align:center;margin-bottom:20px}
+.reflect-q{font-size:15px;font-weight:700;font-style:italic;line-height:1.5}
+
+.q-item{margin-bottom:18px;padding-bottom:18px;border-bottom:1px solid rgba(255,213,74,.04)}
+.q-item:last-child{border-bottom:none;margin-bottom:0}
+.q-num{font-size:10px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
+.q-text{font-size:14px;font-weight:600;margin-bottom:10px}
+.q-opts{display:flex;flex-direction:column;gap:6px}
+.qopt{display:flex;align-items:center;gap:10px;padding:10px 14px;border:1px solid var(--border);border-radius:10px;cursor:pointer;transition:all .25s;font-size:13px;color:var(--text)}
+.qopt:hover{border-color:var(--border-h);color:var(--white)}
+.qopt input{display:none}
+.qopt.correct{border-color:rgba(0,230,150,.3);background:rgba(0,230,150,.08);color:var(--green)}
+.qopt.wrong{border-color:rgba(255,95,87,.3);background:rgba(255,95,87,.08);color:var(--red)}
+.q-fb{font-size:12px;font-weight:600;margin-top:8px;min-height:18px}
+
+.ai-card{background:linear-gradient(135deg,rgba(0,230,150,.05),var(--card));border:1px solid rgba(0,230,150,.12);border-radius:18px;padding:22px;margin-bottom:20px}
+.ai-card h2{color:var(--green)}
+.ai-meta{display:flex;gap:12px;flex-wrap:wrap;margin:10px 0 14px;font-size:12px;color:var(--muted)}
+.ai-btn{background:var(--green);color:var(--bg);border:none;padding:12px 24px;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:var(--font);transition:all .3s;margin-top:10px}
+.ai-btn:hover{box-shadow:0 4px 16px rgba(0,230,150,.3)}
+
+.iv-card{background:linear-gradient(135deg,rgba(100,181,246,.05),var(--card));border:1px solid rgba(100,181,246,.12);border-radius:18px;padding:22px;margin-bottom:20px}
+.iv-card h2{color:var(--blue)}
+.iv-tip{background:rgba(100,181,246,.08);border:1px solid rgba(100,181,246,.15);border-radius:10px;padding:12px 14px;font-size:12px;color:var(--blue);margin-top:10px;font-weight:500}
+
+.takeaway{background:var(--accent-dim);border:1px solid var(--border-h);border-radius:16px;padding:22px;text-align:center;margin-bottom:24px}
+.takeaway p{font-size:16px;font-weight:700;color:var(--accent)}
+
+.bnav{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:20px}
+.bnav-btn{flex:1;min-width:140px;padding:14px 20px;border-radius:12px;font-size:14px;font-weight:700;cursor:pointer;font-family:var(--font);transition:all .3s;text-align:center;text-decoration:none;display:flex;align-items:center;justify-content:center;gap:6px}
+.bnav-prev{background:transparent;color:var(--white);border:1px solid var(--border-h)}.bnav-prev:hover{background:var(--accent-dim)}
+.bnav-complete{background:var(--accent);color:var(--bg);border:none}.bnav-complete:hover{box-shadow:0 6px 24px var(--accent-glow);transform:translateY(-2px)}
+.bnav-complete.done{background:var(--green);pointer-events:none}
+.bnav-next{background:transparent;color:var(--white);border:1px solid var(--border-h)}.bnav-next:hover{background:var(--accent-dim)}
+.toast{position:fixed;bottom:32px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--green);color:var(--bg);padding:14px 28px;border-radius:14px;font-size:14px;font-weight:700;z-index:999;transition:transform .4s cubic-bezier(.16,1,.3,1);pointer-events:none}
+.toast.show{transform:translateX(-50%) translateY(0)}
+
+details{background:var(--card);border:1px solid var(--border);border-radius:14px;margin:14px 0;overflow:hidden}
+details summary{padding:14px 18px;cursor:pointer;font-size:14px;font-weight:600;color:var(--white);list-style:none;display:flex;align-items:center;gap:8px;transition:background .2s;user-select:none}
+details summary:hover{background:rgba(255,255,255,.03)}
+details summary::-webkit-details-marker{display:none}
+details[open] summary{border-bottom:1px solid var(--border)}
+.det-body{padding:16px 18px}
+.det-body p,.det-body li{font-size:14px;color:var(--text);line-height:1.75}
+.det-body p{margin-bottom:10px}.det-body p:last-child{margin-bottom:0}
+.det-body strong{color:var(--white);font-weight:600}
+.det-body ol,.det-body ul{padding-left:20px;margin-bottom:10px}
+.cx-tbl{width:100%;border-collapse:collapse;margin:14px 0;font-size:13px;overflow-x:auto;display:block}
+.cx-tbl th{padding:10px 14px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;text-align:left;white-space:nowrap}
+.cx-tbl td{padding:10px 14px;border-top:1px solid var(--border);vertical-align:top;line-height:1.65;color:var(--text)}
+.cx-tbl .bad{background:rgba(255,95,87,.04)}.cx-tbl .good{background:rgba(0,230,150,.04)}
+.cx-tbl th.bad{color:var(--red);border-bottom:2px solid rgba(255,95,87,.2)}
+.cx-tbl th.good{color:var(--green);border-bottom:2px solid rgba(0,230,150,.2)}
+.fw-tbl{width:100%;border-collapse:collapse;margin:14px 0;font-size:13px;overflow-x:auto;display:block}
+.fw-tbl th{padding:10px 14px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--accent);text-align:left;border-bottom:2px solid var(--border-h);white-space:nowrap}
+.fw-tbl td{padding:10px 14px;border-bottom:1px solid var(--border);color:var(--text);line-height:1.6}
+.fw-tbl tr:last-child td{border-bottom:none}
+.fw-tbl td:first-child{color:var(--white);font-weight:600}
+
+@media(max-width:860px){
+  .sb{transform:translateX(-100%)}.sb.open{transform:translateX(0)}.sb-x{display:block}
+  .mh{display:flex}.main{margin-left:0;padding:72px 20px 48px}
+}
+
+a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+</style>
+</head>
+<body>
+
+<div class="mh"><div class="logo">Amplify<span>Hub</span></div><button class="mb" id="mobBtn" aria-label="Open navigation menu"><span></span><span></span><span></span></button></div>
+
+<aside class="sb" id="sb">
+  <button class="sb-x" id="sbX" aria-label="Close navigation menu">✕</button>
+  <div class="sb-logo">Amplify<span>Hub</span></div>
+  <nav class="sb-nav">
+    <a class="si" href="dashboard.html"><span class="si-ic">🏠</span>Dashboard</a>
+    <a class="si act" href="journey.html"><span class="si-ic">🛤</span>Journey</a>
+    <a class="si" href="coach-home.html"><span class="si-ic">🤖</span>AI Coach</a>
+    <a class="si" href="dashboard.html#challenge"><span class="si-ic">⚡</span>Challenges</a>
+    <a class="si" href="dashboard.html#resources"><span class="si-ic">📚</span>Resources</a>
+    <div class="sb-d"></div>
+    <a class="si" href="settings.html"><span class="si-ic">⚙️</span>Settings</a>
+  </nav>
+  <div class="sb-u"><div class="sb-av">J</div><div><div class="sb-un">Jawad</div><div class="sb-ur">Pro Member</div></div></div>
+</aside>
+
+<div class="main">
+  <a href="journey.html" class="back">← Back to Journey</a>
+  <div class="lesson-badge">Opening the Call · Lesson 1 of 4</div>
+  <h1 class="lesson-title">The 3-Second Hook</h1>
+  <div class="lesson-meta"><span>⏱ ~10 min</span><span>🏆 +50 XP</span><span>📖 Module 4: Opening the Call</span></div>
+
+  <!-- THE REAL GOAL -->
+  <div class="lcard">
+    <h2><span class="ic">🎯</span> The Real Goal of Your First Sentence</h2>
+    <p>An analysis of <em>300 million cold calls</em> revealed something most reps never learn: the purpose of your opening line is not to sell. It is not to pitch. It is not even to book a meeting.</p>
+    <p><strong>The purpose of your first sentence is to earn permission for one more sentence.</strong></p>
+    <p>That is the entire game in the first three seconds. Every word you say is either buying you more time or filing you under "telemarketer — hang up now."</p>
+    <blockquote>💡 <strong>Pro-Tip:</strong> Before every call, repeat this internal goal: "I am here to find out if there is a problem worth solving." That single line changes your posture from pitching to sorting.</blockquote>
+    <p>When you stop trying to impress and start trying to <strong>discover</strong>, your tone shifts. Your pace slows. Your voice drops into a register that sounds like a peer, not a performer.</p>
+  </div>
+
+  <!-- FIRST IMPRESSION FORMULA -->
+  <div class="lcard">
+    <h2><span class="ic">⚡</span> The First Impression Formula</h2>
+    <p>You have roughly <strong>15 seconds</strong> before a prospect decides whether to keep listening or start looking for the end-call button. Your opening needs to cover three things — in order:</p>
+    <table class="fw-tbl">
+      <tr><th>Step</th><th>What It Sounds Like</th><th>Why It Matters</th></tr>
+      <tr><td>1. Identity</td><td>"Hey Sarah, it's Mark with Acme."</td><td>Removes the "who is this?" anxiety instantly</td></tr>
+      <tr><td>2. Context</td><td>"We help sales teams that are struggling with..."</td><td>Tells them why you're calling without a pitch</td></tr>
+      <tr><td>3. Relevance</td><td>"I noticed your team just expanded by 40%..."</td><td>Proves you did homework — you're not dialing from a spreadsheet</td></tr>
+    </table>
+    <p><strong>Identity → Context → Relevance.</strong> Under 15 seconds. That is the formula.</p>
+    <p>Miss any of the three and you trigger the prospect's mental spam filter. Nail all three and you earn that next sentence — which is where the real conversation begins.</p>
+  </div>
+
+  <!-- THE DATA ON WEAK OPENERS -->
+  <div class="lcard">
+    <h2><span class="ic">📊</span> The Data on Weak Openers</h2>
+    <p>That 300-million-call dataset exposed a brutal truth: the openers most reps use are among the <em>worst-performing</em> lines in cold calling.</p>
+    <table class="cx-tbl">
+      <tr><th class="bad">❌ Weak Opener</th><th class="bad">Success Rate</th><th class="good">✅ Why It Fails</th></tr>
+      <tr><td class="bad">"Did I catch you at a bad time?"</td><td class="bad" style="color:var(--red);font-weight:700">~2.4%</td><td class="good">Hands the prospect a pre-built exit. They take it.</td></tr>
+      <tr><td class="bad">"How's your day going?"</td><td class="bad" style="color:var(--red);font-weight:700">~7.6%</td><td class="good">Feels fake from a stranger. Triggers "sales call" alarm.</td></tr>
+      <tr><td class="bad">"How are you?"</td><td class="bad" style="color:var(--red);font-weight:700">Low</td><td class="good">Empty pleasantry — nobody answers honestly to a stranger.</td></tr>
+      <tr><td class="bad">"Is now a good time?"</td><td class="bad" style="color:var(--red);font-weight:700">Low</td><td class="good">Identical problem to "bad time" — gives them a polite no.</td></tr>
+    </table>
+    <p>These lines feel safe. That is exactly the problem. <strong>Safe openers signal "salesperson"</strong> — and the prospect's defenses snap up before you finish the sentence.</p>
+    <blockquote>💡 <strong>Pro-Tip:</strong> If your opener sounds like something a telemarketer would say, you have already lost. The prospect files you as "sales call" in under two seconds and tunes out everything after.</blockquote>
+  </div>
+
+  <!-- WHY GENERIC OPENERS FAIL -->
+  <div class="lcard">
+    <h2><span class="ic">🚫</span> Why Generic Openers Fail</h2>
+    <p>There is a specific reason these openers underperform, and it is not about the words themselves. It is about <strong>pattern recognition.</strong></p>
+    <p>Your prospect gets cold calls. They have heard "How are you doing today?" from enough callers that the phrase itself is a trigger. The moment they hear it, their brain fires a single classification: <em>telemarketer.</em></p>
+    <p>Once that label is applied, you are done. No amount of clever value props, no discovery question, no pivot will undo it. The prospect has mentally filed you into a category — and that category has a very short half-life.</p>
+    <table class="fw-tbl">
+      <tr><th>Signal</th><th>What the Prospect Thinks</th></tr>
+      <tr><td>Overly polite filler</td><td>"Another sales call. How fast can I hang up?"</td></tr>
+      <tr><td>Generic company intro</td><td>"I don't know what this company does and I don't care."</td></tr>
+      <tr><td>Permission-seeking tone</td><td>"If they need my permission this much, they're selling something."</td></tr>
+      <tr><td>Rushed, rehearsed cadence</td><td>"Script reader. Not a real conversation."</td></tr>
+    </table>
+    <p>The fix is simple in concept, harder in practice: <strong>sound like a human who has a reason to call this specific person.</strong></p>
+  </div>
+
+  <!-- OTHER WEAK OPENERS -->
+  <div class="lcard">
+    <h2><span class="ic">⚠️</span> The Full Weak-Opener Graveyard</h2>
+    <details>
+      <summary>🔍 More openers that underperform (and why)</summary>
+      <div class="det-body">
+        <p><strong>"I know you're busy, I'll be quick..."</strong> — Tells the prospect you know you are an interruption. Not a strong position to negotiate from.</p>
+        <p><strong>"I'm calling from [Company], we're a leading provider of..."</strong> — Nobody cares about your company yet. They care about their problem.</p>
+        <p><strong>"The reason for my call is..."</strong> — Corporate filler. Sounds like a template. Feels impersonal because it is.</p>
+        <p><strong>"Just following up on an email I sent..."</strong> — They didn't read the email. Now you've confirmed you're the person who sent it. Two strikes.</p>
+        <p><strong>"Would you be open to..."</strong> — Polite, permission-seeking, and immediately classifiable as a sales question.</p>
+      </div>
+    </details>
+    <details>
+      <summary>🔍 What all weak openers have in common</summary>
+      <div class="det-body">
+        <p>Every weak opener shares the same DNA:</p>
+        <ol>
+          <li><strong>Self-centered</strong> — they talk about you, your company, or your product before earning the right</li>
+          <li><strong>Permission-seeking</strong> — they hand control to the prospect before creating any curiosity</li>
+          <li><strong>Pattern-matching</strong> — they sound exactly like the last ten sales calls the prospect received</li>
+        </ol>
+        <p>If your opener checks even one of those boxes, it needs surgery.</p>
+      </div>
+    </details>
+  </div>
+
+  <!-- REFLECTION -->
+  <div class="reflect"><div class="reflect-q">💭 Think about the last time a stranger called you. How fast did you decide "sales call" or "real person"? That is the speed your prospects are judging you.</div></div>
+
+  <!-- QUIZ -->
+  <div class="lcard">
+    <h2><span class="ic">🧠</span> Knowledge Check</h2>
+    <div class="q-item"><div class="q-num">Q1</div><div class="q-text">The purpose of your opening line on a cold call is to:</div><div class="q-opts">
+      <label class="qopt" data-qi="0" data-oi="0"><input type="radio" name="q0"><span class="qo-text">Pitch your product quickly before they hang up</span></label>
+      <label class="qopt" data-qi="0" data-oi="1"><input type="radio" name="q0"><span class="qo-text">Earn permission for one more sentence</span></label>
+      <label class="qopt" data-qi="0" data-oi="2"><input type="radio" name="q0"><span class="qo-text">Ask the prospect how their day is going</span></label>
+      <label class="qopt" data-qi="0" data-oi="3"><input type="radio" name="q0"><span class="qo-text">Introduce your company's full value proposition</span></label>
+    </div><div class="q-fb" id="qfb0"></div></div>
+
+    <div class="q-item"><div class="q-num">Q2</div><div class="q-text">The First Impression Formula is:</div><div class="q-opts">
+      <label class="qopt" data-qi="1" data-oi="0"><input type="radio" name="q1"><span class="qo-text">Problem → Solution → Close</span></label>
+      <label class="qopt" data-qi="1" data-oi="1"><input type="radio" name="q1"><span class="qo-text">Identity → Context → Relevance</span></label>
+      <label class="qopt" data-qi="1" data-oi="2"><input type="radio" name="q1"><span class="qo-text">Greeting → Permission → Pitch</span></label>
+      <label class="qopt" data-qi="1" data-oi="3"><input type="radio" name="q1"><span class="qo-text">Name → Company → Product</span></label>
+    </div><div class="q-fb" id="qfb1"></div></div>
+
+    <div class="q-item"><div class="q-num">Q3</div><div class="q-text">"Did I catch you at a bad time?" succeeds roughly:</div><div class="q-opts">
+      <label class="qopt" data-qi="2" data-oi="0"><input type="radio" name="q2"><span class="qo-text">25% of the time</span></label>
+      <label class="qopt" data-qi="2" data-oi="1"><input type="radio" name="q2"><span class="qo-text">15% of the time</span></label>
+      <label class="qopt" data-qi="2" data-oi="2"><input type="radio" name="q2"><span class="qo-text">2.4% of the time</span></label>
+      <label class="qopt" data-qi="2" data-oi="3"><input type="radio" name="q2"><span class="qo-text">50% of the time</span></label>
+    </div><div class="q-fb" id="qfb2"></div></div>
+
+    <div class="q-item"><div class="q-num">Q4</div><div class="q-text">Why do generic openers fail?</div><div class="q-opts">
+      <label class="qopt" data-qi="3" data-oi="0"><input type="radio" name="q3"><span class="qo-text">They are too long</span></label>
+      <label class="qopt" data-qi="3" data-oi="1"><input type="radio" name="q3"><span class="qo-text">They trigger the prospect's "telemarketer" pattern recognition</span></label>
+      <label class="qopt" data-qi="3" data-oi="2"><input type="radio" name="q3"><span class="qo-text">They mention the product too early</span></label>
+      <label class="qopt" data-qi="3" data-oi="3"><input type="radio" name="q3"><span class="qo-text">They don't include enough data</span></label>
+    </div><div class="q-fb" id="qfb3"></div></div>
+    <button class="ai-btn" style="background:var(--accent);color:var(--bg);margin-top:14px" id="checkQuiz">Check Answers</button>
+  </div>
+
+  <!-- AI COACH -->
+  <div class="ai-card">
+    <h2><span class="ic">🤖</span> Practice with AI Coach</h2>
+    <p style="font-size:14px;color:var(--text);margin:8px 0"><strong>Scenario:</strong> You are calling a VP of Sales at a mid-market SaaS company. Deliver your opening line using the Identity → Context → Relevance formula in under 15 seconds.</p>
+    <p style="font-size:13px;color:var(--text)"><strong>Your objective:</strong> Hook the prospect without triggering any telemarketer signals. No permission-seeking, no filler.</p>
+    <div class="ai-meta"><span>Difficulty: Medium</span><span>Goal: Practice the First Impression Formula in a realistic scenario.</span></div>
+    <a href="coach-home.html" class="ai-btn">Open AI Coach →</a>
+  </div>
+
+  <!-- INTERVIEW PREP -->
+  <div class="iv-card">
+    <h2><span class="ic">🎤</span> Interview Question</h2>
+    <blockquote style="background:rgba(100,181,246,.06);border-left:3px solid var(--blue);border-radius:0 10px 10px 0;padding:14px 18px;margin:12px 0;font-style:italic;font-size:14px;color:var(--text)">"Walk me through the first 15 seconds of your cold call. What do you say and why?"</blockquote>
+    <p style="font-size:13px;color:var(--text);margin:8px 0"><strong>Example answer:</strong> I open with my name and company to remove the "who is this" question, then give one line of context about the problem we solve, then a specific detail about their business to prove I did my homework. The whole thing is under 15 seconds — long enough to be human, short enough to not lose them.</p>
+    <div class="iv-tip">💡 Interviewers are testing structure, not perfection. Showing you have a formula — and can explain why each piece matters — signals coachability and intentional practice.</div>
+  </div>
+
+  <!-- TAKEAWAY -->
+  <div class="takeaway"><p>🔑 Your opener has one job: earn the next sentence. Identity → Context → Relevance in under 15 seconds. If it sounds like a telemarketer, it is already over.</p></div>
+
+  <!-- BOTTOM NAV -->
+  <div class="bnav">
+    <a href="journey.html" class="bnav-btn bnav-prev">← Back to Journey</a>
+    <button class="bnav-btn bnav-complete" id="completeBtn">Mark as Complete ✓</button>
+    <a href="opening-call-2.html" class="bnav-btn bnav-next">Next Lesson →</a>
+  </div>
+</div>
+
+<div class="toast" id="toast">🎉 Lesson Complete! +50 XP</div>
+
+<script>
+const STORAGE_KEY='amplifyHub_journeyProgress';
+const MODULE_INDEX=3;
+const LESSON_INDEX=0;
+const TOTAL_MODULE_LESSONS=4;
+
+function readProgress(){
+  try{ const d=JSON.parse(localStorage.getItem(STORAGE_KEY)); return new Set(d?.completedLessons||[]); }catch(e){ return new Set(); }
+}
+function saveProgress(completed){
+  localStorage.setItem(STORAGE_KEY,JSON.stringify({
+    completedLessons:[...completed],
+    updatedAt:Date.now()
+  }));
+}
+function lid(m,l){ return `m${m}l${l}`; }
+
+const completed=readProgress();
+const thisLid=lid(MODULE_INDEX,LESSON_INDEX);
+const btn=document.getElementById('completeBtn');
+if(completed.has(thisLid)){ btn.textContent='✓ Completed'; btn.classList.add('done'); }
+
+btn.addEventListener('click',function(){
+  if(completed.has(thisLid)) return;
+  completed.add(thisLid);
+  saveProgress(completed);
+  btn.textContent='✓ Completed';
+  btn.classList.add('done');
+  const toast=document.getElementById('toast');
+  toast.classList.add('show');
+  setTimeout(()=>toast.classList.remove('show'),2500);
+});
+
+const answers=[1, 1, 2, 1];
+document.getElementById('checkQuiz').addEventListener('click',function(){
+  document.querySelectorAll('.qopt').forEach(opt=>{
+    const qi=parseInt(opt.dataset.qi), oi=parseInt(opt.dataset.oi);
+    const input=opt.querySelector('input');
+    if(!input.checked) return;
+    if(oi===answers[qi]){ opt.classList.add('correct'); document.getElementById('qfb'+qi).textContent='✓ Correct!'; document.getElementById('qfb'+qi).style.color='var(--green)'; }
+    else{ opt.classList.add('wrong'); document.getElementById('qfb'+qi).textContent='✗ Try again'; document.getElementById('qfb'+qi).style.color='var(--red)'; }
+  });
+});
+
+document.getElementById('mobBtn').addEventListener('click',()=>document.getElementById('sb').classList.add('open'));
+document.getElementById('sbX').addEventListener('click',()=>document.getElementById('sb').classList.remove('open'));
+</script>
+</body>
+</html>

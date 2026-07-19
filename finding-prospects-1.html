@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AmplifyHub — Define Your Ideal Customer</title>
+<meta name="description" content="Finding Prospects, Lesson 1 — build the filter that separates real buyers from noise.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="AmplifyHub">
+<meta property="og:title" content="AmplifyHub — Define Your Ideal Customer">
+<meta property="og:description" content="Finding Prospects, Lesson 1 — build the filter that separates real buyers from noise.">
+<meta property="og:image" content="og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#07070e;--bg2:#0b0b16;--card:#13132a;--card2:#181838;--glass:rgba(19,19,42,.55);
+  --accent:#FFD54A;--accent-dim:rgba(255,213,74,.1);--accent-glow:rgba(255,213,74,.3);
+  --warm:#FFA726;--green:#00e696;--blue:#64B5F6;--purple:#BA68C8;--red:#ff5f57;
+  --white:#fff;--text:#b0b0c8;--muted:#8a8aa4;
+  --border:rgba(255,213,74,.07);--border-h:rgba(255,213,74,.22);
+  --font:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;--sb:240px;
+}
+body{font-family:var(--font);background:var(--bg);color:var(--white);display:flex;min-height:100vh;overflow-x:hidden}
+
+.sb{width:var(--sb);position:fixed;top:0;left:0;bottom:0;background:var(--bg2);border-right:1px solid var(--border);padding:24px 16px;display:flex;flex-direction:column;z-index:100;transition:transform .3s}
+.sb-logo{font-size:20px;font-weight:800;padding:0 8px 24px}.sb-logo span{color:var(--accent)}
+.sb-nav{display:flex;flex-direction:column;gap:4px;flex:1}
+.si{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:10px;font-size:14px;font-weight:500;color:var(--muted);cursor:pointer;transition:all .2s;text-decoration:none;border:1px solid transparent}
+.si:hover{color:var(--text);background:rgba(255,255,255,.03)}.si.act{color:var(--accent);background:var(--accent-dim);border-color:var(--border)}
+.si-ic{width:20px;text-align:center;font-size:15px}
+.sb-d{height:1px;background:var(--border);margin:10px 8px}
+.sb-u{display:flex;align-items:center;gap:10px;padding:12px 8px;border-top:1px solid var(--border);margin-top:auto}
+.sb-av{width:32px;height:32px;border-radius:8px;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:var(--bg)}
+.sb-un{font-size:13px;font-weight:600}.sb-ur{font-size:11px;color:var(--muted)}
+.sb-x{display:none;position:absolute;top:16px;right:16px;background:none;border:none;color:var(--muted);font-size:20px;cursor:pointer}
+.mh{display:none;position:fixed;top:0;left:0;right:0;z-index:200;padding:14px 20px;background:rgba(7,7,14,.95);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);align-items:center;justify-content:space-between}
+.mh .logo{font-size:18px;font-weight:800}.mh .logo span{color:var(--accent)}
+.mb{background:none;border:none;cursor:pointer}.mb span{display:block;width:20px;height:2px;background:#fff;margin:4px 0}
+
+.main{margin-left:var(--sb);flex:1;padding:32px 40px 80px;max-width:780px}
+.back{display:inline-flex;align-items:center;gap:6px;color:var(--muted);font-size:13px;font-weight:600;text-decoration:none;margin-bottom:20px;transition:color .2s}.back:hover{color:var(--accent)}
+.lesson-badge{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--accent);margin-bottom:8px}
+.lesson-title{font-size:clamp(22px,3vw,28px);font-weight:900;letter-spacing:-.5px;margin-bottom:6px}
+.lesson-meta{display:flex;gap:16px;font-size:12px;color:var(--muted);margin-bottom:28px;flex-wrap:wrap}
+
+.lcard{background:var(--glass);backdrop-filter:blur(14px);border:1px solid var(--border);border-radius:20px;padding:28px;margin-bottom:20px;transition:border-color .3s}
+.lcard:hover{border-color:var(--border-h)}
+.lcard h2{font-size:17px;font-weight:800;letter-spacing:-.2px;margin-bottom:12px;display:flex;align-items:center;gap:10px}
+.lcard h2 .ic{font-size:20px}
+.lcard p,.lcard li{font-size:14px;color:var(--text);line-height:1.75}
+.lcard p{margin-bottom:12px}.lcard p:last-child{margin-bottom:0}
+.lcard strong{color:var(--white);font-weight:600}
+.lcard em{color:var(--accent);font-style:normal}
+.lcard blockquote{background:var(--accent-dim);border-left:3px solid var(--accent);border-radius:0 10px 10px 0;padding:14px 18px;margin:14px 0;font-size:14px;color:var(--text);font-style:italic;line-height:1.6}
+.lcard ul{padding-left:20px;margin:10px 0}
+
+.reflect{background:linear-gradient(135deg,rgba(255,213,74,.06),var(--card));border:1px solid var(--border-h);border-radius:16px;padding:22px;text-align:center;margin-bottom:20px}
+.reflect-q{font-size:15px;font-weight:700;font-style:italic;line-height:1.5}
+
+.q-item{margin-bottom:18px;padding-bottom:18px;border-bottom:1px solid rgba(255,213,74,.04)}
+.q-item:last-child{border-bottom:none;margin-bottom:0}
+.q-num{font-size:10px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
+.q-text{font-size:14px;font-weight:600;margin-bottom:10px}
+.q-opts{display:flex;flex-direction:column;gap:6px}
+.qopt{display:flex;align-items:center;gap:10px;padding:10px 14px;border:1px solid var(--border);border-radius:10px;cursor:pointer;transition:all .25s;font-size:13px;color:var(--text)}
+.qopt:hover{border-color:var(--border-h);color:var(--white)}
+.qopt input{display:none}
+.qopt.correct{border-color:rgba(0,230,150,.3);background:rgba(0,230,150,.08);color:var(--green)}
+.qopt.wrong{border-color:rgba(255,95,87,.3);background:rgba(255,95,87,.08);color:var(--red)}
+.q-fb{font-size:12px;font-weight:600;margin-top:8px;min-height:18px}
+
+.ai-card{background:linear-gradient(135deg,rgba(0,230,150,.05),var(--card));border:1px solid rgba(0,230,150,.12);border-radius:18px;padding:22px;margin-bottom:20px}
+.ai-card h2{color:var(--green)}
+.ai-meta{display:flex;gap:12px;flex-wrap:wrap;margin:10px 0 14px;font-size:12px;color:var(--muted)}
+.ai-btn{background:var(--green);color:var(--bg);border:none;padding:12px 24px;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:var(--font);transition:all .3s;margin-top:10px}
+.ai-btn:hover{box-shadow:0 4px 16px rgba(0,230,150,.3)}
+
+.iv-card{background:linear-gradient(135deg,rgba(100,181,246,.05),var(--card));border:1px solid rgba(100,181,246,.12);border-radius:18px;padding:22px;margin-bottom:20px}
+.iv-card h2{color:var(--blue)}
+.iv-tip{background:rgba(100,181,246,.08);border:1px solid rgba(100,181,246,.15);border-radius:10px;padding:12px 14px;font-size:12px;color:var(--blue);margin-top:10px;font-weight:500}
+
+.takeaway{background:var(--accent-dim);border:1px solid var(--border-h);border-radius:16px;padding:22px;text-align:center;margin-bottom:24px}
+.takeaway p{font-size:16px;font-weight:700;color:var(--accent)}
+
+.bnav{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:20px}
+.bnav-btn{flex:1;min-width:140px;padding:14px 20px;border-radius:12px;font-size:14px;font-weight:700;cursor:pointer;font-family:var(--font);transition:all .3s;text-align:center;text-decoration:none;display:flex;align-items:center;justify-content:center;gap:6px}
+.bnav-prev{background:transparent;color:var(--white);border:1px solid var(--border-h)}.bnav-prev:hover{background:var(--accent-dim)}
+.bnav-complete{background:var(--accent);color:var(--bg);border:none}.bnav-complete:hover{box-shadow:0 6px 24px var(--accent-glow);transform:translateY(-2px)}
+.bnav-complete.done{background:var(--green);pointer-events:none}
+.bnav-next{background:transparent;color:var(--white);border:1px solid var(--border-h)}.bnav-next:hover{background:var(--accent-dim)}
+.toast{position:fixed;bottom:32px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--green);color:var(--bg);padding:14px 28px;border-radius:14px;font-size:14px;font-weight:700;z-index:999;transition:transform .4s cubic-bezier(.16,1,.3,1);pointer-events:none}
+.toast.show{transform:translateX(-50%) translateY(0)}
+
+/* Interactive reveals */
+details{background:var(--card);border:1px solid var(--border);border-radius:14px;margin:14px 0;overflow:hidden}
+details summary{padding:14px 18px;cursor:pointer;font-size:14px;font-weight:600;color:var(--white);list-style:none;display:flex;align-items:center;gap:8px;transition:background .2s;user-select:none}
+details summary:hover{background:rgba(255,255,255,.03)}
+details summary::-webkit-details-marker{display:none}
+details[open] summary{border-bottom:1px solid var(--border)}
+.det-body{padding:16px 18px}
+.det-body p,.det-body li{font-size:14px;color:var(--text);line-height:1.75}
+.det-body p{margin-bottom:10px}.det-body p:last-child{margin-bottom:0}
+.det-body strong{color:var(--white);font-weight:600}
+.det-body ol,.det-body ul{padding-left:20px;margin-bottom:10px}
+/* Comparison tables */
+.cx-tbl{width:100%;border-collapse:collapse;margin:14px 0;font-size:13px;overflow-x:auto;display:block}
+.cx-tbl th{padding:10px 14px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;text-align:left;white-space:nowrap}
+.cx-tbl td{padding:10px 14px;border-top:1px solid var(--border);vertical-align:top;line-height:1.65;color:var(--text)}
+.cx-tbl .bad{background:rgba(255,95,87,.04)}.cx-tbl .good{background:rgba(0,230,150,.04)}
+.cx-tbl th.bad{color:var(--red);border-bottom:2px solid rgba(255,95,87,.2)}
+.cx-tbl th.good{color:var(--green);border-bottom:2px solid rgba(0,230,150,.2)}
+/* Framework tables */
+.fw-tbl{width:100%;border-collapse:collapse;margin:14px 0;font-size:13px;overflow-x:auto;display:block}
+.fw-tbl th{padding:10px 14px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--accent);text-align:left;border-bottom:2px solid var(--border-h);white-space:nowrap}
+.fw-tbl td{padding:10px 14px;border-bottom:1px solid var(--border);color:var(--text);line-height:1.6}
+.fw-tbl tr:last-child td{border-bottom:none}
+.fw-tbl td:first-child{color:var(--white);font-weight:600}
+
+@media(max-width:860px){
+  .sb{transform:translateX(-100%)}.sb.open{transform:translateX(0)}.sb-x{display:block}
+  .mh{display:flex}.main{margin-left:0;padding:72px 20px 48px}
+}
+
+a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+</style>
+</head>
+<body>
+
+<div class="mh"><div class="logo">Amplify<span>Hub</span></div><button class="mb" id="mobBtn" aria-label="Open navigation menu"><span></span><span></span><span></span></button></div>
+
+<aside class="sb" id="sb">
+  <button class="sb-x" id="sbX" aria-label="Close navigation menu">✕</button>
+  <div class="sb-logo">Amplify<span>Hub</span></div>
+  <nav class="sb-nav">
+    <a class="si" href="dashboard.html"><span class="si-ic">🏠</span>Dashboard</a>
+    <a class="si act" href="journey.html"><span class="si-ic">🛤</span>Journey</a>
+    <a class="si" href="coach-home.html"><span class="si-ic">🤖</span>AI Coach</a>
+    <a class="si" href="dashboard.html#challenge"><span class="si-ic">⚡</span>Challenges</a>
+    <a class="si" href="dashboard.html#resources"><span class="si-ic">📚</span>Resources</a>
+    <div class="sb-d"></div>
+    <a class="si" href="settings.html"><span class="si-ic">⚙️</span>Settings</a>
+  </nav>
+  <div class="sb-u"><div class="sb-av">J</div><div><div class="sb-un">Jawad</div><div class="sb-ur">Pro Member</div></div></div>
+</aside>
+
+<div class="main">
+  <a href="journey.html" class="back">← Back to Journey</a>
+  <div class="lesson-badge">Finding Prospects · Lesson 1 of 3</div>
+  <h1 class="lesson-title">Define Your Ideal Customer</h1>
+  <div class="lesson-meta"><span>⏱ ~12 min</span><span>🏆 +50 XP</span><span>📖 Module 2: Finding Prospects</span></div>
+
+  <!-- THE $47K MISTAKE -->
+  <div class="lcard">
+    <h2><span class="ic">💸</span> The $47,000 Mistake</h2>
+    <p><em>67% of lost deals</em> die for one reason: the prospect was never a real fit in the first place.</p>
+    <p>That means two out of every three deals you lose aren't lost because of your pitch, your pricing, or your competitor. They're lost because <strong>you called the wrong person.</strong></p>
+    <p>An average SDR burns roughly <em>$47,000 per year</em> in salary, tools, and opportunity cost chasing prospects who were never going to buy. Not because they're bad at selling. Because nobody handed them a filter.</p>
+    <p>This lesson IS that filter.</p>
+    <p>Before you build a list, before you pick up the phone, before you write a single email — you need to answer one question with surgical precision:</p>
+    <p><strong>Who, exactly, am I looking for?</strong></p>
+  </div>
+
+  <!-- PROSPECT vs LEAD vs QUALIFIED -->
+  <div class="lcard">
+    <h2><span class="ic">🔍</span> Three Levels Most Reps Confuse</h2>
+    <p>Most reps use "prospect" and "lead" interchangeably. That confusion costs them hours every week. Here's the hierarchy that actually matters:</p>
+    <table class="fw-tbl">
+      <tr><th>Level</th><th>Definition</th><th>Example</th></tr>
+      <tr><td>Lead</td><td>Any name + contact info. No context, no qualification.</td><td>A downloaded list of 5,000 VP Sales emails</td></tr>
+      <tr><td>Prospect</td><td>A lead that matches your basic profile — right industry, right size, right title.</td><td>VP Sales at a 200-person B2B SaaS company</td></tr>
+      <tr><td>Qualified Prospect</td><td>A prospect with a confirmed pain, budget potential, and timing signal.</td><td>VP Sales who just posted about hiring 10 new reps (growth = need for training tools)</td></tr>
+    </table>
+    <p>The jump from Lead to Qualified Prospect isn't luck. It's <strong>a system you build once</strong> and use on every single name before it hits your call sheet.</p>
+    <blockquote>💡 <strong>Pro-Tip:</strong> If you can't explain in one sentence why this specific person would care about your solution right now, they're a lead — not a prospect. Don't call them yet.</blockquote>
+  </div>
+
+  <!-- QUALITY > VOLUME -->
+  <div class="lcard">
+    <h2><span class="ic">⚖️</span> The Quality Paradox</h2>
+    <p>Here's a number that will change how you spend your mornings:</p>
+    <table class="cx-tbl">
+      <tr><th class="bad">❌ SDR A — Volume Hunter</th><th class="good">✅ SDR B — Quality Sorter</th></tr>
+      <tr><td class="bad">200 calls/day from a bulk list</td><td class="good">60 calls/day from a filtered list</td></tr>
+      <tr><td class="bad">3 conversations (1.5% connect rate)</td><td class="good">12 conversations (20% connect rate)</td></tr>
+      <tr><td class="bad">0 meetings booked</td><td class="good">3 meetings booked</td></tr>
+      <tr><td class="bad">Burned out by Thursday</td><td class="good">Consistent week over week</td></tr>
+    </table>
+    <p>SDR B made <strong>140 fewer calls</strong> and booked <strong>3 more meetings.</strong> The difference isn't talent. It's that SDR B spent 30 minutes building the right list before dialing.</p>
+    <p><em>Volume without targeting is just organized noise.</em></p>
+  </div>
+
+  <!-- ICP FRAMEWORK -->
+  <div class="lcard">
+    <h2><span class="ic">🧩</span> The ICP Framework — Your Prospect Filter</h2>
+    <p>ICP stands for <strong>Ideal Customer Profile</strong>. Think of it as the blueprint for the exact person most likely to buy from you. It has two layers:</p>
+    <p><strong>Layer 1 — The Profile Box</strong> (firmographic filters):</p>
+    <table class="fw-tbl">
+      <tr><th>Filter</th><th>Question to Answer</th></tr>
+      <tr><td>Industry</td><td>Which industries have this problem most often?</td></tr>
+      <tr><td>Company Size</td><td>What headcount or revenue range is the sweet spot?</td></tr>
+      <tr><td>Geography</td><td>Which regions, countries, or time zones do we serve?</td></tr>
+      <tr><td>Title / Role</td><td>Who personally feels the pain? Who signs the check?</td></tr>
+      <tr><td>Department</td><td>Which team owns the budget for this?</td></tr>
+    </table>
+    <p><strong>Layer 2 — The Pain Layer</strong> (the real qualifying filter):</p>
+    <ul>
+      <li>What specific <strong>problem</strong> does this person deal with daily?</li>
+      <li>What is that problem <strong>costing</strong> them — in dollars, hours, or missed targets?</li>
+      <li>What have they <strong>tried before</strong> that didn't fully solve it?</li>
+      <li>What <strong>event or trigger</strong> would make solving it urgent right now?</li>
+    </ul>
+    <p>The Profile Box gets you in the building. <em>The Pain Layer gets you the meeting.</em></p>
+  </div>
+
+  <!-- ICP EXAMPLE -->
+  <div class="lcard">
+    <h2><span class="ic">📋</span> ICP in Action — Real Example</h2>
+    <p>Say you sell an <strong>SDR coaching platform</strong>. Here's what a completed ICP looks like:</p>
+    <table class="fw-tbl">
+      <tr><th>Filter</th><th>Your ICP</th></tr>
+      <tr><td>Industry</td><td>B2B SaaS, FinTech, MarTech</td></tr>
+      <tr><td>Company Size</td><td>50–500 employees, $5M–$100M ARR</td></tr>
+      <tr><td>Geography</td><td>US, Canada, UK (English-speaking markets)</td></tr>
+      <tr><td>Title</td><td>VP of Sales, Head of Sales Development, CRO</td></tr>
+      <tr><td>Department</td><td>Sales / Revenue Operations</td></tr>
+    </table>
+    <p><strong>Pain Layer:</strong></p>
+    <ul>
+      <li><strong>Problem:</strong> New SDRs take 4+ months to ramp; half quit before month 6</li>
+      <li><strong>Cost:</strong> Each failed SDR hire = ~$50K in wasted salary, recruiting, and lost pipeline</li>
+      <li><strong>Previous attempts:</strong> Ride-alongs, Gong recordings, informal peer coaching — inconsistent results</li>
+      <li><strong>Trigger signals:</strong> Job postings for 5+ SDRs, new VP Sales hired, Series B/C funding announced</li>
+    </ul>
+    <blockquote>💡 <strong>Pro-Tip:</strong> Your ICP isn't static. Revisit it every quarter. As you close deals, patterns emerge — the best ICPs are reverse-engineered from your actual wins, not guessed upfront.</blockquote>
+  </div>
+
+  <!-- EXERCISES -->
+  <div class="lcard">
+    <h2><span class="ic">✏️</span> Practical Exercises</h2>
+    <details>
+      <summary>🔍 Exercise 1: Build Your Own ICP</summary>
+      <div class="det-body">
+        <p>Take your product or service and fill out the ICP template below. If you're not currently selling something, pick a SaaS tool you use daily and reverse-engineer who buys it.</p>
+        <p><strong>Profile Box:</strong></p>
+        <ul>
+          <li>Industry: _______________</li>
+          <li>Company Size: _______________</li>
+          <li>Geography: _______________</li>
+          <li>Title / Role: _______________</li>
+          <li>Department: _______________</li>
+        </ul>
+        <p><strong>Pain Layer:</strong></p>
+        <ul>
+          <li>Core Problem: _______________</li>
+          <li>Cost of Problem: _______________</li>
+          <li>What they've tried: _______________</li>
+          <li>Trigger signals: _______________</li>
+        </ul>
+        <p>Spend 15 minutes on this. <strong>Don't overthink it.</strong> A rough ICP today beats a perfect one "someday."</p>
+      </div>
+    </details>
+    <details>
+      <summary>🔍 Exercise 2: The "Would I Call Them?" Test</summary>
+      <div class="det-body">
+        <p>Pull up your last 20 outreach attempts. For each one, answer:</p>
+        <ol>
+          <li>Did they match my Profile Box? (Yes / No)</li>
+          <li>Did I identify a specific pain before reaching out? (Yes / No)</li>
+          <li>Was there a trigger signal? (Yes / No)</li>
+        </ol>
+        <p>Count your "Yes" answers. If fewer than half your contacts got 3/3, you're calling leads — not prospects. <strong>That's the gap this lesson closes.</strong></p>
+      </div>
+    </details>
+    <details>
+      <summary>🔍 Exercise 3: Reverse-Engineer 3 Wins</summary>
+      <div class="det-body">
+        <p>If you have access to closed-won deals (yours or your team's), pick the 3 best ones and answer:</p>
+        <ul>
+          <li>What industry were they in?</li>
+          <li>How big was the company?</li>
+          <li>What was the buyer's title?</li>
+          <li>What pain did they describe in the first call?</li>
+          <li>What triggered them to take the meeting?</li>
+        </ul>
+        <p>Patterns across your wins are the single best source for building your ICP. <strong>Data beats assumptions.</strong></p>
+      </div>
+    </details>
+  </div>
+
+  <!-- REFLECTION -->
+  <div class="reflect"><div class="reflect-q">💭 If you could only call 10 people tomorrow, how would you pick them? What criteria would make you absolutely certain they're worth your time?</div></div>
+
+  <!-- QUIZ -->
+  <div class="lcard">
+    <h2><span class="ic">🧠</span> Knowledge Check</h2>
+    <div class="q-item"><div class="q-num">Q1</div><div class="q-text">What is the key difference between a "lead" and a "qualified prospect"?</div><div class="q-opts">
+      <label class="qopt" data-qi="0" data-oi="0"><input type="radio" name="q0"><span class="qo-text">Leads have phone numbers, qualified prospects have emails</span></label>
+      <label class="qopt" data-qi="0" data-oi="1"><input type="radio" name="q0"><span class="qo-text">There is no real difference — they're the same thing</span></label>
+      <label class="qopt" data-qi="0" data-oi="2"><input type="radio" name="q0"><span class="qo-text">A qualified prospect matches your ICP profile AND has a confirmed pain or trigger signal</span></label>
+      <label class="qopt" data-qi="0" data-oi="3"><input type="radio" name="q0"><span class="qo-text">Qualified prospects have already agreed to a meeting</span></label>
+    </div><div class="q-fb" id="qfb0"></div></div>
+
+    <div class="q-item"><div class="q-num">Q2</div><div class="q-text">In the SDR A vs SDR B comparison, why did SDR B book more meetings with fewer calls?</div><div class="q-opts">
+      <label class="qopt" data-qi="1" data-oi="0"><input type="radio" name="q1"><span class="qo-text">SDR B had a better script</span></label>
+      <label class="qopt" data-qi="1" data-oi="1"><input type="radio" name="q1"><span class="qo-text">SDR B spent time filtering the list to match their ICP before calling</span></label>
+      <label class="qopt" data-qi="1" data-oi="2"><input type="radio" name="q1"><span class="qo-text">SDR B got lucky with timing</span></label>
+      <label class="qopt" data-qi="1" data-oi="3"><input type="radio" name="q1"><span class="qo-text">SDR B called larger companies</span></label>
+    </div><div class="q-fb" id="qfb1"></div></div>
+
+    <div class="q-item"><div class="q-num">Q3</div><div class="q-text">The ICP's "Pain Layer" is important because:</div><div class="q-opts">
+      <label class="qopt" data-qi="2" data-oi="0"><input type="radio" name="q2"><span class="qo-text">It helps you memorize your product features</span></label>
+      <label class="qopt" data-qi="2" data-oi="1"><input type="radio" name="q2"><span class="qo-text">It tells you what CRM to use</span></label>
+      <label class="qopt" data-qi="2" data-oi="2"><input type="radio" name="q2"><span class="qo-text">It separates profile-matched names from people who actually have urgency to buy</span></label>
+      <label class="qopt" data-qi="2" data-oi="3"><input type="radio" name="q2"><span class="qo-text">It replaces the need for a script</span></label>
+    </div><div class="q-fb" id="qfb2"></div></div>
+
+    <div class="q-item"><div class="q-num">Q4</div><div class="q-text">Which is an example of a "trigger signal" for an SDR coaching platform?</div><div class="q-opts">
+      <label class="qopt" data-qi="3" data-oi="0"><input type="radio" name="q3"><span class="qo-text">The company has a website</span></label>
+      <label class="qopt" data-qi="3" data-oi="1"><input type="radio" name="q3"><span class="qo-text">The CEO posted on LinkedIn last week</span></label>
+      <label class="qopt" data-qi="3" data-oi="2"><input type="radio" name="q3"><span class="qo-text">The company just posted job listings for 8 new SDR roles</span></label>
+      <label class="qopt" data-qi="3" data-oi="3"><input type="radio" name="q3"><span class="qo-text">The company is based in the US</span></label>
+    </div><div class="q-fb" id="qfb3"></div></div>
+    <button class="ai-btn" style="background:var(--accent);color:var(--bg);margin-top:14px" id="checkQuiz">Check Answers</button>
+  </div>
+
+  <!-- AI COACH -->
+  <div class="ai-card">
+    <h2><span class="ic">🤖</span> Practice with AI Coach</h2>
+    <p style="font-size:14px;color:var(--text);margin:8px 0"><strong>Scenario:</strong> Your manager asks you to define the ICP for a new product that helps mid-market companies automate their expense reporting. Walk through the Profile Box and Pain Layer out loud.</p>
+    <p style="font-size:13px;color:var(--text)"><strong>Your objective:</strong> Build a complete ICP on the spot — industry, size, title, department, pain, cost, triggers. The coach will push back on vague answers.</p>
+    <div class="ai-meta"><span>Difficulty: Medium</span><span>Goal: Practice articulating a clear ICP under pressure</span></div>
+    <a href="coach-home.html" class="ai-btn">Open AI Coach →</a>
+  </div>
+
+  <!-- INTERVIEW PREP -->
+  <div class="iv-card">
+    <h2><span class="ic">🎤</span> Interview Question</h2>
+    <blockquote style="background:rgba(100,181,246,.06);border-left:3px solid var(--blue);border-radius:0 10px 10px 0;padding:14px 18px;margin:12px 0;font-style:italic;font-size:14px;color:var(--text)">"How do you decide who to call first when you're given a new territory?"</blockquote>
+    <p style="font-size:13px;color:var(--text);margin:8px 0"><strong>Example answer:</strong> I start by defining the ICP — the industry, company size, and titles that historically convert best. Then I layer in trigger signals like recent funding rounds, leadership changes, or hiring sprees. That gives me a ranked list where every call has a reason behind it, not just a name.</p>
+    <div class="iv-tip">💡 Hiring managers want to hear a system, not "I'd start calling." Show them you think in filters, not volume.</div>
+  </div>
+
+  <!-- TAKEAWAY -->
+  <div class="takeaway"><p>🔑 A bad list doesn't just waste calls — it wastes weeks. Build the filter first, then dial. Your ICP is the single highest-leverage 30 minutes you'll spend this month.</p></div>
+
+  <!-- BOTTOM NAV -->
+  <div class="bnav">
+    <a href="journey.html" class="bnav-btn bnav-prev">← Back to Journey</a>
+    <button class="bnav-btn bnav-complete" id="completeBtn">Mark as Complete ✓</button>
+    <a href="finding-prospects-2.html" class="bnav-btn bnav-next">Next Lesson →</a>
+  </div>
+</div>
+
+<div class="toast" id="toast">🎉 Lesson Complete! +50 XP</div>
+
+<script>
+const STORAGE_KEY='amplifyHub_journeyProgress';
+const MODULE_INDEX=1;
+const LESSON_INDEX=0;
+const TOTAL_MODULE_LESSONS=3;
+
+function readProgress(){
+  try{ const d=JSON.parse(localStorage.getItem(STORAGE_KEY)); return new Set(d?.completedLessons||[]); }catch(e){ return new Set(); }
+}
+function saveProgress(completed){
+  localStorage.setItem(STORAGE_KEY,JSON.stringify({
+    completedLessons:[...completed],
+    updatedAt:Date.now()
+  }));
+}
+function lid(m,l){ return `m${m}l${l}`; }
+
+const completed=readProgress();
+const thisLid=lid(MODULE_INDEX,LESSON_INDEX);
+const btn=document.getElementById('completeBtn');
+if(completed.has(thisLid)){ btn.textContent='✓ Completed'; btn.classList.add('done'); }
+
+btn.addEventListener('click',function(){
+  if(completed.has(thisLid)) return;
+  completed.add(thisLid);
+  saveProgress(completed);
+  btn.textContent='✓ Completed';
+  btn.classList.add('done');
+  const toast=document.getElementById('toast');
+  toast.classList.add('show');
+  setTimeout(()=>toast.classList.remove('show'),2500);
+});
+
+const answers=[2, 1, 2, 2];
+document.getElementById('checkQuiz').addEventListener('click',function(){
+  document.querySelectorAll('.qopt').forEach(opt=>{
+    const qi=parseInt(opt.dataset.qi), oi=parseInt(opt.dataset.oi);
+    const input=opt.querySelector('input');
+    if(!input.checked) return;
+    if(oi===answers[qi]){ opt.classList.add('correct'); document.getElementById('qfb'+qi).textContent='✓ Correct!'; document.getElementById('qfb'+qi).style.color='var(--green)'; }
+    else{ opt.classList.add('wrong'); document.getElementById('qfb'+qi).textContent='✗ Try again'; document.getElementById('qfb'+qi).style.color='var(--red)'; }
+  });
+});
+
+document.getElementById('mobBtn').addEventListener('click',()=>document.getElementById('sb').classList.add('open'));
+document.getElementById('sbX').addEventListener('click',()=>document.getElementById('sb').classList.remove('open'));
+</script>
+</body>
+</html>

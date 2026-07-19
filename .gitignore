@@ -9,3 +9,13 @@ Desktop.ini
 
 # ── Personal files (not part of the site) ──
 assets/docs/About_Me.pdf
+
+# Node / Vite artifacts
+.vite/
+.npm-cache/
+sales-mindset-app/node_modules/
+sales-mindset-app/.chrome-*/
+sales-mindset-app/.edge-*/
+sales-mindset-app/qa-*.png
+sales-mindset-app/dev-server.*
+sales-mindset-app/*.tsbuildinfo

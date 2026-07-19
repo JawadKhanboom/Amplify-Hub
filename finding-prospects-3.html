@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AmplifyHub — Research Before You Call</title>
+<meta name="description" content="Finding Prospects, Lesson 3 — the 5-minute research habit that turns cold calls into warm conversations.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="AmplifyHub">
+<meta property="og:title" content="AmplifyHub — Research Before You Call">
+<meta property="og:description" content="Finding Prospects, Lesson 3 — the 5-minute research habit that turns cold calls into warm conversations.">
+<meta property="og:image" content="og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#07070e;--bg2:#0b0b16;--card:#13132a;--card2:#181838;--glass:rgba(19,19,42,.55);
+  --accent:#FFD54A;--accent-dim:rgba(255,213,74,.1);--accent-glow:rgba(255,213,74,.3);
+  --warm:#FFA726;--green:#00e696;--blue:#64B5F6;--purple:#BA68C8;--red:#ff5f57;
+  --white:#fff;--text:#b0b0c8;--muted:#8a8aa4;
+  --border:rgba(255,213,74,.07);--border-h:rgba(255,213,74,.22);
+  --font:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;--sb:240px;
+}
+body{font-family:var(--font);background:var(--bg);color:var(--white);display:flex;min-height:100vh;overflow-x:hidden}
+
+.sb{width:var(--sb);position:fixed;top:0;left:0;bottom:0;background:var(--bg2);border-right:1px solid var(--border);padding:24px 16px;display:flex;flex-direction:column;z-index:100;transition:transform .3s}
+.sb-logo{font-size:20px;font-weight:800;padding:0 8px 24px}.sb-logo span{color:var(--accent)}
+.sb-nav{display:flex;flex-direction:column;gap:4px;flex:1}
+.si{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:10px;font-size:14px;font-weight:500;color:var(--muted);cursor:pointer;transition:all .2s;text-decoration:none;border:1px solid transparent}
+.si:hover{color:var(--text);background:rgba(255,255,255,.03)}.si.act{color:var(--accent);background:var(--accent-dim);border-color:var(--border)}
+.si-ic{width:20px;text-align:center;font-size:15px}
+.sb-d{height:1px;background:var(--border);margin:10px 8px}
+.sb-u{display:flex;align-items:center;gap:10px;padding:12px 8px;border-top:1px solid var(--border);margin-top:auto}
+.sb-av{width:32px;height:32px;border-radius:8px;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:var(--bg)}
+.sb-un{font-size:13px;font-weight:600}.sb-ur{font-size:11px;color:var(--muted)}
+.sb-x{display:none;position:absolute;top:16px;right:16px;background:none;border:none;color:var(--muted);font-size:20px;cursor:pointer}
+.mh{display:none;position:fixed;top:0;left:0;right:0;z-index:200;padding:14px 20px;background:rgba(7,7,14,.95);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);align-items:center;justify-content:space-between}
+.mh .logo{font-size:18px;font-weight:800}.mh .logo span{color:var(--accent)}
+.mb{background:none;border:none;cursor:pointer}.mb span{display:block;width:20px;height:2px;background:#fff;margin:4px 0}
+
+.main{margin-left:var(--sb);flex:1;padding:32px 40px 80px;max-width:780px}
+.back{display:inline-flex;align-items:center;gap:6px;color:var(--muted);font-size:13px;font-weight:600;text-decoration:none;margin-bottom:20px;transition:color .2s}.back:hover{color:var(--accent)}
+.lesson-badge{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--accent);margin-bottom:8px}
+.lesson-title{font-size:clamp(22px,3vw,28px);font-weight:900;letter-spacing:-.5px;margin-bottom:6px}
+.lesson-meta{display:flex;gap:16px;font-size:12px;color:var(--muted);margin-bottom:28px;flex-wrap:wrap}
+
+.lcard{background:var(--glass);backdrop-filter:blur(14px);border:1px solid var(--border);border-radius:20px;padding:28px;margin-bottom:20px;transition:border-color .3s}
+.lcard:hover{border-color:var(--border-h)}
+.lcard h2{font-size:17px;font-weight:800;letter-spacing:-.2px;margin-bottom:12px;display:flex;align-items:center;gap:10px}
+.lcard h2 .ic{font-size:20px}
+.lcard p,.lcard li{font-size:14px;color:var(--text);line-height:1.75}
+.lcard p{margin-bottom:12px}.lcard p:last-child{margin-bottom:0}
+.lcard strong{color:var(--white);font-weight:600}
+.lcard em{color:var(--accent);font-style:normal}
+.lcard blockquote{background:var(--accent-dim);border-left:3px solid var(--accent);border-radius:0 10px 10px 0;padding:14px 18px;margin:14px 0;font-size:14px;color:var(--text);font-style:italic;line-height:1.6}
+.lcard ul,.lcard ol{padding-left:20px;margin:10px 0}
+
+.reflect{background:linear-gradient(135deg,rgba(255,213,74,.06),var(--card));border:1px solid var(--border-h);border-radius:16px;padding:22px;text-align:center;margin-bottom:20px}
+.reflect-q{font-size:15px;font-weight:700;font-style:italic;line-height:1.5}
+
+.q-item{margin-bottom:18px;padding-bottom:18px;border-bottom:1px solid rgba(255,213,74,.04)}
+.q-item:last-child{border-bottom:none;margin-bottom:0}
+.q-num{font-size:10px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
+.q-text{font-size:14px;font-weight:600;margin-bottom:10px}
+.q-opts{display:flex;flex-direction:column;gap:6px}
+.qopt{display:flex;align-items:center;gap:10px;padding:10px 14px;border:1px solid var(--border);border-radius:10px;cursor:pointer;transition:all .25s;font-size:13px;color:var(--text)}
+.qopt:hover{border-color:var(--border-h);color:var(--white)}
+.qopt input{display:none}
+.qopt.correct{border-color:rgba(0,230,150,.3);background:rgba(0,230,150,.08);color:var(--green)}
+.qopt.wrong{border-color:rgba(255,95,87,.3);background:rgba(255,95,87,.08);color:var(--red)}
+.q-fb{font-size:12px;font-weight:600;margin-top:8px;min-height:18px}
+
+.ai-card{background:linear-gradient(135deg,rgba(0,230,150,.05),var(--card));border:1px solid rgba(0,230,150,.12);border-radius:18px;padding:22px;margin-bottom:20px}
+.ai-card h2{color:var(--green)}
+.ai-meta{display:flex;gap:12px;flex-wrap:wrap;margin:10px 0 14px;font-size:12px;color:var(--muted)}
+.ai-btn{background:var(--green);color:var(--bg);border:none;padding:12px 24px;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:var(--font);transition:all .3s;margin-top:10px}
+.ai-btn:hover{box-shadow:0 4px 16px rgba(0,230,150,.3)}
+
+.iv-card{background:linear-gradient(135deg,rgba(100,181,246,.05),var(--card));border:1px solid rgba(100,181,246,.12);border-radius:18px;padding:22px;margin-bottom:20px}
+.iv-card h2{color:var(--blue)}
+.iv-tip{background:rgba(100,181,246,.08);border:1px solid rgba(100,181,246,.15);border-radius:10px;padding:12px 14px;font-size:12px;color:var(--blue);margin-top:10px;font-weight:500}
+
+.takeaway{background:var(--accent-dim);border:1px solid var(--border-h);border-radius:16px;padding:22px;text-align:center;margin-bottom:24px}
+.takeaway p{font-size:16px;font-weight:700;color:var(--accent)}
+
+.bnav{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:20px}
+.bnav-btn{flex:1;min-width:140px;padding:14px 20px;border-radius:12px;font-size:14px;font-weight:700;cursor:pointer;font-family:var(--font);transition:all .3s;text-align:center;text-decoration:none;display:flex;align-items:center;justify-content:center;gap:6px}
+.bnav-prev{background:transparent;color:var(--white);border:1px solid var(--border-h)}.bnav-prev:hover{background:var(--accent-dim)}
+.bnav-complete{background:var(--accent);color:var(--bg);border:none}.bnav-complete:hover{box-shadow:0 6px 24px var(--accent-glow);transform:translateY(-2px)}
+.bnav-complete.done{background:var(--green);pointer-events:none}
+.bnav-next{background:transparent;color:var(--white);border:1px solid var(--border-h)}.bnav-next:hover{background:var(--accent-dim)}
+.toast{position:fixed;bottom:32px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--green);color:var(--bg);padding:14px 28px;border-radius:14px;font-size:14px;font-weight:700;z-index:999;transition:transform .4s cubic-bezier(.16,1,.3,1);pointer-events:none}
+.toast.show{transform:translateX(-50%) translateY(0)}
+
+/* Interactive reveals */
+details{background:var(--card);border:1px solid var(--border);border-radius:14px;margin:14px 0;overflow:hidden}
+details summary{padding:14px 18px;cursor:pointer;font-size:14px;font-weight:600;color:var(--white);list-style:none;display:flex;align-items:center;gap:8px;transition:background .2s;user-select:none}
+details summary:hover{background:rgba(255,255,255,.03)}
+details summary::-webkit-details-marker{display:none}
+details[open] summary{border-bottom:1px solid var(--border)}
+.det-body{padding:16px 18px}
+.det-body p,.det-body li{font-size:14px;color:var(--text);line-height:1.75}
+.det-body p{margin-bottom:10px}.det-body p:last-child{margin-bottom:0}
+.det-body strong{color:var(--white);font-weight:600}
+.det-body ol,.det-body ul{padding-left:20px;margin-bottom:10px}
+/* Comparison tables */
+.cx-tbl{width:100%;border-collapse:collapse;margin:14px 0;font-size:13px;overflow-x:auto;display:block}
+.cx-tbl th{padding:10px 14px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;text-align:left;white-space:nowrap}
+.cx-tbl td{padding:10px 14px;border-top:1px solid var(--border);vertical-align:top;line-height:1.65;color:var(--text)}
+.cx-tbl .bad{background:rgba(255,95,87,.04)}.cx-tbl .good{background:rgba(0,230,150,.04)}
+.cx-tbl th.bad{color:var(--red);border-bottom:2px solid rgba(255,95,87,.2)}
+.cx-tbl th.good{color:var(--green);border-bottom:2px solid rgba(0,230,150,.2)}
+/* Framework tables */
+.fw-tbl{width:100%;border-collapse:collapse;margin:14px 0;font-size:13px;overflow-x:auto;display:block}
+.fw-tbl th{padding:10px 14px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--accent);text-align:left;border-bottom:2px solid var(--border-h);white-space:nowrap}
+.fw-tbl td{padding:10px 14px;border-bottom:1px solid var(--border);color:var(--text);line-height:1.6}
+.fw-tbl tr:last-child td{border-bottom:none}
+.fw-tbl td:first-child{color:var(--white);font-weight:600}
+
+@media(max-width:860px){
+  .sb{transform:translateX(-100%)}.sb.open{transform:translateX(0)}.sb-x{display:block}
+  .mh{display:flex}.main{margin-left:0;padding:72px 20px 48px}
+}
+
+a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+</style>
+</head>
+<body>
+
+<div class="mh"><div class="logo">Amplify<span>Hub</span></div><button class="mb" id="mobBtn" aria-label="Open navigation menu"><span></span><span></span><span></span></button></div>
+
+<aside class="sb" id="sb">
+  <button class="sb-x" id="sbX" aria-label="Close navigation menu">✕</button>
+  <div class="sb-logo">Amplify<span>Hub</span></div>
+  <nav class="sb-nav">
+    <a class="si" href="dashboard.html"><span class="si-ic">🏠</span>Dashboard</a>
+    <a class="si act" href="journey.html"><span class="si-ic">🛤</span>Journey</a>
+    <a class="si" href="coach-home.html"><span class="si-ic">🤖</span>AI Coach</a>
+    <a class="si" href="dashboard.html#challenge"><span class="si-ic">⚡</span>Challenges</a>
+    <a class="si" href="dashboard.html#resources"><span class="si-ic">📚</span>Resources</a>
+    <div class="sb-d"></div>
+    <a class="si" href="settings.html"><span class="si-ic">⚙️</span>Settings</a>
+  </nav>
+  <div class="sb-u"><div class="sb-av">J</div><div><div class="sb-un">Jawad</div><div class="sb-ur">Pro Member</div></div></div>
+</aside>
+
+<div class="main">
+  <a href="journey.html" class="back">← Back to Journey</a>
+  <div class="lesson-badge">Finding Prospects · Lesson 3 of 3</div>
+  <h1 class="lesson-title">Research Before You Call</h1>
+  <div class="lesson-meta"><span>⏱ ~12 min</span><span>🏆 +50 XP</span><span>📖 Module 2: Finding Prospects</span></div>
+
+  <!-- THE 5-MINUTE EDGE -->
+  <div class="lcard">
+    <h2><span class="ic">⏱️</span> The 5-Minute Edge Nobody Uses</h2>
+    <p><em>93% of SDRs</em> skip pre-call research entirely. They open the dialer, see a name, and wing it.</p>
+    <p>That's not efficiency. That's laziness disguised as hustle.</p>
+    <p>Here's the math: <strong>5 minutes of research</strong> before a call increases your meeting-book rate by roughly <em>2.5x.</em> On a 60-call day, that's 5 hours of research for 2–3 extra meetings per week. Those extra meetings compound into <em>8–12 more meetings per month</em> — the difference between quota and unemployment.</p>
+    <p>The reps who consistently hit quota don't have better scripts. <strong>They have better intel.</strong></p>
+  </div>
+
+  <!-- WHAT TO RESEARCH -->
+  <div class="lcard">
+    <h2><span class="ic">🔎</span> The Research Checklist — What to Look For</h2>
+    <p>You don't need to write a thesis. You need <em>3 data points</em> that let you say something specific in the first 15 seconds of the call. Here's where to find them:</p>
+    <table class="fw-tbl">
+      <tr><th>Source</th><th>What to Look For</th><th>Time</th></tr>
+      <tr><td>LinkedIn Profile</td><td>Recent posts, job change, shared connections, endorsements</td><td>90 sec</td></tr>
+      <tr><td>Company Website</td><td>Press releases, "About" page, leadership changes, product launches</td><td>60 sec</td></tr>
+      <tr><td>Google News</td><td>Funding rounds, acquisitions, layoffs, expansion announcements</td><td>60 sec</td></tr>
+      <tr><td>Job Postings</td><td>Hiring for roles that signal growth or pain (e.g., 10 new SDR roles = need for training)</td><td>30 sec</td></tr>
+      <tr><td>Twitter/X</td><td>Industry opinions, complaints about current tools, engagement with competitors</td><td>30 sec</td></tr>
+    </table>
+    <p>Total time: <strong>under 5 minutes.</strong> You're not building a dossier. You're finding one sentence that proves you did your homework.</p>
+    <blockquote>💡 <strong>Pro-Tip:</strong> The best research finding isn't about the company — it's about the person. "I saw you posted about your team doubling this quarter" hits harder than "I see your company raised a Series B."</blockquote>
+  </div>
+
+  <!-- GENERIC vs PERSONALIZED -->
+  <div class="lcard">
+    <h2><span class="ic">🆚</span> Generic vs. Personalized — The Gap Is Brutal</h2>
+    <p>Same product. Same market. Same day. The only difference is whether the rep spent 5 minutes researching:</p>
+    <table class="cx-tbl">
+      <tr><th class="bad">❌ Generic Opener</th><th class="good">✅ Personalized Opener</th></tr>
+      <tr><td class="bad">"Hi, I'm calling from AcmeTech. We help companies improve their sales performance."</td><td class="good">"Hi Sarah — I noticed you just posted about hiring 8 new SDRs. When teams scale that fast, onboarding usually becomes the bottleneck. Is that something you're running into?"</td></tr>
+      <tr><td class="bad">Sounds like every other cold call</td><td class="good">Sounds like someone who did their homework</td></tr>
+      <tr><td class="bad">Prospect decides in 3 seconds: "Not interested"</td><td class="good">Prospect thinks: "Wait — how did they know that?"</td></tr>
+      <tr><td class="bad">~2% meeting rate</td><td class="good">~5–8% meeting rate</td></tr>
+    </table>
+    <p>Personalization doesn't mean flattery. It means <em>relevance.</em> You're proving that this call is about their specific situation, not a random dial.</p>
+  </div>
+
+  <!-- ACA FRAMEWORK -->
+  <div class="lcard">
+    <h2><span class="ic">🏗️</span> The ACA Framework — Acknowledge, Compliment, Ask</h2>
+    <p>Most reps don't know how to use their research in the actual call. They find a great insight and then bury it in paragraph three of their pitch. The <strong>ACA Framework</strong> gives you a 3-step structure to deploy your research in the first 15 seconds:</p>
+    <table class="fw-tbl">
+      <tr><th>Step</th><th>What It Does</th><th>Example</th></tr>
+      <tr><td>Acknowledge</td><td>Reference something specific about them or their company</td><td>"I saw your team just closed a Series B — congrats."</td></tr>
+      <tr><td>Compliment</td><td>Show genuine respect for something they've done or built</td><td>"Scaling from 5 to 20 reps in a quarter is no small thing."</td></tr>
+      <tr><td>Ask</td><td>Bridge to the pain with a curiosity-based question</td><td>"When teams grow that fast, onboarding quality usually takes a hit — is that something you're navigating?"</td></tr>
+    </table>
+    <p>The entire ACA takes <strong>under 20 seconds</strong> to deliver. It doesn't feel like a pitch — it feels like a thoughtful human starting a conversation. That's the point.</p>
+    <blockquote>💡 <strong>Pro-Tip:</strong> The "Compliment" step is where most reps get awkward. Keep it professional and specific — compliment their work, their growth, their team. Never make it personal or over-the-top.</blockquote>
+  </div>
+
+  <!-- QUALIFYING SIGNALS -->
+  <div class="lcard">
+    <h2><span class="ic">📡</span> The Signal Check — Is This Call Worth Making?</h2>
+    <p>Before you dial, run through this <em>3-filter qualifying check</em>. If a prospect passes all three, they go to the top of your call list:</p>
+    <ul>
+      <li><strong>Filter 1 — ICP Match:</strong> Do they fit the Profile Box? (Industry, size, title, geography)</li>
+      <li><strong>Filter 2 — Pain Signal:</strong> Is there evidence they have the problem you solve? (Job postings, complaints, industry trends)</li>
+      <li><strong>Filter 3 — Timing Trigger:</strong> Has something happened recently that creates urgency? (Funding, leadership change, hiring spree, competitor loss)</li>
+    </ul>
+    <p><strong>3/3 filters = call immediately.</strong> 2/3 = call this week. 1/3 = research more first. 0/3 = they're a lead, not a prospect. Don't waste a dial.</p>
+    <table class="cx-tbl">
+      <tr><th class="bad">❌ 0–1 Filters Passed</th><th class="good">✅ 3 Filters Passed</th></tr>
+      <tr><td class="bad">"They're in tech. Might need what we sell."</td><td class="good">"200-person SaaS company, VP Sales just hired, posting for 10 SDRs, Series B closed last month."</td></tr>
+      <tr><td class="bad">You're guessing</td><td class="good">You have a reason for every word in your opener</td></tr>
+      <tr><td class="bad">You'll feel like you're interrupting</td><td class="good">You'll feel like you're providing a service</td></tr>
+    </table>
+  </div>
+
+  <!-- EXERCISES -->
+  <div class="lcard">
+    <h2><span class="ic">✏️</span> Practical Exercises</h2>
+    <details>
+      <summary>🔍 Exercise: Build Your First 20-Prospect List</summary>
+      <div class="det-body">
+        <p>This is the capstone exercise for the entire module. Set aside <strong>2 hours</strong> and build a real, call-ready list:</p>
+        <ol>
+          <li><strong>Define your ICP</strong> — Use the framework from Lesson 1 (Profile Box + Pain Layer)</li>
+          <li><strong>Source 25 names</strong> from LinkedIn and your existing network</li>
+          <li><strong>Verify contact data</strong> — Use Apollo free tier or another tool. Remove any bounced emails.</li>
+          <li><strong>Add a Pain/Trigger Note</strong> for each — one sentence explaining why they'd care right now</li>
+          <li><strong>Run the 3-Filter Check</strong> — Score each prospect (ICP match, pain signal, timing trigger)</li>
+          <li><strong>Cut to 20</strong> — Remove the 5 weakest. Your list should be 20 names you'd bet money on.</li>
+          <li><strong>Rank by signal strength</strong> — Strongest triggers at the top</li>
+        </ol>
+        <p>When you're done, you should be able to pick up the phone and call #1 on your list with a specific, personalized opener. <strong>That's the standard.</strong></p>
+      </div>
+    </details>
+    <details>
+      <summary>🔍 7-Day Challenge: 50 Qualified Prospects</summary>
+      <div class="det-body">
+        <p>Ready to go beyond the basics? Here's your first real challenge:</p>
+        <p><strong>Goal:</strong> Build a list of 50 fully qualified prospects in 7 days.</p>
+        <ul>
+          <li><strong>Day 1–2:</strong> Define ICP. Source 30 names from LinkedIn + network. Verify contact data.</li>
+          <li><strong>Day 3–4:</strong> Research each name. Add pain/trigger notes. Run the 3-filter check.</li>
+          <li><strong>Day 5:</strong> Source 25 more names from Apollo, Crunchbase, or company websites.</li>
+          <li><strong>Day 6:</strong> Research and qualify the new batch. Merge with your existing list.</li>
+          <li><strong>Day 7:</strong> Cut to 50. Rank by signal strength. Write a personalized ACA opener for your top 10.</li>
+        </ul>
+        <p><strong>Success criteria:</strong> Every name has verified contact data, a pain/trigger note, and passes at least 2 of 3 qualifying filters. If you hit 50, you have more high-quality prospects than most reps build in their first month.</p>
+      </div>
+    </details>
+    <details>
+      <summary>🔍 Exercise: Write 3 ACA Openers</summary>
+      <div class="det-body">
+        <p>Pick 3 prospects from your list. For each one, write a complete ACA opener:</p>
+        <ol>
+          <li><strong>Acknowledge</strong> — Reference something specific you found in research</li>
+          <li><strong>Compliment</strong> — Show genuine respect for their work or achievement</li>
+          <li><strong>Ask</strong> — Bridge to a pain-related question</li>
+        </ol>
+        <p>Read each opener aloud. Time it. <strong>It should take under 20 seconds.</strong> If it's longer, cut words until it fits. Prospects don't give you 30 seconds — earn the next 10 with a tight ACA.</p>
+      </div>
+    </details>
+  </div>
+
+  <!-- REFLECTION -->
+  <div class="reflect"><div class="reflect-q">💭 Think about the last time a salesperson called you. Did they know anything about you — or did they just read a script? Which version would have earned 30 more seconds of your time?</div></div>
+
+  <!-- QUIZ -->
+  <div class="lcard">
+    <h2><span class="ic">🧠</span> Knowledge Check</h2>
+    <div class="q-item"><div class="q-num">Q1</div><div class="q-text">The ACA Framework stands for:</div><div class="q-opts">
+      <label class="qopt" data-qi="0" data-oi="0"><input type="radio" name="q0"><span class="qo-text">Ask, Close, Agree</span></label>
+      <label class="qopt" data-qi="0" data-oi="1"><input type="radio" name="q0"><span class="qo-text">Acknowledge, Compliment, Ask — a 3-step opener using pre-call research</span></label>
+      <label class="qopt" data-qi="0" data-oi="2"><input type="radio" name="q0"><span class="qo-text">Analyze, Call, Automate</span></label>
+      <label class="qopt" data-qi="0" data-oi="3"><input type="radio" name="q0"><span class="qo-text">Always Call Again</span></label>
+    </div><div class="q-fb" id="qfb0"></div></div>
+
+    <div class="q-item"><div class="q-num">Q2</div><div class="q-text">Why does 5 minutes of pre-call research increase meeting rates?</div><div class="q-opts">
+      <label class="qopt" data-qi="1" data-oi="0"><input type="radio" name="q1"><span class="qo-text">It makes your script longer</span></label>
+      <label class="qopt" data-qi="1" data-oi="1"><input type="radio" name="q1"><span class="qo-text">It lets you open with something specific and relevant, proving the call is about them — not a random dial</span></label>
+      <label class="qopt" data-qi="1" data-oi="2"><input type="radio" name="q1"><span class="qo-text">It gives you more features to pitch</span></label>
+      <label class="qopt" data-qi="1" data-oi="3"><input type="radio" name="q1"><span class="qo-text">It delays making the call so the prospect is more available</span></label>
+    </div><div class="q-fb" id="qfb1"></div></div>
+
+    <div class="q-item"><div class="q-num">Q3</div><div class="q-text">A prospect passes all 3 qualifying filters (ICP match, pain signal, timing trigger). What should you do?</div><div class="q-opts">
+      <label class="qopt" data-qi="2" data-oi="0"><input type="radio" name="q2"><span class="qo-text">Add them to a nurture email sequence</span></label>
+      <label class="qopt" data-qi="2" data-oi="1"><input type="radio" name="q2"><span class="qo-text">Wait for them to reach out to you</span></label>
+      <label class="qopt" data-qi="2" data-oi="2"><input type="radio" name="q2"><span class="qo-text">Call them immediately — they're at the top of your priority list</span></label>
+      <label class="qopt" data-qi="2" data-oi="3"><input type="radio" name="q2"><span class="qo-text">Research them for another week first</span></label>
+    </div><div class="q-fb" id="qfb2"></div></div>
+
+    <div class="q-item"><div class="q-num">Q4</div><div class="q-text">Which research finding is MOST effective for a cold call opener?</div><div class="q-opts">
+      <label class="qopt" data-qi="3" data-oi="0"><input type="radio" name="q3"><span class="qo-text">"Your company was founded in 2015"</span></label>
+      <label class="qopt" data-qi="3" data-oi="1"><input type="radio" name="q3"><span class="qo-text">"Your website looks nice"</span></label>
+      <label class="qopt" data-qi="3" data-oi="2"><input type="radio" name="q3"><span class="qo-text">"I saw you posted about doubling your sales team this quarter"</span></label>
+      <label class="qopt" data-qi="3" data-oi="3"><input type="radio" name="q3"><span class="qo-text">"You're based in San Francisco"</span></label>
+    </div><div class="q-fb" id="qfb3"></div></div>
+    <button class="ai-btn" style="background:var(--accent);color:var(--bg);margin-top:14px" id="checkQuiz">Check Answers</button>
+  </div>
+
+  <!-- AI COACH -->
+  <div class="ai-card">
+    <h2><span class="ic">🤖</span> Practice with AI Coach</h2>
+    <p style="font-size:14px;color:var(--text);margin:8px 0"><strong>Scenario:</strong> You're about to call a VP of Sales at a 300-person SaaS company. They just posted on LinkedIn about hiring 12 new SDRs and mentioned onboarding is their biggest challenge. Deliver your ACA opener live.</p>
+    <p style="font-size:13px;color:var(--text)"><strong>Your objective:</strong> Deliver a tight, under-20-second ACA opener that references the LinkedIn post, compliments the growth, and bridges to a pain question. The coach will play the prospect.</p>
+    <div class="ai-meta"><span>Difficulty: Medium</span><span>Goal: Practice deploying research in a live opener using the ACA Framework</span></div>
+    <a href="coach-home.html" class="ai-btn">Open AI Coach →</a>
+  </div>
+
+  <!-- INTERVIEW PREP -->
+  <div class="iv-card">
+    <h2><span class="ic">🎤</span> Interview Question</h2>
+    <blockquote style="background:rgba(100,181,246,.06);border-left:3px solid var(--blue);border-radius:0 10px 10px 0;padding:14px 18px;margin:12px 0;font-style:italic;font-size:14px;color:var(--text)">"How do you prepare for a cold call?"</blockquote>
+    <p style="font-size:13px;color:var(--text);margin:8px 0"><strong>Example answer:</strong> I spend about 5 minutes per prospect. I check their LinkedIn for recent posts or job changes, Google News for company announcements, and their careers page for hiring patterns. I'm looking for one specific thing I can reference in the first 15 seconds — something that proves this isn't a random call. Then I structure my opener using ACA: Acknowledge something about them, Compliment their work, and Ask a question that bridges to the pain we solve.</p>
+    <div class="iv-tip">💡 This answer shows process and discipline. Hiring managers know that reps who research before calling are reps who prepare for everything — demos, follow-ups, negotiations. It signals coachability and work ethic.</div>
+  </div>
+
+  <!-- TAKEAWAY -->
+  <div class="takeaway"><p>🔑 5 minutes of research. 3 qualifying filters. One personalized opener. That's the difference between sounding like every other cold caller and sounding like someone worth talking to.</p></div>
+
+  <!-- BOTTOM NAV -->
+  <div class="bnav">
+    <a href="finding-prospects-2.html" class="bnav-btn bnav-prev">← Previous Lesson</a>
+    <button class="bnav-btn bnav-complete" id="completeBtn">Mark as Complete ✓</button>
+    <a href="journey.html" class="bnav-btn bnav-next">Back to Journey →</a>
+  </div>
+</div>
+
+<div class="toast" id="toast">🎉 Lesson Complete! +50 XP</div>
+
+<script>
+const STORAGE_KEY='amplifyHub_journeyProgress';
+const MODULE_INDEX=1;
+const LESSON_INDEX=2;
+const TOTAL_MODULE_LESSONS=3;
+
+function readProgress(){
+  try{ const d=JSON.parse(localStorage.getItem(STORAGE_KEY)); return new Set(d?.completedLessons||[]); }catch(e){ return new Set(); }
+}
+function saveProgress(completed){
+  localStorage.setItem(STORAGE_KEY,JSON.stringify({
+    completedLessons:[...completed],
+    updatedAt:Date.now()
+  }));
+}
+function lid(m,l){ return `m${m}l${l}`; }
+
+const completed=readProgress();
+const thisLid=lid(MODULE_INDEX,LESSON_INDEX);
+const btn=document.getElementById('completeBtn');
+if(completed.has(thisLid)){ btn.textContent='✓ Completed'; btn.classList.add('done'); }
+
+btn.addEventListener('click',function(){
+  if(completed.has(thisLid)) return;
+  completed.add(thisLid);
+  saveProgress(completed);
+  btn.textContent='✓ Completed';
+  btn.classList.add('done');
+  const toast=document.getElementById('toast');
+  toast.classList.add('show');
+  setTimeout(()=>toast.classList.remove('show'),2500);
+});
+
+const answers=[1, 1, 2, 2];
+document.getElementById('checkQuiz').addEventListener('click',function(){
+  document.querySelectorAll('.qopt').forEach(opt=>{
+    const qi=parseInt(opt.dataset.qi), oi=parseInt(opt.dataset.oi);
+    const input=opt.querySelector('input');
+    if(!input.checked) return;
+    if(oi===answers[qi]){ opt.classList.add('correct'); document.getElementById('qfb'+qi).textContent='✓ Correct!'; document.getElementById('qfb'+qi).style.color='var(--green)'; }
+    else{ opt.classList.add('wrong'); document.getElementById('qfb'+qi).textContent='✗ Try again'; document.getElementById('qfb'+qi).style.color='var(--red)'; }
+  });
+});
+
+document.getElementById('mobBtn').addEventListener('click',()=>document.getElementById('sb').classList.add('open'));
+document.getElementById('sbX').addEventListener('click',()=>document.getElementById('sb').classList.remove('open'));
+</script>
+</body>
+</html>

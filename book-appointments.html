@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AmplifyHub - Appointment Setting</title>
+<meta name="description" content="Learn how to turn a suitable prospect into a qualified appointment that shows up.">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box}*{margin:0}html{scroll-behavior:smooth}
+:root{--bg:#07070e;--bg2:#0b0b16;--card:#13132a;--card2:#181838;--accent:#ffd54a;--accent-dim:rgba(255,213,74,.1);--green:#00e696;--blue:#64b5f6;--red:#ff6b64;--white:#fff;--text:#b8b8cf;--muted:#8f8fa8;--border:rgba(255,213,74,.1);--border-h:rgba(255,213,74,.24);--font:'Inter',system-ui,sans-serif;--sb:250px}
+body{min-width:320px;min-height:100vh;background:radial-gradient(circle at 72% -10%,rgba(255,213,74,.07),transparent 34rem),var(--bg);color:var(--white);font-family:var(--font);line-height:1.6}
+a{color:inherit}button,input{font:inherit}a:focus-visible,button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.sidebar{position:fixed;inset:0 auto 0 0;z-index:30;display:flex;width:var(--sb);flex-direction:column;padding:24px 16px;border-right:1px solid var(--border);background:rgba(11,11,22,.97);backdrop-filter:blur(18px);transition:transform .25s}
+.logo{padding:0 8px 22px;font-size:20px;font-weight:900;letter-spacing:-.04em;text-decoration:none}.logo span{color:var(--accent)}
+.side-nav{display:grid;gap:4px}.side-nav a{display:flex;gap:10px;align-items:center;padding:10px 12px;border:1px solid transparent;border-radius:10px;color:var(--muted);font-size:13px;font-weight:600;text-decoration:none}.side-nav a:hover{background:rgba(255,255,255,.03);color:var(--white)}.side-nav .active{border-color:var(--border);background:var(--accent-dim);color:var(--accent)}
+.side-note{margin-top:auto;padding:14px;border:1px solid var(--border);border-radius:12px;background:var(--accent-dim)}.side-note strong{display:block;font-size:12px}.side-note span{color:var(--muted);font-size:11px}
+.mobile-head{display:none}.side-close{display:none}
+.main{width:min(calc(100% - var(--sb) - 48px),920px);margin-left:max(var(--sb),calc((100vw - var(--sb) - 920px)/2 + var(--sb)));padding:36px 0 80px}
+.back{display:inline-block;margin-bottom:18px;color:var(--muted);font-size:13px;font-weight:700;text-decoration:none}.back:hover{color:var(--accent)}
+.badge,.eyebrow{color:var(--accent);font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase}
+h1{margin:6px 0 8px;font-size:clamp(30px,5vw,48px);font-weight:900;letter-spacing:-.05em;line-height:1.05}.promise{max-width:720px;color:var(--text);font-size:16px}.meta{display:flex;flex-wrap:wrap;gap:10px 18px;margin:18px 0 26px;color:var(--muted);font-size:12px}
+.progress{height:6px;margin-bottom:26px;overflow:hidden;border-radius:99px;background:rgba(255,255,255,.07)}.progress span{display:block;width:0;height:100%;border-radius:inherit;background:var(--accent);transition:width .2s}
+.toc{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-bottom:22px;padding:16px;border:1px solid var(--border);border-radius:16px;background:rgba(19,19,42,.55)}.toc a{padding:7px 9px;border-radius:8px;color:var(--muted);font-size:11px;font-weight:650;text-decoration:none}.toc a:hover{background:var(--accent-dim);color:var(--accent)}
+.section{scroll-margin-top:18px;margin-bottom:18px;padding:clamp(20px,4vw,30px);border:1px solid var(--border);border-radius:20px;background:rgba(19,19,42,.64);backdrop-filter:blur(14px)}.section:hover{border-color:var(--border-h)}
+.section h2{margin:4px 0 6px;font-size:20px;letter-spacing:-.025em}.learn{margin-bottom:16px;color:var(--blue);font-size:12px;font-weight:650}.section h3{margin:18px 0 7px;font-size:15px}.section p,.section li,.section td{color:var(--text);font-size:13.5px}.section p{margin-bottom:10px}.section ul,.section ol{margin:8px 0 12px;padding-left:21px}.section li+li{margin-top:5px}.section strong{color:var(--white)}.section em{color:var(--accent);font-style:normal}
+.callout,.example,.takeaway,.script{margin:13px 0;padding:14px 16px;border-radius:12px}.callout{border-left:3px solid var(--accent);background:var(--accent-dim)}.example{border:1px solid rgba(100,181,246,.18);background:rgba(100,181,246,.07)}.takeaway{border:1px solid rgba(0,230,150,.2);background:rgba(0,230,150,.07);color:var(--green);font-size:13px;font-weight:700}.script{border:1px solid var(--border);background:var(--bg2);color:var(--white);font-size:13px;line-height:1.65}.label{display:block;margin-bottom:5px;color:var(--accent);font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+.table-wrap{margin:12px 0;overflow-x:auto}.table{width:100%;border-collapse:collapse;font-size:12px}.table th{padding:9px 10px;border-bottom:2px solid var(--border-h);color:var(--accent);font-size:10px;letter-spacing:.06em;text-align:left;text-transform:uppercase;white-space:nowrap}.table td{padding:10px;border-bottom:1px solid var(--border);vertical-align:top}.table tr:last-child td{border-bottom:0}.good{color:var(--green)!important}.bad{color:var(--red)!important}
+.framework{display:grid;gap:8px}.step{display:grid;grid-template-columns:42px 1fr;gap:12px;padding:13px;border:1px solid var(--border);border-radius:12px;background:var(--card)}.step-num{display:grid;width:38px;height:38px;place-items:center;border-radius:10px;background:var(--accent);color:var(--bg);font-weight:900}.step h3{margin:0 0 3px}.step p{margin:0}.step small{display:block;margin-top:5px;color:var(--muted);font-size:11px}
+.grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.mini{padding:14px;border:1px solid var(--border);border-radius:12px;background:var(--card)}.mini h3{margin:0 0 6px}.mini p:last-child{margin-bottom:0}
+details{margin:9px 0;overflow:hidden;border:1px solid var(--border);border-radius:12px;background:var(--card)}summary{padding:12px 14px;color:var(--white);font-size:13px;font-weight:700;cursor:pointer}details[open] summary{border-bottom:1px solid var(--border)}.detail{padding:13px 14px}
+.q-item{margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid var(--border)}.q-item:last-of-type{border-bottom:0}.q-num{color:var(--accent);font-size:10px;font-weight:800}.q-text{margin:3px 0 8px;font-size:13px;font-weight:700}.q-opts{display:grid;gap:6px}.qopt{display:flex;gap:9px;align-items:center;padding:9px 12px;border:1px solid var(--border);border-radius:9px;color:var(--text);font-size:12px;cursor:pointer}.qopt:hover{border-color:var(--border-h);color:var(--white)}.qopt input{accent-color:var(--accent)}.qopt.correct{border-color:rgba(0,230,150,.4);background:rgba(0,230,150,.08);color:var(--green)}.qopt.wrong{border-color:rgba(255,107,100,.4);background:rgba(255,107,100,.08);color:var(--red)}.q-fb{min-height:17px;margin-top:6px;font-size:11px;font-weight:700}
+.btn{display:inline-flex;align-items:center;justify-content:center;padding:11px 18px;border:0;border-radius:10px;background:var(--accent);color:var(--bg);font-size:13px;font-weight:800;cursor:pointer}.btn:hover{box-shadow:0 5px 20px rgba(255,213,74,.25)}
+.bottom-nav{display:grid;grid-template-columns:1fr 1fr;gap:10px}.bottom-nav a,.bottom-nav button{min-height:48px;border:1px solid var(--border-h);border-radius:11px;background:transparent;color:var(--white);font-weight:800;text-decoration:none;cursor:pointer}.bottom-nav a{display:grid;place-items:center}.bottom-nav .complete{border-color:var(--accent);background:var(--accent);color:var(--bg)}.bottom-nav .complete.done{border-color:var(--green);background:var(--green)}
+.toast{position:fixed;right:24px;bottom:24px;z-index:60;padding:13px 18px;border-radius:11px;background:var(--green);color:var(--bg);font-size:12px;font-weight:800;opacity:0;transform:translateY(12px);transition:.2s;pointer-events:none}.toast.show{opacity:1;transform:none}
+@media(max-width:880px){.mobile-head{position:sticky;top:0;z-index:25;display:flex;height:58px;align-items:center;justify-content:space-between;padding:0 18px;border-bottom:1px solid var(--border);background:rgba(7,7,14,.95);backdrop-filter:blur(15px)}.mobile-head .logo{padding:0}.menu{border:1px solid var(--border);border-radius:8px;background:var(--card);color:var(--white);padding:6px 10px}.sidebar{transform:translateX(-105%)}.sidebar.open{transform:none}.side-close{display:block;position:absolute;top:16px;right:16px;border:0;background:none;color:var(--white);font-size:20px}.main{width:min(calc(100% - 30px),760px);margin:0 auto;padding:24px 0 60px}.toc{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:560px){.toc,.grid-2{grid-template-columns:1fr}.bottom-nav{grid-template-columns:1fr}.section{border-radius:16px}.step{grid-template-columns:34px 1fr}.step-num{width:32px;height:32px}.toast{right:15px;bottom:15px;max-width:calc(100vw - 30px)}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition-duration:.01ms!important}}
+</style>
+</head>
+<body>
+<header class="mobile-head"><a class="logo" href="dashboard.html">Amplify<span>Hub</span></a><button class="menu" id="menuBtn" aria-label="Open navigation" aria-expanded="false">Menu</button></header>
+<aside class="sidebar" id="sidebar">
+  <button class="side-close" id="sideClose" aria-label="Close navigation">x</button>
+  <a class="logo" href="dashboard.html">Amplify<span>Hub</span></a>
+  <nav class="side-nav" aria-label="Primary navigation">
+    <a href="dashboard.html">🏠 Dashboard</a><a class="active" href="journey.html">🛤 Journey</a><a href="coach-home.html">🤖 AI Coach</a><a href="challenges.html">⚡ Challenges</a><a href="resources.html">📚 Resources</a>
+  </nav>
+  <div class="side-note"><strong>Module 7 · Booking Appointments</strong><span>One complete field lesson</span></div>
+</aside>
+
+<main class="main">
+  <a class="back" href="journey.html">← Back to Journey</a>
+  <div class="badge">Booking Appointments · Lesson 1 of 1</div>
+  <h1>Appointment Setting</h1>
+  <p class="promise">Turn a suitable prospect into a qualified appointment with a clear reason to attend.</p>
+  <div class="meta"><span>⏱ 35-45 min</span><span>🏆 +250 XP</span><span>📖 Beginner to intermediate</span></div>
+  <div class="progress" aria-hidden="true"><span id="readingProgress"></span></div>
+
+  <nav class="toc" aria-label="Lesson sections">
+    <a href="#objectives">Objectives</a><a href="#definition">Definition</a><a href="#framework">Framework</a><a href="#targeting">Targeting</a><a href="#messaging">Messaging</a><a href="#sequence">Sequence</a><a href="#opening">Opening</a><a href="#discovery">Discovery</a><a href="#transition">Transition</a><a href="#booking">Booking</a><a href="#resistance">Resistance</a><a href="#live-call">Live call</a><a href="#scripts">Scripts</a><a href="#exercises">Exercises</a><a href="#quiz">Quiz</a>
+  </nav>
+
+  <section class="section" id="objectives">
+    <div class="eyebrow">1-4 · Lesson setup</div><h2>What You Will Learn</h2>
+    <p class="learn">Learn: build an ethical path from first contact to a worthwhile meeting.</p>
+    <ul><li>Prioritize relevant prospects and create a useful reason to respond.</li><li>Open naturally, run short discovery, quantify only what matters, and qualify without interrogating.</li><li>Invite, book, confirm, reduce no-shows, and hand useful notes to the closer.</li></ul>
+    <div class="takeaway">Appointment setting is not calendar filling. It is creating the right next conversation.</div>
+  </section>
+
+  <section class="section" id="definition">
+    <div class="eyebrow">5 · Definition</div><h2>Booked Is Not the Same as Qualified</h2>
+    <p class="learn">Learn: where setting ends and closing begins.</p>
+    <p>A setter confirms fit and secures a useful next step. The closer diagnoses deeply, recommends, discusses terms, and asks for the sale.</p>
+    <div class="table-wrap"><table class="table"><tr><th>Outcome</th><th>Meaning</th></tr><tr><td>Booked meeting</td><td>A time exists on a calendar.</td></tr><tr><td>Qualified meeting</td><td>The person, need, priority, authority, and timing justify deeper discussion.</td></tr><tr><td>Meeting that shows</td><td>The prospect understands the agenda and keeps the commitment.</td></tr><tr><td>Sales opportunity</td><td>There is plausible fit and a responsible path to a purchase - never a guarantee.</td></tr></table></div>
+    <p><strong>Inbound</strong> follows an action; <strong>outbound</strong> earns attention through research. Both qualify; neither forces a sale.</p>
+    <div class="example"><strong>Setter:</strong> “You are losing inquiries during slow follow-up. A process review is justified.” <strong>Closer:</strong> “Here is the recommended system, investment, and implementation plan.”</div>
+  </section>
+
+  <section class="section" id="framework">
+    <div class="eyebrow">6 · Main framework</div><h2>The T-P-O-D-Q-I-C Framework</h2>
+    <p class="learn">Learn: seven checkpoints for every channel.</p>
+    <div class="framework">
+      <div class="step"><span class="step-num">T</span><div><h3>Target</h3><p>Choose likely beneficiaries. Avoid weak lists. <em>Example:</em> prioritize an agency hiring setters.</p></div></div>
+      <div class="step"><span class="step-num">P</span><div><h3>Prepare</h3><p>Find one trigger and problem hypothesis in 1-3 minutes. Avoid research rabbit holes. <em>Example:</em> note a new branch.</p></div></div>
+      <div class="step"><span class="step-num">O</span><div><h3>Open</h3><p>Identify yourself, give honest context, and ask permission. Avoid fake familiarity. <em>Example:</em> “May I share why I called?”</p></div></div>
+      <div class="step"><span class="step-num">D</span><div><h3>Discover</h3><p>Understand method, challenge, impact, and goal. Avoid pitching early. <em>Example:</em> “Where is follow-up breaking?”</p></div></div>
+      <div class="step"><span class="step-num">Q</span><div><h3>Qualify</h3><p>Confirm fit, importance, people, timing, and resources. <em>Example:</em> “Who else owns this?”</p></div></div>
+      <div class="step"><span class="step-num">I</span><div><h3>Invite</h3><p>Summarize the gap and sell the conversation. Avoid vague asks. <em>Example:</em> suggest a 30-minute review.</p></div></div>
+      <div class="step"><span class="step-num">C</span><div><h3>Confirm</h3><p>Book live; verify zone, attendees, agenda, and acceptance. Avoid false scarcity.</p></div></div>
+    </div>
+  </section>
+
+  <section class="section" id="targeting">
+    <div class="eyebrow">7 · Targeting and buyer research</div><h2>Relevance Beats Reach</h2>
+    <p class="learn">Learn: who deserves attention and which language fits.</p>
+    <p>Define industry, company size, location, buyer, decision-maker, current method, trigger, and likely need. The wrong person still fails.</p>
+    <div class="grid-2"><div class="mini"><h3>Priority</h3><p><strong class="good">High:</strong> profile fit plus a visible trigger or problem.<br><strong>Medium:</strong> profile fit, but no urgency found.<br><strong class="bad">Low:</strong> weak relevance, unclear need, or little buying plausibility.</p></div><div class="mini"><h3>1-3 Minute Check</h3><p>Company fit? Right role? One recent trigger? Current approach? One credible problem hypothesis? One sentence in the buyer's language?</p></div></div>
+    <h3>Buyer-messaging matrix</h3>
+    <div class="table-wrap"><table class="table"><tr><th>Priority</th><th>Current method</th><th>Friction / risk</th><th>Desired result</th><th>Buyer language</th></tr><tr><td>Respond fast</td><td>Manual inbox</td><td>Leads wait and disappear</td><td>Consistent follow-up</td><td>“Speed to lead,” “show rate”</td></tr></table></div>
+    <p>Mine calls, reviews, websites, LinkedIn, and transcripts. AI may organize patterns; humans verify them.</p>
+  </section>
+
+  <section class="section" id="messaging">
+    <div class="eyebrow">8 · Messaging and reasons to respond</div><h2>Lead With Their World</h2>
+    <p class="learn">Learn: replace feature claims with relevance.</p>
+    <div class="table-wrap"><table class="table"><tr><th class="bad">Weak</th><th class="good">Better</th></tr><tr><td>“We provide innovative AI-powered solutions that help businesses grow.”</td><td>“We help agency owners reduce manual lead follow-up so fewer inquiries are lost.”</td></tr></table></div>
+    <p>Earn a response with an insight, audit, benchmark, assessment, resource, demo, or expert conversation.</p>
+    <div class="grid-2"><div class="mini"><h3>Three small offers</h3><p><strong>Reveal:</strong> website speed or missed-lead audit.<br><strong>Solve narrowly:</strong> follow-up template or call review.<br><strong>First step:</strong> positioning worksheet before a full strategy.</p></div><div class="mini"><h3>Examples</h3><p>Agency: lead-response benchmark. Designer: homepage clarity audit. Trainer: opener scorecard. SaaS: workflow comparison. Local service: missed-call review.</p></div></div>
+    <div class="callout"><strong>Rule:</strong> the free resource must help and connect naturally to the paid service - never random bait.</div>
+  </section>
+
+  <section class="section" id="sequence">
+    <div class="eyebrow">9 · Outreach sequence</div><h2>A Simple Three-Week Rhythm</h2>
+    <p class="learn">Learn: sequence channels without pressure.</p>
+    <div class="table-wrap"><table class="table"><tr><th>Week</th><th>Touches</th></tr><tr><td>1</td><td>Relevant email; phone call; LinkedIn visit or connection; follow-up call.</td></tr><tr><td>2</td><td>Value-based email; phone call; short LinkedIn message.</td></tr><tr><td>3</td><td>Final insight email; phone call; respectful breakup message.</td></tr></table></div>
+    <p>Spread 8-12 adapted touches across days. Stop after opt-out, a clear no, wrong-person confirmation, or silence after the sequence. Touch counts are tests; volume never repairs poor relevance.</p>
+  </section>
+
+  <section class="section" id="opening">
+    <div class="eyebrow">10 · Call opening and presence</div><h2>Be Honest, Brief, and Easy to Follow</h2>
+    <p class="learn">Learn: earn 20 seconds honestly.</p>
+    <div class="script"><span class="label">Completely cold</span>“Ana, Devon at BrightPath. I noticed you’re hiring three coordinators. This is an unexpected sales call - may I explain the connection in 20 seconds?”</div>
+    <div class="script"><span class="label">Resource download</span>“Hi Sam, Priya at Northstar. You downloaded our lead-response checklist yesterday. Did it reach you? If you have two minutes, I can point you to the section most relevant to your process.”</div>
+    <div class="script"><span class="label">Reply, missed inbound, or LinkedIn</span>“Thanks for replying about follow-up coverage. I wanted to understand what prompted the interest before I send generic information. Is now a reasonable time for two questions?”</div>
+    <div class="grid-2"><div class="mini"><h3>Early resistance</h3><p><strong>Who?</strong> Name, company, source.<br><strong>What about?</strong> State the problem.<br><strong>Busy?</strong> Ask for 20 seconds or reschedule.<br><strong>Email?</strong> Clarify what is useful.<br><strong>My number?</strong> Name the lawful source; offer removal.</p></div><div class="mini"><h3>How to sound</h3><p>Calm, clear, direct, curious, conversational, and outcome-detached. Pause, remove fillers, listen, and say “I’m noting that” before silence.</p></div></div>
+    <div class="table-wrap"><table class="table"><tr><th>Delivery</th><th>Same opening, different effect</th></tr><tr><td class="bad">Nervous</td><td>Rushed, rising tone: “Hi-I-know-you're-busy...”</td></tr><tr><td class="bad">Aggressive</td><td>Fast and dominant: “I only need 30 seconds.”</td></tr><tr><td class="good">Calm</td><td>Steady, pause: “This is unexpected. May I share why I called?”</td></tr></table></div>
+    <div class="callout"><strong>Drill:</strong> record three takes; score pace, clarity, pauses, warmth, and fillers 1-5. Repeat until conversational.</div>
+  </section>
+
+  <section class="section" id="discovery">
+    <div class="eyebrow">11 · Discovery and qualification</div><h2>Learn Enough to Justify the Meeting</h2>
+    <p class="learn">Learn: discover enough to justify a meeting.</p>
+    <p>Cover situation, challenge, method, impact, goal, priority, previous attempts, and why now. Explain why; never interrogate.</p>
+    <div class="script">“What are you doing now?” → “What is hardest about that?” → “How long has that been happening?” → “What does it affect?” → “What have you tried?” → “What would you improve first?” → “Why address it now?”</div>
+    <h3>Chunk down broad answers</h3>
+    <div class="example"><strong>Prospect:</strong> “Time is the problem.”<br><strong>Weak:</strong> “Great, let me explain our service.”<br><strong>Better:</strong> “Where is most of that time going?” Then: “What is that preventing?” and “What changes if you recover it?”</div>
+    <h3>Use numbers only when they clarify fit</h3>
+    <p>Ask only relevant numbers: leads, bookings, show rate, value, time, cost, team size, or permitted revenue range.</p>
+    <div class="callout"><strong>Illustrative math, not a promise:</strong> 100 monthly leads × 20% booked × 60% show = 12 conversations. Raising show rate to 75% creates 15 conversations - three more chances, with no guaranteed sales.</div>
+    <h3>Six-part qualification scorecard</h3>
+    <div class="table-wrap"><table class="table"><tr><th>Fit</th><th>Need</th><th>Importance</th><th>People</th><th>Timing</th><th>Resources</th></tr><tr><td>ICP match</td><td>Real gap/goal</td><td>Worth action</td><td>Right stakeholders</td><td>Reasonable window</td><td>Plausible capacity</td></tr></table></div>
+    <p><strong>Unqualified:</strong> mismatch. <strong>Potential:</strong> incomplete evidence. <strong>Qualified:</strong> fit and value. <strong>Not ready:</strong> fit, wrong timing; schedule useful follow-up. Never decide from one vague answer.</p>
+  </section>
+
+  <section class="section" id="transition">
+    <div class="eyebrow">12 · Transitioning to the meeting</div><h2>Connect the Invitation to Their Words</h2>
+    <p class="learn">Learn: connect their gap to the next conversation.</p>
+    <div class="script">“From what you’ve shared, you generate enough leads, but inconsistent follow-up is losing some before anyone speaks with them. A 30-minute review with our strategist could map the gaps and determine whether our process fits. Would that be useful?”</div>
+    <div class="grid-2"><div class="mini"><h3>Context</h3><p><strong>Cold:</strong> problem → review.<br><strong>Inbound:</strong> result → assessment.<br><strong>Lead magnet:</strong> finding → discussion.<br><strong>LinkedIn:</strong> thread → session.</p></div><div class="mini"><h3>Business</h3><p><strong>Agency:</strong> lead leakage.<br><strong>Local:</strong> missed calls.<br>State attendee, topic, duration, preparation, and decision-makers.</p></div></div>
+    <div class="takeaway">Sell the value of the next conversation. Do not promise results the closer cannot guarantee.</div>
+  </section>
+
+  <section class="section" id="booking">
+    <div class="eyebrow">13-14 · Booking, no-shows, and handoff</div><h2>Turn Interest Into a Kept Commitment</h2>
+    <p class="learn">Learn: book clearly and protect trust.</p>
+    <ol><li>Confirm interest; offer two genuine times.</li><li>Verify zone and book live.</li><li>Confirm email and phone.</li><li>Name attendees, agenda, duration, preparation.</li><li>Invite decision-makers.</li><li>Gain invite acceptance and a reschedule commitment.</li></ol>
+    <div class="script"><strong>Setter:</strong> “Tuesday at 2:00 or Wednesday at 11:00 Pacific - which works better?”<br><strong>Prospect:</strong> “Wednesday.”<br><strong>Setter:</strong> “Great. I’ve sent 11:00 Pacific for 30 minutes with Maya. You’ll review lead flow and follow-up gaps. Could you accept it now so we know it landed? If your operations partner owns follow-up, please include them.”</div>
+    <h3>No-show prevention</h3>
+    <p>Book soon, confirm agenda and zone, send brief reminders and one preparation prompt. Never spam.</p>
+    <div class="grid-2"><div class="script"><span class="label">Confirmation</span>“You’re booked Wed 11:00 PT with Maya. We’ll review your current lead process. Please bring last month’s lead, booking, and show numbers.”</div><div class="script"><span class="label">24 hours</span>“Reminder for tomorrow at 11:00 PT. Still good? Reply R if we should reschedule.”</div><div class="script"><span class="label">One hour</span>“We’re on in one hour. Maya has your notes and the agenda.”</div><div class="script"><span class="label">Missed meeting</span>“We missed you today. Hope all is well. If the review is still useful, here are two new times; if priorities changed, just tell me.”</div></div>
+    <h3>Setter-to-closer note</h3>
+    <div class="callout">Name/company · role · source · situation · problem · outcome · numbers · current solution · attempts · timing · decision-makers · concerns · reason to meet · anything not to repeat.</div>
+  </section>
+
+  <section class="section" id="resistance">
+    <div class="eyebrow">15 · Resistance playbooks</div><h2>Clarify Once, Then Respect the Answer</h2>
+    <p class="learn">Learn: clarify once without arguing.</p>
+    <details><summary>“I’m busy.”</summary><div class="detail"><p><strong>Means:</strong> occupied or low relevance. <strong>Poor:</strong> minimize their time. <strong>Better:</strong> “Twenty seconds for context, or is Thursday better?” End if both are declined.</p></div></details>
+    <details><summary>“Send me information.”</summary><div class="detail"><p><strong>Means:</strong> exit or preference. <strong>Poor:</strong> generic deck. <strong>Better:</strong> “Benchmarks or the checklist?” End after sending unless follow-up is invited.</p></div></details>
+    <details><summary>“I’m not interested.”</summary><div class="detail"><p><strong>Means:</strong> no need, trust, or timing. <strong>Poor:</strong> debate. <strong>Better:</strong> “Already solved, or not a priority?” Accept the next no.</p></div></details>
+    <details><summary>“We already have someone.”</summary><div class="detail"><p><strong>Means:</strong> an incumbent exists. <strong>Poor:</strong> attack them. <strong>Better:</strong> “Meeting your response and show targets, or would a benchmark help?” End if satisfied.</p></div></details>
+    <details><summary>“How much does it cost?”</summary><div class="detail"><p><strong>Means:</strong> screening. <strong>Poor:</strong> hide behind “it depends.” <strong>Better:</strong> share a real range, variables, and one fit question. End if limits cannot align.</p></div></details>
+    <details><summary>“I need to speak to my partner.”</summary><div class="detail"><p><strong>Means:</strong> shared authority. <strong>Poor:</strong> bypass them. <strong>Better:</strong> “Let’s include them so you needn’t relay it.” Do not omit essential stakeholders.</p></div></details>
+    <details><summary>“Call me later.”</summary><div class="detail"><p><strong>Means:</strong> timing or soft exit. <strong>Poor:</strong> no plan. <strong>Better:</strong> “Tuesday at 10 to review the audit?” End repeated vagueness.</p></div></details>
+    <details><summary>“I don’t remember downloading that.”</summary><div class="detail"><p><strong>Means:</strong> memory gap. <strong>Poor:</strong> insist. <strong>Better:</strong> name resource/date, offer to resend, and check relevance. End if unwanted.</p></div></details>
+  </section>
+
+  <section class="section" id="live-call">
+    <div class="eyebrow">16 · Live-call example</div><h2>A Busy Prospect, Handled Responsibly</h2>
+    <p class="learn">Learn: apply the framework without pressure.</p>
+    <div class="script"><strong>Setter:</strong> “Jordan, Nina at Flowline. You downloaded the missed-lead checklist yesterday. Did it arrive?”<br><small><strong>Open:</strong> honest source and context.</small><br><br><strong>Prospect:</strong> “Maybe. I’m walking into a meeting.”<br><strong>Setter:</strong> “Understood. Thirty seconds now, or tomorrow?”<br><small><strong>Open:</strong> respects time; no misleading five-minute promise.</small><br><br><strong>Prospect:</strong> “Thirty seconds.”<br><strong>Setter:</strong> “Are missed inquiries actually a concern?”<br><strong>Prospect:</strong> “Mostly time.”<br><strong>Setter:</strong> “Where does that time disappear?”<br><small><strong>Discover:</strong> chunks down instead of pitching.</small><br><br><strong>Prospect:</strong> “Voicemails and web leads wait until evening.”<br><strong>Setter:</strong> “How many arrive weekly, and how many get same-day response?”<br><strong>Prospect:</strong> “Forty; maybe half.”<br><strong>Setter:</strong> “So about 20 wait. What happens?”<br><strong>Prospect:</strong> “Some call competitors.”<br><small><strong>Qualify:</strong> numbers clarify without promising revenue.</small><br><br><strong>Setter:</strong> “Demand exists, but coverage is inconsistent. A 25-minute specialist review could map gaps and test whether automation or a simpler process fits. Useful?”<br><strong>Prospect:</strong> “Yes.”<br><small><strong>Invite:</strong> links value to their words.</small><br><br><strong>Setter:</strong> “Tuesday 1:00 or Wednesday 10:30 Mountain?”<br><strong>Prospect:</strong> “Wednesday.”<br><strong>Setter:</strong> “Booked. Invite Casey, accept when it lands, and bring your response numbers.”<br><small><strong>Confirm:</strong> time, zone, stakeholder, acceptance, preparation.</small></div>
+    <div class="callout"><strong>Ethical corrections:</strong> use scenario math, testable gaps, mutual rescheduling, and truthful pricing context.</div>
+  </section>
+
+  <section class="section" id="scripts">
+    <div class="eyebrow">17 · Scripts and templates</div><h2>Guides, Not Lines to Recite</h2>
+    <p class="learn">Learn: adapt, never recite.</p>
+    <div class="table-wrap"><table class="table"><tr><th>Purpose</th><th>Beginner</th><th>More natural</th></tr><tr><td>Cold opening</td><td>“May I explain why I called?”</td><td>“Can I give you the 20-second version?”</td></tr><tr><td>Inbound opening</td><td>“You requested our guide.”</td><td>“What prompted you to download it?”</td></tr><tr><td>Lead-magnet follow-up</td><td>“Did the checklist arrive?”</td><td>“Which section looked most useful?”</td></tr><tr><td>Permission</td><td>“May I ask two questions?”</td><td>“Open to two quick questions?”</td></tr><tr><td>Discovery</td><td>“What are you doing now?”</td><td>“Walk me through today’s process.”</td></tr><tr><td>Chunk down</td><td>“What do you mean by time?”</td><td>“Where does that time disappear?”</td></tr><tr><td>Impact</td><td>“What does that affect?”</td><td>“What gets delayed?”</td></tr><tr><td>Qualification</td><td>“Who decides?”</td><td>“Who else weighs in?”</td></tr><tr><td>Transition</td><td>“Let me summarize.”</td><td>“Here’s the gap I’m hearing.”</td></tr><tr><td>Meeting invitation</td><td>“Would a review help?”</td><td>“Worth mapping this with a specialist?”</td></tr><tr><td>Calendar</td><td>“Tuesday or Wednesday?”</td><td>“Tue 2:00 or Wed 11:00 PT?”</td></tr><tr><td>Decision-maker</td><td>“Can they attend?”</td><td>“Let’s include them so you needn’t relay it.”</td></tr><tr><td>Reminder</td><td>“Still good for tomorrow?”</td><td>“Still good for 11:00 PT?”</td></tr><tr><td>No-show follow-up</td><td>“Would you like another time?”</td><td>“Still useful, or have priorities changed?”</td></tr><tr><td>Disqualify</td><td>“This is not a fit.”</td><td>“A meeting won’t help yet; start here.”</td></tr></table></div>
+  </section>
+
+  <section class="section" id="mistakes">
+    <div class="eyebrow">18 · Common mistakes</div><h2>Appointment-Setting Mistakes That Kill Meetings</h2>
+    <p class="learn">Learn: correct weak-booking behavior.</p>
+    <div class="table-wrap"><table class="table"><tr><th>Mistake</th><th>Correction</th></tr><tr><td>Wrong people; generic message</td><td>Tighten ICP, role, trigger, and buyer language.</td></tr><tr><td>Company pitch too early; scripted tone</td><td>Lead with context and rehearse the framework, not a monologue.</td></tr><tr><td>Question overload or interrogation</td><td>Explain why, follow answers, and stop when fit is clear.</td></tr><tr><td>Unqualified bookings; full close</td><td>Use the scorecard and sell only the next useful conversation.</td></tr><tr><td>Vague meeting; missing decision-maker</td><td>Name agenda, outcome, attendee, and necessary stakeholders.</td></tr><tr><td>Wrong zone; weak invite; poor notes</td><td>Confirm live and hand the closer complete context.</td></tr><tr><td>Promises, fake urgency, contact after no</td><td>Use honest ranges, real timing, and respect consent.</td></tr><tr><td>Activity-only management</td><td>Track qualified bookings, shows, opportunities, and feedback.</td></tr></table></div>
+  </section>
+
+  <section class="section" id="exercises">
+    <div class="eyebrow">19 · Practical exercises</div><h2>Practice Before the Prospect Picks Up</h2>
+    <p class="learn">Learn: make the framework repeatable.</p>
+    <details><summary>1. Targeting</summary><div class="detail"><p>Rank: (A) agency hiring SDRs after funding; (B) ICP fit, no trigger; (C) student, no business; (D) clinic with slow-response reviews; (E) unsupported region. Explain.</p></div></details>
+    <details><summary>2. Rewrite the message</summary><div class="detail"><p>Rewrite from the buyer’s view: “We are an innovative platform.” “Can I get 30 minutes?” “Our award-winning team drives growth.”</p></div></details>
+    <details><summary>3. Opening practice</summary><div class="detail"><p>Write 20-second openings for cold SaaS, missed inbound, and a LinkedIn hiring trigger.</p></div></details>
+    <details><summary>4. Chunking down</summary><div class="detail"><p>Write two follow-ups for each: “We need more sales.” “Time is the problem.” “Our leads are bad.” “We want to grow.”</p></div></details>
+    <details><summary>5-6. Qualification and transition</summary><div class="detail"><p>ICP fit and costly gap; decision-maker absent; timing “someday.” Book, nurture, or disqualify? Write the transition.</p></div></details>
+    <details><summary>7. Three role-plays</summary><div class="detail"><p><strong>Cold:</strong> ops leader; “send email”; slow response; this quarter; earn discovery; do not argue.<br><strong>Inbound:</strong> founder; “just browsing”; low shows; partner decides; include partner; do not close.<br><strong>Lead magnet:</strong> clinic manager; “don’t remember”; missed calls; restore context; no fake familiarity.</p></div></details>
+    <details><summary>8. Call review</summary><div class="detail"><p>Score 1-5: fit, relevance, permission, pace, listening, chunk-down, numbers, qualification, transition, agenda, booking, acceptance, notes, consent.</p></div></details>
+  </section>
+
+  <section class="section" id="quiz">
+    <div class="eyebrow">20 · Scenario quiz</div><h2>Choose the Best Next Move</h2>
+    <p class="learn">Learn: apply judgment.</p>
+    <div class="q-item"><div class="q-num">Q1</div><div class="q-text">A prospect says, “Time is our issue.” What is the best next question?</div><div class="q-opts"><label class="qopt" data-qi="0" data-oi="0"><input type="radio" name="q0">Tell me about our automation.</label><label class="qopt" data-qi="0" data-oi="1"><input type="radio" name="q0">Where is most of that time being spent?</label><label class="qopt" data-qi="0" data-oi="2"><input type="radio" name="q0">What is your budget?</label></div><div class="q-fb"></div></div>
+    <div class="q-item"><div class="q-num">Q2</div><div class="q-text">Which prospect is highest priority?</div><div class="q-opts"><label class="qopt" data-qi="1" data-oi="0"><input type="radio" name="q1">ICP match with a relevant hiring trigger.</label><label class="qopt" data-qi="1" data-oi="1"><input type="radio" name="q1">Large company outside your supported market.</label><label class="qopt" data-qi="1" data-oi="2"><input type="radio" name="q1">Anyone who accepts LinkedIn.</label></div><div class="q-fb"></div></div>
+    <div class="q-item"><div class="q-num">Q3</div><div class="q-text">A buyer asks price early. What should the setter do?</div><div class="q-opts"><label class="qopt" data-qi="2" data-oi="0"><input type="radio" name="q2">Refuse to discuss price.</label><label class="qopt" data-qi="2" data-oi="1"><input type="radio" name="q2">Invent a low starting price.</label><label class="qopt" data-qi="2" data-oi="2"><input type="radio" name="q2">Share an honest range when possible, explain variables, then clarify fit.</label></div><div class="q-fb"></div></div>
+    <div class="q-item"><div class="q-num">Q4</div><div class="q-text">Put the core flow in the correct order.</div><div class="q-opts"><label class="qopt" data-qi="3" data-oi="0"><input type="radio" name="q3">Open, pitch, pressure, book.</label><label class="qopt" data-qi="3" data-oi="1"><input type="radio" name="q3">Target, Prepare, Open, Discover, Qualify, Invite, Confirm.</label><label class="qopt" data-qi="3" data-oi="2"><input type="radio" name="q3">Research, close, discover, follow up.</label></div><div class="q-fb"></div></div>
+    <div class="q-item"><div class="q-num">Q5</div><div class="q-text">A good-fit prospect has no plan to act this year. Best status?</div><div class="q-opts"><label class="qopt" data-qi="4" data-oi="0"><input type="radio" name="q4">Qualified and ready.</label><label class="qopt" data-qi="4" data-oi="1"><input type="radio" name="q4">Qualified but not ready; agree on a useful follow-up.</label><label class="qopt" data-qi="4" data-oi="2"><input type="radio" name="q4">Book anyway to hit target.</label></div><div class="q-fb"></div></div>
+    <div class="q-item"><div class="q-num">Q6</div><div class="q-text">Which meeting invitation is strongest?</div><div class="q-opts"><label class="qopt" data-qi="5" data-oi="0"><input type="radio" name="q5">Want to hop on a call sometime?</label><label class="qopt" data-qi="5" data-oi="1"><input type="radio" name="q5">Our strategist can review the follow-up gap you described in 30 minutes. Worth exploring?</label><label class="qopt" data-qi="5" data-oi="2"><input type="radio" name="q5">Book now before spots disappear.</label></div><div class="q-fb"></div></div>
+    <div class="q-item"><div class="q-num">Q7</div><div class="q-text">The prospect clearly says “no” twice. What next?</div><div class="q-opts"><label class="qopt" data-qi="6" data-oi="0"><input type="radio" name="q6">Try a third rebuttal.</label><label class="qopt" data-qi="6" data-oi="1"><input type="radio" name="q6">Respect the answer, close politely, and update records.</label><label class="qopt" data-qi="6" data-oi="2"><input type="radio" name="q6">Call from another number.</label></div><div class="q-fb"></div></div>
+    <div class="q-item"><div class="q-num">Q8</div><div class="q-text">What most reduces avoidable no-shows?</div><div class="q-opts"><label class="qopt" data-qi="7" data-oi="0"><input type="radio" name="q7">Five reminders per day.</label><label class="qopt" data-qi="7" data-oi="1"><input type="radio" name="q7">A clear agenda, correct zone, accepted invite, and brief reminders.</label><label class="qopt" data-qi="7" data-oi="2"><input type="radio" name="q7">Claiming the calendar is nearly full.</label></div><div class="q-fb"></div></div>
+    <div class="q-item"><div class="q-num">Q9</div><div class="q-text">Which metric best protects meeting quality?</div><div class="q-opts"><label class="qopt" data-qi="8" data-oi="0"><input type="radio" name="q8">Dials only.</label><label class="qopt" data-qi="8" data-oi="1"><input type="radio" name="q8">Calendar invites sent.</label><label class="qopt" data-qi="8" data-oi="2"><input type="radio" name="q8">Qualified bookings, show rate, and opportunity feedback.</label></div><div class="q-fb"></div></div>
+    <div class="q-item"><div class="q-num">Q10</div><div class="q-text">What should the closer never need to ask again?</div><div class="q-opts"><label class="qopt" data-qi="9" data-oi="0"><input type="radio" name="q9">Information the prospect already clearly shared with the setter.</label><label class="qopt" data-qi="9" data-oi="1"><input type="radio" name="q9">Any new diagnostic question.</label><label class="qopt" data-qi="9" data-oi="2"><input type="radio" name="q9">The prospect's name.</label></div><div class="q-fb"></div></div>
+    <button class="btn" id="checkQuiz" type="button">Check Answers</button><p id="quizScore" aria-live="polite"></p>
+  </section>
+
+  <section class="section quiz-answers" id="answers">
+    <div class="eyebrow">21 · Quiz answers</div><h2>Answer Key</h2>
+    <details><summary>Show answers and explanations</summary><div class="detail"><ol><li><strong>B.</strong> Chunk down before pitching; budget is premature.</li><li><strong>A.</strong> Fit plus a real trigger creates relevance.</li><li><strong>C.</strong> Honest context is useful; evasion and bait pricing damage trust.</li><li><strong>B.</strong> It preserves fit, context, discovery, qualification, invitation, and commitment.</li><li><strong>B.</strong> Fit exists, but timing calls for nurture rather than a false booking.</li><li><strong>B.</strong> It links the meeting to the prospect's stated gap and sets expectations.</li><li><strong>B.</strong> One clarification is acceptable; repeated pressure is not.</li><li><strong>B.</strong> Clarity and commitment outperform reminder spam or fake scarcity.</li><li><strong>C.</strong> These show whether meetings are suitable, attended, and valuable.</li><li><strong>A.</strong> Repetition makes the prospect feel unheard; deeper diagnosis is still appropriate.</li></ol></div></details>
+  </section>
+
+  <section class="section" id="field-guide">
+    <div class="eyebrow">22 · Final field guide</div><h2>The 60-Second Appointment-Setting Checklist</h2>
+    <ul><li>Right person and relevant reason?</li><li>Permission earned?</li><li>Situation, real problem, and goal understood?</li><li>Reasonably qualified - including people and timing?</li><li>Meeting connected to their words?</li><li>Agenda, attendee, value, and duration explained?</li><li>Specific time and zone booked?</li><li>Invite accepted and next step clear?</li></ul>
+  </section>
+
+  <section class="section trainer-notes" id="trainer-notes">
+    <div class="eyebrow">23 · Trainer notes</div><h2>How to Coach This Lesson</h2>
+    <ul><li>Teach one framework step at a time, then run full calls.</li><li>Score relevance and listening before objection handling.</li><li>Pause role-plays after broad answers and require two chunk-down questions.</li><li>Audit qualified-show rate and closer feedback, not bookings alone.</li><li>Require learners to disclose commercial intent, use real constraints only, and stop after a clear no.</li></ul>
+  </section>
+
+  <section class="section source-notes" id="source-notes">
+    <div class="eyebrow">24 · Source synthesis notes</div><h2>How the Source Material Was Combined</h2>
+    <p><strong>Repeated:</strong> targeting, buyer language, permission, discovery, problem-led invitations, calendar acceptance, and multichannel follow-up.</p>
+    <p><strong>Unique:</strong> the outbound source added prioritization, matrices, offers, sequencing, and human-checked AI; live calls added chunking, numbers, transitions, and confirmation; lead-generation added problem-revealing and first-step resources; trust material added honest concessions and simpler alternatives.</p>
+    <p><strong>Changed:</strong> projections became scenario math; blame became testable gaps; “five minutes” must stay truthful; fake urgency, deceptive familiarity, decoys, and evasive pricing were removed.</p>
+    <p>Introductions, ads, phone numbers, repetition, unrelated stories, and promotions were excluded.</p>
+  </section>
+
+  <nav class="bottom-nav" aria-label="Lesson completion"><a href="journey.html">← Back to Journey</a><button class="complete" id="completeBtn" type="button">Mark as Complete ✓</button></nav>
+</main>
+
+<div class="toast" id="toast" role="status" aria-live="polite">Lesson complete · +250 XP</div>
+<script>
+const STORAGE_KEY='amplifyHub_journeyProgress';
+const MODULE_MAP=[['Sales Mindset',8],['Finding Prospects',3],['Building Your Script',4],['Opening the Call',4],['Discovery Questions',4],['Objection Handling',5],['Booking Appointments',1],['Follow-up',3],['Live Practice',4],['Mastery',4]];
+const LESSON_ID='m6l0';
+const readStore=()=>{try{return JSON.parse(localStorage.getItem(STORAGE_KEY))||{}}catch(error){console.error('Could not read progress',error);return{}}};
+const saveStore=(completed,lessonMeta)=>{const total=MODULE_MAP.reduce((sum,module)=>sum+module[1],0);let current=MODULE_MAP.at(-1)[0];let knownDone=0;MODULE_MAP.forEach((module,m)=>{for(let l=0;l<module[1];l++)if(completed.has(`m${m}l${l}`))knownDone++});for(let m=0;m<MODULE_MAP.length;m++){let done=true;for(let l=0;l<MODULE_MAP[m][1];l++)if(!completed.has(`m${m}l${l}`)){done=false;break}if(!done){current=MODULE_MAP[m][0];break}}localStorage.setItem(STORAGE_KEY,JSON.stringify({completedLessons:[...completed],overallProgress:Math.round(knownDone/total*100),lessonsCompleted:knownDone,totalLessons:total,currentModuleName:current,lessonMeta,updatedAt:Date.now()}))};
+const store=readStore();const completed=new Set(store.completedLessons||[]);const lessonMeta=store.lessonMeta||{};const startedAt=Date.now();
+const completeBtn=document.getElementById('completeBtn');if(completed.has(LESSON_ID)){completeBtn.textContent='✓ Completed';completeBtn.classList.add('done');completeBtn.disabled=true}
+completeBtn.addEventListener('click',()=>{if(completed.has(LESSON_ID))return;completed.add(LESSON_ID);lessonMeta[LESSON_ID]={...(lessonMeta[LESSON_ID]||{}),mins:Math.max(1,Math.round((Date.now()-startedAt)/60000)),quizScore:document.getElementById('quizScore').dataset.score||null,completedAt:Date.now()};try{saveStore(completed,lessonMeta);completeBtn.textContent='✓ Completed';completeBtn.classList.add('done');completeBtn.disabled=true;const toast=document.getElementById('toast');toast.classList.add('show');setTimeout(()=>toast.classList.remove('show'),2600)}catch(error){console.error('Could not save progress',error)}});
+const answers=[1,0,2,1,1,1,1,1,2,0];document.getElementById('checkQuiz').addEventListener('click',()=>{let correct=0;document.querySelectorAll('.q-item').forEach((item,qi)=>{const chosen=item.querySelector('input:checked');const options=item.querySelectorAll('.qopt');options.forEach(option=>option.classList.remove('correct','wrong'));const feedback=item.querySelector('.q-fb');if(!chosen){feedback.textContent='Choose an answer.';feedback.style.color='var(--muted)';return}const oi=[...item.querySelectorAll('input')].indexOf(chosen);const right=oi===answers[qi];chosen.closest('.qopt').classList.add(right?'correct':'wrong');feedback.textContent=right?'✓ Correct':'✕ Review this section';feedback.style.color=right?'var(--green)':'var(--red)';if(right)correct++});const score=`${correct}/${answers.length}`;const output=document.getElementById('quizScore');output.textContent=`Score: ${score}`;output.dataset.score=score;lessonMeta[LESSON_ID]={...(lessonMeta[LESSON_ID]||{}),quizScore:score};try{saveStore(completed,lessonMeta)}catch(error){console.error('Could not save quiz score',error)}});
+const sidebar=document.getElementById('sidebar'),menuBtn=document.getElementById('menuBtn');menuBtn.addEventListener('click',()=>{const open=sidebar.classList.toggle('open');menuBtn.setAttribute('aria-expanded',String(open))});document.getElementById('sideClose').addEventListener('click',()=>{sidebar.classList.remove('open');menuBtn.setAttribute('aria-expanded','false')});
+const progress=document.getElementById('readingProgress');const updateProgress=()=>{const max=document.documentElement.scrollHeight-innerHeight;progress.style.width=`${max?Math.min(100,scrollY/max*100):100}%`};addEventListener('scroll',updateProgress,{passive:true});updateProgress();
+</script>
+</body>
+</html>

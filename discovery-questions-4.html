@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AmplifyHub — Decision Maker Mapping</title>
+<meta name="description" content="Discovery Questions, Lesson 4 — map the decision process, find your champion, and avoid the 5 deadly discovery mistakes.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="AmplifyHub">
+<meta property="og:title" content="AmplifyHub — Decision Maker Mapping">
+<meta property="og:description" content="Discovery Questions, Lesson 4 — map the decision process, find your champion, and avoid the 5 deadly discovery mistakes.">
+<meta property="og:image" content="og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#07070e;--bg2:#0b0b16;--card:#13132a;--card2:#181838;--glass:rgba(19,19,42,.55);
+  --accent:#FFD54A;--accent-dim:rgba(255,213,74,.1);--accent-glow:rgba(255,213,74,.3);
+  --warm:#FFA726;--green:#00e696;--blue:#64B5F6;--purple:#BA68C8;--red:#ff5f57;
+  --white:#fff;--text:#b0b0c8;--muted:#8a8aa4;
+  --border:rgba(255,213,74,.07);--border-h:rgba(255,213,74,.22);
+  --font:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;--sb:240px;
+}
+body{font-family:var(--font);background:var(--bg);color:var(--white);display:flex;min-height:100vh;overflow-x:hidden}
+
+.sb{width:var(--sb);position:fixed;top:0;left:0;bottom:0;background:var(--bg2);border-right:1px solid var(--border);padding:24px 16px;display:flex;flex-direction:column;z-index:100;transition:transform .3s}
+.sb-logo{font-size:20px;font-weight:800;padding:0 8px 24px}.sb-logo span{color:var(--accent)}
+.sb-nav{display:flex;flex-direction:column;gap:4px;flex:1}
+.si{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:10px;font-size:14px;font-weight:500;color:var(--muted);cursor:pointer;transition:all .2s;text-decoration:none;border:1px solid transparent}
+.si:hover{color:var(--text);background:rgba(255,255,255,.03)}.si.act{color:var(--accent);background:var(--accent-dim);border-color:var(--border)}
+.si-ic{width:20px;text-align:center;font-size:15px}
+.sb-d{height:1px;background:var(--border);margin:10px 8px}
+.sb-u{display:flex;align-items:center;gap:10px;padding:12px 8px;border-top:1px solid var(--border);margin-top:auto}
+.sb-av{width:32px;height:32px;border-radius:8px;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:var(--bg)}
+.sb-un{font-size:13px;font-weight:600}.sb-ur{font-size:11px;color:var(--muted)}
+.sb-x{display:none;position:absolute;top:16px;right:16px;background:none;border:none;color:var(--muted);font-size:20px;cursor:pointer}
+.mh{display:none;position:fixed;top:0;left:0;right:0;z-index:200;padding:14px 20px;background:rgba(7,7,14,.95);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);align-items:center;justify-content:space-between}
+.mh .logo{font-size:18px;font-weight:800}.mh .logo span{color:var(--accent)}
+.mb{background:none;border:none;cursor:pointer}.mb span{display:block;width:20px;height:2px;background:#fff;margin:4px 0}
+
+.main{margin-left:var(--sb);flex:1;padding:32px 40px 80px;max-width:780px}
+.back{display:inline-flex;align-items:center;gap:6px;color:var(--muted);font-size:13px;font-weight:600;text-decoration:none;margin-bottom:20px;transition:color .2s}.back:hover{color:var(--accent)}
+.lesson-badge{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--accent);margin-bottom:8px}
+.lesson-title{font-size:clamp(22px,3vw,28px);font-weight:900;letter-spacing:-.5px;margin-bottom:6px}
+.lesson-meta{display:flex;gap:16px;font-size:12px;color:var(--muted);margin-bottom:28px;flex-wrap:wrap}
+
+.lcard{background:var(--glass);backdrop-filter:blur(14px);border:1px solid var(--border);border-radius:20px;padding:28px;margin-bottom:20px;transition:border-color .3s}
+.lcard:hover{border-color:var(--border-h)}
+.lcard h2{font-size:17px;font-weight:800;letter-spacing:-.2px;margin-bottom:12px;display:flex;align-items:center;gap:10px}
+.lcard h2 .ic{font-size:20px}
+.lcard p,.lcard li{font-size:14px;color:var(--text);line-height:1.75}
+.lcard p{margin-bottom:12px}.lcard p:last-child{margin-bottom:0}
+.lcard strong{color:var(--white);font-weight:600}
+.lcard em{color:var(--accent);font-style:normal}
+.lcard blockquote{background:var(--accent-dim);border-left:3px solid var(--accent);border-radius:0 10px 10px 0;padding:14px 18px;margin:14px 0;font-size:14px;color:var(--text);font-style:italic;line-height:1.6}
+.lcard ul{padding-left:20px;margin:10px 0}
+
+.reflect{background:linear-gradient(135deg,rgba(255,213,74,.06),var(--card));border:1px solid var(--border-h);border-radius:16px;padding:22px;text-align:center;margin-bottom:20px}
+.reflect-q{font-size:15px;font-weight:700;font-style:italic;line-height:1.5}
+
+.q-item{margin-bottom:18px;padding-bottom:18px;border-bottom:1px solid rgba(255,213,74,.04)}
+.q-item:last-child{border-bottom:none;margin-bottom:0}
+.q-num{font-size:10px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
+.q-text{font-size:14px;font-weight:600;margin-bottom:10px}
+.q-opts{display:flex;flex-direction:column;gap:6px}
+.qopt{display:flex;align-items:center;gap:10px;padding:10px 14px;border:1px solid var(--border);border-radius:10px;cursor:pointer;transition:all .25s;font-size:13px;color:var(--text)}
+.qopt:hover{border-color:var(--border-h);color:var(--white)}
+.qopt input{display:none}
+.qopt.correct{border-color:rgba(0,230,150,.3);background:rgba(0,230,150,.08);color:var(--green)}
+.qopt.wrong{border-color:rgba(255,95,87,.3);background:rgba(255,95,87,.08);color:var(--red)}
+.q-fb{font-size:12px;font-weight:600;margin-top:8px;min-height:18px}
+
+.ai-card{background:linear-gradient(135deg,rgba(0,230,150,.05),var(--card));border:1px solid rgba(0,230,150,.12);border-radius:18px;padding:22px;margin-bottom:20px}
+.ai-card h2{color:var(--green)}
+.ai-meta{display:flex;gap:12px;flex-wrap:wrap;margin:10px 0 14px;font-size:12px;color:var(--muted)}
+.ai-btn{background:var(--green);color:var(--bg);border:none;padding:12px 24px;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:var(--font);transition:all .3s;margin-top:10px}
+.ai-btn:hover{box-shadow:0 4px 16px rgba(0,230,150,.3)}
+
+.iv-card{background:linear-gradient(135deg,rgba(100,181,246,.05),var(--card));border:1px solid rgba(100,181,246,.12);border-radius:18px;padding:22px;margin-bottom:20px}
+.iv-card h2{color:var(--blue)}
+.iv-tip{background:rgba(100,181,246,.08);border:1px solid rgba(100,181,246,.15);border-radius:10px;padding:12px 14px;font-size:12px;color:var(--blue);margin-top:10px;font-weight:500}
+
+.takeaway{background:var(--accent-dim);border:1px solid var(--border-h);border-radius:16px;padding:22px;text-align:center;margin-bottom:24px}
+.takeaway p{font-size:16px;font-weight:700;color:var(--accent)}
+
+.bnav{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:20px}
+.bnav-btn{flex:1;min-width:140px;padding:14px 20px;border-radius:12px;font-size:14px;font-weight:700;cursor:pointer;font-family:var(--font);transition:all .3s;text-align:center;text-decoration:none;display:flex;align-items:center;justify-content:center;gap:6px}
+.bnav-prev{background:transparent;color:var(--white);border:1px solid var(--border-h)}.bnav-prev:hover{background:var(--accent-dim)}
+.bnav-complete{background:var(--accent);color:var(--bg);border:none}.bnav-complete:hover{box-shadow:0 6px 24px var(--accent-glow);transform:translateY(-2px)}
+.bnav-complete.done{background:var(--green);pointer-events:none}
+.bnav-next{background:transparent;color:var(--white);border:1px solid var(--border-h)}.bnav-next:hover{background:var(--accent-dim)}
+.toast{position:fixed;bottom:32px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--green);color:var(--bg);padding:14px 28px;border-radius:14px;font-size:14px;font-weight:700;z-index:999;transition:transform .4s cubic-bezier(.16,1,.3,1);pointer-events:none}
+.toast.show{transform:translateX(-50%) translateY(0)}
+
+details{background:var(--card);border:1px solid var(--border);border-radius:14px;margin:14px 0;overflow:hidden}
+details summary{padding:14px 18px;cursor:pointer;font-size:14px;font-weight:600;color:var(--white);list-style:none;display:flex;align-items:center;gap:8px;transition:background .2s;user-select:none}
+details summary:hover{background:rgba(255,255,255,.03)}
+details summary::-webkit-details-marker{display:none}
+details[open] summary{border-bottom:1px solid var(--border)}
+.det-body{padding:16px 18px}
+.det-body p,.det-body li{font-size:14px;color:var(--text);line-height:1.75}
+.det-body p{margin-bottom:10px}.det-body p:last-child{margin-bottom:0}
+.det-body strong{color:var(--white);font-weight:600}
+.det-body ol,.det-body ul{padding-left:20px;margin-bottom:10px}
+.cx-tbl{width:100%;border-collapse:collapse;margin:14px 0;font-size:13px;overflow-x:auto;display:block}
+.cx-tbl th{padding:10px 14px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;text-align:left;white-space:nowrap}
+.cx-tbl td{padding:10px 14px;border-top:1px solid var(--border);vertical-align:top;line-height:1.65;color:var(--text)}
+.cx-tbl .bad{background:rgba(255,95,87,.04)}.cx-tbl .good{background:rgba(0,230,150,.04)}
+.cx-tbl th.bad{color:var(--red);border-bottom:2px solid rgba(255,95,87,.2)}
+.cx-tbl th.good{color:var(--green);border-bottom:2px solid rgba(0,230,150,.2)}
+.fw-tbl{width:100%;border-collapse:collapse;margin:14px 0;font-size:13px;overflow-x:auto;display:block}
+.fw-tbl th{padding:10px 14px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--accent);text-align:left;border-bottom:2px solid var(--border-h);white-space:nowrap}
+.fw-tbl td{padding:10px 14px;border-bottom:1px solid var(--border);color:var(--text);line-height:1.6}
+.fw-tbl tr:last-child td{border-bottom:none}
+.fw-tbl td:first-child{color:var(--white);font-weight:600}
+
+@media(max-width:860px){
+  .sb{transform:translateX(-100%)}.sb.open{transform:translateX(0)}.sb-x{display:block}
+  .mh{display:flex}.main{margin-left:0;padding:72px 20px 48px}
+}
+
+a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+</style>
+</head>
+<body>
+
+<div class="mh"><div class="logo">Amplify<span>Hub</span></div><button class="mb" id="mobBtn" aria-label="Open navigation menu"><span></span><span></span><span></span></button></div>
+
+<aside class="sb" id="sb">
+  <button class="sb-x" id="sbX" aria-label="Close navigation menu">✕</button>
+  <div class="sb-logo">Amplify<span>Hub</span></div>
+  <nav class="sb-nav">
+    <a class="si" href="dashboard.html"><span class="si-ic">🏠</span>Dashboard</a>
+    <a class="si act" href="journey.html"><span class="si-ic">🛤</span>Journey</a>
+    <a class="si" href="coach-home.html"><span class="si-ic">🤖</span>AI Coach</a>
+    <a class="si" href="dashboard.html#challenge"><span class="si-ic">⚡</span>Challenges</a>
+    <a class="si" href="dashboard.html#resources"><span class="si-ic">📚</span>Resources</a>
+    <div class="sb-d"></div>
+    <a class="si" href="settings.html"><span class="si-ic">⚙️</span>Settings</a>
+  </nav>
+  <div class="sb-u"><div class="sb-av">J</div><div><div class="sb-un">Jawad</div><div class="sb-ur">Pro Member</div></div></div>
+</aside>
+
+<div class="main">
+  <a href="journey.html" class="back">← Back to Journey</a>
+  <div class="lesson-badge">Discovery Questions · Lesson 4 of 4</div>
+  <h1 class="lesson-title">Decision Maker Mapping — Find the Real Buyer</h1>
+  <div class="lesson-meta"><span>⏱ ~14 min</span><span>🏆 +50 XP</span><span>📖 Module 5: Discovery Questions</span></div>
+
+  <!-- 5 COMMON MISTAKES -->
+  <div class="lcard">
+    <h2><span class="ic">💀</span> The 5 Discovery Mistakes That Kill Deals</h2>
+    <p>Before we get into decision maker mapping, let's name the five most common ways reps sabotage their own discovery calls:</p>
+    <table class="cx-tbl">
+      <tr><th class="bad">Mistake</th><th class="good">The Fix</th></tr>
+      <tr><td class="bad">1. Pitching too early — jumping to solutions before the prospect feels the pain</td><td class="good">Stay in discovery until the prospect articulates the cost of inaction</td></tr>
+      <tr><td class="bad">2. Asking closed questions — "Do you have this problem?" (Yes/No)</td><td class="good">Reframe: "Walk me through how that process works today"</td></tr>
+      <tr><td class="bad">3. Talking more than 20% of the time</td><td class="good">Set a physical reminder: after you ask, put yourself on mute for 3 seconds</td></tr>
+      <tr><td class="bad">4. Skipping Impact — getting problem agreement without need agreement</td><td class="good">Always follow up a problem with "What does that cost you?"</td></tr>
+      <tr><td class="bad">5. Not mapping the decision process — selling to someone who can't buy</td><td class="good">Ask: "Who else would need to weigh in on something like this?"</td></tr>
+    </table>
+    <p>Mistake #5 is the silent killer. You can run a perfect discovery call, build massive urgency, and still lose the deal because <strong>the person you convinced can't sign the check.</strong></p>
+  </div>
+
+  <!-- MAPPING THE DECISION PROCESS -->
+  <div class="lcard">
+    <h2><span class="ic">🗺️</span> Mapping the Decision Process</h2>
+    <p>You need to know three things about every deal:</p>
+    <ul>
+      <li><strong>Who decides?</strong> — The person who can say yes</li>
+      <li><strong>Who influences?</strong> — The people whose opinion the decision maker trusts</li>
+      <li><strong>Who blocks?</strong> — The person who can say no even if everyone else says yes</li>
+    </ul>
+    <p>Here are the questions that map this:</p>
+    <table class="fw-tbl">
+      <tr><th>Question</th><th>What It Reveals</th></tr>
+      <tr><td>"Who else would need to weigh in on a decision like this?"</td><td>The full stakeholder map — who has influence</td></tr>
+      <tr><td>"Walk me through how your team typically evaluates something like this."</td><td>The buying process — stages, approvals, timelines</td></tr>
+      <tr><td>"Have you brought in a solution like this before? What happened?"</td><td>Past buying behavior — successes and failures</td></tr>
+      <tr><td>"If you were to recommend this internally, what would you need to feel confident doing that?"</td><td>What your champion needs to sell for you</td></tr>
+    </table>
+    <blockquote>💡 <strong>Pro-Tip:</strong> Never ask "Are you the decision maker?" It puts the prospect in an awkward position. Instead, ask about the process — the decision maker's identity will emerge naturally.</blockquote>
+  </div>
+
+  <!-- CHAMPION IDENTIFICATION -->
+  <div class="lcard">
+    <h2><span class="ic">🏆</span> Finding Your Champion</h2>
+    <p>A <strong>champion</strong> is someone inside the prospect's organization who will sell for you when you're not in the room. They're the most valuable person in any deal.</p>
+    <p>How to spot one:</p>
+    <ul>
+      <li>They feel the pain <em>personally</em> — this problem affects their daily work</li>
+      <li>They have influence — other people listen to their opinion</li>
+      <li>They're willing to spend political capital — they'll go to bat for you</li>
+    </ul>
+    <p>How to <em>create</em> one:</p>
+    <ul>
+      <li><strong>Arm them with ammo.</strong> Give them the ROI numbers, the competitive data, the business case — everything they need to make the argument internally</li>
+      <li><strong>Coach their pitch.</strong> Ask: "When you bring this to [decision maker], what do you think they'll ask?" Then help them prepare answers</li>
+      <li><strong>Make them look good.</strong> Position the solution as their idea, their find. Champions sell harder when the win is personal</li>
+    </ul>
+    <blockquote>Without a champion, you're hoping. With a champion, you're planning.</blockquote>
+  </div>
+
+  <!-- DISCOVERY IN ACTION -->
+  <div class="lcard">
+    <h2><span class="ic">🎬</span> Discovery in Action</h2>
+    <p>Here's what a real discovery conversation looks like when all the pieces come together. Watch how the rep moves through the framework.</p>
+    <details>
+      <summary>🔍 Full sample conversation: Rep and James (VP of Sales)</summary>
+      <div class="det-body">
+        <p><strong>Rep:</strong> "James, thanks for making time. Before I show you anything, I'd love to understand how things are working on your end. Can you walk me through how your team currently handles inbound leads?"</p>
+        <p><strong>James:</strong> "Sure. Leads come in through the website, marketing qualifies them, and then they get assigned to reps."</p>
+        <p><strong>Rep:</strong> "Got it. And when a lead hits a rep's queue, how quickly are they typically following up?"</p>
+        <p><strong>James:</strong> "Ideally within the hour, but honestly it's probably closer to 24 hours for most reps."</p>
+        <p><strong>Rep:</strong> "Interesting. When there's that gap between the lead coming in and the rep reaching out, what tends to happen?"</p>
+        <p><strong>James:</strong> "We lose a lot of them. By the time we call, they've already talked to a competitor or lost interest."</p>
+        <p><strong>Rep:</strong> "That's frustrating. Do you have a sense of how many leads that affects in a typical month?"</p>
+        <p><strong>James:</strong> "I'd guess about 30-40% of our inbound leads go cold before we get to them."</p>
+        <p><strong>Rep:</strong> "So roughly a third. At your average deal size, what does that represent in lost revenue?"</p>
+        <p><strong>James:</strong> "...it's probably $40-50K a month that's just walking out the door."</p>
+        <p><strong>Rep:</strong> "That's significant. Let me ask — if we fast-forward 6 months and this is solved, what does that look like for your team?"</p>
+        <p><strong>James:</strong> "Every lead gets a call within 15 minutes. Reps aren't cherry-picking. We're actually converting what we're paying marketing to generate."</p>
+        <p><strong>Rep:</strong> "That sounds like a meaningful shift. Who else on your team would need to weigh in on a decision like this?"</p>
+        <p><strong>James:</strong> "My CRO would need to sign off, and our ops team would need to be involved in implementation."</p>
+        <p><strong>Rep:</strong> "Makes sense. If you were to bring this to your CRO, what would they need to see to feel comfortable moving forward?"</p>
+        <p>Notice: <strong>zero pitching.</strong> The rep asked 8 questions and James talked himself into urgency. That's discovery done right.</p>
+      </div>
+    </details>
+  </div>
+
+  <!-- EXERCISES -->
+  <div class="lcard">
+    <h2><span class="ic">✏️</span> Practical Exercises</h2>
+    <details>
+      <summary>🔍 Build Your 10-Question Discovery Set</summary>
+      <div class="det-body">
+        <p>Create a customized set of 10 discovery questions for your specific product/market. Include:</p>
+        <ol>
+          <li><strong>2 Situation questions</strong> — mapping their current world</li>
+          <li><strong>2 Problem questions</strong> — surfacing specific friction</li>
+          <li><strong>2 Impact questions</strong> — quantifying the cost</li>
+          <li><strong>1 Future state question</strong> — painting the desired outcome</li>
+          <li><strong>1 Budget question</strong> — understanding their buying process</li>
+          <li><strong>2 Decision maker questions</strong> — mapping stakeholders</li>
+        </ol>
+        <p>Memorize these. Not word-for-word — internalize the intent behind each one so they come out naturally in conversation.</p>
+      </div>
+    </details>
+    <details>
+      <summary>🔍 SDR Challenge: Run the Full Framework on 3 Calls</summary>
+      <div class="det-body">
+        <p>Over the next week, run the complete discovery framework on 3 real calls:</p>
+        <ol>
+          <li>Current Situation → Problems → Impact → Future → Budget → Decision Process</li>
+          <li>After each call, grade yourself: Did the prospect quantify their pain? Did you identify the decision maker? Did you find a potential champion?</li>
+          <li>Record the calls (with permission) and listen back for the 80/20 ratio</li>
+        </ol>
+        <p><strong>Success metric:</strong> On at least 2 of the 3 calls, the prospect should articulate the cost of their problem in their own words, unprompted by you.</p>
+      </div>
+    </details>
+    <details>
+      <summary>🔍 Champion Identification Worksheet</summary>
+      <div class="det-body">
+        <p>For each active deal in your pipeline, answer these questions:</p>
+        <ul>
+          <li>Who is your champion? (Name and title)</li>
+          <li>Why do they care personally? (What's their specific pain?)</li>
+          <li>Do they have influence? (Will the decision maker listen?)</li>
+          <li>Have you armed them? (Do they have the data to sell internally?)</li>
+          <li>Have you coached their pitch? (Do they know what objections to expect?)</li>
+        </ul>
+        <p>If you can't name a champion for a deal, <strong>that deal is at risk.</strong> Your next call should focus on building one.</p>
+      </div>
+    </details>
+  </div>
+
+  <!-- REFLECTION -->
+  <div class="reflect"><div class="reflect-q">💭 In your last closed-won deal, who was your champion — and what did they do behind the scenes that made the deal happen?</div></div>
+
+  <!-- QUIZ -->
+  <div class="lcard">
+    <h2><span class="ic">🧠</span> Knowledge Check</h2>
+    <div class="q-item"><div class="q-num">Q1</div><div class="q-text">Why should you never ask "Are you the decision maker?"</div><div class="q-opts">
+      <label class="qopt" data-qi="0" data-oi="0"><input type="radio" name="q0"><span class="qo-text">It's not important to know</span></label>
+      <label class="qopt" data-qi="0" data-oi="1"><input type="radio" name="q0"><span class="qo-text">It puts the prospect in an awkward position — ask about the process instead and the answer emerges naturally</span></label>
+      <label class="qopt" data-qi="0" data-oi="2"><input type="radio" name="q0"><span class="qo-text">Everyone is a decision maker</span></label>
+    </div><div class="q-fb" id="qfb0"></div></div>
+
+    <div class="q-item"><div class="q-num">Q2</div><div class="q-text">What makes someone a "champion" in a deal?</div><div class="q-opts">
+      <label class="qopt" data-qi="1" data-oi="0"><input type="radio" name="q1"><span class="qo-text">The person with the biggest title</span></label>
+      <label class="qopt" data-qi="1" data-oi="1"><input type="radio" name="q1"><span class="qo-text">Someone who feels the pain personally, has influence, and is willing to sell for you internally</span></label>
+      <label class="qopt" data-qi="1" data-oi="2"><input type="radio" name="q1"><span class="qo-text">The person who signed the NDA</span></label>
+    </div><div class="q-fb" id="qfb1"></div></div>
+
+    <div class="q-item"><div class="q-num">Q3</div><div class="q-text">In the sample discovery conversation, the rep asked 8 questions. How many times did the rep pitch?</div><div class="q-opts">
+      <label class="qopt" data-qi="2" data-oi="0"><input type="radio" name="q2"><span class="qo-text">Zero — the prospect talked himself into urgency without a single pitch</span></label>
+      <label class="qopt" data-qi="2" data-oi="1"><input type="radio" name="q2"><span class="qo-text">Once, at the end</span></label>
+      <label class="qopt" data-qi="2" data-oi="2"><input type="radio" name="q2"><span class="qo-text">Twice — once about features, once about pricing</span></label>
+    </div><div class="q-fb" id="qfb2"></div></div>
+
+    <div class="q-item"><div class="q-num">Q4</div><div class="q-text">Which of these is NOT one of the 5 common discovery mistakes?</div><div class="q-opts">
+      <label class="qopt" data-qi="3" data-oi="0"><input type="radio" name="q3"><span class="qo-text">Pitching too early</span></label>
+      <label class="qopt" data-qi="3" data-oi="1"><input type="radio" name="q3"><span class="qo-text">Asking too many questions</span></label>
+      <label class="qopt" data-qi="3" data-oi="2"><input type="radio" name="q3"><span class="qo-text">Skipping Impact questions</span></label>
+      <label class="qopt" data-qi="3" data-oi="3"><input type="radio" name="q3"><span class="qo-text">Not mapping the decision process</span></label>
+    </div><div class="q-fb" id="qfb3"></div></div>
+    <button class="ai-btn" style="background:var(--accent);color:var(--bg);margin-top:14px" id="checkQuiz">Check Answers</button>
+  </div>
+
+  <!-- AI COACH -->
+  <div class="ai-card">
+    <h2><span class="ic">🤖</span> Practice with AI Coach</h2>
+    <p style="font-size:14px;color:var(--text);margin:8px 0"><strong>Scenario:</strong> You've had a great discovery call with a Director of Marketing. They're excited about your solution. But when you ask about next steps, they say: "I'll need to run this by my VP. Let me get back to you."</p>
+    <p style="font-size:13px;color:var(--text)"><strong>Your objective:</strong> Turn this person into a champion. Coach them on what the VP will ask, arm them with data, and get a commitment for a specific next step — not a vague "I'll get back to you."</p>
+    <div class="ai-meta"><span>Difficulty: Hard</span><span>Goal: Practice champion-building and decision maker mapping in real-time.</span></div>
+    <a href="coach-home.html" class="ai-btn">Open AI Coach →</a>
+  </div>
+
+  <!-- INTERVIEW PREP -->
+  <div class="iv-card">
+    <h2><span class="ic">🎤</span> Interview Question</h2>
+    <blockquote style="background:rgba(100,181,246,.06);border-left:3px solid var(--blue);border-radius:0 10px 10px 0;padding:14px 18px;margin:12px 0;font-style:italic;font-size:14px;color:var(--text)">"Tell me about a deal you won where you weren't initially talking to the decision maker."</blockquote>
+    <p style="font-size:13px;color:var(--text);margin:8px 0"><strong>Example answer:</strong> I was working a deal where my main contact was a Director — great champion, felt the pain deeply, but couldn't sign off on the purchase. Instead of pushing to go around them, I coached them. We worked together on the business case, I helped them anticipate their VP's objections, and I armed them with ROI data in their own language. They presented it internally, and the VP approved it in one meeting. The key was making my champion look like the hero, not trying to replace them.</p>
+    <div class="iv-tip">💡 This answer shows you understand multi-threaded selling and champion development — two things that separate top performers from average reps.</div>
+  </div>
+
+  <!-- TAKEAWAY -->
+  <div class="takeaway"><p>🔑 Map the decision process, never pitch to someone who can't buy, find your champion and arm them to sell when you're not in the room. That's how deals actually close.</p></div>
+
+  <!-- BOTTOM NAV -->
+  <div class="bnav">
+    <a href="discovery-questions-3.html" class="bnav-btn bnav-prev">← Previous Lesson</a>
+    <button class="bnav-btn bnav-complete" id="completeBtn">Mark as Complete ✓</button>
+    <a href="journey.html" class="bnav-btn bnav-next">Back to Journey →</a>
+  </div>
+</div>
+
+<div class="toast" id="toast">🎉 Lesson Complete! +50 XP</div>
+
+<script>
+const STORAGE_KEY='amplifyHub_journeyProgress';
+const MODULE_INDEX=4;
+const LESSON_INDEX=3;
+const TOTAL_MODULE_LESSONS=4;
+
+function readProgress(){
+  try{ const d=JSON.parse(localStorage.getItem(STORAGE_KEY)); return new Set(d?.completedLessons||[]); }catch(e){ return new Set(); }
+}
+function saveProgress(completed){
+  localStorage.setItem(STORAGE_KEY,JSON.stringify({
+    completedLessons:[...completed],
+    updatedAt:Date.now()
+  }));
+}
+function lid(m,l){ return `m${m}l${l}`; }
+
+const completed=readProgress();
+const thisLid=lid(MODULE_INDEX,LESSON_INDEX);
+const btn=document.getElementById('completeBtn');
+if(completed.has(thisLid)){ btn.textContent='✓ Completed'; btn.classList.add('done'); }
+
+btn.addEventListener('click',function(){
+  if(completed.has(thisLid)) return;
+  completed.add(thisLid);
+  saveProgress(completed);
+  btn.textContent='✓ Completed';
+  btn.classList.add('done');
+  const toast=document.getElementById('toast');
+  toast.classList.add('show');
+  setTimeout(()=>toast.classList.remove('show'),2500);
+});
+
+const answers=[1, 1, 0, 1];
+document.getElementById('checkQuiz').addEventListener('click',function(){
+  document.querySelectorAll('.qopt').forEach(opt=>{
+    const qi=parseInt(opt.dataset.qi), oi=parseInt(opt.dataset.oi);
+    const input=opt.querySelector('input');
+    if(!input.checked) return;
+    if(oi===answers[qi]){ opt.classList.add('correct'); document.getElementById('qfb'+qi).textContent='✓ Correct!'; document.getElementById('qfb'+qi).style.color='var(--green)'; }
+    else{ opt.classList.add('wrong'); document.getElementById('qfb'+qi).textContent='✗ Try again'; document.getElementById('qfb'+qi).style.color='var(--red)'; }
+  });
+});
+
+document.getElementById('mobBtn').addEventListener('click',()=>document.getElementById('sb').classList.add('open'));
+document.getElementById('sbX').addEventListener('click',()=>document.getElementById('sb').classList.remove('open'));
+</script>
+</body>
+</html>

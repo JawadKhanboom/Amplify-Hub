@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AmplifyHub — Budget and Timeline</title>
+<meta name="description" content="Discovery Questions, Lesson 3 — how to surface budget, create urgency, and connect pain to ROI without sounding salesy.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="AmplifyHub">
+<meta property="og:title" content="AmplifyHub — Budget and Timeline">
+<meta property="og:description" content="Discovery Questions, Lesson 3 — how to surface budget, create urgency, and connect pain to ROI without sounding salesy.">
+<meta property="og:image" content="og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#07070e;--bg2:#0b0b16;--card:#13132a;--card2:#181838;--glass:rgba(19,19,42,.55);
+  --accent:#FFD54A;--accent-dim:rgba(255,213,74,.1);--accent-glow:rgba(255,213,74,.3);
+  --warm:#FFA726;--green:#00e696;--blue:#64B5F6;--purple:#BA68C8;--red:#ff5f57;
+  --white:#fff;--text:#b0b0c8;--muted:#8a8aa4;
+  --border:rgba(255,213,74,.07);--border-h:rgba(255,213,74,.22);
+  --font:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;--sb:240px;
+}
+body{font-family:var(--font);background:var(--bg);color:var(--white);display:flex;min-height:100vh;overflow-x:hidden}
+
+.sb{width:var(--sb);position:fixed;top:0;left:0;bottom:0;background:var(--bg2);border-right:1px solid var(--border);padding:24px 16px;display:flex;flex-direction:column;z-index:100;transition:transform .3s}
+.sb-logo{font-size:20px;font-weight:800;padding:0 8px 24px}.sb-logo span{color:var(--accent)}
+.sb-nav{display:flex;flex-direction:column;gap:4px;flex:1}
+.si{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:10px;font-size:14px;font-weight:500;color:var(--muted);cursor:pointer;transition:all .2s;text-decoration:none;border:1px solid transparent}
+.si:hover{color:var(--text);background:rgba(255,255,255,.03)}.si.act{color:var(--accent);background:var(--accent-dim);border-color:var(--border)}
+.si-ic{width:20px;text-align:center;font-size:15px}
+.sb-d{height:1px;background:var(--border);margin:10px 8px}
+.sb-u{display:flex;align-items:center;gap:10px;padding:12px 8px;border-top:1px solid var(--border);margin-top:auto}
+.sb-av{width:32px;height:32px;border-radius:8px;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:var(--bg)}
+.sb-un{font-size:13px;font-weight:600}.sb-ur{font-size:11px;color:var(--muted)}
+.sb-x{display:none;position:absolute;top:16px;right:16px;background:none;border:none;color:var(--muted);font-size:20px;cursor:pointer}
+.mh{display:none;position:fixed;top:0;left:0;right:0;z-index:200;padding:14px 20px;background:rgba(7,7,14,.95);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);align-items:center;justify-content:space-between}
+.mh .logo{font-size:18px;font-weight:800}.mh .logo span{color:var(--accent)}
+.mb{background:none;border:none;cursor:pointer}.mb span{display:block;width:20px;height:2px;background:#fff;margin:4px 0}
+
+.main{margin-left:var(--sb);flex:1;padding:32px 40px 80px;max-width:780px}
+.back{display:inline-flex;align-items:center;gap:6px;color:var(--muted);font-size:13px;font-weight:600;text-decoration:none;margin-bottom:20px;transition:color .2s}.back:hover{color:var(--accent)}
+.lesson-badge{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--accent);margin-bottom:8px}
+.lesson-title{font-size:clamp(22px,3vw,28px);font-weight:900;letter-spacing:-.5px;margin-bottom:6px}
+.lesson-meta{display:flex;gap:16px;font-size:12px;color:var(--muted);margin-bottom:28px;flex-wrap:wrap}
+
+.lcard{background:var(--glass);backdrop-filter:blur(14px);border:1px solid var(--border);border-radius:20px;padding:28px;margin-bottom:20px;transition:border-color .3s}
+.lcard:hover{border-color:var(--border-h)}
+.lcard h2{font-size:17px;font-weight:800;letter-spacing:-.2px;margin-bottom:12px;display:flex;align-items:center;gap:10px}
+.lcard h2 .ic{font-size:20px}
+.lcard p,.lcard li{font-size:14px;color:var(--text);line-height:1.75}
+.lcard p{margin-bottom:12px}.lcard p:last-child{margin-bottom:0}
+.lcard strong{color:var(--white);font-weight:600}
+.lcard em{color:var(--accent);font-style:normal}
+.lcard blockquote{background:var(--accent-dim);border-left:3px solid var(--accent);border-radius:0 10px 10px 0;padding:14px 18px;margin:14px 0;font-size:14px;color:var(--text);font-style:italic;line-height:1.6}
+.lcard ul{padding-left:20px;margin:10px 0}
+
+.reflect{background:linear-gradient(135deg,rgba(255,213,74,.06),var(--card));border:1px solid var(--border-h);border-radius:16px;padding:22px;text-align:center;margin-bottom:20px}
+.reflect-q{font-size:15px;font-weight:700;font-style:italic;line-height:1.5}
+
+.q-item{margin-bottom:18px;padding-bottom:18px;border-bottom:1px solid rgba(255,213,74,.04)}
+.q-item:last-child{border-bottom:none;margin-bottom:0}
+.q-num{font-size:10px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
+.q-text{font-size:14px;font-weight:600;margin-bottom:10px}
+.q-opts{display:flex;flex-direction:column;gap:6px}
+.qopt{display:flex;align-items:center;gap:10px;padding:10px 14px;border:1px solid var(--border);border-radius:10px;cursor:pointer;transition:all .25s;font-size:13px;color:var(--text)}
+.qopt:hover{border-color:var(--border-h);color:var(--white)}
+.qopt input{display:none}
+.qopt.correct{border-color:rgba(0,230,150,.3);background:rgba(0,230,150,.08);color:var(--green)}
+.qopt.wrong{border-color:rgba(255,95,87,.3);background:rgba(255,95,87,.08);color:var(--red)}
+.q-fb{font-size:12px;font-weight:600;margin-top:8px;min-height:18px}
+
+.ai-card{background:linear-gradient(135deg,rgba(0,230,150,.05),var(--card));border:1px solid rgba(0,230,150,.12);border-radius:18px;padding:22px;margin-bottom:20px}
+.ai-card h2{color:var(--green)}
+.ai-meta{display:flex;gap:12px;flex-wrap:wrap;margin:10px 0 14px;font-size:12px;color:var(--muted)}
+.ai-btn{background:var(--green);color:var(--bg);border:none;padding:12px 24px;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:var(--font);transition:all .3s;margin-top:10px}
+.ai-btn:hover{box-shadow:0 4px 16px rgba(0,230,150,.3)}
+
+.iv-card{background:linear-gradient(135deg,rgba(100,181,246,.05),var(--card));border:1px solid rgba(100,181,246,.12);border-radius:18px;padding:22px;margin-bottom:20px}
+.iv-card h2{color:var(--blue)}
+.iv-tip{background:rgba(100,181,246,.08);border:1px solid rgba(100,181,246,.15);border-radius:10px;padding:12px 14px;font-size:12px;color:var(--blue);margin-top:10px;font-weight:500}
+
+.takeaway{background:var(--accent-dim);border:1px solid var(--border-h);border-radius:16px;padding:22px;text-align:center;margin-bottom:24px}
+.takeaway p{font-size:16px;font-weight:700;color:var(--accent)}
+
+.bnav{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:20px}
+.bnav-btn{flex:1;min-width:140px;padding:14px 20px;border-radius:12px;font-size:14px;font-weight:700;cursor:pointer;font-family:var(--font);transition:all .3s;text-align:center;text-decoration:none;display:flex;align-items:center;justify-content:center;gap:6px}
+.bnav-prev{background:transparent;color:var(--white);border:1px solid var(--border-h)}.bnav-prev:hover{background:var(--accent-dim)}
+.bnav-complete{background:var(--accent);color:var(--bg);border:none}.bnav-complete:hover{box-shadow:0 6px 24px var(--accent-glow);transform:translateY(-2px)}
+.bnav-complete.done{background:var(--green);pointer-events:none}
+.bnav-next{background:transparent;color:var(--white);border:1px solid var(--border-h)}.bnav-next:hover{background:var(--accent-dim)}
+.toast{position:fixed;bottom:32px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--green);color:var(--bg);padding:14px 28px;border-radius:14px;font-size:14px;font-weight:700;z-index:999;transition:transform .4s cubic-bezier(.16,1,.3,1);pointer-events:none}
+.toast.show{transform:translateX(-50%) translateY(0)}
+
+details{background:var(--card);border:1px solid var(--border);border-radius:14px;margin:14px 0;overflow:hidden}
+details summary{padding:14px 18px;cursor:pointer;font-size:14px;font-weight:600;color:var(--white);list-style:none;display:flex;align-items:center;gap:8px;transition:background .2s;user-select:none}
+details summary:hover{background:rgba(255,255,255,.03)}
+details summary::-webkit-details-marker{display:none}
+details[open] summary{border-bottom:1px solid var(--border)}
+.det-body{padding:16px 18px}
+.det-body p,.det-body li{font-size:14px;color:var(--text);line-height:1.75}
+.det-body p{margin-bottom:10px}.det-body p:last-child{margin-bottom:0}
+.det-body strong{color:var(--white);font-weight:600}
+.det-body ol,.det-body ul{padding-left:20px;margin-bottom:10px}
+.cx-tbl{width:100%;border-collapse:collapse;margin:14px 0;font-size:13px;overflow-x:auto;display:block}
+.cx-tbl th{padding:10px 14px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;text-align:left;white-space:nowrap}
+.cx-tbl td{padding:10px 14px;border-top:1px solid var(--border);vertical-align:top;line-height:1.65;color:var(--text)}
+.cx-tbl .bad{background:rgba(255,95,87,.04)}.cx-tbl .good{background:rgba(0,230,150,.04)}
+.cx-tbl th.bad{color:var(--red);border-bottom:2px solid rgba(255,95,87,.2)}
+.cx-tbl th.good{color:var(--green);border-bottom:2px solid rgba(0,230,150,.2)}
+.fw-tbl{width:100%;border-collapse:collapse;margin:14px 0;font-size:13px;overflow-x:auto;display:block}
+.fw-tbl th{padding:10px 14px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--accent);text-align:left;border-bottom:2px solid var(--border-h);white-space:nowrap}
+.fw-tbl td{padding:10px 14px;border-bottom:1px solid var(--border);color:var(--text);line-height:1.6}
+.fw-tbl tr:last-child td{border-bottom:none}
+.fw-tbl td:first-child{color:var(--white);font-weight:600}
+
+@media(max-width:860px){
+  .sb{transform:translateX(-100%)}.sb.open{transform:translateX(0)}.sb-x{display:block}
+  .mh{display:flex}.main{margin-left:0;padding:72px 20px 48px}
+}
+
+a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+</style>
+</head>
+<body>
+
+<div class="mh"><div class="logo">Amplify<span>Hub</span></div><button class="mb" id="mobBtn" aria-label="Open navigation menu"><span></span><span></span><span></span></button></div>
+
+<aside class="sb" id="sb">
+  <button class="sb-x" id="sbX" aria-label="Close navigation menu">✕</button>
+  <div class="sb-logo">Amplify<span>Hub</span></div>
+  <nav class="sb-nav">
+    <a class="si" href="dashboard.html"><span class="si-ic">🏠</span>Dashboard</a>
+    <a class="si act" href="journey.html"><span class="si-ic">🛤</span>Journey</a>
+    <a class="si" href="coach-home.html"><span class="si-ic">🤖</span>AI Coach</a>
+    <a class="si" href="dashboard.html#challenge"><span class="si-ic">⚡</span>Challenges</a>
+    <a class="si" href="dashboard.html#resources"><span class="si-ic">📚</span>Resources</a>
+    <div class="sb-d"></div>
+    <a class="si" href="settings.html"><span class="si-ic">⚙️</span>Settings</a>
+  </nav>
+  <div class="sb-u"><div class="sb-av">J</div><div><div class="sb-un">Jawad</div><div class="sb-ur">Pro Member</div></div></div>
+</aside>
+
+<div class="main">
+  <a href="journey.html" class="back">← Back to Journey</a>
+  <div class="lesson-badge">Discovery Questions · Lesson 3 of 4</div>
+  <h1 class="lesson-title">Budget and Timeline — The Money Conversation</h1>
+  <div class="lesson-meta"><span>⏱ ~12 min</span><span>🏆 +50 XP</span><span>📖 Module 5: Discovery Questions</span></div>
+
+  <!-- HOOK: LEAD WITH FUTURE -->
+  <div class="lcard">
+    <h2><span class="ic">🔮</span> Lead with Future, Not Just Pain</h2>
+    <p>Most reps spend the entire discovery call digging into problems. Pain, pain, more pain. By the end, the prospect feels like they just sat through a therapy session — and they're exhausted.</p>
+    <p>Here's the shift: <strong>after you've surfaced the pain, pivot to the future.</strong></p>
+    <blockquote>"Let's say it's 6 months from now and this problem is completely solved. What does your day look like? What's different for your team?"</blockquote>
+    <p>This question does something powerful: it makes the prospect <em>emotionally invest in a future state.</em> Once they can see it, feel it, describe it — going back to the status quo feels like a loss.</p>
+    <p>Pain tells them what to run from. <strong>The future tells them what to run toward.</strong> You need both.</p>
+  </div>
+
+  <!-- PRINCIPLES FOR BETTER QUESTIONS -->
+  <div class="lcard">
+    <h2><span class="ic">📏</span> Principles for Asking Better Questions</h2>
+    <p>Before we get into budget and timeline specifics, internalize these four rules:</p>
+    <table class="fw-tbl">
+      <tr><th>Principle</th><th>What It Means</th><th>Why It Matters</th></tr>
+      <tr><td>Open-ended only</td><td>No yes/no questions — every question should require a sentence to answer</td><td>Closed questions give you data points. Open questions give you stories.</td></tr>
+      <tr><td>80/20 rule</td><td>The prospect talks 80% of the time, you talk 20%</td><td>If you're talking more than 20%, you're pitching, not discovering.</td></tr>
+      <tr><td>No leading questions</td><td>Don't bake the answer into the question</td><td>"Wouldn't it be great if..." is selling, not asking.</td></tr>
+      <tr><td>Pace and pause</td><td>Ask one question at a time, then wait</td><td>Stacking questions overwhelms the prospect and guarantees shallow answers.</td></tr>
+    </table>
+    <p>Violate any of these and your discovery will <em>feel</em> productive but produce nothing you can use to close the deal.</p>
+  </div>
+
+  <!-- BUDGET QUALIFICATION -->
+  <div class="lcard">
+    <h2><span class="ic">💰</span> Surfacing Budget Without Being Awkward</h2>
+    <p>"Do you have budget for this?" is the laziest question in sales. It puts the prospect on the defensive and almost always gets you a lie.</p>
+    <p>Here's how to surface budget information without asking directly:</p>
+    <table class="cx-tbl">
+      <tr><th class="bad">Direct (Awkward)</th><th class="good">Indirect (Effective)</th></tr>
+      <tr><td class="bad">"What's your budget?"</td><td class="good">"What's been allocated internally for solving this type of problem?"</td></tr>
+      <tr><td class="bad">"Can you afford this?"</td><td class="good">"When your team has invested in solutions like this before, what did that process look like?"</td></tr>
+      <tr><td class="bad">"Is price going to be an issue?"</td><td class="good">"How does your team typically think about the investment vs. the cost of leaving this unsolved?"</td></tr>
+    </table>
+    <p>The indirect versions work because they treat budget as a <strong>process question, not a number question.</strong> You learn how they buy, what they've spent before, and how they justify investment — which is infinitely more useful than a dollar figure.</p>
+    <blockquote>💡 <strong>Pro-Tip:</strong> The best budget question is often: "If we can show the ROI makes sense, is there a process to secure funding for this — or has something already been set aside?" This separates "no budget" from "haven't asked for it yet."</blockquote>
+  </div>
+
+  <!-- TIMELINE AND URGENCY -->
+  <div class="lcard">
+    <h2><span class="ic">⏰</span> Timeline — Creating Real Urgency</h2>
+    <p>Timeline questions serve two purposes: qualifying how soon this deal can close, and <strong>making the prospect feel the cost of delay.</strong></p>
+    <p>The most powerful timeline question you can ask:</p>
+    <blockquote>"What happens if this stays the same for another 6 months?"</blockquote>
+    <p>This forces the prospect to do the math. Six more months of lost leads, wasted time, missed targets. Suddenly "let me think about it" has a price tag.</p>
+    <table class="fw-tbl">
+      <tr><th>Urgency Signal</th><th>What It Means</th><th>Your Response</th></tr>
+      <tr><td>"We need this by Q4"</td><td>Real deadline exists</td><td>Work backward from that date to create a timeline they own</td></tr>
+      <tr><td>"No rush"</td><td>No urgency yet — you haven't built enough Impact</td><td>Go back to Impact questions before proceeding</td></tr>
+      <tr><td>"We're evaluating options"</td><td>Active buying process</td><td>Ask what triggered the evaluation and who else they're talking to</td></tr>
+      <tr><td>"Maybe next quarter"</td><td>Soft stall — could be real or could be a brush-off</td><td>Ask: "What would need to happen between now and then?"</td></tr>
+    </table>
+  </div>
+
+  <!-- CONNECTING IMPACT TO ROI -->
+  <div class="lcard">
+    <h2><span class="ic">📊</span> Connecting Impact to ROI</h2>
+    <p>Here's where everything comes together. You've surfaced the pain. You've helped them see the future. Now you connect the dots — <strong>using their own words.</strong></p>
+    <p>The formula is simple:</p>
+    <p><strong>Cost of the problem (in their words) + Time it persists = Total cost of inaction.</strong></p>
+    <p>Example:</p>
+    <p><em>"Earlier you mentioned your team loses about 30% of inbound leads because of slow follow-up. You said that's roughly 15 deals a month. At your average deal size, that's around $45K a month walking out the door. Over the next 6 months, that's $270K. Does that math feel right?"</em></p>
+    <p>Notice what you did: you didn't invent a number. You used <strong>their numbers, their words, their math.</strong> The prospect can't argue with their own data.</p>
+    <blockquote>💡 <strong>Pro-Tip:</strong> Always ask "Does that math feel right?" at the end. It's a confirmation, not a question — and it gives them ownership of the ROI case they'll need to make internally.</blockquote>
+  </div>
+
+  <!-- EXERCISES -->
+  <div class="lcard">
+    <h2><span class="ic">✏️</span> Practical Exercises</h2>
+    <details>
+      <summary>🔍 The Future State Script</summary>
+      <div class="det-body">
+        <p>Write your own version of the "6 months from now" question, customized for your product:</p>
+        <ol>
+          <li>What specific outcome does your product deliver?</li>
+          <li>What's the prospect's daily experience like after that outcome is achieved?</li>
+          <li>Write the question in a way that gets them to describe that future themselves</li>
+        </ol>
+        <p>Practice delivering it with a tone of <strong>genuine curiosity, not a sales pitch.</strong> The question should feel like you're dreaming together, not setting a trap.</p>
+      </div>
+    </details>
+    <details>
+      <summary>🔍 Build Your ROI Bridge</summary>
+      <div class="det-body">
+        <p>Take a recent deal (won or lost) and map the ROI bridge:</p>
+        <ol>
+          <li><strong>Problem:</strong> What did the prospect say was broken?</li>
+          <li><strong>Impact:</strong> What was the quantified cost (time, money, opportunity)?</li>
+          <li><strong>Timeline:</strong> How long had it been going on?</li>
+          <li><strong>Total cost:</strong> Impact x Timeline = ?</li>
+          <li><strong>Investment:</strong> Your solution's cost</li>
+          <li><strong>ROI:</strong> Total cost of inaction vs. cost of solution</li>
+        </ol>
+        <p>If you can't fill this out, your discovery wasn't deep enough. That's the diagnostic.</p>
+      </div>
+    </details>
+    <details>
+      <summary>🔍 The 80/20 Audit</summary>
+      <div class="det-body">
+        <p>Record your next discovery call (with permission). Then count:</p>
+        <ul>
+          <li>Total call duration</li>
+          <li>Minutes you talked vs. minutes the prospect talked</li>
+          <li>Number of open-ended vs. closed questions</li>
+        </ul>
+        <p>If you're above 30% talk time, you're pitching, not discovering. Adjust for the next call.</p>
+      </div>
+    </details>
+  </div>
+
+  <!-- REFLECTION -->
+  <div class="reflect"><div class="reflect-q">💭 On your last discovery call, did the prospect quantify the cost of their problem in their own words — or did you do it for them?</div></div>
+
+  <!-- QUIZ -->
+  <div class="lcard">
+    <h2><span class="ic">🧠</span> Knowledge Check</h2>
+    <div class="q-item"><div class="q-num">Q1</div><div class="q-text">Why should you "lead with future, not just pain"?</div><div class="q-opts">
+      <label class="qopt" data-qi="0" data-oi="0"><input type="radio" name="q0"><span class="qo-text">Pain is irrelevant to the buying decision</span></label>
+      <label class="qopt" data-qi="0" data-oi="1"><input type="radio" name="q0"><span class="qo-text">Once prospects emotionally invest in a future state, the status quo feels like a loss — creating urgency beyond just pain</span></label>
+      <label class="qopt" data-qi="0" data-oi="2"><input type="radio" name="q0"><span class="qo-text">Prospects don't like talking about problems</span></label>
+    </div><div class="q-fb" id="qfb0"></div></div>
+
+    <div class="q-item"><div class="q-num">Q2</div><div class="q-text">What's wrong with asking "What's your budget?" directly?</div><div class="q-opts">
+      <label class="qopt" data-qi="1" data-oi="0"><input type="radio" name="q1"><span class="qo-text">It's rude</span></label>
+      <label class="qopt" data-qi="1" data-oi="1"><input type="radio" name="q1"><span class="qo-text">It puts the prospect on the defensive and almost always gets a deflection — you learn nothing about how they actually buy</span></label>
+      <label class="qopt" data-qi="1" data-oi="2"><input type="radio" name="q1"><span class="qo-text">Budget doesn't matter in sales</span></label>
+    </div><div class="q-fb" id="qfb1"></div></div>
+
+    <div class="q-item"><div class="q-num">Q3</div><div class="q-text">"What happens if this stays the same for another 6 months?" is powerful because:</div><div class="q-opts">
+      <label class="qopt" data-qi="2" data-oi="0"><input type="radio" name="q2"><span class="qo-text">It creates fear</span></label>
+      <label class="qopt" data-qi="2" data-oi="1"><input type="radio" name="q2"><span class="qo-text">It forces the prospect to calculate the cost of delay in their own mind, making "let me think about it" feel expensive</span></label>
+      <label class="qopt" data-qi="2" data-oi="2"><input type="radio" name="q2"><span class="qo-text">It's a trick question that traps the prospect</span></label>
+    </div><div class="q-fb" id="qfb2"></div></div>
+    <button class="ai-btn" style="background:var(--accent);color:var(--bg);margin-top:14px" id="checkQuiz">Check Answers</button>
+  </div>
+
+  <!-- AI COACH -->
+  <div class="ai-card">
+    <h2><span class="ic">🤖</span> Practice with AI Coach</h2>
+    <p style="font-size:14px;color:var(--text);margin:8px 0"><strong>Scenario:</strong> You've identified that a prospect is losing $40K/month from slow lead response times. They say "We don't really have budget earmarked for this right now."</p>
+    <p style="font-size:13px;color:var(--text)"><strong>Your objective:</strong> Use the ROI bridge to help the prospect see that the cost of inaction exceeds any reasonable investment — without being pushy or aggressive.</p>
+    <div class="ai-meta"><span>Difficulty: Hard</span><span>Goal: Connect quantified pain to budget justification using the prospect's own numbers.</span></div>
+    <a href="coach-home.html" class="ai-btn">Open AI Coach →</a>
+  </div>
+
+  <!-- INTERVIEW PREP -->
+  <div class="iv-card">
+    <h2><span class="ic">🎤</span> Interview Question</h2>
+    <blockquote style="background:rgba(100,181,246,.06);border-left:3px solid var(--blue);border-radius:0 10px 10px 0;padding:14px 18px;margin:12px 0;font-style:italic;font-size:14px;color:var(--text)">"How do you qualify a prospect's budget without asking directly?"</blockquote>
+    <p style="font-size:13px;color:var(--text);margin:8px 0"><strong>Example answer:</strong> I treat budget as a process question, not a number question. I ask things like "What's been allocated internally for solving this type of problem?" or "When your team invested in solutions like this before, what did that process look like?" This tells me not just whether they have money, but how they justify spend — which is what I actually need to build a winning proposal.</p>
+    <div class="iv-tip">💡 This answer shows the interviewer you understand that budget qualification isn't about a number — it's about understanding the buying process.</div>
+  </div>
+
+  <!-- TAKEAWAY -->
+  <div class="takeaway"><p>🔑 Lead with the future, surface budget through process questions, create urgency with "what happens if nothing changes," and always use the prospect's own numbers for ROI.</p></div>
+
+  <!-- BOTTOM NAV -->
+  <div class="bnav">
+    <a href="discovery-questions-2.html" class="bnav-btn bnav-prev">← Previous Lesson</a>
+    <button class="bnav-btn bnav-complete" id="completeBtn">Mark as Complete ✓</button>
+    <a href="discovery-questions-4.html" class="bnav-btn bnav-next">Next Lesson →</a>
+  </div>
+</div>
+
+<div class="toast" id="toast">🎉 Lesson Complete! +50 XP</div>
+
+<script>
+const STORAGE_KEY='amplifyHub_journeyProgress';
+const MODULE_INDEX=4;
+const LESSON_INDEX=2;
+const TOTAL_MODULE_LESSONS=4;
+
+function readProgress(){
+  try{ const d=JSON.parse(localStorage.getItem(STORAGE_KEY)); return new Set(d?.completedLessons||[]); }catch(e){ return new Set(); }
+}
+function saveProgress(completed){
+  localStorage.setItem(STORAGE_KEY,JSON.stringify({
+    completedLessons:[...completed],
+    updatedAt:Date.now()
+  }));
+}
+function lid(m,l){ return `m${m}l${l}`; }
+
+const completed=readProgress();
+const thisLid=lid(MODULE_INDEX,LESSON_INDEX);
+const btn=document.getElementById('completeBtn');
+if(completed.has(thisLid)){ btn.textContent='✓ Completed'; btn.classList.add('done'); }
+
+btn.addEventListener('click',function(){
+  if(completed.has(thisLid)) return;
+  completed.add(thisLid);
+  saveProgress(completed);
+  btn.textContent='✓ Completed';
+  btn.classList.add('done');
+  const toast=document.getElementById('toast');
+  toast.classList.add('show');
+  setTimeout(()=>toast.classList.remove('show'),2500);
+});
+
+const answers=[1, 1, 1];
+document.getElementById('checkQuiz').addEventListener('click',function(){
+  document.querySelectorAll('.qopt').forEach(opt=>{
+    const qi=parseInt(opt.dataset.qi), oi=parseInt(opt.dataset.oi);
+    const input=opt.querySelector('input');
+    if(!input.checked) return;
+    if(oi===answers[qi]){ opt.classList.add('correct'); document.getElementById('qfb'+qi).textContent='✓ Correct!'; document.getElementById('qfb'+qi).style.color='var(--green)'; }
+    else{ opt.classList.add('wrong'); document.getElementById('qfb'+qi).textContent='✗ Try again'; document.getElementById('qfb'+qi).style.color='var(--red)'; }
+  });
+});
+
+document.getElementById('mobBtn').addEventListener('click',()=>document.getElementById('sb').classList.add('open'));
+document.getElementById('sbX').addEventListener('click',()=>document.getElementById('sb').classList.remove('open'));
+</script>
+</body>
+</html>

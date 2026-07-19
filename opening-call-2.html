@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AmplifyHub — Pattern Interrupt Openers</title>
+<meta name="description" content="Opening the Call, Lesson 2 — four proven frameworks that break the telemarketer pattern and earn real conversations.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="AmplifyHub">
+<meta property="og:title" content="AmplifyHub — Pattern Interrupt Openers">
+<meta property="og:description" content="Opening the Call, Lesson 2 — four proven frameworks that break the telemarketer pattern and earn real conversations.">
+<meta property="og:image" content="og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#07070e;--bg2:#0b0b16;--card:#13132a;--card2:#181838;--glass:rgba(19,19,42,.55);
+  --accent:#FFD54A;--accent-dim:rgba(255,213,74,.1);--accent-glow:rgba(255,213,74,.3);
+  --warm:#FFA726;--green:#00e696;--blue:#64B5F6;--purple:#BA68C8;--red:#ff5f57;
+  --white:#fff;--text:#b0b0c8;--muted:#8a8aa4;
+  --border:rgba(255,213,74,.07);--border-h:rgba(255,213,74,.22);
+  --font:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;--sb:240px;
+}
+body{font-family:var(--font);background:var(--bg);color:var(--white);display:flex;min-height:100vh;overflow-x:hidden}
+
+.sb{width:var(--sb);position:fixed;top:0;left:0;bottom:0;background:var(--bg2);border-right:1px solid var(--border);padding:24px 16px;display:flex;flex-direction:column;z-index:100;transition:transform .3s}
+.sb-logo{font-size:20px;font-weight:800;padding:0 8px 24px}.sb-logo span{color:var(--accent)}
+.sb-nav{display:flex;flex-direction:column;gap:4px;flex:1}
+.si{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:10px;font-size:14px;font-weight:500;color:var(--muted);cursor:pointer;transition:all .2s;text-decoration:none;border:1px solid transparent}
+.si:hover{color:var(--text);background:rgba(255,255,255,.03)}.si.act{color:var(--accent);background:var(--accent-dim);border-color:var(--border)}
+.si-ic{width:20px;text-align:center;font-size:15px}
+.sb-d{height:1px;background:var(--border);margin:10px 8px}
+.sb-u{display:flex;align-items:center;gap:10px;padding:12px 8px;border-top:1px solid var(--border);margin-top:auto}
+.sb-av{width:32px;height:32px;border-radius:8px;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:var(--bg)}
+.sb-un{font-size:13px;font-weight:600}.sb-ur{font-size:11px;color:var(--muted)}
+.sb-x{display:none;position:absolute;top:16px;right:16px;background:none;border:none;color:var(--muted);font-size:20px;cursor:pointer}
+.mh{display:none;position:fixed;top:0;left:0;right:0;z-index:200;padding:14px 20px;background:rgba(7,7,14,.95);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);align-items:center;justify-content:space-between}
+.mh .logo{font-size:18px;font-weight:800}.mh .logo span{color:var(--accent)}
+.mb{background:none;border:none;cursor:pointer}.mb span{display:block;width:20px;height:2px;background:#fff;margin:4px 0}
+
+.main{margin-left:var(--sb);flex:1;padding:32px 40px 80px;max-width:780px}
+.back{display:inline-flex;align-items:center;gap:6px;color:var(--muted);font-size:13px;font-weight:600;text-decoration:none;margin-bottom:20px;transition:color .2s}.back:hover{color:var(--accent)}
+.lesson-badge{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--accent);margin-bottom:8px}
+.lesson-title{font-size:clamp(22px,3vw,28px);font-weight:900;letter-spacing:-.5px;margin-bottom:6px}
+.lesson-meta{display:flex;gap:16px;font-size:12px;color:var(--muted);margin-bottom:28px;flex-wrap:wrap}
+
+.lcard{background:var(--glass);backdrop-filter:blur(14px);border:1px solid var(--border);border-radius:20px;padding:28px;margin-bottom:20px;transition:border-color .3s}
+.lcard:hover{border-color:var(--border-h)}
+.lcard h2{font-size:17px;font-weight:800;letter-spacing:-.2px;margin-bottom:12px;display:flex;align-items:center;gap:10px}
+.lcard h2 .ic{font-size:20px}
+.lcard p,.lcard li{font-size:14px;color:var(--text);line-height:1.75}
+.lcard p{margin-bottom:12px}.lcard p:last-child{margin-bottom:0}
+.lcard strong{color:var(--white);font-weight:600}
+.lcard em{color:var(--accent);font-style:normal}
+.lcard blockquote{background:var(--accent-dim);border-left:3px solid var(--accent);border-radius:0 10px 10px 0;padding:14px 18px;margin:14px 0;font-size:14px;color:var(--text);font-style:italic;line-height:1.6}
+.lcard ul{padding-left:20px;margin:10px 0}
+
+.reflect{background:linear-gradient(135deg,rgba(255,213,74,.06),var(--card));border:1px solid var(--border-h);border-radius:16px;padding:22px;text-align:center;margin-bottom:20px}
+.reflect-q{font-size:15px;font-weight:700;font-style:italic;line-height:1.5}
+
+.q-item{margin-bottom:18px;padding-bottom:18px;border-bottom:1px solid rgba(255,213,74,.04)}
+.q-item:last-child{border-bottom:none;margin-bottom:0}
+.q-num{font-size:10px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
+.q-text{font-size:14px;font-weight:600;margin-bottom:10px}
+.q-opts{display:flex;flex-direction:column;gap:6px}
+.qopt{display:flex;align-items:center;gap:10px;padding:10px 14px;border:1px solid var(--border);border-radius:10px;cursor:pointer;transition:all .25s;font-size:13px;color:var(--text)}
+.qopt:hover{border-color:var(--border-h);color:var(--white)}
+.qopt input{display:none}
+.qopt.correct{border-color:rgba(0,230,150,.3);background:rgba(0,230,150,.08);color:var(--green)}
+.qopt.wrong{border-color:rgba(255,95,87,.3);background:rgba(255,95,87,.08);color:var(--red)}
+.q-fb{font-size:12px;font-weight:600;margin-top:8px;min-height:18px}
+
+.ai-card{background:linear-gradient(135deg,rgba(0,230,150,.05),var(--card));border:1px solid rgba(0,230,150,.12);border-radius:18px;padding:22px;margin-bottom:20px}
+.ai-card h2{color:var(--green)}
+.ai-meta{display:flex;gap:12px;flex-wrap:wrap;margin:10px 0 14px;font-size:12px;color:var(--muted)}
+.ai-btn{background:var(--green);color:var(--bg);border:none;padding:12px 24px;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:var(--font);transition:all .3s;margin-top:10px}
+.ai-btn:hover{box-shadow:0 4px 16px rgba(0,230,150,.3)}
+
+.iv-card{background:linear-gradient(135deg,rgba(100,181,246,.05),var(--card));border:1px solid rgba(100,181,246,.12);border-radius:18px;padding:22px;margin-bottom:20px}
+.iv-card h2{color:var(--blue)}
+.iv-tip{background:rgba(100,181,246,.08);border:1px solid rgba(100,181,246,.15);border-radius:10px;padding:12px 14px;font-size:12px;color:var(--blue);margin-top:10px;font-weight:500}
+
+.takeaway{background:var(--accent-dim);border:1px solid var(--border-h);border-radius:16px;padding:22px;text-align:center;margin-bottom:24px}
+.takeaway p{font-size:16px;font-weight:700;color:var(--accent)}
+
+.bnav{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:20px}
+.bnav-btn{flex:1;min-width:140px;padding:14px 20px;border-radius:12px;font-size:14px;font-weight:700;cursor:pointer;font-family:var(--font);transition:all .3s;text-align:center;text-decoration:none;display:flex;align-items:center;justify-content:center;gap:6px}
+.bnav-prev{background:transparent;color:var(--white);border:1px solid var(--border-h)}.bnav-prev:hover{background:var(--accent-dim)}
+.bnav-complete{background:var(--accent);color:var(--bg);border:none}.bnav-complete:hover{box-shadow:0 6px 24px var(--accent-glow);transform:translateY(-2px)}
+.bnav-complete.done{background:var(--green);pointer-events:none}
+.bnav-next{background:transparent;color:var(--white);border:1px solid var(--border-h)}.bnav-next:hover{background:var(--accent-dim)}
+.toast{position:fixed;bottom:32px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--green);color:var(--bg);padding:14px 28px;border-radius:14px;font-size:14px;font-weight:700;z-index:999;transition:transform .4s cubic-bezier(.16,1,.3,1);pointer-events:none}
+.toast.show{transform:translateX(-50%) translateY(0)}
+
+details{background:var(--card);border:1px solid var(--border);border-radius:14px;margin:14px 0;overflow:hidden}
+details summary{padding:14px 18px;cursor:pointer;font-size:14px;font-weight:600;color:var(--white);list-style:none;display:flex;align-items:center;gap:8px;transition:background .2s;user-select:none}
+details summary:hover{background:rgba(255,255,255,.03)}
+details summary::-webkit-details-marker{display:none}
+details[open] summary{border-bottom:1px solid var(--border)}
+.det-body{padding:16px 18px}
+.det-body p,.det-body li{font-size:14px;color:var(--text);line-height:1.75}
+.det-body p{margin-bottom:10px}.det-body p:last-child{margin-bottom:0}
+.det-body strong{color:var(--white);font-weight:600}
+.det-body ol,.det-body ul{padding-left:20px;margin-bottom:10px}
+.cx-tbl{width:100%;border-collapse:collapse;margin:14px 0;font-size:13px;overflow-x:auto;display:block}
+.cx-tbl th{padding:10px 14px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;text-align:left;white-space:nowrap}
+.cx-tbl td{padding:10px 14px;border-top:1px solid var(--border);vertical-align:top;line-height:1.65;color:var(--text)}
+.cx-tbl .bad{background:rgba(255,95,87,.04)}.cx-tbl .good{background:rgba(0,230,150,.04)}
+.cx-tbl th.bad{color:var(--red);border-bottom:2px solid rgba(255,95,87,.2)}
+.cx-tbl th.good{color:var(--green);border-bottom:2px solid rgba(0,230,150,.2)}
+.fw-tbl{width:100%;border-collapse:collapse;margin:14px 0;font-size:13px;overflow-x:auto;display:block}
+.fw-tbl th{padding:10px 14px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--accent);text-align:left;border-bottom:2px solid var(--border-h);white-space:nowrap}
+.fw-tbl td{padding:10px 14px;border-bottom:1px solid var(--border);color:var(--text);line-height:1.6}
+.fw-tbl tr:last-child td{border-bottom:none}
+.fw-tbl td:first-child{color:var(--white);font-weight:600}
+
+@media(max-width:860px){
+  .sb{transform:translateX(-100%)}.sb.open{transform:translateX(0)}.sb-x{display:block}
+  .mh{display:flex}.main{margin-left:0;padding:72px 20px 48px}
+}
+
+a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+</style>
+</head>
+<body>
+
+<div class="mh"><div class="logo">Amplify<span>Hub</span></div><button class="mb" id="mobBtn" aria-label="Open navigation menu"><span></span><span></span><span></span></button></div>
+
+<aside class="sb" id="sb">
+  <button class="sb-x" id="sbX" aria-label="Close navigation menu">✕</button>
+  <div class="sb-logo">Amplify<span>Hub</span></div>
+  <nav class="sb-nav">
+    <a class="si" href="dashboard.html"><span class="si-ic">🏠</span>Dashboard</a>
+    <a class="si act" href="journey.html"><span class="si-ic">🛤</span>Journey</a>
+    <a class="si" href="coach-home.html"><span class="si-ic">🤖</span>AI Coach</a>
+    <a class="si" href="dashboard.html#challenge"><span class="si-ic">⚡</span>Challenges</a>
+    <a class="si" href="dashboard.html#resources"><span class="si-ic">📚</span>Resources</a>
+    <div class="sb-d"></div>
+    <a class="si" href="settings.html"><span class="si-ic">⚙️</span>Settings</a>
+  </nav>
+  <div class="sb-u"><div class="sb-av">J</div><div><div class="sb-un">Jawad</div><div class="sb-ur">Pro Member</div></div></div>
+</aside>
+
+<div class="main">
+  <a href="journey.html" class="back">← Back to Journey</a>
+  <div class="lesson-badge">Opening the Call · Lesson 2 of 4</div>
+  <h1 class="lesson-title">Pattern Interrupt Openers</h1>
+  <div class="lesson-meta"><span>⏱ ~12 min</span><span>🏆 +50 XP</span><span>📖 Module 4: Opening the Call</span></div>
+
+  <!-- THE 4 FRAMEWORKS -->
+  <div class="lcard">
+    <h2><span class="ic">🔧</span> Four Frameworks That Actually Work</h2>
+    <p>There is a 3-step sequence top reps use that most SDRs have never heard of. But before we get there, you need the building blocks — four opener frameworks that break the telemarketer pattern and create genuine curiosity.</p>
+    <p>Each one works differently. <strong>The goal is the same:</strong> sound like a human with a reason to call, not a script reader with a quota.</p>
+    <table class="fw-tbl">
+      <tr><th>Framework</th><th>Best For</th><th>Risk Level</th></tr>
+      <tr><td>Tailored Permission</td><td>Warm-ish leads, referrals, inbound follow-ups</td><td>Low — safe and effective</td></tr>
+      <tr><td>"Heard Name Tossed Around"</td><td>Prospects in companies you've already sold into</td><td>Low — social proof built in</td></tr>
+      <tr><td>Pattern Interrupt</td><td>Pure cold calls to total strangers</td><td>Medium — requires confident delivery</td></tr>
+      <tr><td>Observation-Based</td><td>Prospects with public signals (hiring, funding, news)</td><td>Low — shows genuine prep</td></tr>
+    </table>
+  </div>
+
+  <!-- FRAMEWORK DEEP DIVES -->
+  <div class="lcard">
+    <h2><span class="ic">🎯</span> Framework 1: Tailored Permission</h2>
+    <p>This is the safest high-performer. You give the prospect a reason and let them opt in — but the reason is so specific that declining feels like ignoring a real opportunity.</p>
+    <blockquote>💡 <strong>Example:</strong> "Hey Sarah, it's Mark with Acme. I know I'm calling out of the blue — the reason is we just helped [similar company] cut their ramp time by 40%, and I thought it'd be worth a quick conversation to see if that's relevant for your team too. Fair enough?"</blockquote>
+    <p>The key: <em>the permission is tailored.</em> You are not asking "is now a good time?" You are asking "is this specific result worth 60 seconds of your attention?" Those are very different questions.</p>
+  </div>
+
+  <div class="lcard">
+    <h2><span class="ic">🗣️</span> Framework 2: "Heard Name Tossed Around"</h2>
+    <p>This one uses social proof as the hook. It works best when you have <em>any</em> connection to their company — even a thin one.</p>
+    <blockquote>💡 <strong>Example:</strong> "Hey Tom, it's Lisa from Acme — your name keeps coming up in conversations with folks over at [their company or industry]. I figured I'd reach out directly rather than keep hearing about you secondhand. Got a quick minute?"</blockquote>
+    <p>Why it works: it flips the dynamic. Instead of you chasing them, it sounds like <strong>they are already part of a conversation.</strong> Curiosity takes over — most people want to know what's being said about them.</p>
+    <p><strong>Warning:</strong> Never fabricate the connection. If you have no link, use a different framework. Getting caught in a lie is worse than a bad opener.</p>
+  </div>
+
+  <div class="lcard">
+    <h2><span class="ic">⚡</span> Framework 3: Pattern Interrupt</h2>
+    <p>This is the boldest framework. It works by saying something the prospect does not expect — breaking the pattern of every other sales call they have received.</p>
+    <blockquote>💡 <strong>Example:</strong> "Hey James, this is a cold call — I know that's not what you wanted to hear on a Tuesday. But I'll be upfront: I've got 30 seconds to tell you why three of your competitors are doing something you're probably not. Want to hear it?"</blockquote>
+    <p>The pattern interrupt works because it is <strong>disarmingly honest.</strong> Nobody else on a cold call says "this is a cold call." That honesty buys trust in the first two seconds — which is exactly when trust matters most.</p>
+    <table class="cx-tbl">
+      <tr><th class="bad">❌ Traditional Opener</th><th class="good">✅ Pattern Interrupt</th></tr>
+      <tr><td class="bad">Hides the fact it's a cold call</td><td class="good">Acknowledges reality upfront</td></tr>
+      <tr><td class="bad">Uses filler pleasantries</td><td class="good">Gets to value in 10 seconds</td></tr>
+      <tr><td class="bad">Prospect feels manipulated</td><td class="good">Prospect feels respected</td></tr>
+      <tr><td class="bad">Triggers defensive posture</td><td class="good">Triggers curiosity</td></tr>
+    </table>
+  </div>
+
+  <div class="lcard">
+    <h2><span class="ic">🔍</span> Framework 4: Observation-Based</h2>
+    <p>This framework proves you did your homework. You reference something <em>specific</em> about the prospect or their company — a recent hire, a funding round, a product launch, a news mention.</p>
+    <blockquote>💡 <strong>Example:</strong> "Hey Rachel, I saw your team just posted five new AE roles on LinkedIn. In my experience, when a sales org is scaling that fast, pipeline generation usually becomes the bottleneck before headcount does. Is that something you're running into?"</blockquote>
+    <p>Why it works: most reps don't realize that <strong>the observation IS the value.</strong> You are not selling anything yet. You are demonstrating that you understand their world well enough to ask an intelligent question.</p>
+  </div>
+
+  <!-- ADVANCED SEQUENCE -->
+  <div class="lcard">
+    <h2><span class="ic">🏆</span> The Advanced 3-Part Opening Sequence</h2>
+    <p>Here is the sequence most SDRs have never heard of. It combines three elements in rapid succession — each one builds on the last.</p>
+    <table class="fw-tbl">
+      <tr><th>Step</th><th>What It Does</th><th>Example</th></tr>
+      <tr><td>1. Mini Invitation</td><td>Acknowledges the interruption with grace</td><td>"Hey Mark, I know I'm catching you cold—"</td></tr>
+      <tr><td>2. Pattern-Interrupt Question</td><td>Asks something unexpected that hooks curiosity</td><td>"Quick question — are you the person who'd know if your SDR team is tracking connect rate separately from dial count?"</td></tr>
+      <tr><td>3. Upfront Contract</td><td>Sets clear expectations for the next 30 seconds</td><td>"If it's not relevant, I'll hang up. If it is, I've got 30 seconds of context. Fair?"</td></tr>
+    </table>
+    <p>The sequence works because it <strong>respects the prospect's time, creates curiosity, and gives them control</strong> — all in under 15 seconds. The upfront contract is the secret weapon: it removes the prospect's fear that you'll trap them in a 10-minute pitch.</p>
+    <blockquote>💡 <strong>Pro-Tip:</strong> Leave imperfection in your delivery. Top performers sound slightly unpolished on purpose. A too-smooth delivery signals "rehearsed" — and rehearsed sounds like telemarketer. A small pause, a natural stumble, a conversational "uh" — these are features, not bugs.</blockquote>
+  </div>
+
+  <!-- IMPERFECTION -->
+  <div class="lcard">
+    <h2><span class="ic">🎭</span> The Power of Imperfection</h2>
+    <details>
+      <summary>🔍 Why sounding "too good" hurts your results</summary>
+      <div class="det-body">
+        <p>There is a counterintuitive truth about cold call delivery: <strong>the more polished you sound, the less trustworthy you seem.</strong></p>
+        <p>Prospects have heard thousands of smooth, scripted, perfectly cadenced sales pitches. Their pattern recognition is finely tuned. The moment they detect "sales voice," they mentally check out.</p>
+        <p>The fix: leave rough edges. A natural pause before a key word. A slight vocal stumble that you recover from. A tone that sounds like you are talking to a colleague, not reading a teleprompter.</p>
+        <p><strong>Imperfection signals authenticity.</strong> And authenticity is the fastest bridge to trust you have.</p>
+      </div>
+    </details>
+    <details>
+      <summary>🔍 How to practice without over-polishing</summary>
+      <div class="det-body">
+        <p>The goal of practice is <strong>internalization, not memorization.</strong> You want to know the structure so well that you can deliver it in your own words, in your own rhythm.</p>
+        <ol>
+          <li>Read the framework out loud 5 times</li>
+          <li>Put the script away</li>
+          <li>Explain the opener to a friend using no notes</li>
+          <li>Record yourself — listen for "sales voice" vs. natural conversation</li>
+          <li>Practice until it sounds like your own words, not a template</li>
+        </ol>
+      </div>
+    </details>
+  </div>
+
+  <!-- REFLECTION -->
+  <div class="reflect"><div class="reflect-q">💭 Which of the four frameworks feels most natural for your personality? That is the one you should master first — you can add the others once the first one is automatic.</div></div>
+
+  <!-- QUIZ -->
+  <div class="lcard">
+    <h2><span class="ic">🧠</span> Knowledge Check</h2>
+    <div class="q-item"><div class="q-num">Q1</div><div class="q-text">The "Pattern Interrupt" framework works because it:</div><div class="q-opts">
+      <label class="qopt" data-qi="0" data-oi="0"><input type="radio" name="q0"><span class="qo-text">Uses a long, detailed product pitch</span></label>
+      <label class="qopt" data-qi="0" data-oi="1"><input type="radio" name="q0"><span class="qo-text">Is disarmingly honest — it says what no other caller says</span></label>
+      <label class="qopt" data-qi="0" data-oi="2"><input type="radio" name="q0"><span class="qo-text">Asks the prospect how their day is going</span></label>
+      <label class="qopt" data-qi="0" data-oi="3"><input type="radio" name="q0"><span class="qo-text">Avoids mentioning it's a sales call</span></label>
+    </div><div class="q-fb" id="qfb0"></div></div>
+
+    <div class="q-item"><div class="q-num">Q2</div><div class="q-text">The advanced 3-part opening sequence is:</div><div class="q-opts">
+      <label class="qopt" data-qi="1" data-oi="0"><input type="radio" name="q1"><span class="qo-text">Pitch → Objection Handle → Close</span></label>
+      <label class="qopt" data-qi="1" data-oi="1"><input type="radio" name="q1"><span class="qo-text">Mini Invitation → Pattern-Interrupt Question → Upfront Contract</span></label>
+      <label class="qopt" data-qi="1" data-oi="2"><input type="radio" name="q1"><span class="qo-text">Greeting → Company Intro → Ask for Meeting</span></label>
+      <label class="qopt" data-qi="1" data-oi="3"><input type="radio" name="q1"><span class="qo-text">Name → Problem → Solution</span></label>
+    </div><div class="q-fb" id="qfb1"></div></div>
+
+    <div class="q-item"><div class="q-num">Q3</div><div class="q-text">Why should you leave imperfection in your delivery?</div><div class="q-opts">
+      <label class="qopt" data-qi="2" data-oi="0"><input type="radio" name="q2"><span class="qo-text">Because practice doesn't matter</span></label>
+      <label class="qopt" data-qi="2" data-oi="1"><input type="radio" name="q2"><span class="qo-text">Because too-smooth delivery triggers "telemarketer" pattern recognition</span></label>
+      <label class="qopt" data-qi="2" data-oi="2"><input type="radio" name="q2"><span class="qo-text">Because prospects prefer unprepared callers</span></label>
+      <label class="qopt" data-qi="2" data-oi="3"><input type="radio" name="q2"><span class="qo-text">Because scripts are unnecessary</span></label>
+    </div><div class="q-fb" id="qfb2"></div></div>
+    <button class="ai-btn" style="background:var(--accent);color:var(--bg);margin-top:14px" id="checkQuiz">Check Answers</button>
+  </div>
+
+  <!-- AI COACH -->
+  <div class="ai-card">
+    <h2><span class="ic">🤖</span> Practice with AI Coach</h2>
+    <p style="font-size:14px;color:var(--text);margin:8px 0"><strong>Scenario:</strong> You are calling a Director of Marketing who just announced a Series B funding round. Use the Observation-Based framework to open the call.</p>
+    <p style="font-size:13px;color:var(--text)"><strong>Your objective:</strong> Reference the funding news, connect it to a real business challenge, and earn the next 30 seconds. No pitch, no product — just a smart question.</p>
+    <div class="ai-meta"><span>Difficulty: Medium</span><span>Goal: Practice the Observation-Based framework with a live prospect scenario.</span></div>
+    <a href="coach-home.html" class="ai-btn">Open AI Coach →</a>
+  </div>
+
+  <!-- INTERVIEW PREP -->
+  <div class="iv-card">
+    <h2><span class="ic">🎤</span> Interview Question</h2>
+    <blockquote style="background:rgba(100,181,246,.06);border-left:3px solid var(--blue);border-radius:0 10px 10px 0;padding:14px 18px;margin:12px 0;font-style:italic;font-size:14px;color:var(--text)">"Give me your best cold call opener. Go."</blockquote>
+    <p style="font-size:13px;color:var(--text);margin:8px 0"><strong>Example answer:</strong> "Hey [Name], this is a cold call — I'll be upfront about that. I noticed your team just posted four new SDR roles, and in my experience that usually means pipeline is becoming the bottleneck. If I'm wrong, I'll hang up. If I'm right, I've got 30 seconds of context. Fair?" Then I pause and let them respond.</p>
+    <div class="iv-tip">💡 The interviewer is not grading your script — they're checking whether you understand the psychology behind it. Explain why each piece works after you deliver it.</div>
+  </div>
+
+  <!-- TAKEAWAY -->
+  <div class="takeaway"><p>🔑 Four frameworks. One goal: break the telemarketer pattern. Master the one that fits your personality first, then stack the others. Leave imperfection in — it is your trust signal.</p></div>
+
+  <!-- BOTTOM NAV -->
+  <div class="bnav">
+    <a href="opening-call-1.html" class="bnav-btn bnav-prev">← Previous Lesson</a>
+    <button class="bnav-btn bnav-complete" id="completeBtn">Mark as Complete ✓</button>
+    <a href="opening-call-3.html" class="bnav-btn bnav-next">Next Lesson →</a>
+  </div>
+</div>
+
+<div class="toast" id="toast">🎉 Lesson Complete! +50 XP</div>
+
+<script>
+const STORAGE_KEY='amplifyHub_journeyProgress';
+const MODULE_INDEX=3;
+const LESSON_INDEX=1;
+const TOTAL_MODULE_LESSONS=4;
+
+function readProgress(){
+  try{ const d=JSON.parse(localStorage.getItem(STORAGE_KEY)); return new Set(d?.completedLessons||[]); }catch(e){ return new Set(); }
+}
+function saveProgress(completed){
+  localStorage.setItem(STORAGE_KEY,JSON.stringify({
+    completedLessons:[...completed],
+    updatedAt:Date.now()
+  }));
+}
+function lid(m,l){ return `m${m}l${l}`; }
+
+const completed=readProgress();
+const thisLid=lid(MODULE_INDEX,LESSON_INDEX);
+const btn=document.getElementById('completeBtn');
+if(completed.has(thisLid)){ btn.textContent='✓ Completed'; btn.classList.add('done'); }
+
+btn.addEventListener('click',function(){
+  if(completed.has(thisLid)) return;
+  completed.add(thisLid);
+  saveProgress(completed);
+  btn.textContent='✓ Completed';
+  btn.classList.add('done');
+  const toast=document.getElementById('toast');
+  toast.classList.add('show');
+  setTimeout(()=>toast.classList.remove('show'),2500);
+});
+
+const answers=[1, 1, 1];
+document.getElementById('checkQuiz').addEventListener('click',function(){
+  document.querySelectorAll('.qopt').forEach(opt=>{
+    const qi=parseInt(opt.dataset.qi), oi=parseInt(opt.dataset.oi);
+    const input=opt.querySelector('input');
+    if(!input.checked) return;
+    if(oi===answers[qi]){ opt.classList.add('correct'); document.getElementById('qfb'+qi).textContent='✓ Correct!'; document.getElementById('qfb'+qi).style.color='var(--green)'; }
+    else{ opt.classList.add('wrong'); document.getElementById('qfb'+qi).textContent='✗ Try again'; document.getElementById('qfb'+qi).style.color='var(--red)'; }
+  });
+});
+
+document.getElementById('mobBtn').addEventListener('click',()=>document.getElementById('sb').classList.add('open'));
+document.getElementById('sbX').addEventListener('click',()=>document.getElementById('sb').classList.remove('open'));
+</script>
+</body>
+</html>

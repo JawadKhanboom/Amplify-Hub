@@ -1,0 +1,26 @@
+{
+  "name": "amplifyhub-sales-mindset",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "typecheck": "tsc --noEmit --pretty false",
+    "preview": "vite preview",
+    "qa": "node scripts/qa.mjs",
+    "qa:booking": "node scripts/qa-booking.mjs"
+  },
+  "dependencies": {
+    "react": "19.2.7",
+    "react-dom": "19.2.7"
+  },
+  "devDependencies": {
+    "@types/react": "19.2.17",
+    "@types/react-dom": "19.2.3",
+    "@vitejs/plugin-react": "6.0.3",
+    "playwright-core": "1.61.1",
+    "typescript": "7.0.2",
+    "vite": "8.1.5"
+  }
+}

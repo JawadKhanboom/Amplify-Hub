@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AmplifyHub — Value Proposition in 10 Seconds</title>
+<meta name="description" content="Building Your Script, Lesson 3 — the Problem Proposition, pitch formula, and CTA that books meetings.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="AmplifyHub">
+<meta property="og:title" content="AmplifyHub — Value Proposition in 10 Seconds">
+<meta property="og:description" content="Building Your Script, Lesson 3 — the Problem Proposition, pitch formula, and CTA that books meetings.">
+<meta property="og:image" content="og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#07070e;--bg2:#0b0b16;--card:#13132a;--card2:#181838;--glass:rgba(19,19,42,.55);
+  --accent:#FFD54A;--accent-dim:rgba(255,213,74,.1);--accent-glow:rgba(255,213,74,.3);
+  --warm:#FFA726;--green:#00e696;--blue:#64B5F6;--purple:#BA68C8;--red:#ff5f57;
+  --white:#fff;--text:#b0b0c8;--muted:#8a8aa4;
+  --border:rgba(255,213,74,.07);--border-h:rgba(255,213,74,.22);
+  --font:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;--sb:240px;
+}
+body{font-family:var(--font);background:var(--bg);color:var(--white);display:flex;min-height:100vh;overflow-x:hidden}
+
+.sb{width:var(--sb);position:fixed;top:0;left:0;bottom:0;background:var(--bg2);border-right:1px solid var(--border);padding:24px 16px;display:flex;flex-direction:column;z-index:100;transition:transform .3s}
+.sb-logo{font-size:20px;font-weight:800;padding:0 8px 24px}.sb-logo span{color:var(--accent)}
+.sb-nav{display:flex;flex-direction:column;gap:4px;flex:1}
+.si{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:10px;font-size:14px;font-weight:500;color:var(--muted);cursor:pointer;transition:all .2s;text-decoration:none;border:1px solid transparent}
+.si:hover{color:var(--text);background:rgba(255,255,255,.03)}.si.act{color:var(--accent);background:var(--accent-dim);border-color:var(--border)}
+.si-ic{width:20px;text-align:center;font-size:15px}
+.sb-d{height:1px;background:var(--border);margin:10px 8px}
+.sb-u{display:flex;align-items:center;gap:10px;padding:12px 8px;border-top:1px solid var(--border);margin-top:auto}
+.sb-av{width:32px;height:32px;border-radius:8px;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:var(--bg)}
+.sb-un{font-size:13px;font-weight:600}.sb-ur{font-size:11px;color:var(--muted)}
+.sb-x{display:none;position:absolute;top:16px;right:16px;background:none;border:none;color:var(--muted);font-size:20px;cursor:pointer}
+.mh{display:none;position:fixed;top:0;left:0;right:0;z-index:200;padding:14px 20px;background:rgba(7,7,14,.95);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);align-items:center;justify-content:space-between}
+.mh .logo{font-size:18px;font-weight:800}.mh .logo span{color:var(--accent)}
+.mb{background:none;border:none;cursor:pointer}.mb span{display:block;width:20px;height:2px;background:#fff;margin:4px 0}
+
+.main{margin-left:var(--sb);flex:1;padding:32px 40px 80px;max-width:780px}
+.back{display:inline-flex;align-items:center;gap:6px;color:var(--muted);font-size:13px;font-weight:600;text-decoration:none;margin-bottom:20px;transition:color .2s}.back:hover{color:var(--accent)}
+.lesson-badge{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--accent);margin-bottom:8px}
+.lesson-title{font-size:clamp(22px,3vw,28px);font-weight:900;letter-spacing:-.5px;margin-bottom:6px}
+.lesson-meta{display:flex;gap:16px;font-size:12px;color:var(--muted);margin-bottom:28px;flex-wrap:wrap}
+
+.lcard{background:var(--glass);backdrop-filter:blur(14px);border:1px solid var(--border);border-radius:20px;padding:28px;margin-bottom:20px;transition:border-color .3s}
+.lcard:hover{border-color:var(--border-h)}
+.lcard h2{font-size:17px;font-weight:800;letter-spacing:-.2px;margin-bottom:12px;display:flex;align-items:center;gap:10px}
+.lcard h2 .ic{font-size:20px}
+.lcard p,.lcard li{font-size:14px;color:var(--text);line-height:1.75}
+.lcard p{margin-bottom:12px}.lcard p:last-child{margin-bottom:0}
+.lcard strong{color:var(--white);font-weight:600}
+.lcard em{color:var(--accent);font-style:normal}
+.lcard blockquote{background:var(--accent-dim);border-left:3px solid var(--accent);border-radius:0 10px 10px 0;padding:14px 18px;margin:14px 0;font-size:14px;color:var(--text);font-style:italic;line-height:1.6}
+.lcard ul{padding-left:20px;margin:10px 0}
+
+.reflect{background:linear-gradient(135deg,rgba(255,213,74,.06),var(--card));border:1px solid var(--border-h);border-radius:16px;padding:22px;text-align:center;margin-bottom:20px}
+.reflect-q{font-size:15px;font-weight:700;font-style:italic;line-height:1.5}
+
+.q-item{margin-bottom:18px;padding-bottom:18px;border-bottom:1px solid rgba(255,213,74,.04)}
+.q-item:last-child{border-bottom:none;margin-bottom:0}
+.q-num{font-size:10px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
+.q-text{font-size:14px;font-weight:600;margin-bottom:10px}
+.q-opts{display:flex;flex-direction:column;gap:6px}
+.qopt{display:flex;align-items:center;gap:10px;padding:10px 14px;border:1px solid var(--border);border-radius:10px;cursor:pointer;transition:all .25s;font-size:13px;color:var(--text)}
+.qopt:hover{border-color:var(--border-h);color:var(--white)}
+.qopt input{display:none}
+.qopt.correct{border-color:rgba(0,230,150,.3);background:rgba(0,230,150,.08);color:var(--green)}
+.qopt.wrong{border-color:rgba(255,95,87,.3);background:rgba(255,95,87,.08);color:var(--red)}
+.q-fb{font-size:12px;font-weight:600;margin-top:8px;min-height:18px}
+
+.ai-card{background:linear-gradient(135deg,rgba(0,230,150,.05),var(--card));border:1px solid rgba(0,230,150,.12);border-radius:18px;padding:22px;margin-bottom:20px}
+.ai-card h2{color:var(--green)}
+.ai-meta{display:flex;gap:12px;flex-wrap:wrap;margin:10px 0 14px;font-size:12px;color:var(--muted)}
+.ai-btn{background:var(--green);color:var(--bg);border:none;padding:12px 24px;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:var(--font);transition:all .3s;margin-top:10px}
+.ai-btn:hover{box-shadow:0 4px 16px rgba(0,230,150,.3)}
+
+.iv-card{background:linear-gradient(135deg,rgba(100,181,246,.05),var(--card));border:1px solid rgba(100,181,246,.12);border-radius:18px;padding:22px;margin-bottom:20px}
+.iv-card h2{color:var(--blue)}
+.iv-tip{background:rgba(100,181,246,.08);border:1px solid rgba(100,181,246,.15);border-radius:10px;padding:12px 14px;font-size:12px;color:var(--blue);margin-top:10px;font-weight:500}
+
+.takeaway{background:var(--accent-dim);border:1px solid var(--border-h);border-radius:16px;padding:22px;text-align:center;margin-bottom:24px}
+.takeaway p{font-size:16px;font-weight:700;color:var(--accent)}
+
+.bnav{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:20px}
+.bnav-btn{flex:1;min-width:140px;padding:14px 20px;border-radius:12px;font-size:14px;font-weight:700;cursor:pointer;font-family:var(--font);transition:all .3s;text-align:center;text-decoration:none;display:flex;align-items:center;justify-content:center;gap:6px}
+.bnav-prev{background:transparent;color:var(--white);border:1px solid var(--border-h)}.bnav-prev:hover{background:var(--accent-dim)}
+.bnav-complete{background:var(--accent);color:var(--bg);border:none}.bnav-complete:hover{box-shadow:0 6px 24px var(--accent-glow);transform:translateY(-2px)}
+.bnav-complete.done{background:var(--green);pointer-events:none}
+.bnav-next{background:transparent;color:var(--white);border:1px solid var(--border-h)}.bnav-next:hover{background:var(--accent-dim)}
+.toast{position:fixed;bottom:32px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--green);color:var(--bg);padding:14px 28px;border-radius:14px;font-size:14px;font-weight:700;z-index:999;transition:transform .4s cubic-bezier(.16,1,.3,1);pointer-events:none}
+.toast.show{transform:translateX(-50%) translateY(0)}
+
+details{background:var(--card);border:1px solid var(--border);border-radius:14px;margin:14px 0;overflow:hidden}
+details summary{padding:14px 18px;cursor:pointer;font-size:14px;font-weight:600;color:var(--white);list-style:none;display:flex;align-items:center;gap:8px;transition:background .2s;user-select:none}
+details summary:hover{background:rgba(255,255,255,.03)}
+details summary::-webkit-details-marker{display:none}
+details[open] summary{border-bottom:1px solid var(--border)}
+.det-body{padding:16px 18px}
+.det-body p,.det-body li{font-size:14px;color:var(--text);line-height:1.75}
+.det-body p{margin-bottom:10px}.det-body p:last-child{margin-bottom:0}
+.det-body strong{color:var(--white);font-weight:600}
+.det-body ol,.det-body ul{padding-left:20px;margin-bottom:10px}
+.cx-tbl{width:100%;border-collapse:collapse;margin:14px 0;font-size:13px;overflow-x:auto;display:block}
+.cx-tbl th{padding:10px 14px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;text-align:left;white-space:nowrap}
+.cx-tbl td{padding:10px 14px;border-top:1px solid var(--border);vertical-align:top;line-height:1.65;color:var(--text)}
+.cx-tbl .bad{background:rgba(255,95,87,.04)}.cx-tbl .good{background:rgba(0,230,150,.04)}
+.cx-tbl th.bad{color:var(--red);border-bottom:2px solid rgba(255,95,87,.2)}
+.cx-tbl th.good{color:var(--green);border-bottom:2px solid rgba(0,230,150,.2)}
+.fw-tbl{width:100%;border-collapse:collapse;margin:14px 0;font-size:13px;overflow-x:auto;display:block}
+.fw-tbl th{padding:10px 14px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--accent);text-align:left;border-bottom:2px solid var(--border-h);white-space:nowrap}
+.fw-tbl td{padding:10px 14px;border-bottom:1px solid var(--border);color:var(--text);line-height:1.6}
+.fw-tbl tr:last-child td{border-bottom:none}
+.fw-tbl td:first-child{color:var(--white);font-weight:600}
+
+@media(max-width:860px){
+  .sb{transform:translateX(-100%)}.sb.open{transform:translateX(0)}.sb-x{display:block}
+  .mh{display:flex}.main{margin-left:0;padding:72px 20px 48px}
+}
+
+a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+</style>
+</head>
+<body>
+
+<div class="mh"><div class="logo">Amplify<span>Hub</span></div><button class="mb" id="mobBtn" aria-label="Open navigation menu"><span></span><span></span><span></span></button></div>
+
+<aside class="sb" id="sb">
+  <button class="sb-x" id="sbX" aria-label="Close navigation menu">✕</button>
+  <div class="sb-logo">Amplify<span>Hub</span></div>
+  <nav class="sb-nav">
+    <a class="si" href="dashboard.html"><span class="si-ic">🏠</span>Dashboard</a>
+    <a class="si act" href="journey.html"><span class="si-ic">🛤</span>Journey</a>
+    <a class="si" href="coach-home.html"><span class="si-ic">🤖</span>AI Coach</a>
+    <a class="si" href="dashboard.html#challenge"><span class="si-ic">⚡</span>Challenges</a>
+    <a class="si" href="dashboard.html#resources"><span class="si-ic">📚</span>Resources</a>
+    <div class="sb-d"></div>
+    <a class="si" href="settings.html"><span class="si-ic">⚙️</span>Settings</a>
+  </nav>
+  <div class="sb-u"><div class="sb-av">J</div><div><div class="sb-un">Jawad</div><div class="sb-ur">Pro Member</div></div></div>
+</aside>
+
+<div class="main">
+  <a href="journey.html" class="back">← Back to Journey</a>
+  <div class="lesson-badge">Building Your Script · Lesson 3 of 4</div>
+  <h1 class="lesson-title">Value Proposition in 10 Seconds — The Problem Proposition</h1>
+  <div class="lesson-meta"><span>⏱ ~12 min</span><span>🏆 +50 XP</span><span>📖 Module 3: Building Your Script</span></div>
+
+  <!-- PROBLEM-FIRST -->
+  <div class="lcard">
+    <h2><span class="ic">🚨</span> Nobody Buys Solutions. They Buy Escapes from Problems.</h2>
+    <p>Here's the mistake that kills 90% of cold call pitches: <strong>leading with what you sell instead of what they suffer.</strong></p>
+    <p>Your prospect doesn't wake up thinking <em>"I need a cloud-based workforce management platform."</em> They wake up thinking <em>"I can't believe I'm still doing schedules in a spreadsheet at 11pm."</em></p>
+    <p>That gap — between how reps pitch and how prospects think — is where calls go to die.</p>
+    <p><strong>People don't buy solutions to problems they understand intellectually.</strong> They buy solutions to problems they <em>feel.</em> Your pitch has to hit the nerve, not the brain.</p>
+    <blockquote>💡 <strong>Pro-Tip:</strong> If your pitch includes the word "platform," "solution," or "leverage" in the first sentence, you've already lost. Those are company words. Prospects speak in problems.</blockquote>
+  </div>
+
+  <!-- THE PROBLEM PROPOSITION -->
+  <div class="lcard">
+    <h2><span class="ic">🔬</span> The Problem Proposition — 3 Steps, 10 Seconds</h2>
+    <p>We call this <em>The Problem Proposition</em> because it starts with the problem, not the product. Three steps. Each one earns you the next.</p>
+    <table class="fw-tbl">
+      <tr><th>Step</th><th>What It Does</th><th>Time</th></tr>
+      <tr><td>1. Triggering Problem</td><td>Name a pain they feel right now — specific, not generic</td><td>~4 sec</td></tr>
+      <tr><td>2. One-Sentence Solution</td><td>What you do about that problem — plain English, no jargon</td><td>~3 sec</td></tr>
+      <tr><td>3. Interest CTA</td><td>One question that asks for curiosity, not commitment</td><td>~3 sec</td></tr>
+    </table>
+    <p>That's it. <strong>10 seconds total.</strong> If you can't deliver your value proposition in 10 seconds, you don't know it well enough.</p>
+  </div>
+
+  <!-- PITCH FORMULA -->
+  <div class="lcard">
+    <h2><span class="ic">⚡</span> The Pitch Formula: PROBLEM → SOLUTION → RESULT</h2>
+    <p>Inside that 10-second window, your pitch follows a locked sequence. We call it <em>The PSR Formula</em>:</p>
+    <table class="cx-tbl">
+      <tr><th class="bad">❌ Feature-First Pitch</th><th class="good">✅ Problem-First Pitch (PSR)</th></tr>
+      <tr><td class="bad">"We have an AI-powered scheduling platform that integrates with your existing HR systems."</td><td class="good"><strong>Problem:</strong> "Most ops managers are still building schedules manually — it eats 8-10 hours a week."</td></tr>
+      <tr><td class="bad">"Our solution helps companies optimize workforce allocation."</td><td class="good"><strong>Solution:</strong> "We automate that entirely — your schedule builds itself."</td></tr>
+      <tr><td class="bad">"Would you like to see a demo?"</td><td class="good"><strong>Result:</strong> "Our clients typically get those 10 hours back within the first month."</td></tr>
+    </table>
+    <p>The left column talks about the product. The right column talks about their life. <strong>Same product. Completely different reaction.</strong></p>
+    <blockquote>💡 <strong>Pro-Tip:</strong> The result should be a specific, believable number — not a vague promise. "Save time" is weak. "Get 10 hours back per week" is concrete. Specificity builds trust.</blockquote>
+  </div>
+
+  <!-- NEVER GET IN THE WEEDS -->
+  <div class="lcard">
+    <h2><span class="ic">🚫</span> The Cardinal Sin: Getting Into the Weeds</h2>
+    <p>When a prospect says "Tell me more," most reps make a fatal error: <strong>they actually tell them more.</strong></p>
+    <p>On a cold call, your job is not to explain your product. Your job is to <strong>create enough curiosity to book a meeting.</strong> The moment you start explaining features, integrations, pricing, or technical details on a cold call, you've turned a 2-minute conversation into a demo nobody asked for.</p>
+    <table class="cx-tbl">
+      <tr><th class="bad">❌ Getting Into the Weeds</th><th class="good">✅ Staying at Altitude</th></tr>
+      <tr><td class="bad">"So basically our platform uses machine learning to analyze historical data and then..."</td><td class="good">"I'd love to walk you through exactly how it works — it's easier to show than explain. Would 15 minutes Thursday work?"</td></tr>
+      <tr><td class="bad">"We integrate with Salesforce, HubSpot, and 40+ other CRMs..."</td><td class="good">"We plug into whatever you're already using. The best way to see if it fits is a quick 15-minute call."</td></tr>
+    </table>
+    <p><strong>Curiosity books meetings. Explanations book objections.</strong></p>
+  </div>
+
+  <!-- CTA EXAMPLES -->
+  <div class="lcard">
+    <h2><span class="ic">🎯</span> The CTA: Ask for Curiosity, Not Commitment</h2>
+    <p>Your call-to-action is not "Would you like to buy?" It's not even "Can I schedule a demo?" Those ask for commitment from a stranger. <strong>You haven't earned that yet.</strong></p>
+    <p>Instead, use CTAs that ask for <em>curiosity</em>:</p>
+    <details>
+      <summary>🔍 CTA Examples That Book Meetings</summary>
+      <div class="det-body">
+        <ul>
+          <li><strong>"Would it be worth exploring?"</strong> — Low pressure, high conversion. The word "exploring" removes commitment.</li>
+          <li><strong>"Would it make sense to see if this could help?"</strong> — Frames the meeting as a diagnostic, not a pitch.</li>
+          <li><strong>"I could show you exactly how [result] works in about 15 minutes — worth a look?"</strong> — Specific time + specific result.</li>
+          <li><strong>"I know I caught you cold — would it be crazy to grab 15 minutes this week just to see if there's a fit?"</strong> — Acknowledges the cold call, asks for minimal investment.</li>
+        </ul>
+        <p>Notice: none of these say "buy," "demo," or "pitch." The word choice matters. <strong>"Explore" beats "demo" by 3x</strong> in conversion because it implies no pressure.</p>
+      </div>
+    </details>
+  </div>
+
+  <!-- COMPLETE SCRIPT TEMPLATE -->
+  <div class="lcard">
+    <h2><span class="ic">📋</span> The Complete Cold Call Script Template</h2>
+    <p>Here's every piece from Lessons 1-3 assembled into one framework. This is your <em>Master Template</em>:</p>
+    <details>
+      <summary>🔍 Full Script Framework — All 7 Parts</summary>
+      <div class="det-body">
+        <p><strong>1. Opener</strong> (Context-First or Permission-Based)</p>
+        <p><em>"Hey [Name], I noticed [specific trigger]. Quick question on that..."</em></p>
+        <p><strong>2. Introduction</strong></p>
+        <p><em>"This is [Your Name] with [Company] — we help [audience] [one-line result]."</em></p>
+        <p><strong>3. Reason for Call</strong> (OCQ Framework)</p>
+        <p><em>"The reason I'm reaching out — [observation]. [Challenge]. [Question]?"</em></p>
+        <p><strong>4. Problem Proposition</strong> (PSR Formula)</p>
+        <p><em>"[Triggering problem]. [One-sentence solution]. [Specific result]."</em></p>
+        <p><strong>5. Discovery Question</strong></p>
+        <p><em>"How are you currently handling [the problem]?"</em></p>
+        <p><strong>6. CTA</strong></p>
+        <p><em>"Would it be worth exploring how this could work for your team? I'm thinking 15 minutes — no pressure."</em></p>
+        <p><strong>7. Objection Handling</strong> (covered in Lesson 4)</p>
+        <p>Total delivery time: <strong>45-60 seconds</strong> if the prospect engages. That's the whole call.</p>
+      </div>
+    </details>
+    <details>
+      <summary>🔍 Example: Complete Script for a SaaS Sales Tool</summary>
+      <div class="det-body">
+        <p><strong>Opener:</strong> "Hey Sarah, you don't know me — this is a cold call. Can I get 30 seconds?"</p>
+        <p><strong>Intro:</strong> "This is Mike with CallFlow — we help SDR teams book more meetings without adding headcount."</p>
+        <p><strong>Reason:</strong> "I noticed you just posted 4 SDR roles. Teams scaling that fast usually see ramp time stretch past 90 days. Is that something you're dealing with?"</p>
+        <p><strong>Problem Prop:</strong> "Most sales leaders tell us new reps take 3-4 months before they're booking consistently. We cut that to 6 weeks with guided call frameworks. Teams using us see a 40% jump in meetings within the first quarter."</p>
+        <p><strong>Discovery:</strong> "What does your current onboarding look like for new SDRs?"</p>
+        <p><strong>CTA:</strong> "Would it be worth 15 minutes to see how this could accelerate your new hires? No pressure either way."</p>
+      </div>
+    </details>
+  </div>
+
+  <!-- REFLECTION -->
+  <div class="reflect"><div class="reflect-q">💭 Could you deliver your Problem Proposition — triggering problem, solution, result — in 10 seconds flat, without a single piece of jargon?</div></div>
+
+  <!-- QUIZ -->
+  <div class="lcard">
+    <h2><span class="ic">🧠</span> Knowledge Check</h2>
+    <div class="q-item"><div class="q-num">Q1</div><div class="q-text">The Problem Proposition starts with:</div><div class="q-opts">
+      <label class="qopt" data-qi="0" data-oi="0"><input type="radio" name="q0"><span class="qo-text">Your company's features and integrations</span></label>
+      <label class="qopt" data-qi="0" data-oi="1"><input type="radio" name="q0"><span class="qo-text">A triggering problem the prospect feels right now</span></label>
+      <label class="qopt" data-qi="0" data-oi="2"><input type="radio" name="q0"><span class="qo-text">Your pricing model</span></label>
+      <label class="qopt" data-qi="0" data-oi="3"><input type="radio" name="q0"><span class="qo-text">A list of your current clients</span></label>
+    </div><div class="q-fb" id="qfb0"></div></div>
+
+    <div class="q-item"><div class="q-num">Q2</div><div class="q-text">When a prospect says "Tell me more," you should:</div><div class="q-opts">
+      <label class="qopt" data-qi="1" data-oi="0"><input type="radio" name="q1"><span class="qo-text">Explain every feature in detail</span></label>
+      <label class="qopt" data-qi="1" data-oi="1"><input type="radio" name="q1"><span class="qo-text">Send them a brochure</span></label>
+      <label class="qopt" data-qi="1" data-oi="2"><input type="radio" name="q1"><span class="qo-text">Redirect to booking a meeting — curiosity books meetings, explanations book objections</span></label>
+      <label class="qopt" data-qi="1" data-oi="3"><input type="radio" name="q1"><span class="qo-text">Hand off to your manager</span></label>
+    </div><div class="q-fb" id="qfb1"></div></div>
+
+    <div class="q-item"><div class="q-num">Q3</div><div class="q-text">The PSR Formula stands for:</div><div class="q-opts">
+      <label class="qopt" data-qi="2" data-oi="0"><input type="radio" name="q2"><span class="qo-text">Product, Service, Revenue</span></label>
+      <label class="qopt" data-qi="2" data-oi="1"><input type="radio" name="q2"><span class="qo-text">Problem, Solution, Result</span></label>
+      <label class="qopt" data-qi="2" data-oi="2"><input type="radio" name="q2"><span class="qo-text">Pitch, Sell, Repeat</span></label>
+      <label class="qopt" data-qi="2" data-oi="3"><input type="radio" name="q2"><span class="qo-text">Prospect, Schedule, Review</span></label>
+    </div><div class="q-fb" id="qfb2"></div></div>
+
+    <div class="q-item"><div class="q-num">Q4</div><div class="q-text">Why does "Would it be worth exploring?" outperform "Can I schedule a demo?"</div><div class="q-opts">
+      <label class="qopt" data-qi="3" data-oi="0"><input type="radio" name="q3"><span class="qo-text">It's a longer sentence</span></label>
+      <label class="qopt" data-qi="3" data-oi="1"><input type="radio" name="q3"><span class="qo-text">"Exploring" removes commitment pressure — it asks for curiosity, not a buying decision</span></label>
+      <label class="qopt" data-qi="3" data-oi="2"><input type="radio" name="q3"><span class="qo-text">It sounds more professional</span></label>
+      <label class="qopt" data-qi="3" data-oi="3"><input type="radio" name="q3"><span class="qo-text">It mentions the word "worth"</span></label>
+    </div><div class="q-fb" id="qfb3"></div></div>
+    <button class="ai-btn" style="background:var(--accent);color:var(--bg);margin-top:14px" id="checkQuiz">Check Answers</button>
+  </div>
+
+  <!-- AI COACH -->
+  <div class="ai-card">
+    <h2><span class="ic">🤖</span> Practice with AI Coach</h2>
+    <p style="font-size:14px;color:var(--text);margin:8px 0"><strong>Scenario:</strong> You've delivered your opener and intro. The prospect says "Okay, what do you want?" Deliver your Problem Proposition in under 10 seconds — problem, solution, result — then land the CTA.</p>
+    <p style="font-size:13px;color:var(--text)"><strong>Your objective:</strong> No jargon. No features. Hit the nerve, offer the escape, ask for curiosity.</p>
+    <div class="ai-meta"><span>Difficulty: Medium</span><span>Goal: Deliver a complete Problem Proposition + CTA under pressure.</span></div>
+    <a href="coach-home.html" class="ai-btn">Open AI Coach →</a>
+  </div>
+
+  <!-- INTERVIEW PREP -->
+  <div class="iv-card">
+    <h2><span class="ic">🎤</span> Interview Question</h2>
+    <blockquote style="background:rgba(100,181,246,.06);border-left:3px solid var(--blue);border-radius:0 10px 10px 0;padding:14px 18px;margin:12px 0;font-style:italic;font-size:14px;color:var(--text)">"Pitch me your current (or last) company's product in 10 seconds."</blockquote>
+    <p style="font-size:13px;color:var(--text);margin:8px 0"><strong>Example answer:</strong> "Most [audience] spend [X hours] per week on [painful task]. We eliminate that entirely — [one-sentence how]. Our clients typically see [specific result] within [timeframe]." Then stop. Don't oversell. Let the silence work.</p>
+    <div class="iv-tip">💡 If you can deliver this cleanly in an interview, the manager knows you can deliver it on a call. Practice until you can say it without thinking — that's how it sounds natural.</div>
+  </div>
+
+  <!-- TAKEAWAY -->
+  <div class="takeaway"><p>🔑 Problem first, solution second, result third. 10 seconds. No jargon. Curiosity books meetings — explanations book objections.</p></div>
+
+  <!-- BOTTOM NAV -->
+  <div class="bnav">
+    <a href="building-script-2.html" class="bnav-btn bnav-prev">← Previous Lesson</a>
+    <button class="bnav-btn bnav-complete" id="completeBtn">Mark as Complete ✓</button>
+    <a href="building-script-4.html" class="bnav-btn bnav-next">Next Lesson →</a>
+  </div>
+</div>
+
+<div class="toast" id="toast">🎉 Lesson Complete! +50 XP</div>
+
+<script>
+const STORAGE_KEY='amplifyHub_journeyProgress';
+const MODULE_INDEX=2;
+const LESSON_INDEX=2;
+const TOTAL_MODULE_LESSONS=4;
+
+function readProgress(){
+  try{ const d=JSON.parse(localStorage.getItem(STORAGE_KEY)); return new Set(d?.completedLessons||[]); }catch(e){ return new Set(); }
+}
+function saveProgress(completed){
+  localStorage.setItem(STORAGE_KEY,JSON.stringify({
+    completedLessons:[...completed],
+    updatedAt:Date.now()
+  }));
+}
+function lid(m,l){ return `m${m}l${l}`; }
+
+const completed=readProgress();
+const thisLid=lid(MODULE_INDEX,LESSON_INDEX);
+const btn=document.getElementById('completeBtn');
+if(completed.has(thisLid)){ btn.textContent='✓ Completed'; btn.classList.add('done'); }
+
+btn.addEventListener('click',function(){
+  if(completed.has(thisLid)) return;
+  completed.add(thisLid);
+  saveProgress(completed);
+  btn.textContent='✓ Completed';
+  btn.classList.add('done');
+  const toast=document.getElementById('toast');
+  toast.classList.add('show');
+  setTimeout(()=>toast.classList.remove('show'),2500);
+});
+
+const answers=[1, 2, 1, 1];
+document.getElementById('checkQuiz').addEventListener('click',function(){
+  document.querySelectorAll('.qopt').forEach(opt=>{
+    const qi=parseInt(opt.dataset.qi), oi=parseInt(opt.dataset.oi);
+    const input=opt.querySelector('input');
+    if(!input.checked) return;
+    if(oi===answers[qi]){ opt.classList.add('correct'); document.getElementById('qfb'+qi).textContent='✓ Correct!'; document.getElementById('qfb'+qi).style.color='var(--green)'; }
+    else{ opt.classList.add('wrong'); document.getElementById('qfb'+qi).textContent='✗ Try again'; document.getElementById('qfb'+qi).style.color='var(--red)'; }
+  });
+});
+
+document.getElementById('mobBtn').addEventListener('click',()=>document.getElementById('sb').classList.add('open'));
+document.getElementById('sbX').addEventListener('click',()=>document.getElementById('sb').classList.remove('open'));
+</script>
+</body>
+</html>
