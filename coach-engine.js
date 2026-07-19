@@ -7,6 +7,35 @@ const CoachEngine = (() => {
   function on(evt, fn) { (handlers[evt] = handlers[evt] || []).push(fn); }
   function emit(evt, data) { (handlers[evt] || []).forEach(fn => fn(data)); }
 
+  class CoachApiError extends Error {
+    constructor(message, status, code, retryAfter) {
+      super(message);
+      this.name = 'CoachApiError';
+      this.status = status;
+      this.code = code || 'COACH_REQUEST_FAILED';
+      this.retryAfter = retryAfter || null;
+    }
+  }
+
+  async function apiError(res) {
+    let data = {};
+    try { data = await res.json(); } catch (_) {}
+    const retryAfter = Number(data.retryAfter || res.headers.get('Retry-After')) || null;
+    return new CoachApiError('Coach request failed', res.status, data.code, retryAfter);
+  }
+
+  function userMessageForError(error, fallback) {
+    if (error && error.status === 429) {
+      const seconds = Math.max(1, Number(error.retryAfter) || 60);
+      const minutes = Math.ceil(seconds / 60);
+      return `You're practicing quickly. Please wait about ${minutes} minute${minutes === 1 ? '' : 's'} before trying again.`;
+    }
+    if (error && (error.status === 400 || error.status === 413)) {
+      return 'That request was too large or could not be processed. Shorten it and try again.';
+    }
+    return fallback || 'The AI Coach is temporarily unavailable. Please try again shortly.';
+  }
+
   // Both calls authenticate as the logged-in user, never the public anon key.
   // getSession() (from auth.js) returns the current Supabase session, whose
   // access_token is the short-lived JWT that identifies *this* user to the
@@ -37,9 +66,7 @@ const CoachEngine = (() => {
       });
 
       if (!res.ok) {
-        const errText = await res.text();
-        console.error("AI Provider Error:", errText);
-        throw new Error(`Status ${res.status}`);
+        throw await apiError(res);
       }
       const data = await res.json();
       return { html: data.html };
@@ -58,9 +85,7 @@ const CoachEngine = (() => {
       });
 
       if (!res.ok) {
-        const errText = await res.text();
-        console.error("AI Feedback Error:", errText);
-        throw new Error(`Status ${res.status}`);
+        throw await apiError(res);
       }
       const data = await res.json();
       return data.report;
@@ -118,8 +143,8 @@ const CoachEngine = (() => {
       emit('message', { role: 'coach', html: reply.html });
 
     } catch (err) {
-      console.error('CoachEngine: turn failed —', err);
-      emit('message', { role: 'coach', html: 'Hmm, I lost my train of thought — try that again in a moment.' });
+      console.error('CoachEngine: turn failed —', err && err.code ? err.code : 'unknown');
+      emit('message', { role: 'coach', html: userMessageForError(err, 'Hmm, I lost my train of thought — try that again in a moment.') });
     }
   }
 
@@ -172,6 +197,7 @@ const CoachEngine = (() => {
     endSession,
     getFeedback,
     getMode: () => mode,
-    providerId: () => provider.id
+    providerId: () => provider.id,
+    userMessageForError
   };
 })();

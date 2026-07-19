@@ -54,15 +54,36 @@ const CoachHome = (function () {
     return s;
   }
  
-  function appendBubble(threadEl, role, content, html) {
+  function appendBubble(threadEl, role, content) {
     const empty = threadEl.querySelector('.empty');
     if (empty) empty.remove();
     const d = document.createElement('div');
     d.className = 'tmsg ' + (role === 'user' ? 'user' : 'ai');
-    const av = role === 'user' ? '<div class="tav u">J</div>' : '<div class="tav a">🤖</div>';
-    d.innerHTML = `${av}<div class="bub">${html ? content : esc(content)}</div>`;
+    const av = document.createElement('div');
+    av.className = 'tav ' + (role === 'user' ? 'u' : 'a');
+    av.textContent = role === 'user' ? 'J' : '🤖';
+    const bubble = document.createElement('div');
+    bubble.className = 'bub';
+    // Conversation content is untrusted, including text returned by the AI.
+    // textContent prevents it from ever being interpreted as executable HTML.
+    bubble.textContent = String(content ?? '');
+    d.append(av, bubble);
     threadEl.appendChild(d);
     threadEl.scrollTop = threadEl.scrollHeight;
+  }
+
+  function appendTranscriptMessage(container, role, content) {
+    const isUser = role === 'user';
+    const row = document.createElement('div');
+    row.className = 'tx-msg ' + (isUser ? 'user' : 'ai');
+    const avatar = document.createElement('div');
+    avatar.className = 'tx-av ' + (isUser ? 'u' : 'a');
+    avatar.textContent = isUser ? 'J' : '🤖';
+    const bubble = document.createElement('div');
+    bubble.className = 'tx-bub';
+    bubble.textContent = String(content ?? '');
+    row.append(avatar, bubble);
+    container.appendChild(row);
   }
  
   function showTyping(threadEl) {
@@ -143,7 +164,7 @@ const CoachHome = (function () {
     if (sess) {
       const msgs = await CoachStore.getMessages(sess.id);
       if (msgs.length) {
-        msgs.forEach(m => appendBubble(thread, m.role === 'user' ? 'user' : 'coach', m.content, m.role !== 'user'));
+        msgs.forEach(m => appendBubble(thread, m.role === 'user' ? 'user' : 'coach', m.content));
         return;
       }
     }
@@ -163,7 +184,7 @@ const CoachHome = (function () {
     CoachEngine.on('message', m => {
       if (CoachEngine.getMode() !== 'ask') return;
       removeTyping(thread);
-      appendBubble(thread, 'ai', m.html, true);
+      appendBubble(thread, 'ai', m.html);
     });
  
     async function prepareAskSession() {
@@ -301,7 +322,7 @@ const CoachHome = (function () {
     CoachEngine.on('message', m => {
       if (CoachEngine.getMode() !== 'roleplay') return;
       removeTyping(thread);
-      appendBubble(thread, 'ai', m.html, true);
+      appendBubble(thread, 'ai', m.html);
     });
  
     renderScenarioCards();
@@ -389,7 +410,7 @@ const CoachHome = (function () {
         await CoachStore.endActiveSession({ status: 'abandoned' });
         $('fbLoading').style.display = 'none';
         resetRoleplayToStart();
-        showRpStatus("Couldn't generate your feedback report right now — your conversation was still saved. Try again next session.", 6000);
+        showRpStatus(CoachEngine.userMessageForError(err, "Couldn't generate your feedback report right now — your conversation was still saved. Try again next session."), 6000);
       }
     });
  
@@ -652,14 +673,9 @@ const CoachHome = (function () {
           $('transcriptBody').innerHTML = '<div class="tx-empty">No messages found for this session.</div>';
           return;
         }
-        $('transcriptBody').innerHTML = msgs.map(m => {
-          const isUser = m.role === 'user';
-          const av = isUser
-            ? '<div class="tx-av u">J</div>'
-            : '<div class="tx-av a">🤖</div>';
-          const content = isUser ? esc(m.content) : m.content;
-          return `<div class="tx-msg ${isUser ? 'user' : 'ai'}">${av}<div class="tx-bub">${content}</div></div>`;
-        }).join('');
+        const transcriptBody = $('transcriptBody');
+        transcriptBody.replaceChildren();
+        msgs.forEach(m => appendTranscriptMessage(transcriptBody, m.role, m.content));
       }
     });
  
@@ -673,5 +689,5 @@ const CoachHome = (function () {
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
   else init();
  
-  return { go };
+  return { go, _security: { appendBubble, appendTranscriptMessage, renderFeedbackReport } };
 })();

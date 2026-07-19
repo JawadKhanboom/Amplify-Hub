@@ -19,3 +19,11 @@ sales-mindset-app/.edge-*/
 sales-mindset-app/qa-*.png
 sales-mindset-app/dev-server.*
 sales-mindset-app/*.tsbuildinfo
+
+# Supabase local state and secrets
+supabase/.temp/
+supabase/.branches/
+supabase/.env
+supabase/.env.*
+!supabase/.env.example
+supabase/functions/**/.vscode/
