@@ -10,7 +10,8 @@
     "preview": "vite preview",
     "qa": "node scripts/qa.mjs",
     "qa:booking": "node scripts/qa-booking.mjs",
-    "qa:progress": "node scripts/qa-progress.mjs"
+    "qa:progress": "node scripts/qa-progress.mjs",
+    "qa:coach-security": "node scripts/qa-coach-request-security.mjs && node scripts/qa-coach-security.mjs"
   },
   "dependencies": {
     "react": "19.2.7",

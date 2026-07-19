@@ -1,0 +1,1 @@
+-- Intentionally empty. Keep local and CI database resets deterministic.
