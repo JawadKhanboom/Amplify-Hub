@@ -11,6 +11,8 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="auth-config.js"></script>
 <script src="auth.js"></script>
+<script src="assets/journey-progress.js"></script>
+<script src="assets/user-stats.js"></script>
 <script>requireAuth();</script>
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
@@ -171,8 +173,8 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
     <a class="sb-item" href="settings.html"><span class="sb-icon">⚙️</span>Settings</a>
   </nav>
   <div class="sb-user">
-    <div class="sb-avatar">J</div>
-    <div><div class="sb-uname">Jawad</div><div class="sb-urole">Pro Member</div></div>
+    <div class="sb-avatar" id="sbAvatar">·</div>
+    <div><div class="sb-uname" id="sbName">Your progress</div><div class="sb-urole" id="sbRole">Member</div></div>
   </div>
 </aside>
 
@@ -184,8 +186,9 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
 </section>
 <div class="wrap">
   <div class="skel-wrap" aria-hidden="true"><div class="skel skel-card"></div><div class="skel skel-cta"></div></div>
+  <div id="stateBanner"></div>
   <div class="card fade-in">
-    <div class="empty-note only-new">🌱 <strong>You're just getting started.</strong> Your numbers will grow with every lesson and practice call — <a href="journey.html">begin your Journey</a> to see them move.</div>
+    <div class="empty-note only-new">🌱 <strong>You're just getting started.</strong> Every number here is drawn from your own lessons, AI Coach practice, and challenges — <a href="journey.html">begin your Journey</a> to see them move.</div>
     <div class="pr-ring-wrap">
       <div class="pr-ring">
         <svg width="120" height="120" viewBox="0 0 120 120"><circle class="pr-rbg" cx="60" cy="60" r="52"/><circle class="pr-rfill" id="prRing" cx="60" cy="60" r="52"/></svg>
@@ -193,19 +196,12 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
       </div>
       <div>
         <div style="font-size:11px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:1px">Overall Journey</div>
-        <div style="font-size:17px;font-weight:800;margin-top:4px" id="prStep">Step 3 of 6 — Practice With AI</div>
-        <div style="font-size:13px;color:var(--text);margin-top:6px" id="prSub">You're 38% through your guided path.</div>
+        <div style="font-size:17px;font-weight:800;margin-top:4px" id="prStep">Getting Started</div>
+        <div style="font-size:13px;color:var(--text);margin-top:6px" id="prSub">You haven't started your guided path yet.</div>
       </div>
     </div>
-    <div class="pstat-grid">
-      <div class="pstat"><div class="pstat-v" data-c="247">0</div><div class="pstat-l">Calls Practiced</div></div>
-      <div class="pstat"><div class="pstat-v" data-c="31">0</div><div class="pstat-l">Meetings Simulated</div></div>
-      <div class="pstat"><div class="pstat-v" data-c="87">0</div><div class="pstat-l">Confidence Score</div></div>
-      <div class="pstat"><div class="pstat-v" data-c="14">0</div><div class="pstat-l">Day Streak</div></div>
-    </div>
-    <div class="pbar-row"><div class="pbar-top"><span>Journey Progress</span><span>38%</span></div><div class="pbar-track"><div class="pbar-fill" data-w="38"></div></div></div>
-    <div class="pbar-row"><div class="pbar-top"><span>AI Coach Practice</span><span>68%</span></div><div class="pbar-track"><div class="pbar-fill" data-w="68"></div></div></div>
-    <div class="pbar-row"><div class="pbar-top"><span>Confidence Growth</span><span>87%</span></div><div class="pbar-track"><div class="pbar-fill" data-w="87"></div></div></div>
+    <div class="pstat-grid" id="pstatGrid"></div>
+    <div id="pbars"></div>
   </div>
   <div class="card fade-in" style="text-align:center">
     <h3 style="font-size:18px;font-weight:800;margin-bottom:8px">Want the full picture?</h3>
@@ -214,46 +210,100 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
   </div>
 </div>
 <script>
-// Sidebar mobile toggle
-document.getElementById('mobMenuBtn').addEventListener('click',()=>document.getElementById('sidebar').classList.add('open'));
-document.getElementById('sbClose').addEventListener('click',()=>document.getElementById('sidebar').classList.remove('open'));
+(function(){
+  'use strict';
+  function el(tag, className, text){ var n=document.createElement(tag); if(className)n.className=className; if(text!=null)n.textContent=String(text); return n; }
 
-const prObs = new IntersectionObserver(es => { es.forEach(e => {
-  if (!e.isIntersecting) return;
-  const isNew = document.body.classList.contains('state-new');
-  const ring = document.getElementById('prRing'), pct = document.getElementById('prPct'), target = isNew ? 0 : 38, dash = 327;
-  ring.style.strokeDashoffset = dash - (dash * target / 100);
-  let n = 0; const iv = setInterval(() => { if (n >= target) { clearInterval(iv); return; } n++; pct.textContent = n + '%'; }, 30);
-  document.querySelectorAll('[data-c]').forEach(el => {
-    const t = parseInt(el.dataset.c); let c = 0;
-    if (t === 0) { el.textContent = 0; return; }
-    const civ = setInterval(() => { c += Math.ceil(t/30); if (c >= t) { c = t; clearInterval(civ); } el.textContent = c; }, 25);
-  });
-  document.querySelectorAll('.pbar-fill').forEach(f => f.style.width = f.dataset.w + '%');
-  prObs.unobserve(e.target);
-}); }, { threshold: .3 });
-prObs.observe(document.querySelector('.card'));
+  // Sidebar mobile toggle
+  document.getElementById('mobMenuBtn').addEventListener('click',function(){ document.getElementById('sidebar').classList.add('open'); });
+  document.getElementById('sbClose').addEventListener('click',function(){ document.getElementById('sidebar').classList.remove('open'); });
 
-// ═══ LOADING → NEW-USER / ACTIVE-USER STATE ═══
-function ahUserState(){
-  try{
-    const d=JSON.parse(localStorage.getItem('amplifyHub_journeyProgress')||'null');
-    if(d&&((d.overallProgress||0)>0||(d.lessonsCompleted||0)>0))return 'active';
-  }catch(e){}
-  return 'new';
-}
-setTimeout(()=>{
-  const st=ahUserState();
-  if(st==='new'){
-    document.getElementById('prStep').textContent='Step 1 of 6 — Getting Started';
-    document.getElementById('prSub').textContent="You haven't started your guided path yet.";
-    document.querySelectorAll('[data-c]').forEach(el=>{el.dataset.c='0'});
-    document.querySelectorAll('.pbar-fill').forEach(f=>{f.dataset.w='0'});
-    document.querySelectorAll('.pbar-top span:last-child').forEach(s=>{s.textContent='0%'});
+  function pstat(value, label){
+    var s=el('div','pstat'); s.appendChild(el('div','pstat-v', value)); s.appendChild(el('div','pstat-l', label)); return s;
   }
-  document.body.classList.remove('state-loading');
-  document.body.classList.add(st==='new'?'state-new':'state-active');
-},450);
+  function pbar(label, pct, valueText){
+    var row=el('div','pbar-row');
+    var top=el('div','pbar-top'); top.appendChild(el('span',null,label)); top.appendChild(el('span',null, valueText!=null?valueText:(pct+'%')));
+    row.appendChild(top);
+    var track=el('div','pbar-track'); var fill=el('div','pbar-fill'); fill.style.width='0'; track.appendChild(fill); row.appendChild(track);
+    setTimeout(function(){ fill.style.width=Math.max(0,Math.min(100,pct))+'%'; }, 250);
+    return row;
+  }
+
+  function animateRing(target){
+    var ring=document.getElementById('prRing'), pct=document.getElementById('prPct'), dash=327;
+    ring.style.strokeDashoffset = dash - (dash*target/100);
+    var n=0; var iv=setInterval(function(){ if(n>=target){ clearInterval(iv); pct.textContent=target+'%'; return; } n++; pct.textContent=n+'%'; },20);
+  }
+
+  function banner(kind, node){
+    var host=document.getElementById('stateBanner'); host.replaceChildren();
+    var wrap=el('div','empty-note'); if(kind==='offline'){ wrap.style.borderColor='rgba(255,167,38,.35)'; }
+    wrap.appendChild(node); host.appendChild(wrap);
+  }
+
+  function render(stats){
+    var t=stats.totals;
+    document.getElementById('sbAvatar').textContent = stats.profile.initial;
+    document.getElementById('sbName').textContent = stats.profile.name || 'Your progress';
+    document.getElementById('sbRole').textContent = stats.profile.email || 'Member';
+
+    var hasActivity = t.lessonsCompleted>0 || t.coachSessions>0 || t.challengesCompleted>0;
+
+    // Ring headline
+    document.getElementById('prStep').textContent = hasActivity ? ('Current focus — '+(t.currentModuleName||'Your Journey')) : 'Getting Started';
+    document.getElementById('prSub').textContent = hasActivity
+      ? ("You're "+t.journeyPct+'% through your guided path ('+t.lessonsCompleted+' of '+t.totalLessons+' lessons).')
+      : "You haven't started your guided path yet.";
+
+    // Real stat tiles (no calls, no confidence score)
+    var grid=document.getElementById('pstatGrid'); grid.replaceChildren();
+    grid.appendChild(pstat(t.lessonsCompleted, 'Lessons Done'));
+    grid.appendChild(pstat(t.coachSessions, 'AI Coach Sessions'));
+    grid.appendChild(pstat(t.avgScore!=null?(t.avgScore+'/10'):'—', 'Avg Coach Score'));
+    grid.appendChild(pstat(t.streak, 'Day Streak'));
+
+    // Real progress bars
+    var bars=document.getElementById('pbars'); bars.replaceChildren();
+    bars.appendChild(pbar('Journey Progress', t.journeyPct));
+    if(t.avgScore!=null) bars.appendChild(pbar('Average Coach Score', Math.round(t.avgScore*10), t.avgScore+' / 10'));
+    var topSkill = stats.skills[0];
+    if(topSkill) bars.appendChild(pbar(topSkill.label, topSkill.pct, topSkill.avg+' / 10'));
+
+    document.body.classList.remove('state-loading');
+    document.body.classList.add(hasActivity ? 'state-active' : 'state-new');
+
+    var prObs=new IntersectionObserver(function(es){ es.forEach(function(e){
+      if(!e.isIntersecting) return;
+      animateRing(hasActivity ? t.journeyPct : 0);
+      prObs.unobserve(e.target);
+    }); },{threshold:.3});
+    prObs.observe(document.querySelector('.card'));
+
+    if(stats.offline){
+      var f=document.createDocumentFragment();
+      f.appendChild(el('strong',null,'Showing offline data. '));
+      f.appendChild(document.createTextNode('We could not reach the server; these numbers will refresh once you are back online.'));
+      banner('offline', f);
+    }
+  }
+
+  async function init(){
+    try{
+      var stats=await AmplifyUserStats.load();
+      if(!stats.authenticated){ return; }
+      render(stats);
+    }catch(e){
+      document.body.classList.remove('state-loading');
+      document.body.classList.add('state-new');
+      var f=document.createDocumentFragment();
+      f.appendChild(el('strong',null,'We could not load your progress. '));
+      f.appendChild(document.createTextNode('Please refresh the page.'));
+      banner('err', f);
+    }
+  }
+  init();
+})();
 </script>
 
 <footer>

@@ -12,7 +12,8 @@
     "qa:booking": "node scripts/qa-booking.mjs",
     "qa:progress": "node scripts/qa-progress.mjs",
     "qa:coach-security": "node scripts/qa-coach-request-security.mjs && node scripts/qa-coach-security.mjs",
-    "qa:challenges": "node scripts/qa-challenges.mjs"
+    "qa:challenges": "node scripts/qa-challenges.mjs",
+    "qa:profile-progress": "node scripts/qa-profile-progress.mjs"
   },
   "dependencies": {
     "react": "19.2.7",
