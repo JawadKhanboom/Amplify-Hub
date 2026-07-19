@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AmplifyHub — Resource</title>
+<meta name="description" content="A practical, original SDR resource from the AmplifyHub library. Read it, copy sections, print to PDF, or download an editable file.">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#07070e;--bg2:#0b0b16;--card:#13132a;--card2:#181838;
+  --accent:#FFD54A;--accent-dim:rgba(255,213,74,.1);--accent-glow:rgba(255,213,74,.3);
+  --warm:#FFA726;--green:#00e696;--blue:#64B5F6;--red:#ff5f57;
+  --white:#fff;--text:#b0b0c8;--muted:#8a8aa4;
+  --border:rgba(255,213,74,.08);--border-h:rgba(255,213,74,.22);
+  --font:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
+}
+html{scroll-behavior:smooth}body{font-family:var(--font);background:var(--bg);color:var(--white);min-height:100vh}
+.top{height:64px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 24px;position:sticky;top:0;background:rgba(7,7,14,.94);backdrop-filter:blur(14px);z-index:20}
+.brand{font-size:20px;font-weight:900;text-decoration:none;color:var(--white)}.brand span{color:var(--accent)}
+.top-nav{display:flex;gap:6px}
+.top-nav a{color:var(--text);text-decoration:none;font-size:13px;font-weight:600;padding:8px 12px;border-radius:9px}
+.top-nav a:hover{background:rgba(255,213,74,.08);color:var(--accent)}
+main{max-width:820px;margin:0 auto;padding:28px 24px 90px}
+.back{display:inline-flex;align-items:center;gap:6px;color:var(--muted);text-decoration:none;font-size:13px;font-weight:600;margin-bottom:18px}
+.back:hover{color:var(--accent)}
+.draft-banner{display:flex;gap:10px;align-items:flex-start;background:rgba(255,167,38,.07);border:1px solid rgba(255,167,38,.22);border-radius:12px;padding:12px 14px;margin-bottom:20px;font-size:12px;color:var(--text);line-height:1.6}
+.draft-banner b{color:var(--warm)}
+.eyebrow{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.4px;color:var(--accent);margin-bottom:8px}
+h1.title{font-size:clamp(24px,4vw,34px);font-weight:900;letter-spacing:-.5px;line-height:1.15;margin-bottom:14px}
+.meta-row{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px}
+.chip{font-size:11px;font-weight:600;color:var(--text);background:var(--card2);border:1px solid var(--border);border-radius:100px;padding:5px 12px}
+.chip.diff-beginner{color:var(--green)}.chip.diff-intermediate{color:var(--accent)}.chip.diff-advanced{color:var(--red)}
+.lead{font-size:16px;color:var(--text);line-height:1.7;margin-bottom:24px}
+
+.toolbar{display:flex;flex-wrap:wrap;gap:8px;padding:14px;background:var(--card);border:1px solid var(--border);border-radius:14px;margin-bottom:28px;position:sticky;top:76px;z-index:10}
+.tb{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--border);background:var(--card2);color:var(--white);border-radius:10px;padding:9px 14px;font-size:12px;font-weight:700;font-family:var(--font);cursor:pointer;text-decoration:none;transition:all .2s}
+.tb:hover{border-color:var(--border-h)}
+.tb.primary{background:var(--accent);color:var(--bg);border-color:var(--accent)}
+.tb.primary:hover{box-shadow:0 4px 16px var(--accent-glow)}
+.tb.dl{background:rgba(0,230,150,.08);border-color:rgba(0,230,150,.2);color:var(--green)}
+.tb .fmt{font-size:9px;font-weight:800;letter-spacing:.5px;opacity:.85}
+
+section.block{margin-bottom:26px}
+section.block h2{font-size:17px;font-weight:800;margin-bottom:12px;letter-spacing:-.2px}
+section.block p{font-size:14.5px;color:var(--text);line-height:1.75}
+ul.objs,ul.plain{list-style:none;display:flex;flex-direction:column;gap:9px}
+ul.objs li{position:relative;padding-left:26px;font-size:14px;color:var(--text);line-height:1.6}
+ul.objs li::before{content:'✓';position:absolute;left:0;color:var(--green);font-weight:900}
+ul.plain li{position:relative;padding-left:20px;font-size:14px;color:var(--text);line-height:1.6}
+ul.plain li::before{content:'•';position:absolute;left:2px;color:var(--accent);font-weight:900}
+ol.steps{list-style:none;counter-reset:step;display:flex;flex-direction:column;gap:11px}
+ol.steps li{position:relative;padding-left:34px;font-size:14px;color:var(--text);line-height:1.6;counter-increment:step}
+ol.steps li::before{content:counter(step);position:absolute;left:0;top:-1px;width:22px;height:22px;border-radius:7px;background:var(--accent-dim);color:var(--accent);font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center}
+ul.fields{list-style:none;display:flex;flex-direction:column;gap:12px}
+ul.fields li{font-size:14px;color:var(--text)}
+ul.fields .fill{display:block;height:18px;border-bottom:1px dashed rgba(255,255,255,.18);margin-top:6px}
+.tbl-wrap{overflow-x:auto;border:1px solid var(--border);border-radius:12px}
+table{border-collapse:collapse;width:100%;min-width:420px;font-size:13px}
+th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--border);color:var(--text);vertical-align:top}
+th{background:var(--card2);color:var(--white);font-weight:700;font-size:12px}
+tr:last-child td{border-bottom:none}
+.example{background:rgba(100,181,246,.06);border:1px solid rgba(100,181,246,.18);border-radius:12px;padding:16px 18px}
+.example h2{color:var(--blue)}
+.safe{background:rgba(0,230,150,.05);border:1px solid rgba(0,230,150,.18);border-radius:12px;padding:16px 18px}
+.safe h2{color:var(--green)}
+.related{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px 20px;margin-top:8px}
+.related .rl-t{font-size:13px;color:var(--muted)}.related .rl-t b{color:var(--white);font-size:15px;display:block;margin-top:2px}
+.save-row{margin-top:26px;display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.save-note{font-size:12px;color:var(--muted);background:var(--card);border:1px dashed var(--border);border-radius:10px;padding:10px 14px;line-height:1.6}
+.save-note a{color:var(--accent);font-weight:700}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--card2);border:1px solid var(--border-h);color:var(--white);padding:12px 20px;border-radius:12px;font-size:13px;font-weight:600;opacity:0;transition:all .3s;z-index:50;pointer-events:none}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.notfound{text-align:center;padding:80px 20px}
+.notfound h1{font-size:24px;margin-bottom:10px}.notfound p{color:var(--text);margin-bottom:20px}
+.notfound a{color:var(--accent);font-weight:700;text-decoration:none}
+.review-line{font-size:12px;color:var(--muted);margin-top:30px;border-top:1px solid var(--border);padding-top:16px}
+@media(max-width:640px){.top-nav{display:none}.toolbar{position:static}main{padding:20px 16px 80px}}
+@media(prefers-reduced-motion:reduce){*{transition-duration:.01ms!important}}
+a:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+@media print{
+  .top,.toolbar,.back,.related,.save-row,.draft-banner{display:none!important}
+  body{background:#fff;color:#111}
+  main{max-width:100%;padding:0}
+  h1.title{color:#111}section.block h2{color:#111}
+  section.block p,ul.objs li,ul.plain li,ol.steps li,ul.fields li,th,td,.lead,.chip{color:#222}
+  .example,.safe{border:1px solid #ccc;background:#f7f7f7}
+  .example h2,.safe h2{color:#111}
+  .chip{border:1px solid #ccc}
+  th{background:#eee;color:#111}
+}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <a class="brand" href="index.html">Amplify<span>Hub</span></a>
+  <nav class="top-nav">
+    <a href="resources.html">Library</a>
+    <a href="dashboard.html">Dashboard</a>
+    <a href="coach-home.html">AI Coach</a>
+  </nav>
+</header>
+
+<main id="main"><!-- rendered by script --></main>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="assets/resource-catalog.js"></script>
+<script>
+(function(){
+  'use strict';
+  var catalog = window.ResourceCatalog;
+  var main = document.getElementById('main');
+  var params = new URLSearchParams(window.location.search);
+  var id = params.get('id') || '';
+  var resource = catalog.byId(id);
+  var meta = catalog.categoryMeta;
+
+  function el(tag, className, text){ var n=document.createElement(tag); if(className)n.className=className; if(text!=null)n.textContent=String(text); return n; }
+  function cap(s){ return s ? s.charAt(0).toUpperCase()+s.slice(1) : s; }
+
+  function toast(msg){
+    var t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show');
+    clearTimeout(t._timer); t._timer=setTimeout(function(){ t.classList.remove('show'); }, 2200);
+  }
+
+  if(!resource){
+    document.title = 'AmplifyHub — Resource not found';
+    var nf = el('div','notfound');
+    nf.appendChild(el('h1','','Resource not found'));
+    nf.appendChild(el('p','','We could not find that resource. It may have been renamed or removed.'));
+    var back = el('a',null,'← Back to the Resource Library'); back.href='resources.html';
+    nf.appendChild(back);
+    main.appendChild(nf);
+    return;
+  }
+
+  document.title = 'AmplifyHub — ' + resource.title;
+  var cmeta = meta[resource.category] || { label: resource.category, icon:'📄' };
+
+  // Back link
+  var back = el('a','back','← Resource Library'); back.href='resources.html';
+  main.appendChild(back);
+
+  // Draft banner (honest editorial status)
+  var banner = el('div','draft-banner');
+  banner.appendChild(el('span',null,'📝'));
+  var bt = el('div');
+  var b1 = el('b',null,'Draft — pending editorial review. ');
+  bt.appendChild(b1);
+  bt.appendChild(document.createTextNode('This is an original first draft written for AmplifyHub and has not yet been professionally verified. Use it as a practical starting point.'));
+  banner.appendChild(bt);
+  main.appendChild(banner);
+
+  // Header
+  main.appendChild(el('div','eyebrow', cmeta.icon + '  ' + cmeta.label));
+  main.appendChild(el('h1','title', resource.title));
+
+  var metaRow = el('div','meta-row');
+  metaRow.appendChild(el('span','chip','Skill: '+resource.skill));
+  metaRow.appendChild(el('span','chip diff-'+resource.difficulty, cap(resource.difficulty)));
+  metaRow.appendChild(el('span','chip','⏱ '+resource.duration+' min'));
+  metaRow.appendChild(el('span','chip','Reviewed target: '+(resource.reviewDate||catalog.reviewDate)));
+  main.appendChild(metaRow);
+
+  main.appendChild(el('p','lead', resource.summary));
+
+  // Toolbar
+  var toolbar = el('div','toolbar');
+  var copyBtn = el('button','tb primary','⧉ Copy resource');
+  toolbar.appendChild(copyBtn);
+  var printBtn = el('button','tb','🖨 Print / Save as PDF');
+  toolbar.appendChild(printBtn);
+  (resource.downloads||[]).forEach(function(d){
+    var a = el('a','tb dl');
+    a.href = 'assets/resources/downloads/' + resource.id + '.' + d.format;
+    a.setAttribute('download','');
+    a.appendChild(el('span',null,'⬇ Download'));
+    a.appendChild(el('span','fmt', d.format.toUpperCase()));
+    toolbar.appendChild(a);
+  });
+  main.appendChild(toolbar);
+
+  // Content container (used for copy + print)
+  var content = el('div'); content.id='resourceContent';
+
+  function addBlock(node){ content.appendChild(node); }
+
+  // Objectives
+  var objBlock = el('section','block');
+  objBlock.appendChild(el('h2',null,'What you will get out of it'));
+  var objList = el('ul','objs');
+  (resource.objectives||[]).forEach(function(o){ objList.appendChild(el('li',null,o)); });
+  objBlock.appendChild(objList);
+  addBlock(objBlock);
+
+  // Sections
+  (resource.sections||[]).forEach(function(sec){
+    var block = el('section','block');
+    if(sec.heading) block.appendChild(el('h2',null,sec.heading));
+    if(sec.type==='paragraph' && sec.text){
+      block.appendChild(el('p',null,sec.text));
+    } else if(sec.type==='list' && sec.items){
+      var ul=el('ul','plain'); sec.items.forEach(function(it){ ul.appendChild(el('li',null,it)); }); block.appendChild(ul);
+    } else if(sec.type==='steps' && sec.items){
+      var ol=el('ol','steps'); sec.items.forEach(function(it){ ol.appendChild(el('li',null,it)); }); block.appendChild(ol);
+    } else if(sec.type==='fields' && sec.items){
+      var fl=el('ul','fields'); sec.items.forEach(function(it){ var li=el('li',null,it); li.appendChild(el('span','fill')); fl.appendChild(li); }); block.appendChild(fl);
+    } else if(sec.type==='table' && sec.columns){
+      var wrap=el('div','tbl-wrap'); var table=el('table');
+      var thead=el('thead'); var htr=el('tr');
+      sec.columns.forEach(function(c){ htr.appendChild(el('th',null,c)); });
+      thead.appendChild(htr); table.appendChild(thead);
+      var tbody=el('tbody');
+      (sec.rows||[]).forEach(function(row){
+        var tr=el('tr');
+        row.forEach(function(cell){ tr.appendChild(el('td',null, cell || '—')); });
+        tbody.appendChild(tr);
+      });
+      table.appendChild(tbody); wrap.appendChild(table); block.appendChild(wrap);
+    }
+    addBlock(block);
+  });
+
+  // Example
+  if(resource.example){
+    var ex = el('section','block example');
+    ex.appendChild(el('h2',null,(resource.example.title)||'Worked example'));
+    ex.appendChild(el('p',null,(resource.example.text)||String(resource.example)));
+    addBlock(ex);
+  }
+
+  // Safe practice
+  if(resource.safePractice){
+    var safe = el('section','block safe');
+    safe.appendChild(el('h2',null,'Safe-practice note'));
+    safe.appendChild(el('p',null,resource.safePractice));
+    addBlock(safe);
+  }
+
+  main.appendChild(content);
+
+  // Related action
+  if(resource.related && resource.related.route){
+    var rel = el('div','related');
+    var rt = el('div','rl-t');
+    rt.appendChild(document.createTextNode('Next step'));
+    rt.appendChild(el('b',null, resource.related.label || 'Keep practising'));
+    rel.appendChild(rt);
+    var rb = el('a','tb primary', 'Go →'); rb.href = resource.related.route;
+    rel.appendChild(rb);
+    main.appendChild(rel);
+  }
+
+  // Save / feedback (Phase 1: sign-in prompt; synced saving arrives in Phase 2)
+  var saveRow = el('div','save-row');
+  var bookmarkBtn = el('button','tb','🔖 Bookmark');
+  var usefulBtn = el('button','tb','👍 Was this useful?');
+  saveRow.appendChild(bookmarkBtn);
+  saveRow.appendChild(usefulBtn);
+  main.appendChild(saveRow);
+
+  var saveNote = el('div','save-note'); saveNote.style.display='none';
+  var signHref = 'signin.html?redirect=' + encodeURIComponent('resource.html?id='+resource.id);
+  saveNote.appendChild(document.createTextNode('Saving, synced history, and ratings are coming with accounts. '));
+  var signLink = el('a',null,'Sign in'); signLink.href = signHref;
+  saveNote.appendChild(signLink);
+  saveNote.appendChild(document.createTextNode(' to be ready when they arrive.'));
+  main.appendChild(saveNote);
+
+  function promptSignIn(){ saveNote.style.display='block'; toast('Sign in to save — coming soon.'); }
+  bookmarkBtn.addEventListener('click', promptSignIn);
+  usefulBtn.addEventListener('click', promptSignIn);
+
+  // Review line
+  main.appendChild(el('div','review-line','Original AmplifyHub draft · Status: pending human editorial review · Category: '+cmeta.label));
+
+  // Copy: assemble plain text from the structured content.
+  function plainText(){
+    var lines = [];
+    lines.push(resource.title);
+    lines.push(cmeta.label+' · Skill: '+resource.skill+' · '+cap(resource.difficulty)+' · '+resource.duration+' min');
+    lines.push('(Draft — pending editorial review)');
+    lines.push('');
+    lines.push(resource.summary);
+    lines.push('');
+    lines.push('What you will get out of it:');
+    (resource.objectives||[]).forEach(function(o){ lines.push('  - '+o); });
+    lines.push('');
+    (resource.sections||[]).forEach(function(sec){
+      if(sec.heading) lines.push(sec.heading);
+      if(sec.type==='paragraph' && sec.text) lines.push(sec.text);
+      if(sec.type==='list' && sec.items) sec.items.forEach(function(it){ lines.push('  - '+it); });
+      if(sec.type==='steps' && sec.items) sec.items.forEach(function(it,i){ lines.push('  '+(i+1)+'. '+it); });
+      if(sec.type==='fields' && sec.items) sec.items.forEach(function(it){ lines.push('  - '+it+': ______'); });
+      if(sec.type==='table' && sec.columns){
+        lines.push('  '+sec.columns.join(' | '));
+        (sec.rows||[]).forEach(function(row){ lines.push('  '+row.map(function(c){return c||'';}).join(' | ')); });
+      }
+      lines.push('');
+    });
+    if(resource.example){ lines.push((resource.example.title)||'Worked example'); lines.push((resource.example.text)||String(resource.example)); lines.push(''); }
+    if(resource.safePractice){ lines.push('Safe-practice note'); lines.push(resource.safePractice); lines.push(''); }
+    lines.push('AmplifyHub Practical Resource Library · '+(resource.reviewDate||catalog.reviewDate));
+    return lines.join('\n');
+  }
+
+  copyBtn.addEventListener('click', function(){
+    var text = plainText();
+    function fallback(){
+      var ta=document.createElement('textarea'); ta.value=text; ta.style.position='fixed'; ta.style.opacity='0';
+      document.body.appendChild(ta); ta.select();
+      try{ document.execCommand('copy'); toast('Copied to clipboard'); }catch(e){ toast('Press Ctrl+C to copy'); }
+      document.body.removeChild(ta);
+    }
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(text).then(function(){ toast('Copied to clipboard'); }, fallback);
+    } else { fallback(); }
+  });
+
+  printBtn.addEventListener('click', function(){ window.print(); });
+})();
+</script>
+</body>
+</html>
