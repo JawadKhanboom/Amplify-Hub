@@ -13,6 +13,8 @@
 <script src="auth.js"></script>
 <script src="coach-config.js"></script>
 <script src="coach-store.js"></script>
+<script src="assets/journey-progress.js"></script>
+<script src="assets/challenge-system.js"></script>
 <script>requireAuth();</script>
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
@@ -246,7 +248,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
     <a class="sb-item active" href="dashboard.html"><span class="sb-icon">🏠</span>Dashboard</a>
     <a class="sb-item" href="journey.html"><span class="sb-icon">🛤</span>Journey</a>
     <a class="sb-item" href="coach-home.html"><span class="sb-icon">🤖</span>AI Coach</a>
-    <a class="sb-item" href="#challenge"><span class="sb-icon">⚡</span>Challenges</a>
+    <a class="sb-item" href="challenges.html"><span class="sb-icon">⚡</span>Challenges</a>
     <a class="sb-item" href="#resources"><span class="sb-icon">📚</span>Resources</a>
     <div class="sb-divider"></div>
     <a class="sb-item" href="settings.html"><span class="sb-icon">⚙️</span>Settings</a>
@@ -359,18 +361,18 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
 
   <!-- DAILY CHALLENGE -->
   <div class="sec fade-up" id="challenge">
-    <div class="sec-h"><h2>Daily Challenge</h2><a class="sec-link">View All →</a></div>
-    <div class="challenge">
+    <div class="sec-h"><h2>Daily Challenge</h2><a class="sec-link" href="challenges.html">View All →</a></div>
+    <div class="challenge" id="dailyChallengeCard">
       <div class="ch-icon">⚡</div>
       <div class="ch-info">
-        <h3>Handle the "We Already Have Someone" Objection</h3>
-        <p>Practice turning this common pushback into a conversation that uncovers real opportunity.</p>
+        <h3 id="dailyChallengeTitle">Loading your best next challenge…</h3>
+        <p id="dailyChallengeDesc">Your daily set adapts to lesson progress and recent Coach feedback.</p>
         <div class="ch-meta">
-          <span class="ch-badge xp">🏆 +100 XP</span>
-          <span class="ch-badge time">⏱ ~4 min</span>
+          <span class="ch-badge xp" id="dailyChallengeXp">🏆 — XP</span>
+          <span class="ch-badge time" id="dailyChallengeTime">⏱ — min</span>
         </div>
       </div>
-      <button class="ch-start">Start Challenge</button>
+      <button class="ch-start" id="dailyChallengeStart" disabled>Start Challenge</button>
     </div>
   </div>
 
@@ -519,7 +521,54 @@ async function loadDashboard() {
   } catch (err) { console.error('Dashboard load error:', err); document.body.classList.remove('state-loading'); document.body.classList.add('state-new'); }
 }
 
-getCurrentUser().then(user => { if (user) loadDashboard(); });
+async function loadDailyChallenge() {
+  const title = document.getElementById('dailyChallengeTitle');
+  const desc = document.getElementById('dailyChallengeDesc');
+  const xp = document.getElementById('dailyChallengeXp');
+  const time = document.getElementById('dailyChallengeTime');
+  const start = document.getElementById('dailyChallengeStart');
+  try {
+    if (window.AmplifyJourneyProgress) await AmplifyJourneyProgress.syncWithCloud();
+    const daily = await ChallengeSystem.getDaily();
+    const assignment = (daily.assignments || []).find(a => a.status !== 'completed');
+    if (!assignment) {
+      title.textContent = 'All daily challenges complete';
+      desc.textContent = 'Excellent work. Review your completed practice or return tomorrow for a new set.';
+      xp.textContent = '🏆 ' + ((daily.summary && daily.summary.todayXp) || 0) + ' XP today';
+      time.textContent = '✓ 3 / 3 complete';
+      start.textContent = 'View Completed';
+      start.disabled = false;
+      start.addEventListener('click', () => { location.href = 'challenges.html'; }, { once: true });
+      return;
+    }
+    const challenge = assignment.challenge;
+    title.textContent = challenge.title;
+    desc.textContent = challenge.description;
+    xp.textContent = '🏆 +' + challenge.xp + ' XP';
+    time.textContent = '⏱ ~' + challenge.estimated_minutes + ' min';
+    start.textContent = assignment.status === 'in_progress' ? 'Continue Challenge' : 'Start Challenge';
+    start.disabled = false;
+    start.addEventListener('click', async () => {
+      start.disabled = true;
+      try {
+        const result = await ChallengeSystem.start(assignment.id);
+        location.href = challenge.verification_type === 'reflection' || challenge.verification_type === 'work_sample'
+          ? 'challenges.html' : (result.route || 'challenges.html');
+      } catch (error) {
+        desc.textContent = error.message || 'Could not start this challenge. Open Challenges and try again.';
+        start.disabled = false;
+      }
+    }, { once: true });
+  } catch (error) {
+    title.textContent = 'Challenges temporarily unavailable';
+    desc.textContent = 'Your lessons and Coach remain available. Refresh later to load today’s practice set.';
+    start.textContent = 'Open Challenges';
+    start.disabled = false;
+    start.addEventListener('click', () => { location.href = 'challenges.html'; }, { once: true });
+  }
+}
+
+getCurrentUser().then(user => { if (user) { loadDashboard(); loadDailyChallenge(); } });
 </script>
 </body>
 </html>

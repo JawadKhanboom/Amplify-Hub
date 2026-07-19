@@ -140,6 +140,81 @@
     return store.completedLessons.indexOf(lid(moduleIndex, lessonIndex)) !== -1;
   }
 
+  function getCloudClient() {
+    try {
+      if (typeof supabaseClient !== 'undefined') return supabaseClient;
+      return global.supabaseClient || null;
+    } catch (e) { return null; }
+  }
+
+  async function getCloudUser(client) {
+    if (!client || !client.auth) return null;
+    var result = await client.auth.getUser();
+    return result && result.data ? result.data.user : null;
+  }
+
+  async function syncLessonToCloud(id, meta, completed) {
+    try {
+      var client = getCloudClient();
+      var user = await getCloudUser(client);
+      if (!user) return false;
+      var payload = {
+        user_id: user.id,
+        lesson_id: id,
+        metadata: meta || {},
+        updated_at: new Date().toISOString()
+      };
+      if (completed) payload.completed_at = new Date((meta && meta.completedAt) || Date.now()).toISOString();
+      var result = await client.from('user_lesson_progress').upsert(payload, { onConflict: 'user_id,lesson_id' });
+      if (result.error) throw result.error;
+      return true;
+    } catch (e) {
+      console.warn('Lesson progress will sync when the connection is available.');
+      return false;
+    }
+  }
+
+  // Merges the browser cache with Supabase after sign-in. Completion is a
+  // union, so an older browser can never erase lessons completed elsewhere.
+  async function syncWithCloud() {
+    try {
+      var client = getCloudClient();
+      var user = await getCloudUser(client);
+      if (!user) return readProgress();
+      var cloudResult = await client.from('user_lesson_progress').select('lesson_id,completed_at,metadata,updated_at');
+      if (cloudResult.error) throw cloudResult.error;
+
+      var local = readProgress();
+      var completed = new Set(local.completedLessons || []);
+      var metadata = Object.assign({}, local.lessonMeta || {});
+      (cloudResult.data || []).forEach(function (row) {
+        if (row.completed_at) completed.add(row.lesson_id);
+        var cloudMeta = row.metadata && typeof row.metadata === 'object' ? row.metadata : {};
+        var existing = metadata[row.lesson_id] || {};
+        metadata[row.lesson_id] = Object.assign({}, cloudMeta, existing);
+        if (row.completed_at && !metadata[row.lesson_id].completedAt) {
+          metadata[row.lesson_id].completedAt = new Date(row.completed_at).getTime();
+        }
+      });
+
+      var merged = writeProgress(Array.from(completed), metadata);
+      var rows = Object.keys(metadata).map(function (id) {
+        var row = { user_id: user.id, lesson_id: id, metadata: metadata[id] || {}, updated_at: new Date().toISOString() };
+        if (completed.has(id)) row.completed_at = new Date((metadata[id] && metadata[id].completedAt) || Date.now()).toISOString();
+        return row;
+      });
+      if (rows.length) {
+        var upsertResult = await client.from('user_lesson_progress').upsert(rows, { onConflict: 'user_id,lesson_id' });
+        if (upsertResult.error) throw upsertResult.error;
+      }
+      global.dispatchEvent(new CustomEvent('amplify-progress-synced', { detail: merged }));
+      return merged;
+    } catch (e) {
+      console.warn('Using offline lesson progress until cloud sync is available.');
+      return readProgress();
+    }
+  }
+
   global.AmplifyJourneyProgress = {
     STORAGE_KEY: STORAGE_KEY,
     MODULE_MAP: MODULE_MAP,
@@ -149,6 +224,24 @@
     writeProgress: writeProgress,
     markLessonComplete: markLessonComplete,
     recordLessonMeta: recordLessonMeta,
-    isLessonComplete: isLessonComplete
+    isLessonComplete: isLessonComplete,
+    syncWithCloud: syncWithCloud
   };
+
+  var originalMarkLessonComplete = markLessonComplete;
+  global.AmplifyJourneyProgress.markLessonComplete = function (moduleIndex, lessonIndex, meta) {
+    var store = originalMarkLessonComplete(moduleIndex, lessonIndex, meta);
+    var id = lid(moduleIndex, lessonIndex);
+    syncLessonToCloud(id, store.lessonMeta[id], true);
+    return store;
+  };
+  var originalRecordLessonMeta = recordLessonMeta;
+  global.AmplifyJourneyProgress.recordLessonMeta = function (moduleIndex, lessonIndex, meta) {
+    var store = originalRecordLessonMeta(moduleIndex, lessonIndex, meta);
+    var id = lid(moduleIndex, lessonIndex);
+    syncLessonToCloud(id, store.lessonMeta[id], store.completedLessons.indexOf(id) !== -1);
+    return store;
+  };
+
+  if (getCloudClient()) setTimeout(syncWithCloud, 0);
 })(typeof window !== 'undefined' ? window : globalThis);
