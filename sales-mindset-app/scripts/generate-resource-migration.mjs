@@ -39,8 +39,8 @@ const rows = catalog.resources.map((r) => {
     sqlText(related.route || ''),
     sqlJson(downloads),
     sqlText(r.reviewDate || catalog.reviewDate),
-    "'draft'",
-    'true'
+    sqlText(r.status === 'reviewed' ? 'reviewed' : 'draft'),
+    r.active === false ? 'false' : 'true'
   ].join(',') + ')';
 });
 
@@ -69,12 +69,15 @@ create table if not exists public.resource_catalog (
   active boolean not null default true
 );
 
--- Public, read-only access to active resources; the library is intentionally public.
--- Only authenticated personalization (Phase 2) will write to separate user tables.
+-- Publication gate (defense in depth): the public can read a resource only when
+-- it is BOTH active and editorially reviewed. Draft resources must never appear
+-- publicly merely because they are active. Only authenticated personalization
+-- (Phase 2) will write to separate user tables.
 alter table public.resource_catalog enable row level security;
 drop policy if exists "Public reads active resources" on public.resource_catalog;
-create policy "Public reads active resources" on public.resource_catalog
-  for select to anon, authenticated using (active = true);
+drop policy if exists "Public reads reviewed active resources" on public.resource_catalog;
+create policy "Public reads reviewed active resources" on public.resource_catalog
+  for select to anon, authenticated using (active = true and status = 'reviewed');
 revoke insert, update, delete on public.resource_catalog from anon, authenticated;
 
 create index if not exists resource_catalog_category_idx on public.resource_catalog (category) where active;

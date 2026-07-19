@@ -144,9 +144,9 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(-
     </div>
   </div>
 
-  <div class="note-banner fu">
+  <div class="note-banner fu" id="modeBanner">
     <span aria-hidden="true">📝</span>
-    <div><b>Draft library, pending editorial review.</b> These 25 resources are original first drafts written for AmplifyHub. Every item is being reviewed by a human editor before it is marked as verified. Use them as practical starting points, not finished playbooks.</div>
+    <div id="modeBannerText"><b>Library in editorial review.</b> Resources appear here once they pass human editorial review.</div>
   </div>
 
   <div class="filters fu" id="filters"></div>
@@ -175,16 +175,38 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(-
   'use strict';
   var catalog = window.ResourceCatalog;
   var meta = catalog.categoryMeta;
-  var counts = catalog.categoryCounts();
+
+  // Publication gate: the public library lists only active + reviewed resources.
+  // ?preview=review is an explicit editorial mode that also shows drafts, always
+  // labelled as such. Drafts never render publicly just because they are active.
+  var previewMode = new URLSearchParams(window.location.search).get('preview') === 'review';
+  var SOURCE = previewMode ? catalog.resources.filter(function(r){ return r.active !== false; }) : catalog.published();
+  var counts = {};
+  Object.keys(meta).forEach(function(k){ counts[k] = 0; });
+  SOURCE.forEach(function(r){ counts[r.category] = (counts[r.category]||0) + 1; });
   var state = { category: 'all', query: '' };
 
   var $ = function(id){ return document.getElementById(id); };
   function el(tag, className, text){ var n=document.createElement(tag); if(className)n.className=className; if(text!=null)n.textContent=String(text); return n; }
   function diffClass(d){ return 'res-diff rd-' + d; }
 
+  // Mode banner.
+  var bannerText = $('modeBannerText');
+  bannerText.replaceChildren();
+  if (previewMode) {
+    bannerText.appendChild(el('b',null,'Editorial preview — drafts visible. '));
+    bannerText.appendChild(document.createTextNode('This view includes '+SOURCE.length+' resources that have not yet passed human editorial review. It exists for reviewers; the public library shows only reviewed items.'));
+  } else if (SOURCE.length === 0) {
+    bannerText.appendChild(el('b',null,'Library in final editorial review. '));
+    bannerText.appendChild(document.createTextNode('Every resource is being reviewed by a human editor before publication. Approved resources will appear here — nothing is shown until it has been reviewed.'));
+  } else {
+    bannerText.appendChild(el('b',null,'Reviewed resources. '));
+    bannerText.appendChild(document.createTextNode('Everything listed here has passed editorial review. Use each item as a practical starting point and adapt it to your own voice.'));
+  }
+
   // Filter chips (derived counts).
   var filters = $('filters');
-  var allChip = el('button','flt act','All ('+catalog.resources.length+')');
+  var allChip = el('button','flt act','All ('+SOURCE.length+')');
   allChip.dataset.cat='all';
   filters.appendChild(allChip);
   Object.keys(meta).forEach(function(key){
@@ -209,12 +231,12 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(-
   function cardFor(r){
     var m = meta[r.category] || { label:r.category, icon:'📄' };
     var a = el('a','res');
-    a.href = 'resource.html?id=' + encodeURIComponent(r.id);
+    a.href = 'resource.html?id=' + encodeURIComponent(r.id) + (previewMode ? '&preview=review' : '');
     a.setAttribute('aria-label', r.title + ' — ' + m.label);
 
     var top = el('div','res-top');
     top.appendChild(el('span','res-emoji',m.icon));
-    top.appendChild(el('span','res-draft','Draft'));
+    if (r.status !== 'reviewed') top.appendChild(el('span','res-draft','Draft'));
     a.appendChild(top);
 
     var body = el('div','res-body');
@@ -247,7 +269,7 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(-
   function render(){
     var grid = $('resGrid');
     grid.replaceChildren();
-    var shown = catalog.resources.filter(matches);
+    var shown = SOURCE.filter(matches);
     shown.forEach(function(r){ grid.appendChild(cardFor(r)); });
 
     var label = state.category==='all' ? 'All resources' : (meta[state.category]?meta[state.category].plural:'Resources');
@@ -255,7 +277,18 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(-
     var countText = 'Showing '+shown.length+' resource'+(shown.length===1?'':'s');
     if(state.query) countText += ' for "'+state.query+'"';
     $('resCount').textContent = countText;
-    $('emptyState').style.display = shown.length===0 ? 'block' : 'none';
+
+    var empty = $('emptyState');
+    if (SOURCE.length === 0) {
+      // Nothing published yet: an honest review-state message, not a search error.
+      empty.querySelector('.empty-emoji').textContent = '📝';
+      empty.querySelector('.empty-msg').textContent = 'The library is in final editorial review.';
+      empty.querySelector('.empty-sub').textContent = 'Resources are published one by one as a human editor approves them. Check back soon.';
+      $('clearBtn').style.display = 'none';
+      empty.style.display = 'block';
+    } else {
+      empty.style.display = shown.length===0 ? 'block' : 'none';
+    }
 
     Array.prototype.forEach.call(document.querySelectorAll('.flt'),function(c){ c.classList.toggle('act', c.dataset.cat===state.category); });
     Array.prototype.forEach.call(document.querySelectorAll('.type-card'),function(c){ c.classList.toggle('active', c.dataset.cat===state.category); });

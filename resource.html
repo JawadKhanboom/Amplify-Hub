@@ -119,6 +119,12 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-off
   var resource = catalog.byId(id);
   var meta = catalog.categoryMeta;
 
+  // Publication gate: draft resources are only rendered in the explicit
+  // ?preview=review editorial mode. Publicly they behave as unpublished.
+  var previewMode = params.get('preview') === 'review';
+  if (resource && !catalog.isPublished(resource) && !previewMode) resource = null;
+  var isDraft = resource && resource.status !== 'reviewed';
+
   function el(tag, className, text){ var n=document.createElement(tag); if(className)n.className=className; if(text!=null)n.textContent=String(text); return n; }
   function cap(s){ return s ? s.charAt(0).toUpperCase()+s.slice(1) : s; }
 
@@ -128,10 +134,14 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-off
   }
 
   if(!resource){
-    document.title = 'AmplifyHub — Resource not found';
+    var raw = catalog.byId(id);
+    var unpublished = !!raw; // exists in the catalog but has not passed editorial review
+    document.title = 'AmplifyHub — ' + (unpublished ? 'Resource not yet published' : 'Resource not found');
     var nf = el('div','notfound');
-    nf.appendChild(el('h1','','Resource not found'));
-    nf.appendChild(el('p','','We could not find that resource. It may have been renamed or removed.'));
+    nf.appendChild(el('h1','', unpublished ? 'This resource is not published yet' : 'Resource not found'));
+    nf.appendChild(el('p','', unpublished
+      ? 'It is in editorial review and will appear in the library once a human editor approves it.'
+      : 'We could not find that resource. It may have been renamed or removed.'));
     var back = el('a',null,'← Back to the Resource Library'); back.href='resources.html';
     nf.appendChild(back);
     main.appendChild(nf);
@@ -142,18 +152,19 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-off
   var cmeta = meta[resource.category] || { label: resource.category, icon:'📄' };
 
   // Back link
-  var back = el('a','back','← Resource Library'); back.href='resources.html';
+  var back = el('a','back','← Resource Library'); back.href = 'resources.html' + (previewMode ? '?preview=review' : '');
   main.appendChild(back);
 
-  // Draft banner (honest editorial status)
-  var banner = el('div','draft-banner');
-  banner.appendChild(el('span',null,'📝'));
-  var bt = el('div');
-  var b1 = el('b',null,'Draft — pending editorial review. ');
-  bt.appendChild(b1);
-  bt.appendChild(document.createTextNode('This is an original first draft written for AmplifyHub and has not yet been professionally verified. Use it as a practical starting point.'));
-  banner.appendChild(bt);
-  main.appendChild(banner);
+  // Draft banner: shown for any unreviewed resource (only reachable in preview mode).
+  if (isDraft) {
+    var banner = el('div','draft-banner');
+    banner.appendChild(el('span',null,'📝'));
+    var bt = el('div');
+    bt.appendChild(el('b',null,'Draft — pending editorial review. '));
+    bt.appendChild(document.createTextNode('You are viewing this in editorial preview. It is an original first draft written for AmplifyHub, has not yet been approved by a human editor, and is not visible in the public library.'));
+    banner.appendChild(bt);
+    main.appendChild(banner);
+  }
 
   // Header
   main.appendChild(el('div','eyebrow', cmeta.icon + '  ' + cmeta.label));
@@ -163,7 +174,9 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-off
   metaRow.appendChild(el('span','chip','Skill: '+resource.skill));
   metaRow.appendChild(el('span','chip diff-'+resource.difficulty, cap(resource.difficulty)));
   metaRow.appendChild(el('span','chip','⏱ '+resource.duration+' min'));
-  metaRow.appendChild(el('span','chip','Reviewed target: '+(resource.reviewDate||catalog.reviewDate)));
+  metaRow.appendChild(el('span','chip', isDraft
+    ? 'Draft — in editorial review'
+    : 'Reviewed: '+(resource.reviewDate||catalog.reviewDate)));
   main.appendChild(metaRow);
 
   main.appendChild(el('p','lead', resource.summary));
@@ -276,14 +289,16 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-off
   usefulBtn.addEventListener('click', promptSignIn);
 
   // Review line
-  main.appendChild(el('div','review-line','Original AmplifyHub draft · Status: pending human editorial review · Category: '+cmeta.label));
+  main.appendChild(el('div','review-line', isDraft
+    ? 'Original AmplifyHub draft · Status: pending human editorial review · Category: '+cmeta.label
+    : 'Original AmplifyHub resource · Editorially reviewed '+(resource.reviewDate||catalog.reviewDate)+' · Category: '+cmeta.label));
 
   // Copy: assemble plain text from the structured content.
   function plainText(){
     var lines = [];
     lines.push(resource.title);
     lines.push(cmeta.label+' · Skill: '+resource.skill+' · '+cap(resource.difficulty)+' · '+resource.duration+' min');
-    lines.push('(Draft — pending editorial review)');
+    if (isDraft) lines.push('(Draft — pending editorial review)');
     lines.push('');
     lines.push(resource.summary);
     lines.push('');

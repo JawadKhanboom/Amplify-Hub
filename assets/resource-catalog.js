@@ -41,7 +41,7 @@
       duration: 6,
       summary: 'A short, honest opener that asks for a few seconds of attention before you explain why you called, so the conversation starts with consent instead of a pitch.',
       objectives: [
-        'Introduce yourself clearly and say who you are with',
+        'Introduce yourself and your company clearly',
         'Ask permission before continuing',
         'Give a specific, honest reason for the call',
         'End with one open question that invites a real answer'
@@ -99,7 +99,7 @@
       ],
       example: {
         title: 'Worked example',
-        text: '"Hi Priya, Sam from Northlight. I called because we help support teams that are getting more tickets than they can answer without adding headcount. A lot of leads tell me weekend coverage is where things slip. Is that something your team runs into, or have you already solved it?"'
+        text: '"Hi Priya, Sam from Northlight. I called because we help support teams that are getting more tickets than they can answer without adding headcount. Support leads often tell me weekend coverage is where things slip. Is that something your team runs into, or have you already solved it?"'
       },
       safePractice: 'Use a structure you can adapt in the moment rather than reciting a script; robotic delivery breaks trust. Do not invent statistics or results. If they answer that the problem does not apply, believe them and move on.',
       related: { label: 'Build your own script in the Journey', route: 'building-script-1.html' },
@@ -135,7 +135,7 @@
       ],
       example: {
         title: 'Worked example',
-        text: '"Hi, this is Sam with Northlight — I am probably not who you were expecting today. I am trying to reach whoever looks after driver scheduling, and I am guessing you would know better than I would. Who should I be speaking with, and is there a good time to catch them?"'
+        text: '"Hi, this is Sam calling from Northlight. I am trying to reach whoever looks after driver scheduling, and I am guessing you would know better than I would. Could you point me to the right person, and is there a good time to catch them?"'
       },
       safePractice: 'Do not use tricks, false urgency, or claims of an existing relationship to get past a gatekeeper. Honesty here protects your reputation and theirs. If they decline, accept it politely.',
       related: { label: 'Practice openings with the AI Coach', route: 'coach-home.html#roleplay' },
@@ -161,7 +161,7 @@
           ['"Bad time."', 'Completely understand.', 'Offer a specific alternative time to call back.'],
           ['"Just send an email."', 'Happy to.', 'Ask one question so the email is actually relevant.'],
           ['"Who are you / how did you get my number?"', 'Reasonable question.', 'Answer honestly and briefly, then give your reason for calling.'],
-          ['"We already have a solution."', 'Good — most teams your size do.', 'Ask what is working well and what they would change.']
+          ['"We already have a solution."', 'That makes sense.', 'Ask what is working well and what they would change.']
         ]},
         { type: 'list', heading: 'The pattern behind every response', items: [
           'Acknowledge the concern genuinely, without sarcasm.',
@@ -207,9 +207,9 @@
       ],
       example: {
         title: 'Worked example',
-        text: '"You mentioned weekend coverage is where tickets slip. It might be worth 20 minutes to show you how two similar teams handle that — would that be useful, or not a priority right now? … Great. Would Tuesday afternoon or Wednesday morning suit you better? I will walk you through it and you can decide if it is worth going further."'
+        text: '"You mentioned weekend coverage is where tickets slip. Would it be worth 20 minutes to look at that properly — or is it not a priority right now? … Great. Would Tuesday afternoon or Wednesday morning suit you better? I will keep it focused on the coverage question, and you can decide whether it is worth going further."'
       },
-      safePractice: 'Ask for interest before logistics; pressuring for a calendar slot after a soft no damages trust. Do not promise outcomes you cannot guarantee. If they are not interested, thank them and leave the door open without pushing.',
+      safePractice: 'Ask for interest before logistics; pressuring for a calendar slot after a soft no damages trust. Do not promise outcomes you cannot guarantee, and never cite customers, results, or "similar teams" you do not actually have. If they are not interested, thank them and leave the door open without pushing.',
       related: { label: 'Learn appointment setting in the Journey', route: 'book-appointments.html' },
       downloads: [{ format: 'pdf' }, { format: 'docx' }]
     },
@@ -280,7 +280,7 @@
       ],
       example: {
         title: 'Worked example (voicemail)',
-        text: '"Hi Priya, Sam with Northlight. I called about weekend support coverage — a few teams like yours have been rethinking it. I will send a short email so you have it in writing, no pressure to call back. My number is 555-0142, again 555-0142. Thanks Priya."'
+        text: '"Hi Priya, Sam with Northlight. I called about weekend support coverage — I saw you are hiring for your support team, so the timing seemed relevant. I will send a short email so you have it in writing, no pressure to call back. My number is 555-0142, again 555-0142. Thanks Priya."'
       },
       safePractice: 'Keep both messages honest and easy to ignore. Do not mark emails "urgent" or imply a prior conversation that did not happen. One voicemail and one email per attempt is plenty — avoid flooding.',
       related: { label: 'Practice voicemails with the AI Coach', route: 'coach-home.html#roleplay' },
@@ -959,20 +959,36 @@
     }
   ];
 
+  // Publication gate: a resource is publicly visible only when it is BOTH
+  // active and editorially reviewed. `status` defaults to 'draft' here so a
+  // new entry can never leak into the public UI just by being active; a human
+  // reviewer flips an entry to status:'reviewed' after the editorial pass.
+  RESOURCES.forEach(function (r) {
+    if (r.status !== 'reviewed') r.status = 'draft';
+    if (r.active === undefined) r.active = true;
+  });
+
+  function isPublished(r) { return !!r && r.active === true && r.status === 'reviewed'; }
+
+  function countBy(list) {
+    var counts = {};
+    for (var key in CATEGORY_META) { if (Object.prototype.hasOwnProperty.call(CATEGORY_META, key)) counts[key] = 0; }
+    list.forEach(function (r) { counts[r.category] = (counts[r.category] || 0) + 1; });
+    return counts;
+  }
+
   var API = {
     reviewDate: REVIEW_DATE,
     categoryMeta: CATEGORY_META,
     resources: RESOURCES,
+    isPublished: isPublished,
+    published: function () { return RESOURCES.filter(isPublished); },
     byId: function (id) {
       for (var i = 0; i < RESOURCES.length; i++) { if (RESOURCES[i].id === id) return RESOURCES[i]; }
       return null;
     },
-    categoryCounts: function () {
-      var counts = {};
-      for (var key in CATEGORY_META) { if (Object.prototype.hasOwnProperty.call(CATEGORY_META, key)) counts[key] = 0; }
-      RESOURCES.forEach(function (r) { counts[r.category] = (counts[r.category] || 0) + 1; });
-      return counts;
-    }
+    categoryCounts: function () { return countBy(RESOURCES); },
+    publishedCounts: function () { return countBy(RESOURCES.filter(isPublished)); }
   };
 
   if (typeof module !== 'undefined' && module.exports) { module.exports = API; }

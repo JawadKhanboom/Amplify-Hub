@@ -451,12 +451,28 @@ document.getElementById('mobMenuBtn').addEventListener('click', () => document.g
 document.getElementById('sbClose').addEventListener('click', () => document.getElementById('sidebar').classList.remove('open'));
 document.querySelectorAll('.sb-item').forEach(item => { item.addEventListener('click', () => { document.querySelectorAll('.sb-item').forEach(i => i.classList.remove('active')); item.classList.add('active'); document.getElementById('sidebar').classList.remove('open'); }); });
 
-// Resources: build cards from the real, catalog-derived counts (no invented numbers, no videos).
+// Resources: build cards from published (active + reviewed) counts only — drafts
+// never surface here, and no counts are invented. Falls back to an honest
+// in-review card while nothing has passed editorial review yet.
 (function(){
   var grid = document.getElementById('resourceGrid');
   if (!grid || !window.ResourceCatalog) return;
   var meta = window.ResourceCatalog.categoryMeta;
-  var counts = window.ResourceCatalog.categoryCounts();
+  var counts = window.ResourceCatalog.publishedCounts();
+  var total = Object.keys(counts).reduce(function(sum,k){ return sum + (counts[k]||0); }, 0);
+  function card(icon, name, desc, countText){
+    var a = document.createElement('a');
+    a.className = 'res'; a.href = 'resources.html'; a.style.textDecoration = 'none'; a.style.color = 'inherit';
+    var ic = document.createElement('div'); ic.className = 'res-icon'; ic.textContent = icon; a.appendChild(ic);
+    var nm = document.createElement('div'); nm.className = 'res-name'; nm.textContent = name; a.appendChild(nm);
+    var ds = document.createElement('div'); ds.className = 'res-desc'; ds.textContent = desc; a.appendChild(ds);
+    var ct = document.createElement('div'); ct.className = 'res-count'; ct.textContent = countText; a.appendChild(ct);
+    grid.appendChild(a);
+  }
+  if (total === 0) {
+    card('📝', 'Resource Library', 'Practical SDR resources are in final editorial review and will appear here once approved.', 'See status →');
+    return;
+  }
   var blurbs = {
     script: 'Openers, objections, and closes to adapt',
     template: 'Follow-ups, ICP, and research briefs',
@@ -466,13 +482,8 @@ document.querySelectorAll('.sb-item').forEach(item => { item.addEventListener('c
   };
   Object.keys(meta).forEach(function(key){
     var n = counts[key] || 0;
-    var a = document.createElement('a');
-    a.className = 'res'; a.href = 'resources.html'; a.style.textDecoration = 'none'; a.style.color = 'inherit';
-    var icon = document.createElement('div'); icon.className = 'res-icon'; icon.textContent = meta[key].icon; a.appendChild(icon);
-    var name = document.createElement('div'); name.className = 'res-name'; name.textContent = meta[key].plural; a.appendChild(name);
-    var desc = document.createElement('div'); desc.className = 'res-desc'; desc.textContent = blurbs[key] || ''; a.appendChild(desc);
-    var count = document.createElement('div'); count.className = 'res-count'; count.textContent = n + ' ' + (n === 1 ? 'resource' : 'resources'); a.appendChild(count);
-    grid.appendChild(a);
+    if (n === 0) return;
+    card(meta[key].icon, meta[key].plural, blurbs[key] || '', n + ' ' + (n === 1 ? 'resource' : 'resources'));
   });
 })();
 
