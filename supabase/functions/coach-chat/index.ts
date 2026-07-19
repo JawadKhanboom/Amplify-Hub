@@ -1,22 +1,18 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2"
 import { HttpError, MAX_BODY_BYTES, validateRequest } from "./request-security.ts"
+import { buildCorsHeaders, parseAllowedOrigins } from "./cors-security.ts"
 
-// Locked to a single allowed origin instead of '*'. Set the ALLOWED_ORIGIN
-// secret when you deploy to production; defaults to local dev otherwise.
-const ALLOWED_ORIGIN = Deno.env.get('ALLOWED_ORIGIN') ?? 'http://localhost:8742'
+// ALLOWED_ORIGINS is a comma-separated exact allowlist. The legacy singular
+// secret remains a fallback so existing deployments fail closed during rollout.
+const allowedOrigins = parseAllowedOrigins(
+  Deno.env.get('ALLOWED_ORIGINS') ?? Deno.env.get('ALLOWED_ORIGIN')
+)
 
-const corsHeaders = {
-  'Access-Control-Allow-Origin': ALLOWED_ORIGIN,
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
-  'Access-Control-Allow-Methods': 'POST, OPTIONS',
-  'Vary': 'Origin',
-}
-
-function jsonResponse(body: Record<string, unknown>, status = 200, extraHeaders: Record<string, string> = {}) {
+function jsonResponse(body: Record<string, unknown>, status: number, headers: Record<string, string>) {
   return new Response(JSON.stringify(body), {
     status,
-    headers: { ...corsHeaders, 'Content-Type': 'application/json', ...extraHeaders },
+    headers: { 'Content-Type': 'application/json', ...headers },
   })
 }
 
@@ -308,14 +304,21 @@ async function generateFeedback(messages: { role: string; content: string }[], p
 }
 
 serve(async (req: Request) => {
+  const corsHeaders = buildCorsHeaders(req.headers.get('Origin'), allowedOrigins)
+  const respond = (
+    body: Record<string, unknown>,
+    status = 200,
+    extraHeaders: Record<string, string> = {},
+  ) => jsonResponse(body, status, { ...corsHeaders, ...extraHeaders })
+
   if (req.method === 'OPTIONS') return new Response(null, { status: 204, headers: corsHeaders })
   if (req.method !== 'POST') {
-    return jsonResponse({ error: 'Method not allowed.', code: 'METHOD_NOT_ALLOWED' }, 405, { Allow: 'POST, OPTIONS' })
+    return respond({ error: 'Method not allowed.', code: 'METHOD_NOT_ALLOWED' }, 405, { Allow: 'POST, OPTIONS' })
   }
 
   const declaredLength = Number(req.headers.get('Content-Length'))
   if (Number.isFinite(declaredLength) && declaredLength > MAX_BODY_BYTES) {
-    return jsonResponse({ error: 'Request body is too large.', code: 'PAYLOAD_TOO_LARGE' }, 413)
+    return respond({ error: 'Request body is too large.', code: 'PAYLOAD_TOO_LARGE' }, 413)
   }
 
   // verify_jwt = true (config.toml) only checks that the token is a validly
@@ -330,7 +333,7 @@ serve(async (req: Request) => {
   )
   const { data: { user }, error: authError } = await supabaseClient.auth.getUser()
   if (authError || !user) {
-    return jsonResponse({ error: 'Unauthorized.', code: 'UNAUTHORIZED' }, 401)
+    return respond({ error: 'Unauthorized.', code: 'UNAUTHORIZED' }, 401)
   }
 
   try {
@@ -362,7 +365,7 @@ serve(async (req: Request) => {
     // ── End-of-session feedback report (structured JSON, not chat) ──
     if (action === 'feedback') {
       const report = await generateFeedback(messages, prefs, apiKey)
-      return jsonResponse({ report })
+      return respond({ report })
     }
 
     // ── Normal chat turn (unchanged) ──
@@ -399,13 +402,13 @@ serve(async (req: Request) => {
       throw new Error('The AI returned an empty response — please try again.')
     }
 
-    return jsonResponse({ html: replyText })
+    return respond({ html: replyText })
   } catch (err: unknown) {
     if (err instanceof HttpError) {
       const headers = err.retryAfter ? { 'Retry-After': String(err.retryAfter) } : {}
-      return jsonResponse({ error: err.message, code: err.code, ...(err.retryAfter ? { retryAfter: err.retryAfter } : {}) }, err.status, headers)
+      return respond({ error: err.message, code: err.code, ...(err.retryAfter ? { retryAfter: err.retryAfter } : {}) }, err.status, headers)
     }
     console.error('coach-chat: internal failure', err instanceof Error ? err.message : 'unknown')
-    return jsonResponse({ error: 'AI Coach is temporarily unavailable.', code: 'COACH_UNAVAILABLE' }, 502)
+    return respond({ error: 'AI Coach is temporarily unavailable.', code: 'COACH_UNAVAILABLE' }, 502)
   }
 })
