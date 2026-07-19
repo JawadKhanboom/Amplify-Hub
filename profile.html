@@ -11,6 +11,8 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="auth-config.js"></script>
 <script src="auth.js"></script>
+<script src="assets/journey-progress.js"></script>
+<script src="assets/user-stats.js"></script>
 <script>requireAuth();</script>
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
@@ -89,7 +91,20 @@ html{scroll-behavior:smooth}body{font-family:var(--font);background:var(--bg);co
 .ach.earned:hover{box-shadow:0 8px 24px rgba(255,213,74,.08)}
 .ach-e{font-size:28px;margin-bottom:8px;display:block;transition:transform .3s}.ach:hover .ach-e{transform:scale(1.15)}
 .ach-n{font-size:11px;font-weight:700}
-.ach.locked{opacity:.25;filter:blur(1px) grayscale(.8)}.ach.locked:hover{filter:blur(0) grayscale(.5);opacity:.4}
+.ach-req{font-size:9px;color:var(--muted);margin-top:4px;line-height:1.3}
+.ach.earned{border-color:var(--border-h)}.ach.earned .ach-n{color:var(--accent)}
+.ach.locked{opacity:.5;filter:grayscale(.7)}.ach.locked .ach-e{filter:grayscale(1)}
+.ach-lock{font-size:9px;color:var(--muted);margin-top:2px}
+
+/* STATE + BANNERS */
+.state-banner{border-radius:14px;padding:14px 18px;margin-bottom:20px;font-size:13px;line-height:1.6;border:1px solid var(--border-h)}
+.state-banner.empty{background:rgba(255,213,74,.05);color:var(--text)}
+.state-banner.offline{background:rgba(255,167,38,.07);border-color:rgba(255,167,38,.25);color:var(--text)}
+.state-banner.err{background:rgba(255,95,87,.07);border-color:rgba(255,95,87,.25);color:var(--text)}
+.state-banner b{color:var(--white)} .state-banner a{color:var(--accent);font-weight:600;text-decoration:none}
+.skeleton{background:linear-gradient(90deg,rgba(255,255,255,.04),rgba(255,255,255,.07),rgba(255,255,255,.04));background-size:200% 100%;animation:shimmer 1.4s infinite;border-radius:8px;color:transparent!important}
+@keyframes shimmer{to{background-position:-200% 0}}
+.tl-empty,.pr-empty{font-size:13px;color:var(--muted);padding:8px 0}
 
 /* BADGES */
 .badge-row{display:flex;gap:10px;flex-wrap:wrap}
@@ -158,144 +173,250 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
     <div class="sb-d"></div>
     <a class="si" href="settings.html"><span class="si-ic">⚙️</span>Settings</a>
   </nav>
-  <div class="sb-u" onclick="location.href='profile.html'"><div class="sb-av">J</div><div><div class="sb-un">Jawad</div><div class="sb-ur">Pro Member</div></div></div>
+  <div class="sb-u" onclick="location.href='profile.html'"><div class="sb-av" id="sbAvatar">·</div><div><div class="sb-un" id="sbName">Your profile</div><div class="sb-ur" id="sbRole">Member</div></div></div>
 </aside>
 
 <div class="main">
 
+  <div id="stateBanner"></div>
+
   <!-- PROFILE HEADER -->
   <div class="phead fu">
     <div class="phead-top">
-      <div class="p-av">J</div>
+      <div class="p-av" id="pAvatar">·</div>
       <div class="p-info">
-        <div class="p-name">Jawad Khan</div>
-        <div class="p-user">@jawadkhan · Cold Calling Pro</div>
-        <div class="p-bio">Building DetailAmplify and AmplifyHub. Learning to master cold calling one conversation at a time. 🎯</div>
-        <div class="p-meta">
-          <span class="p-meta-item">📍 Peshawar, PK</span>
-          <span class="p-meta-item">📅 Joined March 2026</span>
-          <span class="p-meta-item">🏆 Level 4</span>
-        </div>
+        <div class="p-name" id="pName">Loading…</div>
+        <div class="p-user" id="pUser"></div>
+        <div class="p-bio" id="pBio"></div>
+        <div class="p-meta" id="pMeta"></div>
       </div>
-      <button class="p-edit">✏️ Edit Profile</button>
+      <a class="p-edit" href="settings.html">✏️ Edit Profile</a>
     </div>
-    <div class="phead-stats">
-      <div class="ph-stat"><div class="ph-v g">2,450</div><div class="ph-l">Total XP</div></div>
-      <div class="ph-stat"><div class="ph-v gr">14</div><div class="ph-l">Day Streak</div></div>
-      <div class="ph-stat"><div class="ph-v w">Lv 4</div><div class="ph-l">Current Level</div></div>
-      <div class="ph-stat"><div class="ph-v" style="color:var(--blue)">38%</div><div class="ph-l">Journey</div></div>
-    </div>
+    <div class="phead-stats" id="pHeadStats"></div>
   </div>
 
   <!-- QUICK STATS -->
   <div class="sec fu">
     <div class="sec-h"><h2>Quick Stats</h2></div>
-    <div class="qs-grid">
-      <div class="qs"><div class="qs-ic">⚡</div><div class="qs-v" style="color:var(--accent)">2,450</div><div class="qs-l">Total XP</div></div>
-      <div class="qs"><div class="qs-ic">📖</div><div class="qs-v" style="color:var(--green)">12</div><div class="qs-l">Lessons Done</div></div>
-      <div class="qs"><div class="qs-ic">🤖</div><div class="qs-v" style="color:var(--blue)">34</div><div class="qs-l">AI Sessions</div></div>
-      <div class="qs"><div class="qs-ic">⚡</div><div class="qs-v" style="color:var(--warm)">28</div><div class="qs-l">Challenges</div></div>
-      <div class="qs"><div class="qs-ic">📞</div><div class="qs-v" style="color:var(--purple)">19</div><div class="qs-l">Calls This Week</div></div>
-      <div class="qs"><div class="qs-ic">🔖</div><div class="qs-v" style="color:var(--pink)">15</div><div class="qs-l">Resources Saved</div></div>
-    </div>
+    <div class="qs-grid" id="qsGrid"></div>
   </div>
 
   <!-- LEARNING PROGRESS -->
   <div class="sec fu">
     <div class="sec-h"><h2>Learning Progress</h2></div>
-    <div class="pr-grid">
-      <div class="pr"><div class="pr-top"><span class="pr-name">🛤 Journey Progress</span><span class="pr-pct">38%</span></div><div class="pr-bar"><div class="pr-fill" data-w="38" style="background:var(--accent)"></div></div></div>
-      <div class="pr"><div class="pr-top"><span class="pr-name">🤖 AI Coach Practice</span><span class="pr-pct">68%</span></div><div class="pr-bar"><div class="pr-fill" data-w="68" style="background:var(--green)"></div></div></div>
-      <div class="pr"><div class="pr-top"><span class="pr-name">⚡ Challenge Progress</span><span class="pr-pct">52%</span></div><div class="pr-bar"><div class="pr-fill" data-w="52" style="background:var(--warm)"></div></div></div>
-      <div class="pr"><div class="pr-top"><span class="pr-name">🛡 Objection Handling</span><span class="pr-pct">44%</span></div><div class="pr-bar"><div class="pr-fill" data-w="44" style="background:var(--purple)"></div></div></div>
-      <div class="pr"><div class="pr-top"><span class="pr-name">📚 Resource Completion</span><span class="pr-pct">29%</span></div><div class="pr-bar"><div class="pr-fill" data-w="29" style="background:var(--blue)"></div></div></div>
-      <div class="pr"><div class="pr-top"><span class="pr-name">🎯 Overall Mastery</span><span class="pr-pct">46%</span></div><div class="pr-bar"><div class="pr-fill" data-w="46" style="background:var(--pink)"></div></div></div>
-    </div>
+    <div class="pr-grid" id="prGrid"></div>
   </div>
 
   <!-- ACHIEVEMENTS -->
   <div class="sec fu">
-    <div class="sec-h"><h2>Achievements</h2><a class="sec-link">View All →</a></div>
-    <div class="ach-grid">
-      <div class="ach earned"><span class="ach-e">🌱</span><div class="ach-n">First Lesson</div></div>
-      <div class="ach earned"><span class="ach-e">🔥</span><div class="ach-n">7-Day Streak</div></div>
-      <div class="ach earned"><span class="ach-e">📞</span><div class="ach-n">Cold Calling Beginner</div></div>
-      <div class="ach earned"><span class="ach-e">🤖</span><div class="ach-n">AI Explorer</div></div>
-      <div class="ach earned"><span class="ach-e">🎯</span><div class="ach-n">Discovery Pro</div></div>
-      <div class="ach locked"><span class="ach-e">🏆</span><div class="ach-n">Challenge Winner</div></div>
-    </div>
-  </div>
-
-  <!-- BADGES -->
-  <div class="sec fu">
-    <div class="sec-h"><h2>Earned Badges</h2></div>
-    <div class="badge-row">
-      <div class="bdg"><span class="bdg-ic">🏆</span><span class="bdg-n">Sales Rookie</span></div>
-      <div class="bdg"><span class="bdg-ic">🔥</span><span class="bdg-n">Consistent Learner</span></div>
-      <div class="bdg"><span class="bdg-ic">🤖</span><span class="bdg-n">AI Explorer</span></div>
-      <div class="bdg"><span class="bdg-ic">📞</span><span class="bdg-n">Cold Caller</span></div>
-      <div class="bdg"><span class="bdg-ic">🎯</span><span class="bdg-n">Goal Crusher</span></div>
-      <div class="bdg"><span class="bdg-ic">⭐</span><span class="bdg-n">Script Master</span></div>
-    </div>
+    <div class="sec-h"><h2>Achievements</h2><span class="sec-link" id="achCount"></span></div>
+    <div class="ach-grid" id="achGrid"></div>
   </div>
 
   <!-- GOALS -->
   <div class="sec fu">
     <div class="sec-h"><h2>Your Goals</h2></div>
-    <div class="goal-grid">
-      <div class="goal"><div class="goal-top"><span class="goal-name">Reach Level 10</span><span class="goal-val">Lv 4 / 10</span></div><div class="goal-bar"><div class="goal-fill" data-w="40"></div></div></div>
-      <div class="goal"><div class="goal-top"><span class="goal-name">Complete Full Journey</span><span class="goal-val">38%</span></div><div class="goal-bar"><div class="goal-fill" data-w="38"></div></div></div>
-      <div class="goal"><div class="goal-top"><span class="goal-name">Practice AI 20 Times</span><span class="goal-val">14 / 20</span></div><div class="goal-bar"><div class="goal-fill" data-w="70"></div></div></div>
-      <div class="goal"><div class="goal-top"><span class="goal-name">Finish Weekly Challenges</span><span class="goal-val">3 / 6</span></div><div class="goal-bar"><div class="goal-fill" data-w="50"></div></div></div>
-    </div>
+    <div class="goal-grid" id="goalGrid"></div>
   </div>
 
   <!-- ACTIVITY TIMELINE -->
   <div class="sec fu">
     <div class="sec-h"><h2>Recent Activity</h2></div>
-    <div>
-      <div class="tl-item"><div class="tl-ic">🎭</div><div><div class="tl-txt">Completed an <strong>AI Roleplay</strong> session — scored 91/100</div><div class="tl-time">2 hours ago</div></div></div>
-      <div class="tl-item"><div class="tl-ic">📖</div><div><div class="tl-txt">Finished <strong>Lesson 8: Pattern Interrupt Openers</strong></div><div class="tl-time">5 hours ago</div></div></div>
-      <div class="tl-item"><div class="tl-ic">🔥</div><div><div class="tl-txt">Unlocked the <strong>14-Day Streak</strong> badge</div><div class="tl-time">Yesterday</div></div></div>
-      <div class="tl-item"><div class="tl-ic">🔖</div><div><div class="tl-txt">Saved <strong>"100 Objection Responses"</strong> to your library</div><div class="tl-time">Yesterday</div></div></div>
-      <div class="tl-item"><div class="tl-ic">⚡</div><div><div class="tl-txt">Completed today's <strong>Daily Challenge</strong> — Handle 3 Objections</div><div class="tl-time">2 days ago</div></div></div>
-      <div class="tl-item"><div class="tl-ic">📞</div><div><div class="tl-txt">Practiced <strong>Gatekeeper Bypass</strong> in AI Coach</div><div class="tl-time">3 days ago</div></div></div>
-    </div>
-  </div>
-
-  <!-- BOOKMARKS -->
-  <div class="sec fu">
-    <div class="sec-h"><h2>Saved Resources</h2></div>
-    <div class="bm-bar">
-      <div class="bm"><div class="bm-ic">📖</div><div class="bm-info"><div class="bm-t">Cold Calling Playbook</div><div class="bm-m">Continue reading</div></div></div>
-      <div class="bm"><div class="bm-ic">🛡</div><div class="bm-info"><div class="bm-t">100 Objection Responses</div><div class="bm-m">Favorite script</div></div></div>
-      <div class="bm"><div class="bm-ic">📝</div><div class="bm-info"><div class="bm-t">Auto Detailing Script</div><div class="bm-m">Favorite playbook</div></div></div>
-      <div class="bm"><div class="bm-ic">🎬</div><div class="bm-info"><div class="bm-t">Live Call Breakdown #4</div><div class="bm-m">Continue watching</div></div></div>
-    </div>
+    <div id="timeline"></div>
   </div>
 
   <!-- SETTINGS SHORTCUTS -->
   <div class="sec fu">
     <div class="sec-h"><h2>Settings</h2></div>
     <div class="set-grid">
-      <div class="set"><div class="set-ic">👤</div><div class="set-n">Account</div></div>
-      <div class="set"><div class="set-ic">🔒</div><div class="set-n">Privacy</div></div>
-      <div class="set"><div class="set-ic">🛡</div><div class="set-n">Security</div></div>
-      <div class="set"><div class="set-ic">🎨</div><div class="set-n">Appearance</div></div>
+      <a class="set" href="settings.html" style="text-decoration:none"><div class="set-ic">👤</div><div class="set-n">Account</div></a>
+      <a class="set" href="settings.html" style="text-decoration:none"><div class="set-ic">🔒</div><div class="set-n">Privacy</div></a>
+      <a class="set" href="settings.html" style="text-decoration:none"><div class="set-ic">🎨</div><div class="set-n">Appearance</div></a>
+      <a class="set" href="settings.html" style="text-decoration:none"><div class="set-ic">⚙️</div><div class="set-n">All Settings</div></a>
     </div>
   </div>
 
 </div>
 
 <script>
-const obs=new IntersectionObserver(es=>{es.forEach((e,i)=>{if(e.isIntersecting)setTimeout(()=>e.target.classList.add('v'),i*60)})},{threshold:.08});
-document.querySelectorAll('.fu').forEach(el=>obs.observe(el));
+(function(){
+  'use strict';
+  function el(tag, className, text){ var n=document.createElement(tag); if(className)n.className=className; if(text!=null)n.textContent=String(text); return n; }
+  function fmtAgo(ts){
+    if(!ts) return '';
+    var mins=Math.floor((Date.now()-ts)/60000);
+    if(mins<2) return 'Just now';
+    if(mins<60) return mins+'m ago';
+    var hrs=Math.floor(mins/60); if(hrs<24) return hrs+'h ago';
+    var days=Math.floor(hrs/24); if(days===1) return 'Yesterday';
+    if(days<30) return days+'d ago';
+    return new Date(ts).toLocaleDateString();
+  }
+  function fmtNum(n){ return (n||0).toLocaleString(); }
 
-const barObs=new IntersectionObserver(es=>{es.forEach(e=>{if(!e.isIntersecting)return;e.target.querySelectorAll('[data-w]').forEach(f=>setTimeout(()=>f.style.width=f.dataset.w+'%',200));barObs.unobserve(e.target)})},{threshold:.15});
-document.querySelectorAll('.pr-grid,.goal-grid').forEach(el=>barObs.observe(el));
+  function reveal(){
+    var obs=new IntersectionObserver(function(es){ es.forEach(function(e,i){ if(e.isIntersecting) setTimeout(function(){ e.target.classList.add('v'); }, i*50); }); },{threshold:.08});
+    Array.prototype.forEach.call(document.querySelectorAll('.fu'), function(x){ obs.observe(x); });
+  }
 
-document.getElementById('mobBtn').addEventListener('click',()=>document.getElementById('sb').classList.add('open'));
-document.getElementById('sbX').addEventListener('click',()=>document.getElementById('sb').classList.remove('open'));
+  function headStat(value, label, colorVar){
+    var s=el('div','ph-stat');
+    var v=el('div','ph-v', value); if(colorVar) v.style.color=colorVar;
+    s.appendChild(v); s.appendChild(el('div','ph-l', label));
+    return s;
+  }
+  function quickStat(icon, value, label, colorVar){
+    var q=el('div','qs');
+    q.appendChild(el('div','qs-ic', icon));
+    var v=el('div','qs-v', value); if(colorVar) v.style.color=colorVar;
+    q.appendChild(v); q.appendChild(el('div','qs-l', label));
+    return q;
+  }
+  function progressRow(name, pct, colorVar, valueText){
+    var pr=el('div','pr');
+    var top=el('div','pr-top');
+    top.appendChild(el('span','pr-name', name));
+    top.appendChild(el('span','pr-pct', valueText!=null?valueText:(pct+'%')));
+    pr.appendChild(top);
+    var bar=el('div','pr-bar'); var fill=el('div','pr-fill'); fill.style.background=colorVar; fill.style.width='0';
+    bar.appendChild(fill); pr.appendChild(bar);
+    setTimeout(function(){ fill.style.width=Math.max(0,Math.min(100,pct))+'%'; }, 120);
+    return pr;
+  }
+
+  function render(stats){
+    var t=stats.totals, p=stats.profile;
+
+    // Sidebar + header identity (textContent — never HTML — for user-supplied strings).
+    var name = p.name || 'Your profile';
+    document.getElementById('sbAvatar').textContent = p.initial;
+    document.getElementById('sbName').textContent = name;
+    document.getElementById('sbRole').textContent = p.email || 'Member';
+    document.getElementById('pAvatar').textContent = p.initial;
+    document.getElementById('pName').textContent = name;
+    document.getElementById('pUser').textContent = p.username ? '@'+p.username : (p.email || '');
+    var bio = document.getElementById('pBio');
+    if(p.bio){ bio.textContent = p.bio; bio.style.display=''; } else { bio.style.display='none'; }
+
+    var meta=document.getElementById('pMeta'); meta.replaceChildren();
+    if(p.joinedAt){
+      var joined=new Date(p.joinedAt);
+      meta.appendChild(el('span','p-meta-item','📅 Joined '+joined.toLocaleDateString(undefined,{month:'long',year:'numeric'})));
+    }
+    meta.appendChild(el('span','p-meta-item','📖 '+t.lessonsCompleted+' of '+t.totalLessons+' lessons'));
+    if(t.currentModuleName) meta.appendChild(el('span','p-meta-item','🛤 '+t.currentModuleName));
+
+    // Header stats — real, traceable. XP hidden when the user turned XP off.
+    var hs=document.getElementById('pHeadStats'); hs.replaceChildren();
+    if(stats.prefs.xpVisibility) hs.appendChild(headStat(fmtNum(t.xp), 'Challenge XP', 'var(--accent)'));
+    hs.appendChild(headStat(t.streak, t.streak===1?'Day Streak':'Day Streak', 'var(--green)'));
+    hs.appendChild(headStat(t.lessonsCompleted, 'Lessons Done', 'var(--warm)'));
+    hs.appendChild(headStat(t.journeyPct+'%', 'Journey', 'var(--blue)'));
+
+    // Quick stats — honest metrics only (no calls, no resources-saved).
+    var qs=document.getElementById('qsGrid'); qs.replaceChildren();
+    if(stats.prefs.xpVisibility) qs.appendChild(quickStat('⚡', fmtNum(t.xp), 'Challenge XP', 'var(--accent)'));
+    qs.appendChild(quickStat('📖', t.lessonsCompleted, 'Lessons Done', 'var(--green)'));
+    qs.appendChild(quickStat('🤖', t.coachSessions, 'AI Coach Sessions', 'var(--blue)'));
+    qs.appendChild(quickStat('⚡', t.challengesCompleted, 'Challenges Done', 'var(--warm)'));
+    qs.appendChild(quickStat('🔥', t.streak, 'Day Streak', 'var(--purple)'));
+    qs.appendChild(quickStat('🎯', t.avgScore!=null?(t.avgScore+' / 10'):'—', 'Avg Coach Score', 'var(--pink)'));
+
+    // Learning progress — Journey % plus REAL per-skill Coach averages.
+    var pr=document.getElementById('prGrid'); pr.replaceChildren();
+    pr.appendChild(progressRow('🛤 Journey Progress', t.journeyPct, 'var(--accent)'));
+    if(t.avgScore!=null) pr.appendChild(progressRow('🤖 Average Coach Score', Math.round(t.avgScore*10), 'var(--green)', t.avgScore+' / 10'));
+    var skillColors=['var(--blue)','var(--purple)','var(--pink)','var(--warm)'];
+    stats.skills.slice(0,4).forEach(function(sk,i){
+      pr.appendChild(progressRow('📊 '+sk.label, sk.pct, skillColors[i%skillColors.length], sk.avg+' / 10'));
+    });
+    if(t.avgScore==null && !stats.skills.length){
+      pr.appendChild(el('div','pr-empty','Practice with the AI Coach to see your skill scores here.'));
+    }
+
+    // Achievements — honest requirements, earned/locked from real data.
+    var ach=document.getElementById('achGrid'); ach.replaceChildren();
+    var earnedCount=0;
+    stats.achievements.forEach(function(a){
+      if(a.earned) earnedCount++;
+      var tile=el('div','ach '+(a.earned?'earned':'locked'));
+      tile.setAttribute('title', a.earned ? ('Earned — '+a.req) : ('Locked — '+a.req));
+      tile.appendChild(el('span','ach-e', a.icon));
+      tile.appendChild(el('div','ach-n', a.name));
+      tile.appendChild(el('div', a.earned?'ach-req':'ach-lock', a.earned?'Earned':('🔒 '+a.req)));
+      ach.appendChild(tile);
+    });
+    document.getElementById('achCount').textContent = earnedCount+' of '+stats.achievements.length+' earned';
+
+    // Goals — backed by real preferences + real progress.
+    var gg=document.getElementById('goalGrid'); gg.replaceChildren();
+    stats.goals.forEach(function(g){
+      var goal=el('div','goal');
+      var top=el('div','goal-top');
+      top.appendChild(el('span','goal-name', g.name));
+      top.appendChild(el('span','goal-val', g.valueText));
+      goal.appendChild(top);
+      var bar=el('div','goal-bar'); var fill=el('div','goal-fill'); fill.style.width='0';
+      bar.appendChild(fill); goal.appendChild(bar); gg.appendChild(goal);
+      setTimeout(function(){ fill.style.width=Math.max(0,Math.min(100,g.pct))+'%'; },120);
+    });
+
+    // Activity timeline — merged real events, most recent first.
+    var tl=document.getElementById('timeline'); tl.replaceChildren();
+    if(!stats.timeline.length){
+      tl.appendChild(el('div','tl-empty','No activity yet. Complete a lesson, run an AI roleplay, or finish a daily challenge to start your history.'));
+    } else {
+      stats.timeline.slice(0,8).forEach(function(item){
+        var row=el('div','tl-item');
+        row.appendChild(el('div','tl-ic', item.icon));
+        var body=el('div');
+        body.appendChild(el('div','tl-txt', item.text));
+        body.appendChild(el('div','tl-time', fmtAgo(item.ts)));
+        row.appendChild(body); tl.appendChild(row);
+      });
+    }
+  }
+
+  function banner(kind, node){
+    var host=document.getElementById('stateBanner');
+    host.replaceChildren();
+    var b=el('div','state-banner '+kind);
+    b.appendChild(node);
+    host.appendChild(b);
+  }
+
+  async function init(){
+    try{
+      var stats = await AmplifyUserStats.load();
+      if(!stats.authenticated){ return; } // requireAuth() will have redirected
+      render(stats);
+      if(stats.offline){
+        var f=document.createDocumentFragment();
+        f.appendChild(el('b',null,'Showing offline data. '));
+        f.appendChild(document.createTextNode('We could not reach the server, so some numbers may be out of date. They will refresh when you are back online.'));
+        banner('offline', f);
+      } else if(stats.totals.lessonsCompleted===0 && stats.totals.coachSessions===0 && stats.totals.challengesCompleted===0){
+        var g=document.createDocumentFragment();
+        g.appendChild(el('b',null,'🌱 Welcome! '));
+        g.appendChild(document.createTextNode('Your profile fills in as you learn. '));
+        var a=el('a',null,'Start your Journey'); a.href='journey.html'; g.appendChild(a);
+        g.appendChild(document.createTextNode(' to see your first numbers move.'));
+        banner('empty', g);
+      }
+      reveal();
+    }catch(e){
+      var f=document.createDocumentFragment();
+      f.appendChild(el('b',null,'We could not load your profile. '));
+      f.appendChild(document.createTextNode('Please refresh the page. If this keeps happening, check your connection.'));
+      banner('err', f);
+      reveal();
+    }
+  }
+
+  document.getElementById('mobBtn').addEventListener('click',function(){ document.getElementById('sb').classList.add('open'); });
+  document.getElementById('sbX').addEventListener('click',function(){ document.getElementById('sb').classList.remove('open'); });
+  init();
+})();
 </script>
 </body>
 </html>

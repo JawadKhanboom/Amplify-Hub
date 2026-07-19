@@ -15,6 +15,7 @@
 <script src="coach-store.js"></script>
 <script src="assets/journey-progress.js"></script>
 <script src="assets/challenge-system.js"></script>
+<script src="assets/user-stats.js"></script>
 <script>requireAuth();</script>
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
@@ -253,9 +254,9 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
     <div class="sb-divider"></div>
     <a class="sb-item" href="settings.html"><span class="sb-icon">⚙️</span>Settings</a>
   </nav>
-  <div class="sb-user">
-    <div class="sb-avatar">J</div>
-    <div><div class="sb-uname">Jawad</div><div class="sb-urole">Pro Member</div></div>
+  <div class="sb-user" onclick="location.href='profile.html'" style="cursor:pointer">
+    <div class="sb-avatar" id="sbAvatar">·</div>
+    <div><div class="sb-uname" id="sbName">Your account</div><div class="sb-urole" id="sbRole">Member</div></div>
   </div>
 </aside>
 
@@ -273,10 +274,10 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
   <div class="welcome fade-up">
     <div class="w-top">
       <div class="w-greeting">
-        <h1>Welcome back, Jawad 👋</h1>
-        <p>You're on a 14-day streak. Keep the momentum going.</p>
+        <h1>Welcome back 👋</h1>
+        <p id="wSubtitle">Loading your progress…</p>
       </div>
-      <div class="w-streak">🔥 14 Day Streak</div>
+      <div class="w-streak">🔥 Streak</div>
     </div>
     <div class="w-progress">
       <div class="w-ring">
@@ -380,29 +381,19 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
   <div class="sec fade-up">
     <div class="sec-h"><h2>Your Progress</h2></div>
     <div class="stats-grid" id="statsGrid">
-      <div class="stat-card"><div class="st-val gold" data-count="247">0</div><div class="st-label">Calls Practiced</div><div class="st-bar"><div class="st-fill" data-w="78" style="background:var(--accent)"></div></div></div>
-      <div class="stat-card"><div class="st-val grn" data-count="31">0</div><div class="st-label">Meetings Simulated</div><div class="st-bar"><div class="st-fill" data-w="62" style="background:var(--green)"></div></div></div>
-      <div class="stat-card"><div class="st-val wrm" data-count="87">0</div><div class="st-label">Confidence Score</div><div class="st-bar"><div class="st-fill" data-w="87" style="background:var(--warm)"></div></div></div>
-      <div class="stat-card"><div class="st-val blu" data-count="14">0</div><div class="st-label">Day Streak</div><div class="st-bar"><div class="st-fill" data-w="46" style="background:var(--blue)"></div></div></div>
+      <div class="stat-card"><div class="st-val gold" data-count="0">0</div><div class="st-label">AI Roleplays</div><div class="st-bar"><div class="st-fill" data-w="0" style="background:var(--accent)"></div></div></div>
+      <div class="stat-card"><div class="st-val grn" data-count="0">0</div><div class="st-label">Scored Sessions</div><div class="st-bar"><div class="st-fill" data-w="0" style="background:var(--green)"></div></div></div>
+      <div class="stat-card"><div class="st-val wrm" data-count="0">0</div><div class="st-label">Avg Coach Score /10</div><div class="st-bar"><div class="st-fill" data-w="0" style="background:var(--warm)"></div></div></div>
+      <div class="stat-card"><div class="st-val blu" data-count="0">0</div><div class="st-label">Day Streak</div><div class="st-bar"><div class="st-fill" data-w="0" style="background:var(--blue)"></div></div></div>
     </div>
     <div class="es-hint only-new">Your stats begin with your first practice call — they'll fill in as you go.</div>
   </div>
 
   <!-- BADGES -->
   <div class="sec fade-up">
-    <div class="sec-h"><h2>Achievements</h2><a class="sec-link">View All →</a></div>
-    <div class="badges-grid">
-      <div class="badge earned"><div class="badge-icon">🔥</div><div class="badge-name">Hot Streak</div></div>
-      <div class="badge earned"><div class="badge-icon">📞</div><div class="badge-name">100 Calls</div></div>
-      <div class="badge earned"><div class="badge-icon">🎯</div><div class="badge-name">10 Bookings</div></div>
-      <div class="badge earned"><div class="badge-icon">📝</div><div class="badge-name">Script Master</div></div>
-      <div class="badge earned"><div class="badge-icon">🌱</div><div class="badge-name">First Call</div></div>
-      <div class="badge locked"><div class="badge-icon">💎</div><div class="badge-name">Objection Pro</div></div>
-      <div class="badge locked"><div class="badge-icon">🏆</div><div class="badge-name">Top Performer</div></div>
-      <div class="badge locked"><div class="badge-icon">👑</div><div class="badge-name">Mentor</div></div>
-      <div class="badge locked"><div class="badge-icon">⭐</div><div class="badge-name">500 Calls</div></div>
-    </div>
-    <div class="es-hint only-new">Complete your first lesson to earn your first badge.</div>
+    <div class="sec-h"><h2>Achievements</h2><a class="sec-link" href="profile.html">View All →</a></div>
+    <div class="badges-grid" id="badgesGrid"></div>
+    <div class="es-hint only-new">Complete your first lesson or AI session to earn your first badge.</div>
   </div>
 
   <!-- RECENT ACTIVITY -->
@@ -492,8 +483,10 @@ async function loadDashboard() {
       document.querySelector('.w-streak').textContent = '\u{1F331} Day 1';
       document.getElementById('wCta').textContent = 'Start Your Journey \u2192';
     } else {
-      if (firstName) document.querySelector('.w-greeting h1').textContent = 'Welcome back, ' + firstName + ' \u{1F44B}';
+      document.querySelector('.w-greeting h1').textContent = firstName ? ('Welcome back, ' + firstName + ' \u{1F44B}') : 'Welcome back \u{1F44B}';
       document.querySelector('.w-streak').textContent = streak > 0 ? '\u{1F525} ' + streak + '-Day Streak' : '\u{1F4AA} Keep going!';
+      const sub = document.getElementById('wSubtitle');
+      if (sub) sub.textContent = streak > 1 ? ("You're on a " + streak + '-day streak. Keep the momentum going.') : 'Pick up where you left off and keep building.';
     }
 
     const ctaBtn = document.getElementById('wCta');
@@ -515,10 +508,31 @@ async function loadDashboard() {
       }
     }
 
-    const badges = document.querySelectorAll('.badges-grid .badge');
-    if (badges.length) { badges.forEach(b => b.classList.add('locked')); if (sessions.length >= 1 && badges[0]) { badges[0].classList.remove('locked'); badges[0].classList.add('earned'); } if (roleplay.length >= 1 && badges[1]) { badges[1].classList.remove('locked'); badges[1].classList.add('earned'); } if (streak >= 3 && badges[2]) { badges[2].classList.remove('locked'); badges[2].classList.add('earned'); } if (avgScore !== null && avgScore >= 7 && badges[3]) { badges[3].classList.remove('locked'); badges[3].classList.add('earned'); } if (docs.length >= 1 && badges[4]) { badges[4].classList.remove('locked'); badges[4].classList.add('earned'); } }
-
   } catch (err) { console.error('Dashboard load error:', err); document.body.classList.remove('state-loading'); document.body.classList.add('state-new'); }
+}
+
+// Achievements: rendered from the shared user-stats module so the badge NAMES
+// always match their real unlock rules (the old static badges did not).
+async function loadAchievements() {
+  const grid = document.getElementById('badgesGrid');
+  if (!grid || !window.AmplifyUserStats) return;
+  try {
+    const stats = await AmplifyUserStats.load();
+    // Real identity in the sidebar (textContent — never HTML).
+    const sbName = document.getElementById('sbName'), sbAvatar = document.getElementById('sbAvatar'), sbRole = document.getElementById('sbRole');
+    if (sbName) sbName.textContent = stats.profile.name || 'Your account';
+    if (sbAvatar) sbAvatar.textContent = stats.profile.initial;
+    if (sbRole) sbRole.textContent = stats.profile.email || 'Member';
+    grid.replaceChildren();
+    stats.achievements.forEach(a => {
+      const badge = document.createElement('div');
+      badge.className = 'badge ' + (a.earned ? 'earned' : 'locked');
+      badge.title = (a.earned ? 'Earned — ' : 'Locked — ') + a.req;
+      const icon = document.createElement('div'); icon.className = 'badge-icon'; icon.textContent = a.icon; badge.appendChild(icon);
+      const name = document.createElement('div'); name.className = 'badge-name'; name.textContent = a.name; badge.appendChild(name);
+      grid.appendChild(badge);
+    });
+  } catch (e) { /* achievements are non-critical; leave the grid empty on error */ }
 }
 
 async function loadDailyChallenge() {
@@ -568,7 +582,7 @@ async function loadDailyChallenge() {
   }
 }
 
-getCurrentUser().then(user => { if (user) { loadDashboard(); loadDailyChallenge(); } });
+getCurrentUser().then(user => { if (user) { loadDashboard(); loadDailyChallenge(); loadAchievements(); } });
 </script>
 </body>
 </html>
