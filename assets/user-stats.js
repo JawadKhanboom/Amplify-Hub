@@ -21,8 +21,38 @@
 (function (global) {
   'use strict';
 
-  var TOTAL_LESSONS = (global.AmplifyJourneyProgress && global.AmplifyJourneyProgress.TOTAL_LESSONS) || 36;
   var MODULE_MAP = (global.AmplifyJourneyProgress && global.AmplifyJourneyProgress.MODULE_MAP) || [];
+  var TOTAL_LESSONS = (global.AmplifyJourneyProgress && global.AmplifyJourneyProgress.TOTAL_LESSONS) || 40;
+
+  // The set of lesson IDs the curriculum actually defines. Any ID not in here
+  // (typo, stale schema, tampered localStorage, injected row) is ignored so it
+  // can never inflate the lesson count or Journey %.
+  var VALID_LESSON_IDS = (function () {
+    var s = new Set();
+    for (var m = 0; m < MODULE_MAP.length; m += 1) {
+      for (var l = 0; l < MODULE_MAP[m][1]; l += 1) { s.add('m' + m + 'l' + l); }
+    }
+    return s;
+  })();
+  function isValidLesson(id) {
+    if (typeof id !== 'string') return false;
+    if (VALID_LESSON_IDS.size) return VALID_LESSON_IDS.has(id);
+    return /^m\d+l\d+$/.test(id); // fallback only if MODULE_MAP is unavailable
+  }
+  function clamp(n, lo, hi) { return Math.max(lo, Math.min(hi, n)); }
+
+  // A coaching session counts as completed only when it was actually finished.
+  // - status === 'completed' always counts.
+  // - A legacy row with no status counts if it has an ended_at.
+  // - Any explicit terminal-but-not-completed status (abandoned/failed/
+  //   cancelled/in_progress/...) is excluded even if ended_at is set, so it
+  //   never affects totals, streaks, scores, skills, achievements, or activity.
+  function isCompletedSession(s) {
+    if (!s) return false;
+    if (s.status === 'completed') return true;
+    if (s.status === null || s.status === undefined || s.status === '') return !!s.ended_at;
+    return false;
+  }
 
   var SKILL_LABELS = {
     opening: 'Opening', discovery: 'Discovery', objection: 'Objection Handling',
@@ -182,22 +212,27 @@
     var activityDays = new Set();
 
     // ── Lessons (cloud unioned with local cache) ──
+    // Both sources are filtered to real curriculum IDs; unknown/malformed IDs
+    // from localStorage or Supabase are dropped before they can be counted.
     var local = localLessons();
-    var completedSet = new Set(Array.isArray(local.completedLessons) ? local.completedLessons : []);
+    var completedSet = new Set();
+    (Array.isArray(local.completedLessons) ? local.completedLessons : []).forEach(function (id) {
+      if (isValidLesson(id)) completedSet.add(id);
+    });
     var lessonTimes = {}; // lessonId -> ms timestamp
     Object.keys(local.lessonMeta || {}).forEach(function (id) {
       var m = local.lessonMeta[id];
-      if (m && m.completedAt) lessonTimes[id] = m.completedAt;
+      if (m && m.completedAt && isValidLesson(id)) lessonTimes[id] = m.completedAt;
     });
     (lessonsRes.data || []).forEach(function (row) {
-      if (row.completed_at) {
+      if (row.completed_at && isValidLesson(row.lesson_id)) {
         completedSet.add(row.lesson_id);
         lessonTimes[row.lesson_id] = new Date(row.completed_at).getTime();
       }
     });
     var t = result.totals;
-    t.lessonsCompleted = completedSet.size;
-    t.journeyPct = Math.round((completedSet.size / TOTAL_LESSONS) * 100);
+    t.lessonsCompleted = clamp(completedSet.size, 0, TOTAL_LESSONS);
+    t.journeyPct = clamp(Math.round((t.lessonsCompleted / TOTAL_LESSONS) * 100), 0, 100);
     for (var m = 0; m < MODULE_MAP.length; m += 1) {
       if (isModuleComplete(m, completedSet)) { t.moduleComplete = true; }
     }
@@ -221,7 +256,7 @@
 
     // ── Coach sessions ──
     var sessions = sessionsRes.data || [];
-    var completedSessions = sessions.filter(function (s) { return s.status === 'completed' || s.ended_at; });
+    var completedSessions = sessions.filter(isCompletedSession);
     t.coachSessions = completedSessions.length;
     t.roleplaySessions = completedSessions.filter(function (s) { return s.mode === 'roleplay'; }).length;
     var scored = completedSessions.filter(function (s) { return s.score !== null && s.score !== undefined; });

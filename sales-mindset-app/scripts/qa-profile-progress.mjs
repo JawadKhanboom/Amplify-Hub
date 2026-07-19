@@ -42,6 +42,32 @@ const ACTIVE_USER = {
   }
 };
 
+// Edge cases: unknown/malformed lesson IDs, and abandoned/legacy coach sessions.
+const MODULE_COUNTS = [8, 3, 4, 4, 4, 5, 1, 3, 4, 4]; // mirrors journey-progress.js MODULE_MAP (40 lessons)
+const ALL_VALID_LESSONS = [];
+MODULE_COUNTS.forEach((count, m) => { for (let l = 0; l < count; l++) ALL_VALID_LESSONS.push('m' + m + 'l' + l); });
+const EDGE_USER = {
+  user: { id: 'u-edge', email: 'edge@example.com', created_at: iso(90), user_metadata: { full_name: 'Edge Case' } },
+  tables: {
+    user_preferences: [{ full_name: 'Edge Case', xp_visibility: true }],
+    // Every valid lesson completed, PLUS junk IDs that must be ignored.
+    user_lesson_progress: [
+      ...ALL_VALID_LESSONS.map((id) => ({ lesson_id: id, completed_at: iso(0), metadata: {}, updated_at: iso(0) })),
+      { lesson_id: 'm99l0', completed_at: iso(0), metadata: {} },   // module out of range
+      { lesson_id: 'm0l99', completed_at: iso(0), metadata: {} },   // lesson out of range
+      { lesson_id: 'bogus', completed_at: iso(0), metadata: {} },   // malformed
+      { lesson_id: null, completed_at: iso(0), metadata: {} }        // non-string
+    ],
+    coaching_sessions: [
+      { id: 'c-done', status: 'completed', score: 8, turns: 6, scores: { objection: 8 }, started_at: iso(1), ended_at: iso(1) },
+      { id: 'c-aband', status: 'abandoned', score: 3, turns: 2, scores: { objection: 1 }, started_at: iso(1), ended_at: iso(1) }, // ended but not completed → excluded
+      { id: 'c-legacy', score: 6, turns: 5, scores: null, started_at: iso(2), ended_at: iso(2) } // no status → legacy, counts
+    ],
+    user_challenge_assignments: [],
+    challenge_catalog: []
+  }
+};
+
 const MALICIOUS_USER = {
   user: { id: 'u-x', email: 'x@example.com', created_at: iso(3), user_metadata: {} },
   tables: {
@@ -192,12 +218,39 @@ try {
   assert.ok(dashBadges.includes('First Lesson') && dashBadges.includes('AI Explorer'), 'dashboard achievements come from the shared honest ruleset');
   await page.close();
 
-  // ═══ 6. STATIC CHECK — source no longer hardcodes the fictional data ═══
+  // ═══ 6. EDGE CASES — junk lesson IDs and abandoned/legacy coach sessions ═══
+  // Evaluate the shared module directly with the mocked backend for exact values.
+  currentData = EDGE_USER;
+  page = await newPage();
+  await page.goto(`${baseUrl}profile.html`, { waitUntil: 'domcontentloaded' });
+  await page.waitForFunction(() => window.AmplifyUserStats);
+  const edge = await page.evaluate(async () => {
+    const s = await window.AmplifyUserStats.load();
+    const obj = (s.skills.find((x) => x.key === 'objection') || {}).avg;
+    return { lessons: s.totals.lessonsCompleted, pct: s.totals.journeyPct, coach: s.totals.coachSessions, avg: s.totals.avgScore, best: s.totals.bestScore, objection: obj };
+  });
+  assert.ok(edge.lessons <= 40, `lessons cannot exceed 40 (got ${edge.lessons})`);
+  assert.equal(edge.lessons, 40, 'exactly the 40 valid lessons count; junk IDs ignored');
+  assert.ok(edge.pct <= 100, `journey % cannot exceed 100 (got ${edge.pct})`);
+  assert.equal(edge.pct, 100, 'all valid lessons → 100%');
+  assert.equal(edge.coach, 2, 'completed + legacy(no-status) count; abandoned excluded');
+  assert.equal(edge.avg, 7, 'avg = (8 + 6) / 2; abandoned score 3 excluded');
+  assert.equal(edge.best, 8, 'best score ignores the abandoned session');
+  assert.equal(edge.objection, 8, 'abandoned session scores never touch skill averages');
+  await page.close();
+
+  // ═══ 7. STATIC CHECK — source no longer hardcodes the fictional data ═══
   for (const file of ['profile.html', 'progress.html', 'dashboard.html']) {
     const src = await readFile(path.join(siteRoot, file), 'utf8');
     assert.ok(!/>\s*Jawad\s*</.test(src) && !src.includes('Pro Member'), `${file} has no hardcoded Jawad/Pro Member`);
     assert.ok(src.includes('assets/user-stats.js'), `${file} loads the shared stats module`);
   }
+  // Dashboard must ship no fabricated activity cards; the feed starts empty.
+  const dashSrc = await readFile(path.join(siteRoot, 'dashboard.html'), 'utf8');
+  for (const s of ['87% confidence', 'Confidence +9%', 'Building Your Script — moved on', 'Milestone unlocked']) {
+    assert.ok(!dashSrc.includes(s), `dashboard source has no fabricated activity text: "${s}"`);
+  }
+  assert.match(dashSrc, /id="activityFeed"><\/div>/, 'activity feed container starts empty in source');
 
   console.log('Profile/Progress QA passed: new-account zeros, traceable active numbers, safe malicious text, mobile layout, and honest dashboard labels + achievements.');
 } finally {
