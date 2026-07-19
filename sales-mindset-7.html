@@ -179,35 +179,28 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
 
 <div class="toast" id="toast">🎉 Lesson Complete! +50 XP</div>
 
+<script src="assets/journey-progress.js"></script>
 <script>
 // ── PROGRESS SYNC (shared with journey.html) ──
-const STORAGE_KEY='amplifyHub_journeyProgress';
-const MODULE_INDEX=0; // Sales Mindset is module 0
-const LESSON_INDEX=6; // 0-indexed
-const TOTAL_MODULE_LESSONS=8;
+const MODULE_INDEX=0;
+const LESSON_INDEX=6;
 
-function readProgress(){
-  try{ const d=JSON.parse(localStorage.getItem(STORAGE_KEY)); return new Set(d?.completedLessons||[]); }catch(e){ return new Set(); }
-}
-function saveProgress(completed){
-  localStorage.setItem(STORAGE_KEY,JSON.stringify({
-    completedLessons:[...completed],
-    updatedAt:Date.now()
-  }));
-}
-function lid(m,l){ return `m${m}l${l}`; }
-
-// ── INIT STATE ──
-const completed=readProgress();
-const thisLid=lid(MODULE_INDEX,LESSON_INDEX);
+const AJP=window.AmplifyJourneyProgress;
+const thisLid=AJP.lid(MODULE_INDEX,LESSON_INDEX);
+let progressStore=AJP.readProgress();
+let completed=new Set(progressStore.completedLessons);
+let lessonMeta=progressStore.lessonMeta||{};
+const pageLoadTime=Date.now();
+let lastQuizScore=(lessonMeta[thisLid]&&lessonMeta[thisLid].quizScore)||null;
 const btn=document.getElementById('completeBtn');
 if(completed.has(thisLid)){ btn.textContent='✓ Completed'; btn.classList.add('done'); }
 
-// ── MARK COMPLETE ──
 btn.addEventListener('click',function(){
   if(completed.has(thisLid)) return;
-  completed.add(thisLid);
-  saveProgress(completed);
+  const minsSpent=Math.max(1,Math.round((Date.now()-pageLoadTime)/60000));
+  const store=AJP.markLessonComplete(MODULE_INDEX,LESSON_INDEX,{mins:minsSpent, quizScore:lastQuizScore});
+  completed=new Set(store.completedLessons);
+  lessonMeta=store.lessonMeta;
   btn.textContent='✓ Completed';
   btn.classList.add('done');
   const toast=document.getElementById('toast');
@@ -215,16 +208,22 @@ btn.addEventListener('click',function(){
   setTimeout(()=>toast.classList.remove('show'),2500);
 });
 
-// ── QUIZ ──
 const answers=[1, 2, 1, 1];
 document.getElementById('checkQuiz').addEventListener('click',function(){
+  let correct=0, answeredAny=false;
   document.querySelectorAll('.qopt').forEach(opt=>{
     const qi=parseInt(opt.dataset.qi), oi=parseInt(opt.dataset.oi);
     const input=opt.querySelector('input');
     if(!input.checked) return;
-    if(oi===answers[qi]){ opt.classList.add('correct'); document.getElementById('qfb'+qi).textContent='✓ Correct!'; document.getElementById('qfb'+qi).style.color='var(--green)'; }
+    answeredAny=true;
+    if(oi===answers[qi]){ correct++; opt.classList.add('correct'); document.getElementById('qfb'+qi).textContent='✓ Correct!'; document.getElementById('qfb'+qi).style.color='var(--green)'; }
     else{ opt.classList.add('wrong'); document.getElementById('qfb'+qi).textContent='✗ Try again'; document.getElementById('qfb'+qi).style.color='var(--red)'; }
   });
+  if(answeredAny){
+    lastQuizScore=correct+'/'+answers.length;
+    lessonMeta[thisLid]=Object.assign({},lessonMeta[thisLid]||{},{quizScore:lastQuizScore});
+    AJP.recordLessonMeta(MODULE_INDEX,LESSON_INDEX,{quizScore:lastQuizScore});
+  }
 });
 
 // ── MOBILE ──

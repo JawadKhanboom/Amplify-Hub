@@ -12,6 +12,7 @@
 <script src="auth-config.js"></script>
 <script src="auth.js"></script>
 <script>requireAuth();</script>
+<script src="assets/journey-progress.js"></script>
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 :root{
@@ -298,7 +299,7 @@ so.observe(document.querySelector('.stats'));
 // JOURNEY PROGRESS — data, state, persistence, rendering
 // ═══════════════════════════════════════
 const JP = (() => {
-  const STORAGE_KEY = 'amplifyHub_journeyProgress';
+  const AJP = window.AmplifyJourneyProgress;
 
   // ── Data/Config: modules + lessons (existing content, now with per-lesson ids/duration/xp) ──
   const modules = [
@@ -323,12 +324,15 @@ const JP = (() => {
     {name:'Booking Appointments', desc:'Qualify and secure the next conversation', diff:'Intermediate', dCls:'med', mins:45, xp:250,
       lessons:['Appointment Setting'],
       pages:['book-appointments.html']},
-    {name:'Follow-up', desc:'Stay top of mind', diff:'Easy', dCls:'easy', mins:15, xp:150,
-      lessons:['The 5-touch sequence','Voicemail that gets callbacks','Email follow-up templates']},
-    {name:'Live Practice', desc:'Real scenarios with AI', diff:'Hard', dCls:'hard', mins:40, xp:400,
-      lessons:['AI roleplay: warm lead','AI roleplay: cold lead','AI roleplay: gatekeeper','Full call simulation']},
+    {name:'Follow-up', desc:'Master the art of staying relevant', diff:'Easy', dCls:'easy', mins:30, xp:150,
+      lessons:['The Follow-Up Framework','Multi-Channel Follow-Up','Templates and Best Practices'],
+      pages:['follow-up-1.html','follow-up-2.html','follow-up-3.html']},
+    {name:'Live Practice', desc:'Build real call skills through repetition', diff:'Hard', dCls:'hard', mins:40, xp:400,
+      lessons:['The Improvement Loop','The First 30 Seconds','Discovery and Objection Handling','Call Review and Roleplay'],
+      pages:['live-practice-1.html','live-practice-2.html','live-practice-3.html','live-practice-4.html']},
     {name:'Mastery', desc:'Become a top performer', diff:'Hard', dCls:'hard', mins:30, xp:500,
-      lessons:['Coaching others','Building your playbook','Advanced tonality','The closer mindset']}
+      lessons:['Coaching Others','Building Your Playbook','Advanced Tonality','The Closer Mindset'],
+      pages:['mastery-1.html','mastery-2.html','mastery-3.html','mastery-4.html']}
   ];
   const lid = (m,l) => `m${m}l${l}`;
   const lessonMins = (m) => Math.max(3, Math.round(modules[m].mins / modules[m].lessons.length));
@@ -336,27 +340,21 @@ const JP = (() => {
   const totalLessons = modules.reduce((s,m)=>s+m.lessons.length,0);
 
   let completed = new Set();
+  let lessonMeta = {};
 
   function loadProgress(){
-    try{
-      const raw = localStorage.getItem(STORAGE_KEY);
-      if(raw){ completed = new Set((JSON.parse(raw).completedLessons)||[]); return; }
-    }catch(e){}
-    // First-ever visit: empty progress, first lesson unlocked by default
-    completed = new Set();
-    saveProgress();
+    const store = AJP.readProgress();
+    completed = new Set(store.completedLessons);
+    lessonMeta = store.lessonMeta || {};
+    if(!store.completedLessons.length && store.overallProgress === undefined){
+      // First-ever visit: empty progress, first lesson unlocked by default
+      saveProgress();
+    }
   }
   function saveProgress(){
-    let n=0; modules.forEach((mod,mi)=>mod.lessons.forEach((_,li)=>{if(completed.has(lid(mi,li)))n++;}));
-    const curM = currentModuleIndex();
-    localStorage.setItem(STORAGE_KEY, JSON.stringify({
-      completedLessons:[...completed],
-      overallProgress: Math.round(n/totalLessons*100),
-      lessonsCompleted: n,
-      totalLessons,
-      currentModuleName: modules[curM].name,
-      updatedAt: Date.now()
-    }));
+    const store = AJP.writeProgress(completed, lessonMeta);
+    completed = new Set(store.completedLessons);
+    lessonMeta = store.lessonMeta;
   }
   function isModuleDone(m){ return modules[m].lessons.every((_,l)=>completed.has(lid(m,l))); }
   function isModuleUnlocked(m){ return m===0 || isModuleDone(m-1); }

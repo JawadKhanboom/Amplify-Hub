@@ -9,7 +9,8 @@
     "typecheck": "tsc --noEmit --pretty false",
     "preview": "vite preview",
     "qa": "node scripts/qa.mjs",
-    "qa:booking": "node scripts/qa-booking.mjs"
+    "qa:booking": "node scripts/qa-booking.mjs",
+    "qa:progress": "node scripts/qa-progress.mjs"
   },
   "dependencies": {
     "react": "19.2.7",

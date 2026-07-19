@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AmplifyHub — The First 30 Seconds</title>
+<meta name="description" content="Live Practice, Lesson 2 — master the opening structure that earns the right to keep talking.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="AmplifyHub">
+<meta property="og:title" content="AmplifyHub — The First 30 Seconds">
+<meta property="og:description" content="Live Practice, Lesson 2 — master the opening structure that earns the right to keep talking.">
+<meta property="og:image" content="og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#07070e;--bg2:#0b0b16;--card:#13132a;--card2:#181838;--glass:rgba(19,19,42,.55);
+  --accent:#FFD54A;--accent-dim:rgba(255,213,74,.1);--accent-glow:rgba(255,213,74,.3);
+  --warm:#FFA726;--green:#00e696;--blue:#64B5F6;--purple:#BA68C8;--red:#ff5f57;
+  --white:#fff;--text:#b0b0c8;--muted:#8a8aa4;
+  --border:rgba(255,213,74,.07);--border-h:rgba(255,213,74,.22);
+  --font:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;--sb:240px;
+}
+body{font-family:var(--font);background:var(--bg);color:var(--white);display:flex;min-height:100vh;overflow-x:hidden}
+
+.sb{width:var(--sb);position:fixed;top:0;left:0;bottom:0;background:var(--bg2);border-right:1px solid var(--border);padding:24px 16px;display:flex;flex-direction:column;z-index:100;transition:transform .3s}
+.sb-logo{font-size:20px;font-weight:800;padding:0 8px 24px}.sb-logo span{color:var(--accent)}
+.sb-nav{display:flex;flex-direction:column;gap:4px;flex:1}
+.si{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:10px;font-size:14px;font-weight:500;color:var(--muted);cursor:pointer;transition:all .2s;text-decoration:none;border:1px solid transparent}
+.si:hover{color:var(--text);background:rgba(255,255,255,.03)}.si.act{color:var(--accent);background:var(--accent-dim);border-color:var(--border)}
+.si-ic{width:20px;text-align:center;font-size:15px}
+.sb-d{height:1px;background:var(--border);margin:10px 8px}
+.sb-u{display:flex;align-items:center;gap:10px;padding:12px 8px;border-top:1px solid var(--border);margin-top:auto}
+.sb-av{width:32px;height:32px;border-radius:8px;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:var(--bg)}
+.sb-un{font-size:13px;font-weight:600}.sb-ur{font-size:11px;color:var(--muted)}
+.sb-x{display:none;position:absolute;top:16px;right:16px;background:none;border:none;color:var(--muted);font-size:20px;cursor:pointer}
+.mh{display:none;position:fixed;top:0;left:0;right:0;z-index:200;padding:14px 20px;background:rgba(7,7,14,.95);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);align-items:center;justify-content:space-between}
+.mh .logo{font-size:18px;font-weight:800}.mh .logo span{color:var(--accent)}
+.mb{background:none;border:none;cursor:pointer}.mb span{display:block;width:20px;height:2px;background:#fff;margin:4px 0}
+
+.main{margin-left:var(--sb);flex:1;padding:32px 40px 80px;max-width:780px}
+.back{display:inline-flex;align-items:center;gap:6px;color:var(--muted);font-size:13px;font-weight:600;text-decoration:none;margin-bottom:20px;transition:color .2s}.back:hover{color:var(--accent)}
+.lesson-badge{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--accent);margin-bottom:8px}
+.lesson-title{font-size:clamp(22px,3vw,28px);font-weight:900;letter-spacing:-.5px;margin-bottom:6px}
+.lesson-meta{display:flex;gap:16px;font-size:12px;color:var(--muted);margin-bottom:28px;flex-wrap:wrap}
+
+.lcard{background:var(--glass);backdrop-filter:blur(14px);border:1px solid var(--border);border-radius:20px;padding:28px;margin-bottom:20px;transition:border-color .3s}
+.lcard:hover{border-color:var(--border-h)}
+.lcard h2{font-size:17px;font-weight:800;letter-spacing:-.2px;margin-bottom:12px;display:flex;align-items:center;gap:10px}
+.lcard h2 .ic{font-size:20px}
+.lcard p,.lcard li{font-size:14px;color:var(--text);line-height:1.75}
+.lcard p{margin-bottom:12px}.lcard p:last-child{margin-bottom:0}
+.lcard strong{color:var(--white);font-weight:600}
+.lcard em{color:var(--accent);font-style:normal}
+.lcard blockquote{background:var(--accent-dim);border-left:3px solid var(--accent);border-radius:0 10px 10px 0;padding:14px 18px;margin:14px 0;font-size:14px;color:var(--text);font-style:italic;line-height:1.6}
+.lcard ul,.lcard ol{padding-left:20px;margin:10px 0}
+
+.reflect{background:linear-gradient(135deg,rgba(255,213,74,.06),var(--card));border:1px solid var(--border-h);border-radius:16px;padding:22px;text-align:center;margin-bottom:20px}
+.reflect-q{font-size:15px;font-weight:700;font-style:italic;line-height:1.5}
+
+.q-item{margin-bottom:18px;padding-bottom:18px;border-bottom:1px solid rgba(255,213,74,.04)}
+.q-item:last-child{border-bottom:none;margin-bottom:0}
+.q-num{font-size:10px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
+.q-text{font-size:14px;font-weight:600;margin-bottom:10px}
+.q-opts{display:flex;flex-direction:column;gap:6px}
+.qopt{display:flex;align-items:center;gap:10px;padding:10px 14px;border:1px solid var(--border);border-radius:10px;cursor:pointer;transition:all .25s;font-size:13px;color:var(--text)}
+.qopt:hover{border-color:var(--border-h);color:var(--white)}
+.qopt input{display:none}
+.qopt.correct{border-color:rgba(0,230,150,.3);background:rgba(0,230,150,.08);color:var(--green)}
+.qopt.wrong{border-color:rgba(255,95,87,.3);background:rgba(255,95,87,.08);color:var(--red)}
+.q-fb{font-size:12px;font-weight:600;margin-top:8px;min-height:18px}
+
+.ai-card{background:linear-gradient(135deg,rgba(0,230,150,.05),var(--card));border:1px solid rgba(0,230,150,.12);border-radius:18px;padding:22px;margin-bottom:20px}
+.ai-card h2{color:var(--green)}
+.ai-meta{display:flex;gap:12px;flex-wrap:wrap;margin:10px 0 14px;font-size:12px;color:var(--muted)}
+.ai-btn{background:var(--green);color:var(--bg);border:none;padding:12px 24px;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:var(--font);transition:all .3s;margin-top:10px}
+.ai-btn:hover{box-shadow:0 4px 16px rgba(0,230,150,.3)}
+
+.takeaway{background:var(--accent-dim);border:1px solid var(--border-h);border-radius:16px;padding:22px;text-align:center;margin-bottom:24px}
+.takeaway p{font-size:16px;font-weight:700;color:var(--accent)}
+
+.bnav{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:20px}
+.bnav-btn{flex:1;min-width:140px;padding:14px 20px;border-radius:12px;font-size:14px;font-weight:700;cursor:pointer;font-family:var(--font);transition:all .3s;text-align:center;text-decoration:none;display:flex;align-items:center;justify-content:center;gap:6px}
+.bnav-prev{background:transparent;color:var(--white);border:1px solid var(--border-h)}.bnav-prev:hover{background:var(--accent-dim)}
+.bnav-complete{background:var(--accent);color:var(--bg);border:none}.bnav-complete:hover{box-shadow:0 6px 24px var(--accent-glow);transform:translateY(-2px)}
+.bnav-complete.done{background:var(--green);pointer-events:none}
+.bnav-next{background:transparent;color:var(--white);border:1px solid var(--border-h)}.bnav-next:hover{background:var(--accent-dim)}
+.toast{position:fixed;bottom:32px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--green);color:var(--bg);padding:14px 28px;border-radius:14px;font-size:14px;font-weight:700;z-index:999;transition:transform .4s cubic-bezier(.16,1,.3,1);pointer-events:none}
+.toast.show{transform:translateX(-50%) translateY(0)}
+
+/* Interactive reveals */
+details{background:var(--card);border:1px solid var(--border);border-radius:14px;margin:14px 0;overflow:hidden}
+details summary{padding:14px 18px;cursor:pointer;font-size:14px;font-weight:600;color:var(--white);list-style:none;display:flex;align-items:center;gap:8px;transition:background .2s;user-select:none}
+details summary:hover{background:rgba(255,255,255,.03)}
+details summary::-webkit-details-marker{display:none}
+details[open] summary{border-bottom:1px solid var(--border)}
+.det-body{padding:16px 18px}
+.det-body p,.det-body li{font-size:14px;color:var(--text);line-height:1.75}
+.det-body p{margin-bottom:10px}.det-body p:last-child{margin-bottom:0}
+.det-body strong{color:var(--white);font-weight:600}
+.det-body ol,.det-body ul{padding-left:20px;margin-bottom:10px}
+/* Comparison tables */
+.cx-tbl{width:100%;border-collapse:collapse;margin:14px 0;font-size:13px;overflow-x:auto;display:block}
+.cx-tbl th{padding:10px 14px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;text-align:left;white-space:nowrap}
+.cx-tbl td{padding:10px 14px;border-top:1px solid var(--border);vertical-align:top;line-height:1.65;color:var(--text)}
+.cx-tbl .bad{background:rgba(255,95,87,.04)}.cx-tbl .good{background:rgba(0,230,150,.04)}
+.cx-tbl th.bad{color:var(--red);border-bottom:2px solid rgba(255,95,87,.2)}
+.cx-tbl th.good{color:var(--green);border-bottom:2px solid rgba(0,230,150,.2)}
+/* Framework tables */
+.fw-tbl{width:100%;border-collapse:collapse;margin:14px 0;font-size:13px;overflow-x:auto;display:block}
+.fw-tbl th{padding:10px 14px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--accent);text-align:left;border-bottom:2px solid var(--border-h);white-space:nowrap}
+.fw-tbl td{padding:10px 14px;border-bottom:1px solid var(--border);color:var(--text);line-height:1.6}
+.fw-tbl tr:last-child td{border-bottom:none}
+.fw-tbl td:first-child{color:var(--white);font-weight:600}
+
+/* Warning card */
+.warn-card{background:rgba(255,95,87,.06);border:1px solid rgba(255,95,87,.18);border-left:3px solid var(--red);border-radius:0 14px 14px 0;padding:18px 20px;margin:14px 0;font-size:14px;color:var(--text);line-height:1.7}
+.warn-card strong{color:var(--red);font-weight:700}
+
+/* Delivery comparison */
+.delivery-item{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 18px;margin:10px 0}
+.delivery-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
+.delivery-label.nervous{color:var(--warm)}.delivery-label.aggressive{color:var(--red)}.delivery-label.confident{color:var(--green)}
+.delivery-text{font-size:14px;color:var(--text);line-height:1.65;font-style:italic}
+
+@media(max-width:860px){
+  .sb{transform:translateX(-100%)}.sb.open{transform:translateX(0)}.sb-x{display:block}
+  .mh{display:flex}.main{margin-left:0;padding:72px 20px 48px}
+}
+
+a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+</style>
+</head>
+<body>
+
+<div class="mh"><div class="logo">Amplify<span>Hub</span></div><button class="mb" id="mobBtn" aria-label="Open navigation menu"><span></span><span></span><span></span></button></div>
+
+<aside class="sb" id="sb">
+  <button class="sb-x" id="sbX" aria-label="Close navigation menu">&#10005;</button>
+  <div class="sb-logo">Amplify<span>Hub</span></div>
+  <nav class="sb-nav">
+    <a class="si" href="dashboard.html"><span class="si-ic">&#127968;</span>Dashboard</a>
+    <a class="si act" href="journey.html"><span class="si-ic">&#128740;</span>Journey</a>
+    <a class="si" href="coach-home.html"><span class="si-ic">&#129302;</span>AI Coach</a>
+    <a class="si" href="dashboard.html#challenge"><span class="si-ic">&#9889;</span>Challenges</a>
+    <a class="si" href="dashboard.html#resources"><span class="si-ic">&#128218;</span>Resources</a>
+    <div class="sb-d"></div>
+    <a class="si" href="settings.html"><span class="si-ic">&#9881;&#65039;</span>Settings</a>
+  </nav>
+  <div class="sb-u"><div class="sb-av">J</div><div><div class="sb-un">Jawad</div><div class="sb-ur">Pro Member</div></div></div>
+</aside>
+
+<div class="main">
+  <a href="journey.html" class="back">&larr; Back to Journey</a>
+  <div class="lesson-badge">Live Practice &middot; Lesson 2 of 4</div>
+  <h1 class="lesson-title">The First 30 Seconds</h1>
+  <div class="lesson-meta"><span>&#9201; ~10 min</span><span>&#127942; +100 XP</span><span>&#128214; Module 9: Live Practice</span></div>
+
+  <!-- CARD 1: THE OPENING STRUCTURE -->
+  <div class="lcard">
+    <h2><span class="ic">&#127919;</span> The Opening Structure</h2>
+    <p>Most cold calls are won or lost in the opening. The prospect decides whether to keep listening or start looking for an exit &mdash; and that decision happens <strong>before you finish your second sentence.</strong></p>
+    <p>Use this five-part structure to earn the right to continue:</p>
+    <ol>
+      <li><strong>Identify yourself</strong> &mdash; first name, company if relevant</li>
+      <li><strong>Mention relevant context</strong> &mdash; why you're calling THIS person</li>
+      <li><strong>Ask permission to continue</strong> &mdash; give them a moment to opt in</li>
+      <li><strong>Explain the reason for the call</strong> &mdash; one sentence</li>
+      <li><strong>Introduce a problem or observation</strong> &mdash; not a pitch</li>
+    </ol>
+    <p>Notice what's <em>not</em> in the structure: a product demo, a feature list, or a 90-second monologue about your company. The opening earns attention. The conversation earns the meeting.</p>
+  </div>
+
+  <!-- CARD 2: OPENING EXAMPLES -->
+  <div class="lcard">
+    <h2><span class="ic">&#128172;</span> Opening Examples</h2>
+    <p>Each scenario calls for a slightly different opener. Tap to expand:</p>
+
+    <details>
+      <summary>&#10052; Completely cold prospect</summary>
+      <div class="det-body">
+        <p><em>"Hi [Name], it's [You] with [Company]. I know I'm catching you out of nowhere &mdash; got 20 seconds for me to share why I called?"</em></p>
+        <p><strong>Why it works:</strong> You acknowledge the interruption honestly. You ask for a tiny commitment (20 seconds) instead of demanding open-ended time. It feels human, not scripted.</p>
+      </div>
+    </details>
+
+    <details>
+      <summary>&#128200; Prospect tied to a company event</summary>
+      <div class="det-body">
+        <p><em>"Hi [Name], saw you're hiring a wave of account executives right now &mdash; that's actually why I called. Got a minute?"</em></p>
+        <p><strong>Why it works:</strong> The trigger (hiring AEs) signals you did your homework. The prospect immediately understands this isn't a random dial.</p>
+      </div>
+    </details>
+
+    <details>
+      <summary>&#129309; Warm lead (referral)</summary>
+      <div class="det-body">
+        <p><em>"Hi [Name], [Referrer] suggested I reach out &mdash; mentioned you'd been looking at ways to [goal]. Is now an okay time?"</em></p>
+        <p><strong>Why it works:</strong> The referrer's name creates instant trust. Mentioning the goal shows you aren't cold &mdash; you're continuing a conversation someone else started.</p>
+      </div>
+    </details>
+
+    <details>
+      <summary>&#128196; Downloaded a resource</summary>
+      <div class="det-body">
+        <p><em>"Hi [Name], saw you grabbed our guide on [topic] &mdash; wanted to see what prompted the interest, if you've got a minute."</em></p>
+        <p><strong>Why it works:</strong> You reference a specific action they took. The question ("what prompted the interest") invites them to talk about their problem, not listen to yours.</p>
+      </div>
+    </details>
+  </div>
+
+  <!-- CARD 3: WEAK VS. STRONG OPENINGS -->
+  <div class="lcard">
+    <h2><span class="ic">&#9878;&#65039;</span> Weak vs. Strong Openings</h2>
+    <p>Side by side, the difference is obvious. In practice, most reps default to the left column without realising it.</p>
+    <table class="cx-tbl">
+      <tr><th class="bad">&#10060; Weak (product-heavy)</th><th class="good">&#9989; Strong (problem-based)</th></tr>
+      <tr>
+        <td class="bad">"Hi, we offer a full suite of solutions for sales teams including automation, reporting, and coaching tools &mdash; do you have a few minutes?"</td>
+        <td class="good">"Hi [Name], most sales leaders I talk to are seeing reps spend more time on admin work than actual selling &mdash; is that something you're running into too?"</td>
+      </tr>
+    </table>
+    <p>The weak opening talks <strong>about you.</strong> The strong opening talks <strong>about them.</strong> That single shift changes whether the next sound is a click or a conversation.</p>
+  </div>
+
+  <!-- CARD 4: HANDLING IMMEDIATE REACTIONS -->
+  <div class="lcard">
+    <h2><span class="ic">&#128737;&#65039;</span> Handling Immediate Reactions</h2>
+    <p>You won't always get a warm welcome. Here's how to handle the most common first responses:</p>
+    <table class="fw-tbl">
+      <tr><th>They Say</th><th>Response Approach</th><th>Continue or Stop?</th></tr>
+      <tr><td>"Who is this?"</td><td>Restate name and company plainly, then continue</td><td>Continue</td></tr>
+      <tr><td>"What is this about?"</td><td>Give one-sentence reason immediately</td><td>Continue</td></tr>
+      <tr><td>"I'm busy."</td><td>Acknowledge, offer 10-second version or better time</td><td>Continue briefly, or reschedule</td></tr>
+      <tr><td>"Not interested."</td><td>Ask once if it's timing or topic &mdash; then respect the answer</td><td>Continue once, briefly</td></tr>
+      <tr><td>"Take me off your list."</td><td>Confirm you will, and do it</td><td>Stop immediately</td></tr>
+      <tr><td>Silence</td><td>"Still there &mdash; good time?"</td><td>Continue briefly</td></tr>
+      <tr><td>Prospect hangs up</td><td>Log it, move on. Don't call back repeatedly.</td><td>Stop</td></tr>
+    </table>
+
+    <div class="warn-card">
+      <strong>&#9888; Important:</strong> Never argue with a clear refusal. "Take me off your list" and a firm "not interested" after you've tried once both mean stop. Pushing past a genuine no doesn't win business &mdash; it burns the relationship and your reputation.
+    </div>
+  </div>
+
+  <!-- CARD 5: TONALITY AND DELIVERY -->
+  <div class="lcard">
+    <h2><span class="ic">&#127908;</span> Tonality and Delivery</h2>
+    <p>The same words land differently depending on delivery. Five principles to internalise:</p>
+    <ul>
+      <li><strong>Pace your speech</strong> &mdash; don't rush through the opener</li>
+      <li><strong>Use pauses</strong> instead of filler words ("um," "uh," "like")</li>
+      <li><strong>Speak clearly</strong> at natural volume</li>
+      <li><strong>Smile naturally</strong> &mdash; it changes tone even when unseen</li>
+      <li><strong>Stay composed after rejection</strong> &mdash; frustration leaks into the next call</li>
+    </ul>
+
+    <p style="margin-top:16px"><strong>Same Line, Three Deliveries:</strong></p>
+    <div class="delivery-item">
+      <div class="delivery-label nervous">Nervous</div>
+      <div class="delivery-text">"Um, hi, is, uh, is this a bad time? I can call back if..."</div>
+    </div>
+    <div class="delivery-item">
+      <div class="delivery-label aggressive">Aggressive</div>
+      <div class="delivery-text">"You need to hear this &mdash; it'll change how you sell, period."</div>
+    </div>
+    <div class="delivery-item">
+      <div class="delivery-label confident">Calm and confident</div>
+      <div class="delivery-text">"Hi [Name], got 20 seconds? I think this is relevant to what you're working on."</div>
+    </div>
+
+    <blockquote>&#127908; <strong>Recording Exercise:</strong> Record yourself delivering your opening in all three tones above. Play it back. Most beginners are surprised by how much faster or flatter they sound compared to how it feels in the moment.</blockquote>
+  </div>
+
+  <!-- REFLECTION -->
+  <div class="reflect"><div class="reflect-q">&#128173; Record your opening line right now &mdash; even on your phone. Play it back. Does it sound like a confident professional, or does it need work?</div></div>
+
+  <!-- QUIZ -->
+  <div class="lcard">
+    <h2><span class="ic">&#129504;</span> Knowledge Check</h2>
+    <div class="q-item"><div class="q-num">Q1</div><div class="q-text">Which opening best follows the problem-based structure?</div><div class="q-opts">
+      <label class="qopt" data-qi="0" data-oi="0"><input type="radio" name="q0"><span class="qo-text">A full list of product features</span></label>
+      <label class="qopt" data-qi="0" data-oi="1"><input type="radio" name="q0"><span class="qo-text">"Got 20 seconds &mdash; most sales leaders I talk to are seeing X, is that true for you?"</span></label>
+      <label class="qopt" data-qi="0" data-oi="2"><input type="radio" name="q0"><span class="qo-text">"How's your day going?"</span></label>
+      <label class="qopt" data-qi="0" data-oi="3"><input type="radio" name="q0"><span class="qo-text">A generic company overview</span></label>
+    </div><div class="q-fb" id="qfb0"></div></div>
+
+    <div class="q-item"><div class="q-num">Q2</div><div class="q-text">A prospect says "take me off your list." What should you do?</div><div class="q-opts">
+      <label class="qopt" data-qi="1" data-oi="0"><input type="radio" name="q1"><span class="qo-text">Ask one more clarifying question</span></label>
+      <label class="qopt" data-qi="1" data-oi="1"><input type="radio" name="q1"><span class="qo-text">Offer a discount</span></label>
+      <label class="qopt" data-qi="1" data-oi="2"><input type="radio" name="q1"><span class="qo-text">Confirm and stop immediately</span></label>
+      <label class="qopt" data-qi="1" data-oi="3"><input type="radio" name="q1"><span class="qo-text">Call back tomorrow</span></label>
+    </div><div class="q-fb" id="qfb1"></div></div>
+
+    <div class="q-item"><div class="q-num">Q3</div><div class="q-text">What is the purpose of asking permission to continue in the opening?</div><div class="q-opts">
+      <label class="qopt" data-qi="2" data-oi="0"><input type="radio" name="q2"><span class="qo-text">To waste time</span></label>
+      <label class="qopt" data-qi="2" data-oi="1"><input type="radio" name="q2"><span class="qo-text">To sound scripted</span></label>
+      <label class="qopt" data-qi="2" data-oi="2"><input type="radio" name="q2"><span class="qo-text">To give the prospect a moment to opt in, building respect</span></label>
+      <label class="qopt" data-qi="2" data-oi="3"><input type="radio" name="q2"><span class="qo-text">To avoid giving your reason for calling</span></label>
+    </div><div class="q-fb" id="qfb2"></div></div>
+
+    <div class="q-item"><div class="q-num">Q4</div><div class="q-text">What's the biggest risk in over-preparing an opener?</div><div class="q-opts">
+      <label class="qopt" data-qi="3" data-oi="0"><input type="radio" name="q3"><span class="qo-text">Running out of things to say</span></label>
+      <label class="qopt" data-qi="3" data-oi="1"><input type="radio" name="q3"><span class="qo-text">Sounding robotic and scripted</span></label>
+      <label class="qopt" data-qi="3" data-oi="2"><input type="radio" name="q3"><span class="qo-text">Talking too little</span></label>
+      <label class="qopt" data-qi="3" data-oi="3"><input type="radio" name="q3"><span class="qo-text">Forgetting the prospect's name</span></label>
+    </div><div class="q-fb" id="qfb3"></div></div>
+
+    <div class="q-item"><div class="q-num">Q5</div><div class="q-text">When a prospect says "I'm busy," what should you do?</div><div class="q-opts">
+      <label class="qopt" data-qi="4" data-oi="0"><input type="radio" name="q4"><span class="qo-text">Hang up immediately</span></label>
+      <label class="qopt" data-qi="4" data-oi="1"><input type="radio" name="q4"><span class="qo-text">Launch into your full pitch</span></label>
+      <label class="qopt" data-qi="4" data-oi="2"><input type="radio" name="q4"><span class="qo-text">Acknowledge it and offer a 10-second version or a better time</span></label>
+      <label class="qopt" data-qi="4" data-oi="3"><input type="radio" name="q4"><span class="qo-text">Call back in 5 minutes</span></label>
+    </div><div class="q-fb" id="qfb4"></div></div>
+    <button class="ai-btn" style="background:var(--accent);color:var(--bg);margin-top:14px" id="checkQuiz">Check Answers</button>
+  </div>
+
+  <!-- AI COACH -->
+  <div class="ai-card">
+    <h2><span class="ic">&#129302;</span> Practice with AI Coach</h2>
+    <p style="font-size:14px;color:var(--text);margin:8px 0"><strong>Scenario:</strong> Practise your opening on three different prospect types. The coach will react as each prospect would &mdash; a busy executive, a skeptical business owner, and a warm inbound lead.</p>
+    <p style="font-size:13px;color:var(--text)"><strong>Your objective:</strong> Deliver a clean, problem-based opening for each type. Adapt your tone and context to fit the situation. Handle whatever reaction comes back.</p>
+    <div class="ai-meta"><span>Difficulty: Hard</span><span>Goal: Adapt your opening to three distinct prospect personas</span></div>
+    <a href="coach-home.html" class="ai-btn">Open AI Coach &rarr;</a>
+  </div>
+
+  <!-- TAKEAWAY -->
+  <div class="takeaway"><p>&#128273; The first 30 seconds aren't about pitching &mdash; they're about earning the right to keep talking. Lead with context, ask permission, and introduce a problem. Everything else follows from there.</p></div>
+
+  <!-- BOTTOM NAV -->
+  <div class="bnav">
+    <a href="live-practice-1.html" class="bnav-btn bnav-prev">&larr; Previous Lesson</a>
+    <button class="bnav-btn bnav-complete" id="completeBtn">Mark as Complete &#10003;</button>
+    <a href="live-practice-3.html" class="bnav-btn bnav-next">Next Lesson &rarr;</a>
+  </div>
+</div>
+
+<div class="toast" id="toast">&#127881; Lesson Complete! +100 XP</div>
+
+<script src="assets/journey-progress.js"></script>
+<script>
+const MODULE_INDEX=8;
+const LESSON_INDEX=1;
+
+const AJP=window.AmplifyJourneyProgress;
+const thisLid=AJP.lid(MODULE_INDEX,LESSON_INDEX);
+let progressStore=AJP.readProgress();
+let completed=new Set(progressStore.completedLessons);
+let lessonMeta=progressStore.lessonMeta||{};
+const pageLoadTime=Date.now();
+let lastQuizScore=(lessonMeta[thisLid]&&lessonMeta[thisLid].quizScore)||null;
+const btn=document.getElementById('completeBtn');
+if(completed.has(thisLid)){ btn.textContent='✓ Completed'; btn.classList.add('done'); }
+
+btn.addEventListener('click',function(){
+  if(completed.has(thisLid)) return;
+  const minsSpent=Math.max(1,Math.round((Date.now()-pageLoadTime)/60000));
+  const store=AJP.markLessonComplete(MODULE_INDEX,LESSON_INDEX,{mins:minsSpent, quizScore:lastQuizScore});
+  completed=new Set(store.completedLessons);
+  lessonMeta=store.lessonMeta;
+  btn.textContent='✓ Completed';
+  btn.classList.add('done');
+  const toast=document.getElementById('toast');
+  toast.classList.add('show');
+  setTimeout(()=>toast.classList.remove('show'),2500);
+});
+
+const answers=[1, 2, 2, 1, 2];
+document.getElementById('checkQuiz').addEventListener('click',function(){
+  let correct=0, answeredAny=false;
+  document.querySelectorAll('.qopt').forEach(opt=>{
+    const qi=parseInt(opt.dataset.qi), oi=parseInt(opt.dataset.oi);
+    const input=opt.querySelector('input');
+    if(!input.checked) return;
+    answeredAny=true;
+    if(oi===answers[qi]){ correct++; opt.classList.add('correct'); document.getElementById('qfb'+qi).textContent='✓ Correct!'; document.getElementById('qfb'+qi).style.color='var(--green)'; }
+    else{ opt.classList.add('wrong'); document.getElementById('qfb'+qi).textContent='✗ Try again'; document.getElementById('qfb'+qi).style.color='var(--red)'; }
+  });
+  if(answeredAny){
+    lastQuizScore=correct+'/'+answers.length;
+    lessonMeta[thisLid]=Object.assign({},lessonMeta[thisLid]||{},{quizScore:lastQuizScore});
+    AJP.recordLessonMeta(MODULE_INDEX,LESSON_INDEX,{quizScore:lastQuizScore});
+  }
+});
+
+document.getElementById('mobBtn').addEventListener('click',()=>document.getElementById('sb').classList.add('open'));
+document.getElementById('sbX').addEventListener('click',()=>document.getElementById('sb').classList.remove('open'));
+</script>
+</body>
+</html>

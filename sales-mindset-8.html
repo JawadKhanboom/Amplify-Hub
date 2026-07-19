@@ -184,48 +184,21 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
 
 <div class="toast" id="toast">🎉 Lesson Complete! +50 XP</div>
 
+<script src="assets/journey-progress.js"></script>
 <script>
 // ── PROGRESS SYNC (shared with journey.html + dashboard.html) ──
-const STORAGE_KEY='amplifyHub_journeyProgress';
 const MODULE_INDEX=0; // Sales Mindset is module 0
 const LESSON_INDEX=7; // 0-indexed
-// Compact module map (names + lesson counts) so summary fields stay correct for Dashboard
-const MODULE_MAP=[
-  ['Sales Mindset',8],['Finding Prospects',3],['Building Your Script',4],['Opening the Call',4],
-  ['Discovery Questions',4],['Objection Handling',5],['Booking Appointments',1],['Follow-up',3],
-  ['Live Practice',4],['Mastery',4]
-];
-const TOTAL_LESSONS=MODULE_MAP.reduce((s,m)=>s+m[1],0);
 
-function readStore(){
-  try{ return JSON.parse(localStorage.getItem(STORAGE_KEY))||{}; }catch(e){ return {}; }
-}
-function lid(m,l){ return `m${m}l${l}`; }
+const AJP=window.AmplifyJourneyProgress;
+function lid(m,l){ return AJP.lid(m,l); }
 function saveProgress(completed, lessonMeta){
-  // Recompute the summary fields Dashboard depends on (fixes sync)
-  let done=0, curModule=MODULE_MAP.length-1;
-  outer: for(let m=0;m<MODULE_MAP.length;m++){
-    for(let l=0;l<MODULE_MAP[m][1];l++) if(completed.has(lid(m,l))) done++;
-  }
-  for(let m=0;m<MODULE_MAP.length;m++){
-    let allDone=true;
-    for(let l=0;l<MODULE_MAP[m][1];l++) if(!completed.has(lid(m,l))){allDone=false;break;}
-    if(!allDone){ curModule=m; break; }
-  }
-  localStorage.setItem(STORAGE_KEY,JSON.stringify({
-    completedLessons:[...completed],
-    overallProgress: Math.round(done/TOTAL_LESSONS*100),
-    lessonsCompleted: done,
-    totalLessons: TOTAL_LESSONS,
-    currentModuleName: MODULE_MAP[curModule][0],
-    lessonMeta: lessonMeta,
-    updatedAt: Date.now()
-  }));
+  return AJP.writeProgress(completed, lessonMeta);
 }
 
 // ── INIT STATE ──
-const store=readStore();
-const completed=new Set(store.completedLessons||[]);
+const store=AJP.readProgress();
+let completed=new Set(store.completedLessons||[]);
 const lessonMeta=store.lessonMeta||{};
 const thisLid=lid(MODULE_INDEX,LESSON_INDEX);
 const btn=document.getElementById('completeBtn');

@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AmplifyHub — Call Review and Roleplay</title>
+<meta name="description" content="Live Practice, Lesson 4 — review your calls, practise roleplays, and build a seven-day practice plan.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="AmplifyHub">
+<meta property="og:title" content="AmplifyHub — Call Review and Roleplay">
+<meta property="og:description" content="Live Practice, Lesson 4 — review your calls, practise roleplays, and build a seven-day practice plan.">
+<meta property="og:image" content="og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#07070e;--bg2:#0b0b16;--card:#13132a;--card2:#181838;--glass:rgba(19,19,42,.55);
+  --accent:#FFD54A;--accent-dim:rgba(255,213,74,.1);--accent-glow:rgba(255,213,74,.3);
+  --warm:#FFA726;--green:#00e696;--blue:#64B5F6;--purple:#BA68C8;--red:#ff5f57;
+  --white:#fff;--text:#b0b0c8;--muted:#8a8aa4;
+  --border:rgba(255,213,74,.07);--border-h:rgba(255,213,74,.22);
+  --font:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;--sb:240px;
+}
+body{font-family:var(--font);background:var(--bg);color:var(--white);display:flex;min-height:100vh;overflow-x:hidden}
+
+.sb{width:var(--sb);position:fixed;top:0;left:0;bottom:0;background:var(--bg2);border-right:1px solid var(--border);padding:24px 16px;display:flex;flex-direction:column;z-index:100;transition:transform .3s}
+.sb-logo{font-size:20px;font-weight:800;padding:0 8px 24px}.sb-logo span{color:var(--accent)}
+.sb-nav{display:flex;flex-direction:column;gap:4px;flex:1}
+.si{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:10px;font-size:14px;font-weight:500;color:var(--muted);cursor:pointer;transition:all .2s;text-decoration:none;border:1px solid transparent}
+.si:hover{color:var(--text);background:rgba(255,255,255,.03)}.si.act{color:var(--accent);background:var(--accent-dim);border-color:var(--border)}
+.si-ic{width:20px;text-align:center;font-size:15px}
+.sb-d{height:1px;background:var(--border);margin:10px 8px}
+.sb-u{display:flex;align-items:center;gap:10px;padding:12px 8px;border-top:1px solid var(--border);margin-top:auto}
+.sb-av{width:32px;height:32px;border-radius:8px;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:var(--bg)}
+.sb-un{font-size:13px;font-weight:600}.sb-ur{font-size:11px;color:var(--muted)}
+.sb-x{display:none;position:absolute;top:16px;right:16px;background:none;border:none;color:var(--muted);font-size:20px;cursor:pointer}
+.mh{display:none;position:fixed;top:0;left:0;right:0;z-index:200;padding:14px 20px;background:rgba(7,7,14,.95);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);align-items:center;justify-content:space-between}
+.mh .logo{font-size:18px;font-weight:800}.mh .logo span{color:var(--accent)}
+.mb{background:none;border:none;cursor:pointer}.mb span{display:block;width:20px;height:2px;background:#fff;margin:4px 0}
+
+.main{margin-left:var(--sb);flex:1;padding:32px 40px 80px;max-width:780px}
+.back{display:inline-flex;align-items:center;gap:6px;color:var(--muted);font-size:13px;font-weight:600;text-decoration:none;margin-bottom:20px;transition:color .2s}.back:hover{color:var(--accent)}
+.lesson-badge{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--accent);margin-bottom:8px}
+.lesson-title{font-size:clamp(22px,3vw,28px);font-weight:900;letter-spacing:-.5px;margin-bottom:6px}
+.lesson-meta{display:flex;gap:16px;font-size:12px;color:var(--muted);margin-bottom:28px;flex-wrap:wrap}
+
+.lcard{background:var(--glass);backdrop-filter:blur(14px);border:1px solid var(--border);border-radius:20px;padding:28px;margin-bottom:20px;transition:border-color .3s}
+.lcard:hover{border-color:var(--border-h)}
+.lcard h2{font-size:17px;font-weight:800;letter-spacing:-.2px;margin-bottom:12px;display:flex;align-items:center;gap:10px}
+.lcard h2 .ic{font-size:20px}
+.lcard p,.lcard li{font-size:14px;color:var(--text);line-height:1.75}
+.lcard p{margin-bottom:12px}.lcard p:last-child{margin-bottom:0}
+.lcard strong{color:var(--white);font-weight:600}
+.lcard em{color:var(--accent);font-style:normal}
+.lcard blockquote{background:var(--accent-dim);border-left:3px solid var(--accent);border-radius:0 10px 10px 0;padding:14px 18px;margin:14px 0;font-size:14px;color:var(--text);font-style:italic;line-height:1.6}
+.lcard ul{padding-left:20px;margin:10px 0}
+.lcard ol{padding-left:20px;margin:10px 0}
+.lcard ol li,.lcard ul li{margin-bottom:4px}
+
+.reflect{background:linear-gradient(135deg,rgba(255,213,74,.06),var(--card));border:1px solid var(--border-h);border-radius:16px;padding:22px;text-align:center;margin-bottom:20px}
+.reflect-q{font-size:15px;font-weight:700;font-style:italic;line-height:1.5}
+
+.q-item{margin-bottom:18px;padding-bottom:18px;border-bottom:1px solid rgba(255,213,74,.04)}
+.q-item:last-child{border-bottom:none;margin-bottom:0}
+.q-num{font-size:10px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
+.q-text{font-size:14px;font-weight:600;margin-bottom:10px}
+.q-opts{display:flex;flex-direction:column;gap:6px}
+.qopt{display:flex;align-items:center;gap:10px;padding:10px 14px;border:1px solid var(--border);border-radius:10px;cursor:pointer;transition:all .25s;font-size:13px;color:var(--text)}
+.qopt:hover{border-color:var(--border-h);color:var(--white)}
+.qopt input{display:none}
+.qopt.correct{border-color:rgba(0,230,150,.3);background:rgba(0,230,150,.08);color:var(--green)}
+.qopt.wrong{border-color:rgba(255,95,87,.3);background:rgba(255,95,87,.08);color:var(--red)}
+.q-fb{font-size:12px;font-weight:600;margin-top:8px;min-height:18px}
+
+.ai-card{background:linear-gradient(135deg,rgba(0,230,150,.05),var(--card));border:1px solid rgba(0,230,150,.12);border-radius:18px;padding:22px;margin-bottom:20px}
+.ai-card h2{color:var(--green)}
+.ai-meta{display:flex;gap:12px;flex-wrap:wrap;margin:10px 0 14px;font-size:12px;color:var(--muted)}
+.ai-btn{background:var(--green);color:var(--bg);border:none;padding:12px 24px;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:var(--font);transition:all .3s;margin-top:10px}
+.ai-btn:hover{box-shadow:0 4px 16px rgba(0,230,150,.3)}
+
+.iv-card{background:linear-gradient(135deg,rgba(100,181,246,.05),var(--card));border:1px solid rgba(100,181,246,.12);border-radius:18px;padding:22px;margin-bottom:20px}
+.iv-card h2{color:var(--blue)}
+.iv-tip{background:rgba(100,181,246,.08);border:1px solid rgba(100,181,246,.15);border-radius:10px;padding:12px 14px;font-size:12px;color:var(--blue);margin-top:10px;font-weight:500}
+
+.takeaway{background:var(--accent-dim);border:1px solid var(--border-h);border-radius:16px;padding:22px;text-align:center;margin-bottom:24px}
+.takeaway p{font-size:16px;font-weight:700;color:var(--accent)}
+
+.bnav{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:20px}
+.bnav-btn{flex:1;min-width:140px;padding:14px 20px;border-radius:12px;font-size:14px;font-weight:700;cursor:pointer;font-family:var(--font);transition:all .3s;text-align:center;text-decoration:none;display:flex;align-items:center;justify-content:center;gap:6px}
+.bnav-prev{background:transparent;color:var(--white);border:1px solid var(--border-h)}.bnav-prev:hover{background:var(--accent-dim)}
+.bnav-complete{background:var(--accent);color:var(--bg);border:none}.bnav-complete:hover{box-shadow:0 6px 24px var(--accent-glow);transform:translateY(-2px)}
+.bnav-complete.done{background:var(--green);pointer-events:none}
+.bnav-next{background:transparent;color:var(--white);border:1px solid var(--border-h)}.bnav-next:hover{background:var(--accent-dim)}
+.toast{position:fixed;bottom:32px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--green);color:var(--bg);padding:14px 28px;border-radius:14px;font-size:14px;font-weight:700;z-index:999;transition:transform .4s cubic-bezier(.16,1,.3,1);pointer-events:none}
+.toast.show{transform:translateX(-50%) translateY(0)}
+
+/* Interactive reveals */
+details{background:var(--card);border:1px solid var(--border);border-radius:14px;margin:14px 0;overflow:hidden}
+details summary{padding:14px 18px;cursor:pointer;font-size:14px;font-weight:600;color:var(--white);list-style:none;display:flex;align-items:center;gap:8px;transition:background .2s;user-select:none}
+details summary:hover{background:rgba(255,255,255,.03)}
+details summary::-webkit-details-marker{display:none}
+details[open] summary{border-bottom:1px solid var(--border)}
+.det-body{padding:16px 18px}
+.det-body p,.det-body li{font-size:14px;color:var(--text);line-height:1.75}
+.det-body p{margin-bottom:10px}.det-body p:last-child{margin-bottom:0}
+.det-body strong{color:var(--white);font-weight:600}
+.det-body ol,.det-body ul{padding-left:20px;margin-bottom:10px}
+/* Comparison tables */
+.cx-tbl{width:100%;border-collapse:collapse;margin:14px 0;font-size:13px;overflow-x:auto;display:block}
+.cx-tbl th{padding:10px 14px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;text-align:left;white-space:nowrap}
+.cx-tbl td{padding:10px 14px;border-top:1px solid var(--border);vertical-align:top;line-height:1.65;color:var(--text)}
+.cx-tbl .bad{background:rgba(255,95,87,.04)}.cx-tbl .good{background:rgba(0,230,150,.04)}
+.cx-tbl th.bad{color:var(--red);border-bottom:2px solid rgba(255,95,87,.2)}
+.cx-tbl th.good{color:var(--green);border-bottom:2px solid rgba(0,230,150,.2)}
+/* Framework tables */
+.fw-tbl{width:100%;border-collapse:collapse;margin:14px 0;font-size:13px;overflow-x:auto;display:block}
+.fw-tbl th{padding:10px 14px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--accent);text-align:left;border-bottom:2px solid var(--border-h);white-space:nowrap}
+.fw-tbl td{padding:10px 14px;border-bottom:1px solid var(--border);color:var(--text);line-height:1.6}
+.fw-tbl tr:last-child td{border-bottom:none}
+.fw-tbl td:first-child{color:var(--white);font-weight:600}
+/* Scorecard */
+.scorecard{background:var(--card);border:1px solid var(--border);border-radius:14px;margin:14px 0;overflow:hidden}
+.scorecard-header{padding:14px 18px;font-size:14px;font-weight:700;color:var(--accent);border-bottom:1px solid var(--border)}
+.scorecard-row{display:flex;align-items:center;justify-content:space-between;padding:10px 18px;border-bottom:1px solid var(--border);font-size:13px;color:var(--text)}
+.scorecard-row:last-child{border-bottom:none}
+.scorecard-row .sc-cat{flex:1;font-weight:600;color:var(--white)}
+.scorecard-row .sc-pts{width:50px;text-align:center;color:var(--accent);font-weight:700;font-size:12px}
+.scorecard-total{padding:12px 18px;background:var(--accent-dim);font-size:14px;font-weight:700;color:var(--accent);display:flex;justify-content:space-between}
+/* Checklist */
+.checklist{margin:14px 0}
+.checklist-section{margin-bottom:16px}
+.checklist-section h3{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--accent);margin-bottom:8px}
+.checklist-item{display:flex;align-items:flex-start;gap:10px;padding:6px 0;font-size:14px;color:var(--text);line-height:1.6}
+.checklist-item .chk{width:18px;height:18px;border:2px solid var(--border-h);border-radius:5px;flex-shrink:0;margin-top:2px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;font-size:11px;color:transparent}
+.checklist-item .chk.checked{background:var(--green);border-color:var(--green);color:var(--bg)}
+
+@media(max-width:860px){
+  .sb{transform:translateX(-100%)}.sb.open{transform:translateX(0)}.sb-x{display:block}
+  .mh{display:flex}.main{margin-left:0;padding:72px 20px 48px}
+}
+
+a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+</style>
+</head>
+<body>
+
+<div class="mh"><div class="logo">Amplify<span>Hub</span></div><button class="mb" id="mobBtn" aria-label="Open navigation menu"><span></span><span></span><span></span></button></div>
+
+<aside class="sb" id="sb">
+  <button class="sb-x" id="sbX" aria-label="Close navigation menu">&#10005;</button>
+  <div class="sb-logo">Amplify<span>Hub</span></div>
+  <nav class="sb-nav">
+    <a class="si" href="dashboard.html"><span class="si-ic">&#127968;</span>Dashboard</a>
+    <a class="si act" href="journey.html"><span class="si-ic">&#128740;</span>Journey</a>
+    <a class="si" href="coach-home.html"><span class="si-ic">&#129302;</span>AI Coach</a>
+    <a class="si" href="dashboard.html#challenge"><span class="si-ic">&#9889;</span>Challenges</a>
+    <a class="si" href="dashboard.html#resources"><span class="si-ic">&#128218;</span>Resources</a>
+    <div class="sb-d"></div>
+    <a class="si" href="settings.html"><span class="si-ic">&#9881;&#65039;</span>Settings</a>
+  </nav>
+  <div class="sb-u"><div class="sb-av">J</div><div><div class="sb-un">Jawad</div><div class="sb-ur">Pro Member</div></div></div>
+</aside>
+
+<div class="main">
+  <a href="journey.html" class="back">&larr; Back to Journey</a>
+  <div class="lesson-badge">Live Practice &middot; Lesson 4 of 4</div>
+  <h1 class="lesson-title">Call Review and Roleplay</h1>
+  <div class="lesson-meta"><span>&#9201; ~10 min</span><span>&#127942; +100 XP</span><span>&#128214; Module 9: Live Practice</span></div>
+
+  <!-- CARD 1: Transitioning to the Next Step -->
+  <div class="lcard">
+    <h2><span class="ic">&#127919;</span> Transitioning to the Next Step</h2>
+    <p>Discovery without a clear next step is just a nice conversation. Once you've uncovered a real problem, <strong>move from discovery into a meeting:</strong></p>
+    <ol>
+      <li><strong>Summarize</strong> what the prospect said</li>
+      <li><strong>Connect</strong> the problem to the next conversation</li>
+      <li><strong>Explain</strong> what the meeting will provide</li>
+      <li><strong>Ask</strong> for a specific time</li>
+    </ol>
+    <p><strong>Transition examples:</strong></p>
+    <blockquote>"From what you've shared, your reps are creating activity but not enough qualified pipeline. It could help to review your messaging and call process together &mdash; would Tuesday afternoon or Wednesday morning work better?"</blockquote>
+    <blockquote>"Sounds like the team's growing fast and onboarding hasn't caught up yet. Worth 20 minutes to see where the gaps are?"</blockquote>
+    <blockquote>&#128161; <strong>Coach's Note:</strong> Confirm the meeting lands on their calendar before you hang up. Ask them to check while you're still on the phone.</blockquote>
+  </div>
+
+  <!-- CARD 2: Learning From Failed Calls -->
+  <div class="lcard">
+    <h2><span class="ic">&#128202;</span> Learning From Failed Calls</h2>
+    <p>Every failed call is a dataset. The goal isn't to avoid failure &mdash; it's to <strong>extract the lesson before moving on.</strong></p>
+    <table class="fw-tbl">
+      <tr><th>What happened</th><th>Why it failed</th><th>The lesson</th></tr>
+      <tr><td>Prospect kept asking "who is this?" and hung up</td><td>Rushing past identification when the line is unclear</td><td>Confirm you can be heard clearly before diving into your opener</td></tr>
+      <tr><td>Used internal team jargon prospect didn't recognize</td><td>Guessing at insider language confuses more than it impresses</td><td>Lead with plain-language problems, not internal terminology</td></tr>
+      <tr><td>Gave a long tactical explanation to a CRO</td><td>Mismatch &mdash; senior stakeholders think in outcomes, not mechanics</td><td>Match the altitude of conversation to the seniority of the person</td></tr>
+      <tr><td>Prospect said business was going well, no urgency</td><td>Not every prospect has an active, felt problem</td><td>Accept the disqualification gracefully and move on</td></tr>
+    </table>
+  </div>
+
+  <!-- CARD 3: The Call-Review Scorecard -->
+  <div class="lcard">
+    <h2><span class="ic">&#128203;</span> The Call-Review Scorecard</h2>
+    <p>Use this scorecard after every call to identify patterns. <strong>Rate each category honestly</strong> &mdash; the total doesn't matter as much as the trend over time.</p>
+    <div class="scorecard">
+      <div class="scorecard-header">Scorecard &mdash; Rate each category</div>
+      <div class="scorecard-row"><span class="sc-cat">Preparation</span><span class="sc-pts">/ 10</span></div>
+      <div class="scorecard-row"><span class="sc-cat">Opening</span><span class="sc-pts">/ 10</span></div>
+      <div class="scorecard-row"><span class="sc-cat">Relevance to prospect</span><span class="sc-pts">/ 10</span></div>
+      <div class="scorecard-row"><span class="sc-cat">Tonality and delivery</span><span class="sc-pts">/ 10</span></div>
+      <div class="scorecard-row"><span class="sc-cat">Listening</span><span class="sc-pts">/ 15</span></div>
+      <div class="scorecard-row"><span class="sc-cat">Discovery question quality</span><span class="sc-pts">/ 15</span></div>
+      <div class="scorecard-row"><span class="sc-cat">Objection handling</span><span class="sc-pts">/ 15</span></div>
+      <div class="scorecard-row"><span class="sc-cat">Meeting transition</span><span class="sc-pts">/ 10</span></div>
+      <div class="scorecard-row"><span class="sc-cat">Next-step confirmation</span><span class="sc-pts">/ 5</span></div>
+      <div class="scorecard-total"><span>Total</span><span>/ 100</span></div>
+    </div>
+    <p><strong>Review questions:</strong></p>
+    <details>
+      <summary>&#128269; Post-Call Reflection Prompts</summary>
+      <div class="det-body">
+        <ul>
+          <li>What went well?</li>
+          <li>Where did the prospect become more engaged?</li>
+          <li>Where did resistance increase?</li>
+          <li>Did I talk too much?</li>
+          <li>Which question produced the best answer?</li>
+          <li>Did I clearly earn the next step?</li>
+          <li>What is the one skill I will improve next?</li>
+        </ul>
+      </div>
+    </details>
+  </div>
+
+  <!-- CARD 4: Roleplay Scenarios -->
+  <div class="lcard">
+    <h2><span class="ic">&#127917;</span> Roleplay Scenarios</h2>
+    <p>Practise these scenarios with a partner, your AI coach, or by recording yourself. Each one targets a different real-world challenge.</p>
+    <details>
+      <summary>&#127919; Scenario 1: Busy Leader</summary>
+      <div class="det-body">
+        <p><strong>Who:</strong> VP of Sales, back-to-back meetings all day.</p>
+        <p><strong>Opening:</strong> "I've got about 90 seconds &mdash; go."</p>
+        <p><strong>Main problem:</strong> Pipeline quality is inconsistent.</p>
+        <p><strong>Hidden concern:</strong> New tool = more admin work for the team.</p>
+        <p><strong>Your objective:</strong> Earn 20 more seconds of attention and book a discovery call.</p>
+      </div>
+    </details>
+    <details>
+      <summary>&#128300; Scenario 2: Skeptical Owner</summary>
+      <div class="det-body">
+        <p><strong>Who:</strong> Small home-services business owner, skeptical of sales calls.</p>
+        <p><strong>Opening:</strong> "We're doing fine, not looking for anything."</p>
+        <p><strong>Hidden concern:</strong> Burned by an overpromising vendor before.</p>
+        <p><strong>Your objective:</strong> Find out if there's a real problem beneath the dismissal.</p>
+      </div>
+    </details>
+    <details>
+      <summary>&#128233; Scenario 3: Warm Inbound</summary>
+      <div class="det-body">
+        <p><strong>Who:</strong> Marketing manager who downloaded a guide two days ago.</p>
+        <p><strong>Opening:</strong> "Oh right, yeah, I did grab that."</p>
+        <p><strong>Hidden concern:</strong> Early in the research process, doesn't want pressure.</p>
+        <p><strong>Your objective:</strong> Understand what prompted the download and qualify without pushing.</p>
+      </div>
+    </details>
+    <details>
+      <summary>&#128101; Scenario 4: Partner Concern</summary>
+      <div class="det-body">
+        <p><strong>Who:</strong> Small business owner deciding jointly with their spouse.</p>
+        <p><strong>Opening:</strong> "I'd want to run this by my spouse first."</p>
+        <p><strong>Hidden concern:</strong> None &mdash; this is legitimate.</p>
+        <p><strong>Your objective:</strong> Ask what would matter most to their partner and offer to include them in the next conversation.</p>
+      </div>
+    </details>
+  </div>
+
+  <!-- CARD 5: The Seven-Day Practice Plan -->
+  <div class="lcard">
+    <h2><span class="ic">&#128197;</span> The Seven-Day Practice Plan</h2>
+    <p>Consistent practice beats occasional cramming. Follow this plan for one week to build real muscle memory:</p>
+    <table class="fw-tbl">
+      <tr><th>Day</th><th>Focus</th></tr>
+      <tr><td>Day 1</td><td>Practise openings</td></tr>
+      <tr><td>Day 2</td><td>Practise discovery questions</td></tr>
+      <tr><td>Day 3</td><td>Practise objection handling</td></tr>
+      <tr><td>Day 4</td><td>Make live calls; record where permitted</td></tr>
+      <tr><td>Day 5</td><td>Review calls and select one weakness</td></tr>
+      <tr><td>Day 6</td><td>Roleplay the weak section</td></tr>
+      <tr><td>Day 7</td><td>Repeat the improved version live</td></tr>
+    </table>
+    <blockquote>&#128161; <strong>Pro-Tip:</strong> After Day 7, start the cycle again with a new weakness. Improvement compounds &mdash; one fix per week is 52 fixes per year.</blockquote>
+  </div>
+
+  <!-- CARD 6: Common Mistakes -->
+  <div class="lcard">
+    <h2><span class="ic">&#9888;&#65039;</span> Common Mistakes</h2>
+    <table class="cx-tbl">
+      <tr><th class="bad">&#10060; Mistake</th><th class="good">&#9989; Correction</th></tr>
+      <tr><td class="bad">Over-preparing and sounding robotic</td><td class="good">Prepare key points, not word-for-word scripts</td></tr>
+      <tr><td class="bad">Talking too quickly</td><td class="good">Slow down deliberately in the opening</td></tr>
+      <tr><td class="bad">Pitching features immediately</td><td class="good">Ask about their problem first</td></tr>
+      <tr><td class="bad">Asking questions without listening</td><td class="good">Pause and process the answer</td></tr>
+      <tr><td class="bad">Arguing with objections</td><td class="good">Acknowledge and clarify first</td></tr>
+      <tr><td class="bad">Avoiding direct questions</td><td class="good">Answer honest questions honestly</td></tr>
+      <tr><td class="bad">Failing to ask for the meeting</td><td class="good">Always close discovery with a specific ask</td></tr>
+      <tr><td class="bad">Trying to correct ten skills at once</td><td class="good">Pick one weakness per practice cycle</td></tr>
+    </table>
+  </div>
+
+  <!-- CARD 7: The Live Call Practice Checklist -->
+  <div class="lcard">
+    <h2><span class="ic">&#9989;</span> The Live Call Practice Checklist</h2>
+    <div class="checklist">
+      <div class="checklist-section">
+        <h3>Before the Call</h3>
+        <div class="checklist-item"><span class="chk" tabindex="0" role="checkbox" aria-checked="false">&#10003;</span>Who am I calling?</div>
+        <div class="checklist-item"><span class="chk" tabindex="0" role="checkbox" aria-checked="false">&#10003;</span>Why is this relevant to them?</div>
+        <div class="checklist-item"><span class="chk" tabindex="0" role="checkbox" aria-checked="false">&#10003;</span>What problem might exist?</div>
+        <div class="checklist-item"><span class="chk" tabindex="0" role="checkbox" aria-checked="false">&#10003;</span>What is my opening?</div>
+        <div class="checklist-item"><span class="chk" tabindex="0" role="checkbox" aria-checked="false">&#10003;</span>What are my two best questions?</div>
+      </div>
+      <div class="checklist-section">
+        <h3>During the Call</h3>
+        <div class="checklist-item"><span class="chk" tabindex="0" role="checkbox" aria-checked="false">&#10003;</span>Slow down</div>
+        <div class="checklist-item"><span class="chk" tabindex="0" role="checkbox" aria-checked="false">&#10003;</span>Listen more than I talk</div>
+        <div class="checklist-item"><span class="chk" tabindex="0" role="checkbox" aria-checked="false">&#10003;</span>Stay curious, not defensive</div>
+        <div class="checklist-item"><span class="chk" tabindex="0" role="checkbox" aria-checked="false">&#10003;</span>Follow the prospect's answers</div>
+        <div class="checklist-item"><span class="chk" tabindex="0" role="checkbox" aria-checked="false">&#10003;</span>Do not argue with objections</div>
+        <div class="checklist-item"><span class="chk" tabindex="0" role="checkbox" aria-checked="false">&#10003;</span>Ask for a clear next step</div>
+      </div>
+      <div class="checklist-section">
+        <h3>After the Call</h3>
+        <div class="checklist-item"><span class="chk" tabindex="0" role="checkbox" aria-checked="false">&#10003;</span>Record the result</div>
+        <div class="checklist-item"><span class="chk" tabindex="0" role="checkbox" aria-checked="false">&#10003;</span>Review what happened</div>
+        <div class="checklist-item"><span class="chk" tabindex="0" role="checkbox" aria-checked="false">&#10003;</span>Identify one mistake</div>
+        <div class="checklist-item"><span class="chk" tabindex="0" role="checkbox" aria-checked="false">&#10003;</span>Rewrite the weak section</div>
+        <div class="checklist-item"><span class="chk" tabindex="0" role="checkbox" aria-checked="false">&#10003;</span>Practise it</div>
+        <div class="checklist-item"><span class="chk" tabindex="0" role="checkbox" aria-checked="false">&#10003;</span>Call again</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PRACTICAL EXERCISES -->
+  <div class="lcard">
+    <h2><span class="ic">&#9999;&#65039;</span> Practical Exercises</h2>
+    <details>
+      <summary>&#127908; Exercise 1: Record Three Openings</summary>
+      <div class="det-body">
+        <p>Pick three different prospect types you commonly call. Record a permission-based opening for each one &mdash; out loud, on your phone or laptop. Listen back and ask:</p>
+        <ul>
+          <li>Did I sound natural or scripted?</li>
+          <li>Would this person give me 30 more seconds?</li>
+          <li>Did I reference something specific to them?</li>
+        </ul>
+      </div>
+    </details>
+    <details>
+      <summary>&#128260; Exercise 2: Turn Pitches Into Problems</summary>
+      <div class="det-body">
+        <p>Take five of your current product pitches and rewrite each one as a <strong>problem-based statement</strong> &mdash; lead with what the prospect is struggling with, not what your product does.</p>
+        <p><strong>Example:</strong></p>
+        <p><em>Before:</em> "We offer AI-powered call coaching for sales teams."</p>
+        <p><em>After:</em> "A lot of sales leaders tell us their new reps take 4+ months to ramp &mdash; and half leave before they hit quota. We help cut that ramp time in half."</p>
+      </div>
+    </details>
+    <details>
+      <summary>&#128203; Exercise 3: Complete a Scorecard</summary>
+      <div class="det-body">
+        <p>Pull up one of your own recent calls (recorded or from memory) and fill out the Call-Review Scorecard above. Be honest &mdash; the score itself doesn't matter. What matters is:</p>
+        <ul>
+          <li>Which category scored lowest?</li>
+          <li>What one change would raise it by 3+ points next time?</li>
+        </ul>
+      </div>
+    </details>
+    <details>
+      <summary>&#127917; Exercise 4: Full Roleplay</summary>
+      <div class="det-body">
+        <p>Complete one full roleplay scenario from the cards above &mdash; ideally Scenario 1 (Busy Leader). Use the AI Coach, a colleague, or record yourself playing both sides. Then score it with the scorecard.</p>
+        <p><strong>Focus on:</strong> opening under pressure, discovery in under 2 minutes, and transitioning to a specific meeting time.</p>
+      </div>
+    </details>
+  </div>
+
+  <!-- TAKEAWAY -->
+  <div class="takeaway"><p>&#128273; The gap between a beginner and a strong closer is almost always repetition with real feedback, not raw talent. Treat your early recordings as data, not evidence you aren't cut out for sales.</p></div>
+
+  <!-- REFLECTION -->
+  <div class="reflect"><div class="reflect-q">&#128173; What is the one skill from this module you'll practise first &mdash; and how will you know when it's improved?</div></div>
+
+  <!-- QUIZ -->
+  <div class="lcard">
+    <h2><span class="ic">&#129504;</span> Knowledge Check</h2>
+    <div class="q-item"><div class="q-num">Q1</div><div class="q-text">What's the correct order for transitioning to a meeting?</div><div class="q-opts">
+      <label class="qopt" data-qi="0" data-oi="0"><input type="radio" name="q0"><span class="qo-text">Summarize what they said, connect problem to next conversation, explain meeting value, ask for time</span></label>
+      <label class="qopt" data-qi="0" data-oi="1"><input type="radio" name="q0"><span class="qo-text">Pitch your product, ask for the sale, follow up later</span></label>
+      <label class="qopt" data-qi="0" data-oi="2"><input type="radio" name="q0"><span class="qo-text">Ask for the meeting first, then explain why</span></label>
+      <label class="qopt" data-qi="0" data-oi="3"><input type="radio" name="q0"><span class="qo-text">Send a calendar link and hope for the best</span></label>
+    </div><div class="q-fb" id="qfb0"></div></div>
+
+    <div class="q-item"><div class="q-num">Q2</div><div class="q-text">What is the biggest risk in over-preparing for a call?</div><div class="q-opts">
+      <label class="qopt" data-qi="1" data-oi="0"><input type="radio" name="q1"><span class="qo-text">Running out of things to say</span></label>
+      <label class="qopt" data-qi="1" data-oi="1"><input type="radio" name="q1"><span class="qo-text">Sounding robotic and scripted</span></label>
+      <label class="qopt" data-qi="1" data-oi="2"><input type="radio" name="q1"><span class="qo-text">Talking too little</span></label>
+      <label class="qopt" data-qi="1" data-oi="3"><input type="radio" name="q1"><span class="qo-text">Forgetting the prospect's name</span></label>
+    </div><div class="q-fb" id="qfb1"></div></div>
+
+    <div class="q-item"><div class="q-num">Q3</div><div class="q-text">A caller gave a long tactical explanation to a CRO. Why did it fail?</div><div class="q-opts">
+      <label class="qopt" data-qi="2" data-oi="0"><input type="radio" name="q2"><span class="qo-text">The explanation was too short</span></label>
+      <label class="qopt" data-qi="2" data-oi="1"><input type="radio" name="q2"><span class="qo-text">The CRO doesn't use technology</span></label>
+      <label class="qopt" data-qi="2" data-oi="2"><input type="radio" name="q2"><span class="qo-text">Senior stakeholders think in outcomes and KPIs, not day-to-day mechanics</span></label>
+      <label class="qopt" data-qi="2" data-oi="3"><input type="radio" name="q2"><span class="qo-text">The caller spoke too quietly</span></label>
+    </div><div class="q-fb" id="qfb2"></div></div>
+
+    <div class="q-item"><div class="q-num">Q4</div><div class="q-text">On the scorecard, which category is worth the most points?</div><div class="q-opts">
+      <label class="qopt" data-qi="3" data-oi="0"><input type="radio" name="q3"><span class="qo-text">Preparation (10)</span></label>
+      <label class="qopt" data-qi="3" data-oi="1"><input type="radio" name="q3"><span class="qo-text">Opening (10)</span></label>
+      <label class="qopt" data-qi="3" data-oi="2"><input type="radio" name="q3"><span class="qo-text">Listening, Discovery quality, or Objection handling (15 each)</span></label>
+      <label class="qopt" data-qi="3" data-oi="3"><input type="radio" name="q3"><span class="qo-text">Next-step confirmation (5)</span></label>
+    </div><div class="q-fb" id="qfb3"></div></div>
+
+    <div class="q-item"><div class="q-num">Q5</div><div class="q-text">What should you do if a prospect says business is going well and sees no urgency?</div><div class="q-opts">
+      <label class="qopt" data-qi="4" data-oi="0"><input type="radio" name="q4"><span class="qo-text">Push harder to create urgency</span></label>
+      <label class="qopt" data-qi="4" data-oi="1"><input type="radio" name="q4"><span class="qo-text">Argue that they're wrong about their own business</span></label>
+      <label class="qopt" data-qi="4" data-oi="2"><input type="radio" name="q4"><span class="qo-text">Accept the disqualification gracefully and move to the next call</span></label>
+      <label class="qopt" data-qi="4" data-oi="3"><input type="radio" name="q4"><span class="qo-text">Offer a discount to force interest</span></label>
+    </div><div class="q-fb" id="qfb4"></div></div>
+    <button class="ai-btn" style="background:var(--accent);color:var(--bg);margin-top:14px" id="checkQuiz">Check Answers</button>
+  </div>
+
+  <!-- AI COACH -->
+  <div class="ai-card">
+    <h2><span class="ic">&#129302;</span> Practice with AI Coach</h2>
+    <p style="font-size:14px;color:var(--text);margin:8px 0"><strong>Scenario:</strong> Complete a full roleplay using Scenario 1 (Busy Leader). The VP gives you 90 seconds &mdash; earn the meeting. Score yourself using the scorecard afterward.</p>
+    <p style="font-size:13px;color:var(--text)"><strong>Your objective:</strong> Open under pressure, run a focused 2-minute discovery, handle at least one objection ethically, and transition to a specific meeting time. The coach will play the VP and will not make it easy.</p>
+    <div class="ai-meta"><span>Difficulty: Hard</span><span>Goal: Full-cycle call practice with self-scoring</span></div>
+    <a href="coach-home.html" class="ai-btn">Open AI Coach &rarr;</a>
+  </div>
+
+  <!-- BOTTOM NAV -->
+  <div class="bnav">
+    <a href="live-practice-3.html" class="bnav-btn bnav-prev">&larr; Previous Lesson</a>
+    <button class="bnav-btn bnav-complete" id="completeBtn">Mark as Complete &#10003;</button>
+    <a href="journey.html" class="bnav-btn bnav-next">Back to Journey &rarr;</a>
+  </div>
+</div>
+
+<div class="toast" id="toast">&#127881; Lesson Complete! +100 XP</div>
+
+<script src="assets/journey-progress.js"></script>
+<script>
+const MODULE_INDEX=8;
+const LESSON_INDEX=3;
+
+const AJP=window.AmplifyJourneyProgress;
+const thisLid=AJP.lid(MODULE_INDEX,LESSON_INDEX);
+let progressStore=AJP.readProgress();
+let completed=new Set(progressStore.completedLessons);
+let lessonMeta=progressStore.lessonMeta||{};
+const pageLoadTime=Date.now();
+let lastQuizScore=(lessonMeta[thisLid]&&lessonMeta[thisLid].quizScore)||null;
+const btn=document.getElementById('completeBtn');
+if(completed.has(thisLid)){ btn.textContent='✓ Completed'; btn.classList.add('done'); }
+
+btn.addEventListener('click',function(){
+  if(completed.has(thisLid)) return;
+  const minsSpent=Math.max(1,Math.round((Date.now()-pageLoadTime)/60000));
+  const store=AJP.markLessonComplete(MODULE_INDEX,LESSON_INDEX,{mins:minsSpent, quizScore:lastQuizScore});
+  completed=new Set(store.completedLessons);
+  lessonMeta=store.lessonMeta;
+  btn.textContent='✓ Completed';
+  btn.classList.add('done');
+  const toast=document.getElementById('toast');
+  toast.classList.add('show');
+  setTimeout(()=>toast.classList.remove('show'),2500);
+});
+
+const answers=[0, 1, 2, 2, 2];
+document.getElementById('checkQuiz').addEventListener('click',function(){
+  let correct=0, answeredAny=false;
+  document.querySelectorAll('.qopt').forEach(opt=>{
+    const qi=parseInt(opt.dataset.qi), oi=parseInt(opt.dataset.oi);
+    const input=opt.querySelector('input');
+    if(!input.checked) return;
+    answeredAny=true;
+    if(oi===answers[qi]){ correct++; opt.classList.add('correct'); document.getElementById('qfb'+qi).textContent='✓ Correct!'; document.getElementById('qfb'+qi).style.color='var(--green)'; }
+    else{ opt.classList.add('wrong'); document.getElementById('qfb'+qi).textContent='✗ Try again'; document.getElementById('qfb'+qi).style.color='var(--red)'; }
+  });
+  if(answeredAny){
+    lastQuizScore=correct+'/'+answers.length;
+    lessonMeta[thisLid]=Object.assign({},lessonMeta[thisLid]||{},{quizScore:lastQuizScore});
+    AJP.recordLessonMeta(MODULE_INDEX,LESSON_INDEX,{quizScore:lastQuizScore});
+  }
+});
+
+document.querySelectorAll('.chk').forEach(chk=>{
+  chk.addEventListener('click',function(){
+    this.classList.toggle('checked');
+    this.setAttribute('aria-checked',this.classList.contains('checked'));
+  });
+  chk.addEventListener('keydown',function(e){
+    if(e.key===' '||e.key==='Enter'){e.preventDefault();this.click();}
+  });
+});
+
+document.getElementById('mobBtn').addEventListener('click',()=>document.getElementById('sb').classList.add('open'));
+document.getElementById('sbX').addEventListener('click',()=>document.getElementById('sb').classList.remove('open'));
+</script>
+</body>
+</html>

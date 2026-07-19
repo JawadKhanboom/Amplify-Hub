@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AmplifyHub — The Closer Mindset</title>
+<meta name="description" content="Mastery, Lesson 4 — confidence, conviction, and detachment: the final lesson of the AmplifyHub Sales Academy.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="AmplifyHub">
+<meta property="og:title" content="AmplifyHub — The Closer Mindset">
+<meta property="og:description" content="Mastery, Lesson 4 — confidence, conviction, and detachment: the final lesson of the AmplifyHub Sales Academy.">
+<meta property="og:image" content="og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#07070e;--bg2:#0b0b16;--card:#13132a;--card2:#181838;--glass:rgba(19,19,42,.55);
+  --accent:#FFD54A;--accent-dim:rgba(255,213,74,.1);--accent-glow:rgba(255,213,74,.3);
+  --warm:#FFA726;--green:#00e696;--blue:#64B5F6;--purple:#BA68C8;--red:#ff5f57;
+  --white:#fff;--text:#b0b0c8;--muted:#8a8aa4;
+  --border:rgba(255,213,74,.07);--border-h:rgba(255,213,74,.22);
+  --font:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;--sb:240px;
+}
+body{font-family:var(--font);background:var(--bg);color:var(--white);display:flex;min-height:100vh;overflow-x:hidden}
+
+.sb{width:var(--sb);position:fixed;top:0;left:0;bottom:0;background:var(--bg2);border-right:1px solid var(--border);padding:24px 16px;display:flex;flex-direction:column;z-index:100;transition:transform .3s}
+.sb-logo{font-size:20px;font-weight:800;padding:0 8px 24px}.sb-logo span{color:var(--accent)}
+.sb-nav{display:flex;flex-direction:column;gap:4px;flex:1}
+.si{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:10px;font-size:14px;font-weight:500;color:var(--muted);cursor:pointer;transition:all .2s;text-decoration:none;border:1px solid transparent}
+.si:hover{color:var(--text);background:rgba(255,255,255,.03)}.si.act{color:var(--accent);background:var(--accent-dim);border-color:var(--border)}
+.si-ic{width:20px;text-align:center;font-size:15px}
+.sb-d{height:1px;background:var(--border);margin:10px 8px}
+.sb-u{display:flex;align-items:center;gap:10px;padding:12px 8px;border-top:1px solid var(--border);margin-top:auto}
+.sb-av{width:32px;height:32px;border-radius:8px;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:var(--bg)}
+.sb-un{font-size:13px;font-weight:600}.sb-ur{font-size:11px;color:var(--muted)}
+.sb-x{display:none;position:absolute;top:16px;right:16px;background:none;border:none;color:var(--muted);font-size:20px;cursor:pointer}
+.mh{display:none;position:fixed;top:0;left:0;right:0;z-index:200;padding:14px 20px;background:rgba(7,7,14,.95);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);align-items:center;justify-content:space-between}
+.mh .logo{font-size:18px;font-weight:800}.mh .logo span{color:var(--accent)}
+.mb{background:none;border:none;cursor:pointer}.mb span{display:block;width:20px;height:2px;background:#fff;margin:4px 0}
+
+.main{margin-left:var(--sb);flex:1;padding:32px 40px 80px;max-width:780px}
+.back{display:inline-flex;align-items:center;gap:6px;color:var(--muted);font-size:13px;font-weight:600;text-decoration:none;margin-bottom:20px;transition:color .2s}.back:hover{color:var(--accent)}
+.lesson-badge{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--accent);margin-bottom:8px}
+.lesson-title{font-size:clamp(22px,3vw,28px);font-weight:900;letter-spacing:-.5px;margin-bottom:6px}
+.lesson-meta{display:flex;gap:16px;font-size:12px;color:var(--muted);margin-bottom:28px;flex-wrap:wrap}
+
+.lcard{background:var(--glass);backdrop-filter:blur(14px);border:1px solid var(--border);border-radius:20px;padding:28px;margin-bottom:20px;transition:border-color .3s}
+.lcard:hover{border-color:var(--border-h)}
+.lcard h2{font-size:17px;font-weight:800;letter-spacing:-.2px;margin-bottom:12px;display:flex;align-items:center;gap:10px}
+.lcard h2 .ic{font-size:20px}
+.lcard p,.lcard li{font-size:14px;color:var(--text);line-height:1.75}
+.lcard p{margin-bottom:12px}.lcard p:last-child{margin-bottom:0}
+.lcard strong{color:var(--white);font-weight:600}
+.lcard em{color:var(--accent);font-style:normal}
+.lcard blockquote{background:var(--accent-dim);border-left:3px solid var(--accent);border-radius:0 10px 10px 0;padding:14px 18px;margin:14px 0;font-size:14px;color:var(--text);font-style:italic;line-height:1.6}
+.lcard ul,.lcard ol{padding-left:20px;margin:10px 0}
+
+.reflect{background:linear-gradient(135deg,rgba(255,213,74,.06),var(--card));border:1px solid var(--border-h);border-radius:16px;padding:22px;text-align:center;margin-bottom:20px}
+.reflect-q{font-size:15px;font-weight:700;font-style:italic;line-height:1.5}
+
+.q-item{margin-bottom:18px;padding-bottom:18px;border-bottom:1px solid rgba(255,213,74,.04)}
+.q-item:last-child{border-bottom:none;margin-bottom:0}
+.q-num{font-size:10px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
+.q-text{font-size:14px;font-weight:600;margin-bottom:10px}
+.q-opts{display:flex;flex-direction:column;gap:6px}
+.qopt{display:flex;align-items:center;gap:10px;padding:10px 14px;border:1px solid var(--border);border-radius:10px;cursor:pointer;transition:all .25s;font-size:13px;color:var(--text)}
+.qopt:hover{border-color:var(--border-h);color:var(--white)}
+.qopt input{display:none}
+.qopt.correct{border-color:rgba(0,230,150,.3);background:rgba(0,230,150,.08);color:var(--green)}
+.qopt.wrong{border-color:rgba(255,95,87,.3);background:rgba(255,95,87,.08);color:var(--red)}
+.q-fb{font-size:12px;font-weight:600;margin-top:8px;min-height:18px}
+
+.ai-card{background:linear-gradient(135deg,rgba(0,230,150,.05),var(--card));border:1px solid rgba(0,230,150,.12);border-radius:18px;padding:22px;margin-bottom:20px}
+.ai-card h2{color:var(--green)}
+.ai-meta{display:flex;gap:12px;flex-wrap:wrap;margin:10px 0 14px;font-size:12px;color:var(--muted)}
+.ai-btn{background:var(--green);color:var(--bg);border:none;padding:12px 24px;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:var(--font);transition:all .3s;margin-top:10px}
+.ai-btn:hover{box-shadow:0 4px 16px rgba(0,230,150,.3)}
+
+.takeaway{background:var(--accent-dim);border:1px solid var(--border-h);border-radius:16px;padding:22px;text-align:center;margin-bottom:24px}
+.takeaway p{font-size:16px;font-weight:700;color:var(--accent)}
+
+.bnav{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:20px}
+.bnav-btn{flex:1;min-width:140px;padding:14px 20px;border-radius:12px;font-size:14px;font-weight:700;cursor:pointer;font-family:var(--font);transition:all .3s;text-align:center;text-decoration:none;display:flex;align-items:center;justify-content:center;gap:6px}
+.bnav-prev{background:transparent;color:var(--white);border:1px solid var(--border-h)}.bnav-prev:hover{background:var(--accent-dim)}
+.bnav-complete{background:var(--accent);color:var(--bg);border:none}.bnav-complete:hover{box-shadow:0 6px 24px var(--accent-glow);transform:translateY(-2px)}
+.bnav-complete.done{background:var(--green);pointer-events:none}
+.bnav-next{background:transparent;color:var(--white);border:1px solid var(--border-h)}.bnav-next:hover{background:var(--accent-dim)}
+.toast{position:fixed;bottom:32px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--green);color:var(--bg);padding:14px 28px;border-radius:14px;font-size:14px;font-weight:700;z-index:999;transition:transform .4s cubic-bezier(.16,1,.3,1);pointer-events:none}
+.toast.show{transform:translateX(-50%) translateY(0)}
+
+/* Interactive reveals */
+details{background:var(--card);border:1px solid var(--border);border-radius:14px;margin:14px 0;overflow:hidden}
+details summary{padding:14px 18px;cursor:pointer;font-size:14px;font-weight:600;color:var(--white);list-style:none;display:flex;align-items:center;gap:8px;transition:background .2s;user-select:none}
+details summary:hover{background:rgba(255,255,255,.03)}
+details summary::-webkit-details-marker{display:none}
+details[open] summary{border-bottom:1px solid var(--border)}
+.det-body{padding:16px 18px}
+.det-body p,.det-body li{font-size:14px;color:var(--text);line-height:1.75}
+.det-body p{margin-bottom:10px}.det-body p:last-child{margin-bottom:0}
+.det-body strong{color:var(--white);font-weight:600}
+.det-body ol,.det-body ul{padding-left:20px;margin-bottom:10px}
+/* Framework tables */
+.fw-tbl{width:100%;border-collapse:collapse;margin:14px 0;font-size:13px;overflow-x:auto;display:block}
+.fw-tbl th{padding:10px 14px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--accent);text-align:left;border-bottom:2px solid var(--border-h);white-space:nowrap}
+.fw-tbl td{padding:10px 14px;border-bottom:1px solid var(--border);color:var(--text);line-height:1.6}
+.fw-tbl tr:last-child td{border-bottom:none}
+.fw-tbl td:first-child{color:var(--white);font-weight:600}
+
+/* Challenge card */
+.challenge-card{background:linear-gradient(135deg,rgba(255,213,74,.07),rgba(186,104,200,.06),var(--card));border:1px solid var(--border-h);border-radius:20px;padding:28px;margin-bottom:20px}
+.challenge-card h2{color:var(--accent)}
+.challenge-card .day{display:flex;gap:12px;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--border);font-size:14px;color:var(--text);line-height:1.65}
+.challenge-card .day:last-child{border-bottom:none}
+.challenge-card .day-num{min-width:52px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--accent);padding-top:2px}
+
+/* Completion card */
+.completion-card{background:linear-gradient(135deg,rgba(255,213,74,.08),rgba(0,230,150,.05),var(--card));border:2px solid var(--border-h);border-radius:20px;padding:32px;margin-bottom:24px;text-align:center;position:relative;overflow:hidden}
+.completion-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--accent),var(--green),var(--accent))}
+.completion-card h2{font-size:18px;font-weight:900;color:var(--accent);margin-bottom:16px;display:flex;align-items:center;justify-content:center;gap:10px}
+.completion-card p{font-size:15px;color:var(--text);line-height:1.75;max-width:580px;margin:0 auto 12px}
+.completion-card p:last-child{margin-bottom:0}
+.completion-card strong{color:var(--white);font-weight:600}
+
+@media(max-width:860px){
+  .sb{transform:translateX(-100%)}.sb.open{transform:translateX(0)}.sb-x{display:block}
+  .mh{display:flex}.main{margin-left:0;padding:72px 20px 48px}
+}
+
+a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+</style>
+</head>
+<body>
+
+<div class="mh"><div class="logo">Amplify<span>Hub</span></div><button class="mb" id="mobBtn" aria-label="Open navigation menu"><span></span><span></span><span></span></button></div>
+
+<aside class="sb" id="sb">
+  <button class="sb-x" id="sbX" aria-label="Close navigation menu">&#10005;</button>
+  <div class="sb-logo">Amplify<span>Hub</span></div>
+  <nav class="sb-nav">
+    <a class="si" href="dashboard.html"><span class="si-ic">&#127968;</span>Dashboard</a>
+    <a class="si act" href="journey.html"><span class="si-ic">&#128740;</span>Journey</a>
+    <a class="si" href="coach-home.html"><span class="si-ic">&#129302;</span>AI Coach</a>
+    <a class="si" href="dashboard.html#challenge"><span class="si-ic">&#9889;</span>Challenges</a>
+    <a class="si" href="dashboard.html#resources"><span class="si-ic">&#128218;</span>Resources</a>
+    <div class="sb-d"></div>
+    <a class="si" href="settings.html"><span class="si-ic">&#9881;&#65039;</span>Settings</a>
+  </nav>
+  <div class="sb-u"><div class="sb-av">J</div><div><div class="sb-un">Jawad</div><div class="sb-ur">Pro Member</div></div></div>
+</aside>
+
+<div class="main">
+  <a href="journey.html" class="back">&larr; Back to Journey</a>
+  <div class="lesson-badge">Mastery &middot; Lesson 4 of 4</div>
+  <h1 class="lesson-title">The Closer Mindset</h1>
+  <div class="lesson-meta"><span>&#9201; ~8 min</span><span>&#127942; +125 XP</span><span>&#128214; Module 10: Mastery</span></div>
+
+  <!-- CARD 1: BELIEF BEFORE THE CALL -->
+  <div class="lcard">
+    <h2><span class="ic">&#128170;</span> Belief Before the Call</h2>
+    <p>Closing starts before the call, with your own belief in what you're offering. Selling is, at its core, <em>a transfer of belief across a bridge of trust</em> — you can't hand someone certainty you don't actually have.</p>
+    <p>Prospects are unusually good at detecting when someone's real motive is their commission rather than the prospect's outcome. That detection <strong>kills trust fast.</strong></p>
+    <p>Expect objections instead of treating them as personal setbacks. An objection is almost always uncertainty that needs clarifying — not rejection to take personally. Staying curious about <strong>why</strong> someone hesitates keeps the conversation moving.</p>
+    <p>Ask hard questions because you actually want to help. Stay detached from any single outcome: not every qualified conversation should end in a sale, and being able to say so directly builds long-term trust and referrals.</p>
+  </div>
+
+  <!-- CARD 2: CONFIDENCE, CONVICTION, AND DETACHMENT -->
+  <div class="lcard">
+    <h2><span class="ic">&#128314;</span> Confidence, Conviction, and Detachment</h2>
+    <p>Three ideas that get confused constantly:</p>
+    <table class="fw-tbl">
+      <tr><th>Component</th><th>What It Means</th></tr>
+      <tr><td>Confidence</td><td>Believing you can handle the conversation itself, regardless of outcome</td></tr>
+      <tr><td>Conviction</td><td>Genuinely believing your solution can help the right prospect</td></tr>
+      <tr><td>Detachment</td><td>Being willing to tell someone this isn't a fit, even when a sale is on the table</td></tr>
+    </table>
+    <p>You need <strong>all three</strong>:</p>
+    <ul>
+      <li><strong>Confidence without conviction</strong> sounds like performance — smooth but hollow</li>
+      <li><strong>Conviction without skill</strong> becomes enthusiasm with nowhere to go</li>
+      <li><strong>Confidence and conviction without detachment</strong> creates pressure and manipulation</li>
+      <li><em>Ethical persuasion requires holding all three at once</em></li>
+    </ul>
+    <blockquote>Confidence built on real preparation holds up under pressure. Confidence built on hype evaporates the first time a call goes badly.</blockquote>
+  </div>
+
+  <!-- CARD 3: PRE-CALL MINDSET ROUTINE -->
+  <div class="lcard">
+    <h2><span class="ic">&#129497;</span> Pre-Call Mindset Routine</h2>
+    <ul>
+      <li><strong>Review</strong> what you know about the prospect before dialling</li>
+      <li><strong>Remind yourself</strong> of the specific problem your offer solves</li>
+      <li>Set an intention to <strong>understand</strong> the prospect, not to force an outcome</li>
+      <li>Take a moment to <strong>control breathing and posture</strong></li>
+      <li>Practise your opener once, <strong>out loud</strong></li>
+      <li>Accept that resistance is normal, not a sign something's wrong</li>
+      <li>Focus on <strong>the conversation itself</strong>, not on whether it closes</li>
+    </ul>
+  </div>
+
+  <!-- CARD 4: TOP-PERFORMER OPERATING SYSTEM -->
+  <div class="lcard">
+    <h2><span class="ic">&#9889;</span> The Top-Performer Operating System</h2>
+    <p><strong>Daily routine:</strong></p>
+    <ul>
+      <li>Prepare for the day's calls — research, review playbook notes</li>
+      <li>Practise one specific skill for a few minutes before dialling</li>
+      <li>Complete scheduled calls</li>
+      <li>Jot down anything notable immediately after a call</li>
+      <li>Review at least one call recording before the day ends</li>
+    </ul>
+    <p><strong>Weekly routine:</strong></p>
+    <ul>
+      <li>Review your numbers — connect rate, meetings booked, show-up rate, close rate</li>
+      <li>Study two or three call recordings in depth, including one that didn't go well</li>
+      <li>Update your playbook based on what those calls revealed</li>
+      <li>Run at least one roleplay session</li>
+      <li>Coach or teach someone else, even informally</li>
+      <li>Choose one specific skill to improve next week</li>
+    </ul>
+  </div>
+
+  <!-- CARD 5: COMMON MASTERY MISTAKES -->
+  <div class="lcard">
+    <h2><span class="ic">&#9888;&#65039;</span> Common Mastery Mistakes</h2>
+    <ul>
+      <li>Collecting scripts and frameworks without ever <strong>practising them out loud</strong></li>
+      <li>Giving ten corrections after one call instead of picking the <strong>highest-impact one</strong></li>
+      <li>Confusing loudness or forced enthusiasm with <strong>genuine certainty</strong></li>
+      <li>Copying another salesperson's personality instead of adapting <strong>underlying principles</strong></li>
+      <li>Constantly rewriting the script instead of <strong>reviewing recordings</strong></li>
+      <li>Letting mood swing with each individual call's outcome</li>
+      <li>Using conviction to justify <strong>pressuring someone</strong> into a wrong decision</li>
+      <li>Stopping deliberate practice once results start improving</li>
+    </ul>
+  </div>
+
+  <!-- CARD 6: SEVEN-DAY MASTERY CHALLENGE -->
+  <div class="challenge-card">
+    <h2><span class="ic">&#127942;</span> The Seven-Day Mastery Challenge</h2>
+    <p style="font-size:14px;color:var(--text);margin-bottom:14px">One week. Seven focused actions. Each builds on the last.</p>
+    <div class="day"><span class="day-num">Day 1</span><span>Review your playbook end to end. Note where it's thin or outdated.</span></div>
+    <div class="day"><span class="day-num">Day 2</span><span>Record yourself running the Tonality Drill on two practice sentences.</span></div>
+    <div class="day"><span class="day-num">Day 3</span><span>Pull one recent call and review it using the coaching framework, as if coaching yourself.</span></div>
+    <div class="day"><span class="day-num">Day 4</span><span>Pick your most common objection and rewrite your response using what you've learned.</span></div>
+    <div class="day"><span class="day-num">Day 5</span><span>Coach or roleplay with another person.</span></div>
+    <div class="day"><span class="day-num">Day 6</span><span>Update your playbook with everything you've learned this week.</span></div>
+    <div class="day"><span class="day-num">Day 7</span><span>Reflect honestly: where did confidence, conviction, or detachment slip — and what will you do differently next week?</span></div>
+  </div>
+
+  <!-- CARD 7: FINAL TAKEAWAYS -->
+  <div class="takeaway" style="text-align:left;padding:26px">
+    <p style="margin-bottom:14px">&#128273; Final Takeaways</p>
+    <ol style="padding-left:20px;margin:0">
+      <li style="font-size:14px;color:var(--text);line-height:1.75;margin-bottom:8px"><strong style="color:var(--white)">Feedback that names one specific, high-impact moment</strong> changes behaviour; vague encouragement doesn't.</li>
+      <li style="font-size:14px;color:var(--text);line-height:1.75;margin-bottom:8px">A playbook is a <strong style="color:var(--white)">living system</strong> you update from real call evidence, not a script memorised once.</li>
+      <li style="font-size:14px;color:var(--text);line-height:1.75;margin-bottom:8px">Tonality is a <strong style="color:var(--white)">trainable skill</strong> — it has to be practised out loud, repeatedly.</li>
+      <li style="font-size:14px;color:var(--text);line-height:1.75;margin-bottom:8px"><strong style="color:var(--white)">Confidence, conviction, and detachment</strong> only work together — missing any one either weakens your close or turns it into pressure.</li>
+      <li style="font-size:14px;color:var(--text);line-height:1.75">Top performers separate themselves through <strong style="color:var(--white)">consistent, deliberate practice and review</strong>, not raw talent.</li>
+    </ol>
+  </div>
+
+  <!-- REFLECTION -->
+  <div class="reflect"><div class="reflect-q">&#128173; At the start of this program, you learned that sales is a skill, not talent. Now that you've completed every module, what's the ONE skill that made the biggest difference in how you approach calls?</div></div>
+
+  <!-- QUIZ -->
+  <div class="lcard">
+    <h2><span class="ic">&#129504;</span> Knowledge Check</h2>
+    <div class="q-item"><div class="q-num">Q1</div><div class="q-text">What are the three components of the closer mindset?</div><div class="q-opts">
+      <label class="qopt" data-qi="0" data-oi="0"><input type="radio" name="q0"><span class="qo-text">Speed, volume, and persistence</span></label>
+      <label class="qopt" data-qi="0" data-oi="1"><input type="radio" name="q0"><span class="qo-text">Charisma, scripts, and discounts</span></label>
+      <label class="qopt" data-qi="0" data-oi="2"><input type="radio" name="q0"><span class="qo-text">Confidence, conviction, and detachment</span></label>
+      <label class="qopt" data-qi="0" data-oi="3"><input type="radio" name="q0"><span class="qo-text">Enthusiasm, pressure, and closing techniques</span></label>
+    </div><div class="q-fb" id="qfb0"></div></div>
+
+    <div class="q-item"><div class="q-num">Q2</div><div class="q-text">Why is detachment important in ethical selling?</div><div class="q-opts">
+      <label class="qopt" data-qi="1" data-oi="0"><input type="radio" name="q1"><span class="qo-text">It means you don't care about the sale</span></label>
+      <label class="qopt" data-qi="1" data-oi="1"><input type="radio" name="q1"><span class="qo-text">It lets you avoid difficult conversations</span></label>
+      <label class="qopt" data-qi="1" data-oi="2"><input type="radio" name="q1"><span class="qo-text">It means you're willing to say this isn't a fit — which builds trust and prevents manipulation</span></label>
+      <label class="qopt" data-qi="1" data-oi="3"><input type="radio" name="q1"><span class="qo-text">It makes you sound aloof</span></label>
+    </div><div class="q-fb" id="qfb1"></div></div>
+
+    <div class="q-item"><div class="q-num">Q3</div><div class="q-text">Confidence built on hype tends to:</div><div class="q-opts">
+      <label class="qopt" data-qi="2" data-oi="0"><input type="radio" name="q2"><span class="qo-text">Last indefinitely</span></label>
+      <label class="qopt" data-qi="2" data-oi="1"><input type="radio" name="q2"><span class="qo-text">Impress every prospect</span></label>
+      <label class="qopt" data-qi="2" data-oi="2"><input type="radio" name="q2"><span class="qo-text">Evaporate the first time a call goes badly</span></label>
+      <label class="qopt" data-qi="2" data-oi="3"><input type="radio" name="q2"><span class="qo-text">Build stronger relationships</span></label>
+    </div><div class="q-fb" id="qfb2"></div></div>
+
+    <div class="q-item"><div class="q-num">Q4</div><div class="q-text">In the top-performer daily routine, what should you do immediately after a call?</div><div class="q-opts">
+      <label class="qopt" data-qi="3" data-oi="0"><input type="radio" name="q3"><span class="qo-text">Move to the next call without thinking</span></label>
+      <label class="qopt" data-qi="3" data-oi="1"><input type="radio" name="q3"><span class="qo-text">Jot down anything notable — a phrase that worked, a moment that didn't</span></label>
+      <label class="qopt" data-qi="3" data-oi="2"><input type="radio" name="q3"><span class="qo-text">Take a 30-minute break</span></label>
+      <label class="qopt" data-qi="3" data-oi="3"><input type="radio" name="q3"><span class="qo-text">Update your entire playbook</span></label>
+    </div><div class="q-fb" id="qfb3"></div></div>
+
+    <div class="q-item"><div class="q-num">Q5</div><div class="q-text">What separates top performers from average ones?</div><div class="q-opts">
+      <label class="qopt" data-qi="4" data-oi="0"><input type="radio" name="q4"><span class="qo-text">Natural talent and charisma</span></label>
+      <label class="qopt" data-qi="4" data-oi="1"><input type="radio" name="q4"><span class="qo-text">Working longer hours</span></label>
+      <label class="qopt" data-qi="4" data-oi="2"><input type="radio" name="q4"><span class="qo-text">Consistent, deliberate practice and review</span></label>
+      <label class="qopt" data-qi="4" data-oi="3"><input type="radio" name="q4"><span class="qo-text">Having more leads</span></label>
+    </div><div class="q-fb" id="qfb4"></div></div>
+    <button class="ai-btn" style="background:var(--accent);color:var(--bg);margin-top:14px" id="checkQuiz">Check Answers</button>
+  </div>
+
+  <!-- AI COACH -->
+  <div class="ai-card">
+    <h2><span class="ic">&#129302;</span> Practice with AI Coach</h2>
+    <p style="font-size:14px;color:var(--text);margin:8px 0"><strong>Scenario:</strong> Complete a pre-call mindset routine together, then roleplay a challenging prospect scenario. The prospect will raise objections, test your conviction, and push back on price — your job is to use all three mindset components: confidence, conviction, and detachment.</p>
+    <p style="font-size:13px;color:var(--text)"><strong>Your objective:</strong> Stay centred under pressure, respond with calm certainty, and be willing to walk away if the fit isn't right.</p>
+    <div class="ai-meta"><span>Difficulty: Hard</span><span>Goal: Integrate confidence, conviction, and detachment under realistic pressure</span></div>
+    <a href="coach-home.html" class="ai-btn">Open AI Coach &rarr;</a>
+  </div>
+
+  <!-- PROGRAM COMPLETION CARD -->
+  <div class="completion-card">
+    <h2>&#127919; Program Complete</h2>
+    <p>You've completed the <strong>AmplifyHub Sales Academy</strong>.</p>
+    <p>Every framework, technique, and principle in this program is designed to be practised, not just understood. Your next step is simple: <strong>pick one skill from today's lesson, practise it on your next call, and review what happened.</strong></p>
+    <p>That's how mastery works — one call, one correction, one improvement at a time.</p>
+  </div>
+
+  <!-- BOTTOM NAV -->
+  <div class="bnav">
+    <a href="mastery-3.html" class="bnav-btn bnav-prev">&larr; Previous Lesson</a>
+    <button class="bnav-btn bnav-complete" id="completeBtn">Mark as Complete &#10003;</button>
+    <a href="journey.html" class="bnav-btn bnav-next">Complete Your Journey &rarr;</a>
+  </div>
+</div>
+
+<div class="toast" id="toast">&#127881; Lesson Complete! +125 XP</div>
+
+<script src="assets/journey-progress.js"></script>
+<script>
+const MODULE_INDEX=9;
+const LESSON_INDEX=3;
+
+const AJP=window.AmplifyJourneyProgress;
+const thisLid=AJP.lid(MODULE_INDEX,LESSON_INDEX);
+let progressStore=AJP.readProgress();
+let completed=new Set(progressStore.completedLessons);
+let lessonMeta=progressStore.lessonMeta||{};
+const pageLoadTime=Date.now();
+let lastQuizScore=(lessonMeta[thisLid]&&lessonMeta[thisLid].quizScore)||null;
+const btn=document.getElementById('completeBtn');
+if(completed.has(thisLid)){ btn.textContent='✓ Completed'; btn.classList.add('done'); }
+
+btn.addEventListener('click',function(){
+  if(completed.has(thisLid)) return;
+  const minsSpent=Math.max(1,Math.round((Date.now()-pageLoadTime)/60000));
+  const store=AJP.markLessonComplete(MODULE_INDEX,LESSON_INDEX,{mins:minsSpent, quizScore:lastQuizScore});
+  completed=new Set(store.completedLessons);
+  lessonMeta=store.lessonMeta;
+  btn.textContent='✓ Completed';
+  btn.classList.add('done');
+  const toast=document.getElementById('toast');
+  toast.classList.add('show');
+  setTimeout(()=>toast.classList.remove('show'),2500);
+});
+
+const answers=[2, 2, 2, 1, 2];
+document.getElementById('checkQuiz').addEventListener('click',function(){
+  let correct=0, answeredAny=false;
+  document.querySelectorAll('.qopt').forEach(opt=>{
+    const qi=parseInt(opt.dataset.qi), oi=parseInt(opt.dataset.oi);
+    const input=opt.querySelector('input');
+    if(!input.checked) return;
+    answeredAny=true;
+    if(oi===answers[qi]){ correct++; opt.classList.add('correct'); document.getElementById('qfb'+qi).textContent='✓ Correct!'; document.getElementById('qfb'+qi).style.color='var(--green)'; }
+    else{ opt.classList.add('wrong'); document.getElementById('qfb'+qi).textContent='✗ Try again'; document.getElementById('qfb'+qi).style.color='var(--red)'; }
+  });
+  if(answeredAny){
+    lastQuizScore=correct+'/'+answers.length;
+    lessonMeta[thisLid]=Object.assign({},lessonMeta[thisLid]||{},{quizScore:lastQuizScore});
+    AJP.recordLessonMeta(MODULE_INDEX,LESSON_INDEX,{quizScore:lastQuizScore});
+  }
+});
+
+document.getElementById('mobBtn').addEventListener('click',()=>document.getElementById('sb').classList.add('open'));
+document.getElementById('sbX').addEventListener('click',()=>document.getElementById('sb').classList.remove('open'));
+</script>
+</body>
+</html>
