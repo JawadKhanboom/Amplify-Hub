@@ -74,13 +74,18 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
   <p id="errorText" style="display:none;color:#ff6b6b;font-size:13px;margin:-6px 0 14px;"></p>
   <button class="submit" id="submitBtn">Sign In →</button>
   <p class="footer-text">New here? <a href="signup.html">Create an account</a></p>
+  <p class="footer-text" style="margin-top:10px"><a href="forgot-password.html">Forgot password?</a></p>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="auth-config.js"></script>
 <script src="auth.js"></script>
 <script>
+// Only allow redirects to known internal pages — anything else falls back to
+// the dashboard so a crafted ?redirect= link can't bounce users to another site.
+const ALLOWED_REDIRECTS = ['dashboard.html','journey.html','coach-home.html','progress.html','profile.html','challenges.html','settings.html','resources.html','interview-prep.html'];
 const params = new URLSearchParams(window.location.search);
-const redirect = params.get('redirect') || 'dashboard.html';
+const requestedRedirect = params.get('redirect');
+const redirect = ALLOWED_REDIRECTS.indexOf(requestedRedirect) !== -1 ? requestedRedirect : 'dashboard.html';
 
 function showError(msg) {
   const el = document.getElementById('errorText');

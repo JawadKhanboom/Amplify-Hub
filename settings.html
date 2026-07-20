@@ -745,13 +745,14 @@ function renderConnectedAccounts(user) {
 // ─────────────────────────────────────────────
 // Advanced — Genuine Data Export
 // ─────────────────────────────────────────────
-async function safeSelect(table, columns, filter) {
+// Returns { table, rows } on success or { table, rows: null } on failure so the
+// export can refuse to produce a silently-incomplete file.
+async function exportSelect(table, columns) {
   try {
-    var q = supabaseClient.from(table).select(columns || '*');
-    if (filter) q = filter(q);
-    var result = await q;
-    return (result && result.data) || [];
-  } catch (e) { return []; }
+    var result = await supabaseClient.from(table).select(columns || '*');
+    if (result && result.error) return { table: table, rows: null };
+    return { table: table, rows: (result && result.data) || [] };
+  } catch (e) { return { table: table, rows: null }; }
 }
 
 document.getElementById('exportDataBtn').addEventListener('click', async () => {
@@ -767,29 +768,34 @@ document.getElementById('exportDataBtn').addEventListener('click', async () => {
       providers: (user.identities || []).map(function(i){ return i.provider; })
     } : null;
 
-    var results = await Promise.allSettled([
-      safeSelect('user_preferences', '*'),
-      safeSelect('user_lesson_progress', '*'),
-      safeSelect('coaching_sessions', 'id,mode,scenario,persona,difficulty,coach_style,goal,status,turns,score,scores,feedback_report,started_at,ended_at,created_at'),
-      safeSelect('coach_messages', 'id,session_id,role,content,created_at'),
-      safeSelect('coach_documents', 'id,name,type,size,session_id,created_at'),
-      safeSelect('user_challenge_assignments', '*'),
-      safeSelect('user_challenge_feedback', '*'),
+    var results = await Promise.all([
+      exportSelect('user_preferences', '*'),
+      exportSelect('user_lesson_progress', '*'),
+      exportSelect('coaching_sessions', 'id,mode,scenario,persona,difficulty,coach_style,goal,status,turns,score,scores,feedback_report,started_at,ended_at,created_at'),
+      exportSelect('coach_messages', 'id,session_id,role,content,created_at'),
+      exportSelect('coach_documents', 'id,name,type,size,session_id,created_at'),
+      exportSelect('user_challenge_assignments', '*'),
+      exportSelect('user_challenge_feedback', '*'),
     ]);
 
-    function val(r) { return r.status === 'fulfilled' ? r.value : []; }
+    // Refuse to download an incomplete export — tell the user exactly what failed.
+    var failedTables = results.filter(function(r){ return r.rows === null; }).map(function(r){ return r.table; });
+    if (failedTables.length > 0) {
+      showToast('Export failed — could not read: ' + failedTables.join(', ') + '. Nothing was downloaded, please try again.');
+      return;
+    }
 
     var payload = {
       schemaVersion: 1,
       exportedAt: new Date().toISOString(),
       account: safeUser,
-      preferences: val(results[0])[0] || null,
-      lessonProgress: val(results[1]),
-      coachSessions: val(results[2]),
-      coachMessages: val(results[3]),
-      coachDocuments: val(results[4]),
-      challengeAssignments: val(results[5]),
-      challengeFeedback: val(results[6]),
+      preferences: results[0].rows[0] || null,
+      lessonProgress: results[1].rows,
+      coachSessions: results[2].rows,
+      coachMessages: results[3].rows,
+      coachDocuments: results[4].rows,
+      challengeAssignments: results[5].rows,
+      challengeFeedback: results[6].rows,
     };
 
     var blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });

@@ -119,11 +119,11 @@ ok('sidebar-user.js exists', await exists('assets/sidebar-user.js'));
 const sidebarScript = await read('assets/sidebar-user.js');
 ok('sidebar-user.js uses textContent', sidebarScript.includes('textContent'));
 ok('sidebar-user.js never uses innerHTML', !sidebarScript.includes('innerHTML'));
-
-const sidebarPages = htmlFiles.filter(f => {
-  const c = readFile(join(siteRoot, f), 'utf-8');
-  return true;
-});
+ok('sidebar-user.js has no hardcoded project ref', !sidebarScript.includes('dsuahpcqrrlbudomjrye'));
+ok('sidebar-user.js scans for sb-*-auth-token keys', sidebarScript.includes('sb-[a-z0-9]+-auth-token'));
+ok('sidebar-user.js skips dead expired sessions', sidebarScript.includes('expires_at'));
+ok('sidebar-user.js prefers live supabase client when present', sidebarScript.includes("typeof supabaseClient !== 'undefined'"));
+ok('sidebar-user.js leaves page-managed (id-bearing) sidebar elements alone', sidebarScript.includes('!els[i].id'));
 
 // ─────────────────────────────────────────────
 // 6. Delete Account Edge Function
@@ -207,6 +207,84 @@ ok('settings: connected accounts use textContent not innerHTML',
 ok('sidebar-user.js: no innerHTML', !sidebarScript.includes('innerHTML'));
 ok('settings: loadDeviceSessionInfo uses textContent/createElement',
   settings.includes('createElement') && !settings.match(/sessionsInfo[\s\S]{0,100}innerHTML|devicesInfo[\s\S]{0,100}innerHTML/));
+
+// ─────────────────────────────────────────────
+// 12. Safe auth redirects (open-redirect fix)
+// ─────────────────────────────────────────────
+console.log('\n12. Safe Auth Redirects');
+
+for (const page of ['signin.html', 'signup.html']) {
+  const content = await read(page);
+  ok(`${page}: has ALLOWED_REDIRECTS whitelist`, content.includes('ALLOWED_REDIRECTS'));
+  ok(`${page}: redirect param no longer used unvalidated`, !content.includes("params.get('redirect') || 'dashboard.html'"));
+}
+
+// ─────────────────────────────────────────────
+// 13. Password recovery flow
+// ─────────────────────────────────────────────
+console.log('\n13. Password Recovery');
+
+const signinPage = await read('signin.html');
+ok('signin links to forgot-password.html', signinPage.includes('forgot-password.html'));
+
+ok('forgot-password.html exists', await exists('forgot-password.html'));
+const forgot = await read('forgot-password.html');
+ok('forgot: uses resetPasswordForEmail', forgot.includes('resetPasswordForEmail'));
+ok('forgot: redirects recovery to reset-password.html', forgot.includes('reset-password.html'));
+ok('forgot: no user enumeration (same message either way)', forgot.includes('If an account exists'));
+ok('forgot: noindex', forgot.includes('noindex'));
+
+ok('reset-password.html exists', await exists('reset-password.html'));
+const reset = await read('reset-password.html');
+ok('reset: uses updateUser to set password', reset.includes('updateUser'));
+ok('reset: enforces 8-char minimum', reset.includes('at least 8 characters') || reset.includes('p1.length < 8'));
+ok('reset: handles invalid/expired links', reset.includes('invalid or has expired'));
+ok('reset: never uses innerHTML', !reset.includes('innerHTML'));
+ok('reset: noindex', reset.includes('noindex'));
+
+// ─────────────────────────────────────────────
+// 14. Export failure honesty
+// ─────────────────────────────────────────────
+console.log('\n14. Export Failure Honesty');
+
+ok('settings: export tracks failed tables', settings.includes('failedTables'));
+ok('settings: export refuses incomplete download', settings.includes('Nothing was downloaded'));
+ok('settings: no silent empty-array fallback left', !settings.includes('function safeSelect'));
+
+// ─────────────────────────────────────────────
+// 15. CI, smoke, monitoring, release process
+// ─────────────────────────────────────────────
+console.log('\n15. CI / Smoke / Monitoring / Release');
+
+const pkg = JSON.parse(await read('sales-mindset-app/package.json'));
+ok('package.json: qa:account-trust script', !!pkg.scripts['qa:account-trust']);
+ok('package.json: smoke:production script', !!pkg.scripts['smoke:production']);
+ok('package.json: monitor:health script', !!pkg.scripts['monitor:health']);
+
+ok('CI workflow exists', await exists('.github/workflows/qa.yml'));
+const ci = await read('.github/workflows/qa.yml');
+ok('CI runs build', ci.includes('npm run build'));
+ok('CI runs account-trust QA', ci.includes('qa:account-trust'));
+ok('CI runs browser QA suites', ci.includes('qa:profile-progress') && ci.includes('qa:challenges'));
+
+ok('monitor workflow exists', await exists('.github/workflows/monitor.yml'));
+const mon = await read('.github/workflows/monitor.yml');
+ok('monitor runs on a schedule', mon.includes('schedule:'));
+
+ok('smoke script exists', await exists('sales-mindset-app/scripts/smoke-production.mjs'));
+const smoke = await read('sales-mindset-app/scripts/smoke-production.mjs');
+ok('smoke: service key from env only', smoke.includes('process.env.SUPABASE_SERVICE_ROLE_KEY') && !smoke.includes('sb_secret'));
+ok('smoke: only deletes smoke-pattern accounts', smoke.includes('+smoke-'));
+ok('smoke: verifies deletion end-to-end', smoke.includes('signin after deletion fails'));
+
+ok('monitor script exists', await exists('sales-mindset-app/scripts/monitor-health.mjs'));
+const monScript = await read('sales-mindset-app/scripts/monitor-health.mjs');
+ok('monitor: read-only (no signup/delete calls)', !monScript.includes('/signup') && !monScript.includes('admin/users'));
+
+ok('RELEASE_CHECKLIST.md exists', await exists('RELEASE_CHECKLIST.md'));
+const checklist = await read('RELEASE_CHECKLIST.md');
+ok('checklist covers redirect-URL config', checklist.includes('reset-password.html'));
+ok('checklist covers SMTP quota', checklist.includes('SMTP'));
 
 // ─────────────────────────────────────────────
 // Summary
