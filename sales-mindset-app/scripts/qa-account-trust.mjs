@@ -242,7 +242,10 @@ ok('reset: uses updateUser to set password', reset.includes('updateUser'));
 ok('reset: enforces 8-char minimum', reset.includes('at least 8 characters') || reset.includes('p1.length < 8'));
 ok('reset: handles invalid/expired links', reset.includes('invalid or has expired'));
 ok('reset: gated on PASSWORD_RECOVERY auth event', reset.includes("'PASSWORD_RECOVERY'") && reset.includes('onAuthStateChange'));
-ok('reset: session fallback requires a real recovery link', reset.includes("=== 'recovery'"));
+ok('reset: session fallback requires a real recovery link',
+  reset.includes("=== 'recovery'")
+  && reset.includes("initialHashParams.get('access_token')")
+  && reset.includes("initialHashParams.get('refresh_token')"));
 ok('reset: surfaces expired-link errors from the URL', reset.includes('error_code'));
 ok('reset: never uses innerHTML', !reset.includes('innerHTML'));
 ok('reset: noindex', reset.includes('noindex'));
