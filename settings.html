@@ -188,7 +188,7 @@ body.no-animations *{animation-duration:.01ms!important;transition-duration:.01m
     <div class="sb-d"></div>
     <a class="si act"><span class="si-ic">⚙️</span>Settings</a>
   </nav>
-  <div class="sb-u" onclick="location.href='profile.html'"><div class="sb-av">J</div><div><div class="sb-un">Jawad</div><div class="sb-ur">Pro Member</div></div></div>
+  <div class="sb-u" onclick="location.href='profile.html'"><div class="sb-av" id="sbAvatar">?</div><div><div class="sb-un" id="sbName"></div><div class="sb-ur" id="sbRole">Member</div></div></div>
 </aside>
 
 <div class="page">
@@ -203,7 +203,6 @@ body.no-animations *{animation-duration:.01ms!important;transition-duration:.01m
     <div class="cat" data-p="learning"><span class="cat-ic">📚</span>Learning</div>
     <div class="cat" data-p="language"><span class="cat-ic">🌐</span>Language & Region</div>
     <div class="cat" data-p="connected"><span class="cat-ic">🔗</span>Connected Accounts</div>
-    <div class="cat" data-p="billing"><span class="cat-ic">💳</span>Billing</div>
     <div class="cat" data-p="advanced"><span class="cat-ic">⚙️</span>Advanced</div>
   </div>
 
@@ -214,14 +213,14 @@ body.no-animations *{animation-duration:.01ms!important;transition-duration:.01m
     <div class="panel act" id="p-account">
       <div class="p-h fu"><h2>Account</h2><p>Manage your personal information and public profile.</p></div>
       <div class="card fu">
-        <div class="av-row"><div class="av-big">J</div><button class="av-btn">Upload New Photo</button></div>
+        <div class="av-row"><div class="av-big" id="accountAvatar">?</div><button class="av-btn">Upload New Photo</button></div>
         <div class="field-row">
-          <div class="field"><label for="fullNameInput">Full Name</label><input type="text" id="fullNameInput" value="Jawad Khan" class="track"></div>
-          <div class="field"><label for="usernameInput">Username</label><input type="text" id="usernameInput" value="jawadkhan" class="track"></div>
+          <div class="field"><label for="fullNameInput">Full Name</label><input type="text" id="fullNameInput" value="" class="track"></div>
+          <div class="field"><label for="usernameInput">Username</label><input type="text" id="usernameInput" value="" class="track"></div>
         </div>
-        <div class="field"><label for="emailInput">Email</label><input type="email" id="emailInput" value="jawad@amplifyhub.com" readonly style="opacity:.6;cursor:not-allowed"></div>
+        <div class="field"><label for="emailInput">Email</label><input type="email" id="emailInput" value="" readonly style="opacity:.6;cursor:not-allowed"></div>
         <div class="inline-note" style="margin-top:-10px;margin-bottom:16px">Email changes require verification — contact support to update it.</div>
-        <div class="field"><label>Bio</label><textarea id="bioInput" class="track">Building DetailAmplify and AmplifyHub. Learning to master cold calling one conversation at a time. 🎯</textarea></div>
+        <div class="field"><label>Bio</label><textarea id="bioInput" class="track"></textarea></div>
         <button class="btn btn-gold" id="accountSaveBtn">Save Changes</button>
       </div>
       <div class="card fu"><div class="t-row"><div class="t-info"><h4>Log Out</h4><p>Sign out of AmplifyHub on this device</p></div><button class="btn btn-outline" id="logoutBtn">Log Out</button></div></div>
@@ -329,22 +328,9 @@ body.no-animations *{animation-duration:.01ms!important;transition-duration:.01m
 
     <!-- CONNECTED ACCOUNTS -->
     <div class="panel" id="p-connected">
-      <div class="p-h fu"><h2>Connected Accounts</h2><p>Link external accounts for faster sign-in.</p></div>
-      <div class="card fu">
-        <div class="conn-item"><div class="conn-ic">🔵</div><div class="conn-info"><div class="conn-n">Google</div><div class="conn-s">Connected as jawad@gmail.com</div></div><button class="conn-btn connected">Connected</button></div>
-        <div class="conn-item"><div class="conn-ic">⚫</div><div class="conn-info"><div class="conn-n">GitHub</div><div class="conn-s">Not connected</div></div><button class="conn-btn" id="connectGithubBtn">Connect</button></div>
-        <div class="conn-item"><div class="conn-ic">🔷</div><div class="conn-info"><div class="conn-n">LinkedIn</div><div class="conn-s">Not connected</div></div><button class="conn-btn" id="connectLinkedinBtn">Connect</button></div>
-        <div class="conn-item"><div class="conn-ic">🟦</div><div class="conn-info"><div class="conn-n">Microsoft</div><div class="conn-s">Not connected</div></div><button class="conn-btn" id="connectMicrosoftBtn">Connect</button></div>
-      </div>
-    </div>
-
-    <!-- BILLING -->
-    <div class="panel" id="p-billing">
-      <div class="p-h fu"><h2>Billing</h2><p>Manage your subscription and payment.</p></div>
-      <div class="plan-card fu">
-        <div class="plan-top"><span class="plan-name">Pro Plan</span><span class="plan-badge">Active</span></div>
-        <div class="plan-renew">$29/month · Renews on July 28, 2026</div>
-        <div class="plan-btns"><button class="btn btn-gold" id="upgradeBtn">Upgrade Plan</button><button class="btn btn-outline" id="manageSubBtn">Manage Subscription</button></div>
+      <div class="p-h fu"><h2>Connected Accounts</h2><p>Your linked sign-in identities.</p></div>
+      <div class="card fu" id="connectedAccountsCard">
+        <div class="inline-note" id="connectedLoading">Loading identities...</div>
       </div>
     </div>
 
@@ -352,14 +338,16 @@ body.no-animations *{animation-duration:.01ms!important;transition-duration:.01m
     <div class="panel" id="p-advanced">
       <div class="p-h fu"><h2>Advanced</h2><p>Data management and account controls.</p></div>
       <div class="card fu">
-        <div class="adv-item"><div class="t-info"><h4>Export Data</h4><p>Download a copy of your AmplifyHub data</p></div><button class="btn btn-outline" id="exportDataBtn">Export</button></div>
-        <div class="adv-item"><div class="t-info"><h4>Download Progress</h4><p>Print or save your journey and stats as a PDF</p></div><button class="btn btn-outline" id="downloadProgressBtn">Download</button></div>
+        <div class="adv-item"><div class="t-info"><h4>Export Data</h4><p>Download a JSON file of all your AmplifyHub data</p></div><button class="btn btn-outline" id="exportDataBtn">Export</button></div>
+        <div class="adv-item"><div class="t-info"><h4>Download Progress</h4><p>Print or save your journey and stats as a report</p></div><button class="btn btn-outline" id="downloadProgressBtn">Download</button></div>
         <div class="adv-item"><div class="t-info"><h4>Clear Cache</h4><p>Free up local storage space</p></div><button class="btn btn-outline" id="clearCacheBtn">Clear</button></div>
         <div class="adv-item adv-danger"><div class="t-info"><h4>Delete Account</h4><p>Permanently remove your account and data</p></div><button class="btn btn-danger" id="deleteAccountBtn">Delete</button></div>
         <div class="reveal" id="deletePanel"><div class="reveal-inner">
           <div class="danger-box">
-            <p class="inline-note" style="margin-top:0">This permanently deletes your account and all data. Type <strong>DELETE</strong> to confirm.</p>
-            <input type="text" id="deleteConfirmInput" placeholder="Type DELETE">
+            <p class="inline-note" style="margin-top:0">This permanently deletes your account and all associated data. Enter your password and type <strong>DELETE</strong> to confirm.</p>
+            <div class="field"><label for="deletePasswordInput">Current Password</label><input type="password" id="deletePasswordInput" placeholder="Your password"></div>
+            <div class="field"><label for="deleteConfirmInput">Type DELETE</label><input type="text" id="deleteConfirmInput" placeholder="DELETE"></div>
+            <div class="inline-error" id="deleteError"></div>
             <div style="display:flex;gap:10px"><button class="btn btn-danger" id="deleteConfirmBtn" disabled>Permanently Delete</button><button class="btn btn-outline" id="deleteCancelBtn">Cancel</button></div>
           </div>
         </div></div>
@@ -400,8 +388,7 @@ document.querySelectorAll('.theme-card:not(.dis)').forEach(t=>{
 const savebar=document.getElementById('savebar');
 function markDirty(){savebar.classList.add('show')}
 
-// Toggle switches — mfaToggle is handled separately below since it needs a real
-// enroll/verify flow before it's allowed to flip on.
+// Toggle switches
 document.querySelectorAll('.toggle').forEach(t=>{
   if (t.id === 'mfaToggle') return;
   t.addEventListener('click',()=>{
@@ -412,7 +399,7 @@ document.querySelectorAll('.toggle').forEach(t=>{
   });
 });
 
-// Color dots — also apply the accent color live
+// Color dots
 document.querySelectorAll('.color-dot').forEach(d=>{
   d.addEventListener('click',()=>{
     document.querySelectorAll('.color-dot').forEach(x=>x.classList.remove('sel'));
@@ -436,7 +423,6 @@ bindRange('fontRange','fontVal','px');
 bindRange('dailyRange','dailyVal',' min');
 bindRange('weeklyRange','weeklyVal',' lessons');
 
-// Track any input/select/textarea change
 document.querySelectorAll('.track').forEach(el=>{
   el.addEventListener('input',markDirty);
   el.addEventListener('change',markDirty);
@@ -468,11 +454,11 @@ function showToast(msg){
 function toggleReveal(el){ el.classList.toggle('open'); }
 
 // ─────────────────────────────────────────────
-// AI Coach / Appearance / Learning / etc. preferences
+// Settings load / save
 // ─────────────────────────────────────────────
 function applySettingsToDOM(p){
-  document.getElementById('fullNameInput').value = p.full_name || 'Jawad Khan';
-  document.getElementById('usernameInput').value = p.username || 'jawadkhan';
+  document.getElementById('fullNameInput').value = p.full_name || '';
+  document.getElementById('usernameInput').value = p.username || '';
   document.getElementById('bioInput').value = p.bio || '';
 
   document.querySelectorAll('.color-dot').forEach(d=>d.classList.toggle('sel', d.dataset.color === p.accent_color));
@@ -507,6 +493,13 @@ function applySettingsToDOM(p){
 
   const visSel = document.getElementById('visibilitySel');
   if (visSel) visSel.value = p.profile_visibility;
+
+  // Update sidebar and account avatar from loaded prefs
+  var name = p.full_name || '';
+  var initial = name ? name.charAt(0).toUpperCase() : '?';
+  document.getElementById('sbAvatar').textContent = initial;
+  document.getElementById('sbName').textContent = name || 'Account';
+  document.getElementById('accountAvatar').textContent = initial;
 }
 
 function collectSettingsFromDOM(){
@@ -660,17 +653,23 @@ document.getElementById('mfaCancelBtn').addEventListener('click', async () => {
 });
 
 // ─────────────────────────────────────────────
-// Security — Sessions / Devices (single-device info; Supabase's client SDK
-// doesn't expose other devices without a dedicated backend table)
+// Security — Sessions / Devices
 // ─────────────────────────────────────────────
 async function loadDeviceSessionInfo(infoElId){
   const { data } = await supabaseClient.auth.getSession();
   const session = data && data.session;
   const el = document.getElementById(infoElId);
   if (!session) { el.textContent = 'No active session found.'; return; }
-  const lastSignIn = session.user && session.user.last_sign_in_at ? new Date(session.user.last_sign_in_at).toLocaleString() : 'unknown';
-  el.innerHTML = 'Signed in on this device since <strong>' + lastSignIn + '</strong>.<br>Browser: ' + navigator.userAgent +
-    '<br><br>This shows details for the current device only — listing every signed-in device needs a dedicated backend table to track logins, which isn\'t built yet.';
+  var lastSignIn = session.user && session.user.last_sign_in_at ? new Date(session.user.last_sign_in_at).toLocaleString() : 'unknown';
+  var strong = document.createElement('strong'); strong.textContent = lastSignIn;
+  el.textContent = '';
+  el.appendChild(document.createTextNode('Signed in on this device since '));
+  el.appendChild(strong);
+  el.appendChild(document.createElement('br'));
+  el.appendChild(document.createTextNode('Browser: ' + navigator.userAgent));
+  el.appendChild(document.createElement('br'));
+  el.appendChild(document.createElement('br'));
+  el.appendChild(document.createTextNode('This shows details for the current device only.'));
 }
 document.getElementById('sessionsBtn').addEventListener('click', async () => {
   const panel = document.getElementById('sessionsPanel');
@@ -683,67 +682,139 @@ document.getElementById('devicesBtn').addEventListener('click', async () => {
   if (panel.classList.contains('open')) await loadDeviceSessionInfo('devicesInfo');
 });
 
-// ─────────────────────────────────────────────
-// Security — Privacy
-// ─────────────────────────────────────────────
 document.getElementById('privacyBtn').addEventListener('click', () => toggleReveal(document.getElementById('privacyPanel')));
 
 // ─────────────────────────────────────────────
-// Connected Accounts (real Supabase identity linking — the provider must
-// also be enabled in Supabase Dashboard → Authentication → Providers)
+// Connected Accounts — built from real user.identities
 // ─────────────────────────────────────────────
-async function connectProvider(btn, provider){
-  const orig = btn.textContent;
-  btn.textContent = 'Connecting…'; btn.disabled = true;
-  const { error } = await supabaseClient.auth.linkIdentity({ provider });
-  if (error) {
-    btn.textContent = orig; btn.disabled = false;
-    showToast("Couldn't connect: " + error.message);
+var PROVIDER_META = {
+  email: { icon: '✉️', label: 'Email' },
+  google: { icon: '🔵', label: 'Google' },
+  github: { icon: '⚫', label: 'GitHub' },
+  apple: { icon: '🍏', label: 'Apple' },
+  linkedin_oidc: { icon: '🔷', label: 'LinkedIn' },
+  azure: { icon: '🟦', label: 'Microsoft' },
+};
+
+function renderConnectedAccounts(user) {
+  var card = document.getElementById('connectedAccountsCard');
+  card.textContent = '';
+  var identities = (user && user.identities) || [];
+  if (identities.length === 0) {
+    var note = document.createElement('div');
+    note.className = 'inline-note';
+    note.textContent = 'No linked identities found. You are signed in with email and password.';
+    card.appendChild(note);
+    return;
   }
-  // On success the browser redirects to the provider, so no further UI update needed here.
+  identities.forEach(function(identity) {
+    var provider = identity.provider || 'unknown';
+    var meta = PROVIDER_META[provider] || { icon: '🔗', label: provider };
+    var email = (identity.identity_data && identity.identity_data.email) || '';
+
+    var item = document.createElement('div');
+    item.className = 'conn-item';
+
+    var ic = document.createElement('div');
+    ic.className = 'conn-ic';
+    ic.textContent = meta.icon;
+    item.appendChild(ic);
+
+    var info = document.createElement('div');
+    info.className = 'conn-info';
+    var nameEl = document.createElement('div');
+    nameEl.className = 'conn-n';
+    nameEl.textContent = meta.label;
+    info.appendChild(nameEl);
+    var detail = document.createElement('div');
+    detail.className = 'conn-s';
+    detail.textContent = email || 'Connected';
+    info.appendChild(detail);
+    item.appendChild(info);
+
+    var badge = document.createElement('span');
+    badge.className = 'conn-btn connected';
+    badge.textContent = 'Active';
+    badge.style.cursor = 'default';
+    item.appendChild(badge);
+
+    card.appendChild(item);
+  });
 }
-document.getElementById('connectGithubBtn').addEventListener('click', e => connectProvider(e.currentTarget, 'github'));
-document.getElementById('connectLinkedinBtn').addEventListener('click', e => connectProvider(e.currentTarget, 'linkedin_oidc'));
-document.getElementById('connectMicrosoftBtn').addEventListener('click', e => connectProvider(e.currentTarget, 'azure'));
 
 // ─────────────────────────────────────────────
-// Billing (no payment processor connected yet — see chat summary)
+// Advanced — Genuine Data Export
 // ─────────────────────────────────────────────
-document.getElementById('upgradeBtn').addEventListener('click', () => showToast("Billing isn't connected yet — reach out to enable plan upgrades."));
-document.getElementById('manageSubBtn').addEventListener('click', () => showToast("Billing isn't connected yet — reach out to enable subscription management."));
+async function safeSelect(table, columns, filter) {
+  try {
+    var q = supabaseClient.from(table).select(columns || '*');
+    if (filter) q = filter(q);
+    var result = await q;
+    return (result && result.data) || [];
+  } catch (e) { return []; }
+}
 
-// ─────────────────────────────────────────────
-// Advanced
-// ─────────────────────────────────────────────
 document.getElementById('exportDataBtn').addEventListener('click', async () => {
   const btn = document.getElementById('exportDataBtn');
   const orig = btn.textContent; btn.textContent = 'Exporting…'; btn.disabled = true;
   try {
-    const [prefs, sessions, docs] = await Promise.all([
-      CoachStore.getPreferences(),
-      CoachStore.listSessions(),
-      CoachStore.listDocs()
+    var user = await getCurrentUser();
+    var safeUser = user ? {
+      id: user.id,
+      email: user.email,
+      created_at: user.created_at,
+      last_sign_in_at: user.last_sign_in_at,
+      providers: (user.identities || []).map(function(i){ return i.provider; })
+    } : null;
+
+    var results = await Promise.allSettled([
+      safeSelect('user_preferences', '*'),
+      safeSelect('user_lesson_progress', '*'),
+      safeSelect('coaching_sessions', 'id,mode,scenario,persona,difficulty,coach_style,goal,status,turns,score,scores,feedback_report,started_at,ended_at,created_at'),
+      safeSelect('coach_messages', 'id,session_id,role,content,created_at'),
+      safeSelect('coach_documents', 'id,name,type,size,session_id,created_at'),
+      safeSelect('user_challenge_assignments', '*'),
+      safeSelect('user_challenge_feedback', '*'),
     ]);
-    const payload = { exportedAt: new Date().toISOString(), preferences: prefs, sessions, documents: docs };
-    const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url; a.download = 'amplifyhub-data-' + Date.now() + '.json';
+
+    function val(r) { return r.status === 'fulfilled' ? r.value : []; }
+
+    var payload = {
+      schemaVersion: 1,
+      exportedAt: new Date().toISOString(),
+      account: safeUser,
+      preferences: val(results[0])[0] || null,
+      lessonProgress: val(results[1]),
+      coachSessions: val(results[2]),
+      coachMessages: val(results[3]),
+      coachDocuments: val(results[4]),
+      challengeAssignments: val(results[5]),
+      challengeFeedback: val(results[6]),
+    };
+
+    var blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    var dateStr = new Date().toISOString().slice(0, 10);
+    a.href = url; a.download = 'amplifyhub-data-' + dateStr + '.json';
     document.body.appendChild(a); a.click(); a.remove();
     URL.revokeObjectURL(url);
     showToast('Export downloaded.');
+  } catch (err) {
+    showToast('Export failed — please try again.');
   } finally {
     btn.textContent = orig; btn.disabled = false;
   }
 });
 
 document.getElementById('downloadProgressBtn').addEventListener('click', async () => {
-  const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-  const sessions = (await CoachStore.listSessions()).filter(s => s.turns > 0);
-  const win = window.open('', '_blank');
+  var esc = function(s) { return String(s).replace(/[&<>"']/g, function(c) { return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]; }); };
+  var sessions = [];
+  try { sessions = (await CoachStore.listSessions()).filter(function(s){ return s.turns > 0; }); } catch(e){}
+  var win = window.open('', '_blank');
   if (!win) { showToast('Please allow pop-ups to download your progress.'); return; }
-  const rows = sessions.map(s => '<tr><td>' + (s.started_at ? new Date(s.started_at).toLocaleDateString() : '') +
-    '<\/td><td>' + esc(s.mode) + '<\/td><td>' + s.turns + '<\/td><td>' + (s.score != null ? s.score : '—') + '<\/td><\/tr>').join('');
+  var rows = sessions.map(function(s) { return '<tr><td>' + (s.started_at ? new Date(s.started_at).toLocaleDateString() : '') +
+    '<\/td><td>' + esc(s.mode) + '<\/td><td>' + s.turns + '<\/td><td>' + (s.score != null ? s.score : '—') + '<\/td><\/tr>'; }).join('');
   win.document.write('<html><head><title>AmplifyHub Progress<\/title><style>body{font-family:sans-serif;padding:32px}h1{margin-bottom:4px}table{width:100%;border-collapse:collapse;margin-top:20px}td,th{border-bottom:1px solid #ddd;padding:8px;text-align:left;font-size:13px}<\/style><\/head><body><h1>AmplifyHub — Progress Report<\/h1><p>Generated ' +
     new Date().toLocaleString() + '<\/p><table><thead><tr><th>Date<\/th><th>Mode<\/th><th>Turns<\/th><th>Score<\/th><\/tr><\/thead><tbody>' +
     (rows || '<tr><td colspan="4">No sessions yet.<\/td><\/tr>') + '<\/tbody><\/table><\/body><\/html>');
@@ -757,27 +828,85 @@ document.getElementById('clearCacheBtn').addEventListener('click', () => {
   showToast('Local cache cleared.');
 });
 
+// ─────────────────────────────────────────────
+// Advanced — Account Deletion with password reauthentication
+// ─────────────────────────────────────────────
 document.getElementById('deleteAccountBtn').addEventListener('click', () => toggleReveal(document.getElementById('deletePanel')));
 document.getElementById('deleteCancelBtn').addEventListener('click', () => {
   document.getElementById('deletePanel').classList.remove('open');
+  document.getElementById('deletePasswordInput').value = '';
   document.getElementById('deleteConfirmInput').value = '';
+  document.getElementById('deleteError').textContent = '';
   document.getElementById('deleteConfirmBtn').disabled = true;
 });
-document.getElementById('deleteConfirmInput').addEventListener('input', e => {
-  document.getElementById('deleteConfirmBtn').disabled = e.target.value.trim() !== 'DELETE';
-});
+
+function checkDeleteReady() {
+  var pw = document.getElementById('deletePasswordInput').value;
+  var confirm = document.getElementById('deleteConfirmInput').value.trim();
+  document.getElementById('deleteConfirmBtn').disabled = !(pw.length >= 1 && confirm === 'DELETE');
+}
+document.getElementById('deletePasswordInput').addEventListener('input', checkDeleteReady);
+document.getElementById('deleteConfirmInput').addEventListener('input', checkDeleteReady);
+
 document.getElementById('deleteConfirmBtn').addEventListener('click', async () => {
-  const btn = document.getElementById('deleteConfirmBtn');
-  btn.disabled = true; btn.textContent = 'Deleting…';
+  var btn = document.getElementById('deleteConfirmBtn');
+  var errEl = document.getElementById('deleteError');
+  var password = document.getElementById('deletePasswordInput').value;
+  errEl.textContent = '';
+
+  if (!password) { errEl.textContent = 'Please enter your password.'; return; }
+  if (document.getElementById('deleteConfirmInput').value.trim() !== 'DELETE') { errEl.textContent = 'Type DELETE to confirm.'; return; }
+
+  btn.disabled = true; btn.textContent = 'Verifying…';
+
+  // Step 1: reauthenticate to get a fresh token
+  var user = await getCurrentUser();
+  if (!user || !user.email) {
+    errEl.textContent = 'Could not verify your identity. Please sign in again.';
+    btn.textContent = 'Permanently Delete'; btn.disabled = false;
+    return;
+  }
+
+  var { data: signInData, error: signInError } = await supabaseClient.auth.signInWithPassword({
+    email: user.email,
+    password: password
+  });
+
+  if (signInError || !signInData || !signInData.session) {
+    errEl.textContent = 'Incorrect password. Your account was not deleted.';
+    btn.textContent = 'Permanently Delete'; btn.disabled = false;
+    return;
+  }
+
+  btn.textContent = 'Deleting…';
+
+  // Step 2: call delete-account Edge Function with the fresh token
   try {
-    const { error } = await supabaseClient.functions.invoke('delete-account');
-    if (error) throw error;
-    showToast('Account deleted. Signing you out…');
-    setTimeout(() => signOutUser(), 1500);
+    var freshToken = signInData.session.access_token;
+    var resp = await fetch(SUPABASE_URL + '/functions/v1/delete-account', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + freshToken,
+        'apikey': SUPABASE_ANON_KEY
+      },
+      body: JSON.stringify({ confirmation: 'DELETE' })
+    });
+    var result = await resp.json().catch(function(){ return {}; });
+
+    if (!resp.ok) {
+      errEl.textContent = result.error || 'Deletion failed. Your account was not deleted.';
+      btn.textContent = 'Permanently Delete'; btn.disabled = false;
+      return;
+    }
+
+    // Step 3: success — clear local state
+    Object.keys(localStorage).filter(function(k){ return k.startsWith('amplifyHub_'); }).forEach(function(k){ localStorage.removeItem(k); });
+    await supabaseClient.auth.signOut().catch(function(){});
+    window.location.href = 'index.html?deleted=1';
   } catch (err) {
-    btn.textContent = 'Permanently Delete';
-    document.getElementById('deleteConfirmInput').value = '';
-    showToast("Account deletion isn't wired to a backend yet — nothing was deleted. This needs a secure delete-account Edge Function.");
+    errEl.textContent = 'Something went wrong. Your account was not deleted.';
+    btn.textContent = 'Permanently Delete'; btn.disabled = false;
   }
 });
 
@@ -787,15 +916,17 @@ document.getElementById('deleteConfirmBtn').addEventListener('click', async () =
 (async () => {
   await loadSettings();
   await refreshMfaState();
-})();
 
-// Show the real logged-in user's email instead of the placeholder
-getCurrentUser().then(user => {
+  var user = await getCurrentUser();
   if (user) {
-    const emailField = document.getElementById('emailInput');
-    if (emailField) emailField.value = user.email;
+    var emailField = document.getElementById('emailInput');
+    if (emailField) emailField.value = user.email || '';
+    renderConnectedAccounts(user);
+  } else {
+    document.getElementById('connectedLoading').textContent = 'Could not load identity information.';
   }
-});
+})();
 </script>
+<script src="assets/sidebar-user.js"></script>
 </body>
 </html>

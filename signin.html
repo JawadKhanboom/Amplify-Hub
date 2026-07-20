@@ -46,13 +46,6 @@ h1{font-size:24px;font-weight:800;letter-spacing:-.5px;text-align:center;margin-
 .footer-text a{color:var(--accent);text-decoration:none;font-weight:600;transition:opacity .2s}
 .footer-text a:hover{opacity:.7}
 
-.divider{display:flex;align-items:center;gap:12px;margin:24px 0}
-.divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--border)}
-.divider span{font-size:11px;color:var(--muted);font-weight:500;text-transform:uppercase;letter-spacing:1px}
-
-.social{display:flex;gap:12px}
-.social button{flex:1;padding:12px;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:12px;color:var(--text);font-size:13px;font-weight:600;cursor:pointer;font-family:var(--font);transition:all .25s;display:flex;align-items:center;justify-content:center;gap:8px}
-.social button:hover{border-color:var(--border-h);background:rgba(255,255,255,.06);color:var(--white)}
 
 @media(max-width:480px){.card{padding:32px 24px;border-radius:20px}}
 @media(max-height:800px){
@@ -63,7 +56,6 @@ h1{font-size:24px;font-weight:800;letter-spacing:-.5px;text-align:center;margin-
   .field{margin-bottom:13px}
   .field input{padding:11px 14px}
   .submit{padding:13px}
-  .divider{margin:16px 0}
   .footer-text{margin-top:16px}
 }
 
@@ -81,8 +73,6 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
   <div class="field"><label for="passwordInput">Password</label><input type="password" id="passwordInput" placeholder="Your password"></div>
   <p id="errorText" style="display:none;color:#ff6b6b;font-size:13px;margin:-6px 0 14px;"></p>
   <button class="submit" id="submitBtn">Sign In →</button>
-  <div class="divider"><span>or</span></div>
-  <div class="social"><button>G Google</button><button>🍎 Apple</button></div>
   <p class="footer-text">New here? <a href="signup.html">Create an account</a></p>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
