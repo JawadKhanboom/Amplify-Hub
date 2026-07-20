@@ -66,7 +66,7 @@ html{scroll-behavior:smooth}body{font-family:var(--font);background:var(--bg);co
 .flt:hover{border-color:var(--border-h);color:var(--white)}.flt.act{border-color:var(--accent);color:var(--accent);background:var(--accent-dim)}
 
 .types-row{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
-.type-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px 12px;text-align:center;cursor:pointer;transition:all .3s}
+.type-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px 12px;text-align:center;cursor:pointer;transition:all .3s;font:inherit;color:inherit;width:100%}
 .type-card:hover{border-color:var(--border-h);transform:translateY(-3px)}
 .type-card.active{border-color:var(--accent);background:var(--accent-dim)}
 .tc-ic{font-size:24px;margin-bottom:8px;display:block;transition:transform .3s}.type-card:hover .tc-ic{transform:scale(1.12)}
@@ -179,12 +179,16 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(-
   // Publication gate: the public library lists only active + reviewed resources.
   // ?preview=review is an explicit editorial mode that also shows drafts, always
   // labelled as such. Drafts never render publicly just because they are active.
-  var previewMode = new URLSearchParams(window.location.search).get('preview') === 'review';
+  var params = new URLSearchParams(window.location.search);
+  var previewMode = params.get('preview') === 'review';
   var SOURCE = previewMode ? catalog.resources.filter(function(r){ return r.active !== false; }) : catalog.published();
+  var previewDraftCount = SOURCE.filter(function(r){ return r.status !== 'reviewed'; }).length;
   var counts = {};
   Object.keys(meta).forEach(function(k){ counts[k] = 0; });
   SOURCE.forEach(function(r){ counts[r.category] = (counts[r.category]||0) + 1; });
-  var state = { category: 'all', query: '' };
+  var requestedCategory = params.get('category');
+  var initialCategory = requestedCategory && meta[requestedCategory] ? requestedCategory : 'all';
+  var state = { category: initialCategory, query: '' };
 
   var $ = function(id){ return document.getElementById(id); };
   function el(tag, className, text){ var n=document.createElement(tag); if(className)n.className=className; if(text!=null)n.textContent=String(text); return n; }
@@ -194,8 +198,12 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(-
   var bannerText = $('modeBannerText');
   bannerText.replaceChildren();
   if (previewMode) {
-    bannerText.appendChild(el('b',null,'Editorial preview — drafts visible. '));
-    bannerText.appendChild(document.createTextNode('This view includes '+SOURCE.length+' resources that have not yet passed human editorial review. It exists for reviewers; the public library shows only reviewed items.'));
+    bannerText.appendChild(el('b',null,'Editorial preview. '));
+    if (previewDraftCount > 0) {
+      bannerText.appendChild(document.createTextNode('This view includes '+previewDraftCount+' draft resource'+(previewDraftCount===1?'':'s')+'. Drafts remain hidden from the public library until reviewed.'));
+    } else {
+      bannerText.appendChild(document.createTextNode('All '+SOURCE.length+' resources in this catalog have passed human editorial review and are publicly available.'));
+    }
   } else if (SOURCE.length === 0) {
     bannerText.appendChild(el('b',null,'Library in final editorial review. '));
     bannerText.appendChild(document.createTextNode('Every resource is being reviewed by a human editor before publication. Approved resources will appear here — nothing is shown until it has been reviewed.'));
@@ -220,8 +228,10 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(-
   var typesRow = $('typesRow');
   Object.keys(meta).forEach(function(key){
     var m = meta[key];
-    var card = el('div','type-card');
+    var card = el('button','type-card');
+    card.type = 'button';
     card.dataset.cat = key;
+    card.setAttribute('aria-pressed','false');
     card.appendChild(el('span','tc-ic',m.icon));
     card.appendChild(el('div','tc-nm',m.plural));
     card.appendChild(el('div','tc-ct',(counts[key]||0)+' item'+((counts[key]||0)===1?'':'s')));
@@ -291,10 +301,27 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(-
     }
 
     Array.prototype.forEach.call(document.querySelectorAll('.flt'),function(c){ c.classList.toggle('act', c.dataset.cat===state.category); });
-    Array.prototype.forEach.call(document.querySelectorAll('.type-card'),function(c){ c.classList.toggle('active', c.dataset.cat===state.category); });
+    Array.prototype.forEach.call(document.querySelectorAll('.type-card'),function(c){
+      var selected = c.dataset.cat===state.category;
+      c.classList.toggle('active', selected);
+      c.setAttribute('aria-pressed', selected ? 'true' : 'false');
+    });
   }
 
-  function setCategory(cat){ state.category = (state.category===cat && cat!=='all') ? 'all' : cat; render(); }
+  function syncCategoryUrl(){
+    var url = new URL(window.location.href);
+    if(state.category==='all') url.searchParams.delete('category');
+    else url.searchParams.set('category',state.category);
+    window.history.replaceState(null,'',url.pathname+url.search+url.hash);
+  }
+
+  function setCategory(cat){
+    var valid = cat==='all' || Object.prototype.hasOwnProperty.call(meta,cat);
+    var next = valid ? cat : 'all';
+    state.category = (state.category===next && next!=='all') ? 'all' : next;
+    syncCategoryUrl();
+    render();
+  }
 
   filters.addEventListener('click',function(e){ var b=e.target.closest('.flt'); if(b) setCategory(b.dataset.cat); });
   typesRow.addEventListener('click',function(e){ var c=e.target.closest('.type-card'); if(c) setCategory(c.dataset.cat); });
@@ -303,7 +330,7 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(-
   $('searchBtn').addEventListener('click', doSearch);
   $('searchInput').addEventListener('keydown', function(e){ if(e.key==='Enter') doSearch(); });
   $('searchInput').addEventListener('input', function(e){ if(e.target.value==='' ){ state.query=''; render(); } });
-  $('clearBtn').addEventListener('click', function(){ state.query=''; state.category='all'; $('searchInput').value=''; render(); });
+  $('clearBtn').addEventListener('click', function(){ state.query=''; state.category='all'; $('searchInput').value=''; syncCategoryUrl(); render(); });
 
   render();
 

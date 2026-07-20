@@ -42,6 +42,7 @@ for (const r of resources) {
 
 // Publication gate semantics.
 const published = catalog.published();
+assert.equal(published.length, 25, 'all 25 approved resources are publicly published');
 assert.deepEqual(
   published.map((r) => r.id),
   resources.filter((r) => r.active === true && r.status === 'reviewed').map((r) => r.id),
@@ -51,6 +52,9 @@ for (const r of resources.filter((x) => x.status !== 'reviewed')) {
   assert.ok(!catalog.isPublished(r), `${r.id} (draft) is never published merely because it is active`);
 }
 const pubCounts = catalog.publishedCounts();
+for (const category of ['script', 'template', 'cheatsheet', 'worksheet', 'interview']) {
+  assert.equal(pubCounts[category], 5, `published ${category} category has five resources`);
+}
 assert.equal(
   Object.values(pubCounts).reduce((a, b) => a + b, 0),
   published.length,
@@ -159,6 +163,19 @@ try {
   assert.match(await page.locator('.flt', { hasText: 'All' }).innerText(), /All \(25\)/, 'preview All filter shows real total');
   assert.match(await page.locator('.flt', { hasText: 'Scripts' }).innerText(), /\(5\)/, 'Scripts chip shows derived count');
   assert.equal(await page.locator('.type-card').count(), 5, 'five category type cards (videos removed)');
+  assert.equal(await page.locator('.type-card').evaluateAll((cards) => cards.every((card) => card.tagName === 'BUTTON')), true, 'category cards are semantic buttons');
+
+  // A dashboard/category link opens the library already filtered to that type.
+  await page.goto(`${baseUrl}resources.html?category=script`, { waitUntil: 'domcontentloaded' });
+  await page.waitForSelector('.res');
+  assert.equal(await page.locator('.res').count(), 5, 'direct Scripts URL renders the five script resources');
+  assert.equal(await page.locator('#gridHeading').innerText(), 'Scripts', 'direct Scripts URL labels the filtered grid');
+  const scriptsCard = page.locator('.type-card', { hasText: 'Scripts' });
+  assert.equal(await scriptsCard.getAttribute('aria-pressed'), 'true', 'Scripts category control exposes its selected state');
+
+  // Return to the complete editorial view for the remaining preview-only checks.
+  await page.goto(`${baseUrl}resources.html?preview=review`, { waitUntil: 'domcontentloaded' });
+  await page.waitForSelector('.res');
 
   // No fake/removed content.
   for (const banned of ['Community Picks', 'Learning Paths', 'Videos', '% complete', 'saves', 'comments', 'Most Saved']) {
@@ -262,6 +279,7 @@ try {
   const dashboard = await readFile(path.join(siteRoot, 'dashboard.html'), 'utf8');
   assert.match(dashboard, /href="resources\.html">Browse Library/, 'dashboard links to the real library');
   assert.match(dashboard, /publishedCounts\(\)/, 'dashboard derives counts from published resources only');
+  assert.match(dashboard, /resources\.html\?category=/, 'dashboard category cards deep-link to filtered resource lists');
   assert.doesNotMatch(dashboard, /36 videos|18 templates|24 scripts/, 'dashboard no longer shows invented counts');
 
   console.log('Browser QA passed: reviewed-only public library, draft blocking, labelled editorial preview, search/filter, 25 detail pages, downloads, safe rendering, and honest dashboard.');

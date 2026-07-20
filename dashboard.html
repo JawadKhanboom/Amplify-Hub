@@ -460,9 +460,11 @@ document.querySelectorAll('.sb-item').forEach(item => { item.addEventListener('c
   var meta = window.ResourceCatalog.categoryMeta;
   var counts = window.ResourceCatalog.publishedCounts();
   var total = Object.keys(counts).reduce(function(sum,k){ return sum + (counts[k]||0); }, 0);
-  function card(icon, name, desc, countText){
+  function card(icon, name, desc, countText, category){
     var a = document.createElement('a');
-    a.className = 'res'; a.href = 'resources.html'; a.style.textDecoration = 'none'; a.style.color = 'inherit';
+    a.className = 'res';
+    a.href = category ? 'resources.html?category=' + encodeURIComponent(category) : 'resources.html';
+    a.style.textDecoration = 'none'; a.style.color = 'inherit';
     var ic = document.createElement('div'); ic.className = 'res-icon'; ic.textContent = icon; a.appendChild(ic);
     var nm = document.createElement('div'); nm.className = 'res-name'; nm.textContent = name; a.appendChild(nm);
     var ds = document.createElement('div'); ds.className = 'res-desc'; ds.textContent = desc; a.appendChild(ds);
@@ -483,7 +485,7 @@ document.querySelectorAll('.sb-item').forEach(item => { item.addEventListener('c
   Object.keys(meta).forEach(function(key){
     var n = counts[key] || 0;
     if (n === 0) return;
-    card(meta[key].icon, meta[key].plural, blurbs[key] || '', n + ' ' + (n === 1 ? 'resource' : 'resources'));
+    card(meta[key].icon, meta[key].plural, blurbs[key] || '', n + ' ' + (n === 1 ? 'resource' : 'resources'), key);
   });
 })();
 

@@ -34,6 +34,7 @@
     /* ---------------------------------------------------------------- SCRIPTS */
     {
       id: 'scripts-permission-opener',
+      status: 'reviewed',
       title: 'Permission-Based Cold Call Opener',
       category: 'script',
       skill: 'opening',
@@ -70,6 +71,7 @@
     },
     {
       id: 'scripts-30-second-structure',
+      status: 'reviewed',
       title: '30-Second Call Structure',
       category: 'script',
       skill: 'opening',
@@ -107,6 +109,7 @@
     },
     {
       id: 'scripts-gatekeeper-approach',
+      status: 'reviewed',
       title: 'Respectful Gatekeeper Approach',
       category: 'script',
       skill: 'opening',
@@ -143,6 +146,7 @@
     },
     {
       id: 'scripts-objection-conversation',
+      status: 'reviewed',
       title: 'Top-Five Objection Conversation',
       category: 'script',
       skill: 'objections',
@@ -180,6 +184,7 @@
     },
     {
       id: 'scripts-interest-based-close',
+      status: 'reviewed',
       title: 'Interest-Based Meeting Close',
       category: 'script',
       skill: 'booking',
@@ -217,6 +222,7 @@
     /* -------------------------------------------------------------- TEMPLATES */
     {
       id: 'templates-three-touch-followup',
+      status: 'reviewed',
       title: 'Three-Touch Follow-Up Sequence',
       category: 'template',
       skill: 'follow-up',
@@ -252,6 +258,7 @@
     },
     {
       id: 'templates-voicemail-email-pair',
+      status: 'reviewed',
       title: 'Voicemail + Email Pair',
       category: 'template',
       skill: 'follow-up',
@@ -288,6 +295,7 @@
     },
     {
       id: 'templates-prospect-research-brief',
+      status: 'reviewed',
       title: 'Prospect Research Brief',
       category: 'template',
       skill: 'prospecting',
@@ -321,6 +329,7 @@
     },
     {
       id: 'templates-icp-template',
+      status: 'reviewed',
       title: 'Ideal Customer Profile (ICP) Template',
       category: 'template',
       skill: 'prospecting',
@@ -357,6 +366,7 @@
     },
     {
       id: 'templates-call-block-plan',
+      status: 'reviewed',
       title: 'Call-Block Preparation Plan',
       category: 'template',
       skill: 'planning',
@@ -393,6 +403,7 @@
     /* ------------------------------------------------------------ CHEAT SHEETS */
     {
       id: 'cheatsheets-cold-call-flow',
+      status: 'reviewed',
       title: 'Cold-Call Flow Cheat Sheet',
       category: 'cheatsheet',
       skill: 'opening',
@@ -429,6 +440,7 @@
     },
     {
       id: 'cheatsheets-top-five-objections',
+      status: 'reviewed',
       title: 'Top-Five Objections Cheat Sheet',
       category: 'cheatsheet',
       skill: 'objections',
@@ -465,6 +477,7 @@
     },
     {
       id: 'cheatsheets-discovery-question-map',
+      status: 'reviewed',
       title: 'Discovery Question Map',
       category: 'cheatsheet',
       skill: 'discovery',
@@ -501,6 +514,7 @@
     },
     {
       id: 'cheatsheets-tonality-guide',
+      status: 'reviewed',
       title: 'Tonality Guide',
       category: 'cheatsheet',
       skill: 'communication',
@@ -536,6 +550,7 @@
     },
     {
       id: 'cheatsheets-booking-followup-checklist',
+      status: 'reviewed',
       title: 'Booking & Follow-Up Checklist',
       category: 'cheatsheet',
       skill: 'booking',
@@ -574,6 +589,7 @@
     /* -------------------------------------------------------------- WORKSHEETS */
     {
       id: 'worksheets-script-personalization-canvas',
+      status: 'reviewed',
       title: 'Script Personalization Canvas',
       category: 'worksheet',
       skill: 'script',
@@ -617,6 +633,7 @@
     },
     {
       id: 'worksheets-prospect-qualification-sheet',
+      status: 'reviewed',
       title: 'Prospect Qualification Sheet',
       category: 'worksheet',
       skill: 'prospecting',
@@ -651,6 +668,7 @@
     },
     {
       id: 'worksheets-rejection-log',
+      status: 'reviewed',
       title: 'Rejection Log',
       category: 'worksheet',
       skill: 'mindset',
@@ -685,6 +703,7 @@
     },
     {
       id: 'worksheets-roleplay-scorecard',
+      status: 'reviewed',
       title: 'Roleplay Scorecard',
       category: 'worksheet',
       skill: 'improvement',
@@ -728,6 +747,7 @@
     },
     {
       id: 'worksheets-weekly-improvement-review',
+      status: 'reviewed',
       title: 'Weekly Improvement Review',
       category: 'worksheet',
       skill: 'improvement',
@@ -777,6 +797,7 @@
     /* --------------------------------------------------------- INTERVIEW PREP */
     {
       id: 'interview-common-question-planner',
+      status: 'reviewed',
       title: 'Common-Question Answer Planner',
       category: 'interview',
       skill: 'interview',
@@ -814,6 +835,7 @@
     },
     {
       id: 'interview-star-story-builder',
+      status: 'reviewed',
       title: 'STAR Story Builder',
       category: 'interview',
       skill: 'interview',
@@ -850,6 +872,7 @@
     },
     {
       id: 'interview-30-60-90-plan',
+      status: 'reviewed',
       title: '30/60/90-Day Plan',
       category: 'interview',
       skill: 'interview',
@@ -885,6 +908,7 @@
     },
     {
       id: 'interview-cold-call-audition-prep',
+      status: 'reviewed',
       title: 'Cold-Call Audition Preparation',
       category: 'interview',
       skill: 'interview',
@@ -921,6 +945,7 @@
     },
     {
       id: 'interview-day-checklist-portfolio',
+      status: 'reviewed',
       title: 'Interview-Day Checklist & Portfolio',
       category: 'interview',
       skill: 'interview',
