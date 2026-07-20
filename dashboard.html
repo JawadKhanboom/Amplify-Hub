@@ -15,6 +15,7 @@
 <script src="coach-store.js"></script>
 <script src="assets/journey-progress.js"></script>
 <script src="assets/challenge-system.js"></script>
+<script src="assets/resource-catalog.js"></script>
 <script src="assets/user-stats.js"></script>
 <script>requireAuth();</script>
 <style>
@@ -422,14 +423,8 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
 
   <!-- RESOURCES -->
   <div class="sec fade-up" id="resources">
-    <div class="sec-h"><h2>Resources</h2><a class="sec-link">Browse Library →</a></div>
-    <div class="res-grid">
-      <a class="res" href="interview-prep.html" style="text-decoration:none;color:inherit"><div class="res-icon">🎤</div><div class="res-name">Interview Prep</div><div class="res-desc">Your SDR portfolio and first-call challenge</div><div class="res-count">Build yours →</div></a>
-      <div class="res"><div class="res-icon">📝</div><div class="res-name">Scripts</div><div class="res-desc">Industry-specific cold call frameworks</div><div class="res-count">24 scripts</div></div>
-      <div class="res"><div class="res-icon">📋</div><div class="res-name">Templates</div><div class="res-desc">Email follow-ups, voicemail drops</div><div class="res-count">18 templates</div></div>
-      <div class="res"><div class="res-icon">⚡</div><div class="res-name">Cheat Sheets</div><div class="res-desc">Quick-reference objection handlers</div><div class="res-count">12 sheets</div></div>
-      <div class="res"><div class="res-icon">🎬</div><div class="res-name">Videos</div><div class="res-desc">Live call breakdowns and tutorials</div><div class="res-count">36 videos</div></div>
-    </div>
+    <div class="sec-h"><h2>Resources</h2><a class="sec-link" href="resources.html">Browse Library →</a></div>
+    <div class="res-grid" id="resourceGrid"></div>
   </div>
 
 </div>
@@ -442,6 +437,44 @@ document.querySelectorAll('.fade-up').forEach(el => obs.observe(el));
 document.getElementById('mobMenuBtn').addEventListener('click', () => document.getElementById('sidebar').classList.add('open'));
 document.getElementById('sbClose').addEventListener('click', () => document.getElementById('sidebar').classList.remove('open'));
 document.querySelectorAll('.sb-item').forEach(item => { item.addEventListener('click', () => { document.querySelectorAll('.sb-item').forEach(i => i.classList.remove('active')); item.classList.add('active'); document.getElementById('sidebar').classList.remove('open'); }); });
+
+// Resources: build cards from published (active + reviewed) counts only — drafts
+// never surface here, and no counts are invented. Falls back to an honest
+// in-review card while nothing has passed editorial review yet.
+(function(){
+  var grid = document.getElementById('resourceGrid');
+  if (!grid || !window.ResourceCatalog) return;
+  var meta = window.ResourceCatalog.categoryMeta;
+  var counts = window.ResourceCatalog.publishedCounts();
+  var total = Object.keys(counts).reduce(function(sum,k){ return sum + (counts[k]||0); }, 0);
+  function card(icon, name, desc, countText, category){
+    var a = document.createElement('a');
+    a.className = 'res';
+    a.href = category ? 'resources.html?category=' + encodeURIComponent(category) : 'resources.html';
+    a.style.textDecoration = 'none'; a.style.color = 'inherit';
+    var ic = document.createElement('div'); ic.className = 'res-icon'; ic.textContent = icon; a.appendChild(ic);
+    var nm = document.createElement('div'); nm.className = 'res-name'; nm.textContent = name; a.appendChild(nm);
+    var ds = document.createElement('div'); ds.className = 'res-desc'; ds.textContent = desc; a.appendChild(ds);
+    var ct = document.createElement('div'); ct.className = 'res-count'; ct.textContent = countText; a.appendChild(ct);
+    grid.appendChild(a);
+  }
+  if (total === 0) {
+    card('📝', 'Resource Library', 'Practical SDR resources are in final editorial review and will appear here once approved.', 'See status →');
+    return;
+  }
+  var blurbs = {
+    script: 'Openers, objections, and closes to adapt',
+    template: 'Follow-ups, ICP, and research briefs',
+    cheatsheet: 'Quick-reference flows and checklists',
+    worksheet: 'Trackers and reflection worksheets',
+    interview: 'Answer planners, STAR, and 30/60/90'
+  };
+  Object.keys(meta).forEach(function(key){
+    var n = counts[key] || 0;
+    if (n === 0) return;
+    card(meta[key].icon, meta[key].plural, blurbs[key] || '', n + ' ' + (n === 1 ? 'resource' : 'resources'), key);
+  });
+})();
 
 function readJourneyProgress() { try { const raw = localStorage.getItem('amplifyHub_journeyProgress'); if (raw) { const d = JSON.parse(raw); return { pct: d.overallProgress ?? 0, milestone: d.currentModuleName || 'Getting Started', lessonsDone: d.lessonsCompleted ?? 0 }; } } catch(e) {} return { pct: 0, milestone: 'Getting Started', lessonsDone: 0 }; }
 function applyJourneyProgress(animate) { const jp = readJourneyProgress(); const milestoneEl = document.getElementById('wMilestoneText'); if (milestoneEl) milestoneEl.textContent = jp.milestone; const pctEl = document.getElementById('ringPct'); const circ = document.getElementById('ringFill'); if (!pctEl || !circ) return; const dashTotal = 176; circ.style.transition = animate ? '' : 'none'; circ.style.strokeDashoffset = dashTotal - (dashTotal * jp.pct / 100); if (animate) { let c = parseInt(pctEl.textContent) || 0; const dir = jp.pct > c ? 1 : -1; const iv = setInterval(() => { if (c === jp.pct) { clearInterval(iv); return; } c += dir; pctEl.textContent = c + '%'; }, 20); } else { pctEl.textContent = jp.pct + '%'; } }

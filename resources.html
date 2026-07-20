@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AmplifyHub — Resources</title>
-<meta name="description" content="The AmplifyHub resource library: scripts, templates, cheat sheets, and video breakdowns for cold callers.">
+<title>AmplifyHub — Resource Library</title>
+<meta name="description" content="A public library of practical, original SDR resources: scripts, templates, cheat sheets, worksheets, and interview preparation. Read, copy, print, or download.">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="AmplifyHub">
-<meta property="og:title" content="AmplifyHub — Resources">
-<meta property="og:description" content="The AmplifyHub resource library: scripts, templates, cheat sheets, and video breakdowns for cold callers.">
+<meta property="og:title" content="AmplifyHub — Resource Library">
+<meta property="og:description" content="Practical, original SDR resources you can read, copy, print, and download.">
 <meta property="og:image" content="og-image.png">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
@@ -26,7 +26,6 @@
 }
 html{scroll-behavior:smooth}body{font-family:var(--font);background:var(--bg);color:var(--white);display:flex;min-height:100vh;overflow-x:hidden}
 
-/* SIDEBAR */
 .sb{width:var(--sb);position:fixed;top:0;left:0;bottom:0;background:var(--bg2);border-right:1px solid var(--border);padding:24px 16px;display:flex;flex-direction:column;z-index:100;transition:transform .3s}
 .sb-logo{font-size:20px;font-weight:800;padding:0 8px 24px}.sb-logo span{color:var(--accent)}
 .sb-nav{display:flex;flex-direction:column;gap:4px;flex:1}
@@ -34,9 +33,10 @@ html{scroll-behavior:smooth}body{font-family:var(--font);background:var(--bg);co
 .si:hover{color:var(--text);background:rgba(255,255,255,.03)}.si.act{color:var(--accent);background:var(--accent-dim);border-color:var(--border)}
 .si-ic{width:20px;text-align:center;font-size:15px}
 .sb-d{height:1px;background:var(--border);margin:10px 8px}
-.sb-u{display:flex;align-items:center;gap:10px;padding:12px 8px;border-top:1px solid var(--border);margin-top:auto}
-.sb-av{width:32px;height:32px;border-radius:8px;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:var(--bg)}
-.sb-un{font-size:13px;font-weight:600}.sb-ur{font-size:11px;color:var(--muted)}
+.sb-cta{margin-top:auto;border-top:1px solid var(--border);padding-top:14px}
+.sb-cta a{display:block;text-align:center;background:var(--accent-dim);border:1px solid var(--border);color:var(--accent);border-radius:10px;padding:10px;font-size:12px;font-weight:700;text-decoration:none}
+.sb-cta a:hover{border-color:var(--border-h)}
+.sb-cta p{font-size:10px;color:var(--muted);margin-top:8px;text-align:center;line-height:1.5}
 .sb-x{display:none;position:absolute;top:16px;right:16px;background:none;border:none;color:var(--muted);font-size:20px;cursor:pointer}
 .mh{display:none;position:fixed;top:0;left:0;right:0;z-index:200;padding:14px 20px;background:rgba(7,7,14,.95);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);align-items:center;justify-content:space-between}
 .mh .logo{font-size:18px;font-weight:800}.mh .logo span{color:var(--accent)}
@@ -47,16 +47,12 @@ html{scroll-behavior:smooth}body{font-family:var(--font);background:var(--bg);co
 .sec{margin-bottom:36px}
 .sec-h{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
 .sec-h h2{font-size:18px;font-weight:800;letter-spacing:-.3px}
-.sec-link{font-size:12px;color:var(--accent);font-weight:600;cursor:pointer;text-decoration:none}
 
-/* HERO */
-.hero{background:linear-gradient(135deg,rgba(255,213,74,.06),rgba(255,167,38,.03),var(--card));border:1px solid var(--border-h);border-radius:24px;padding:36px;position:relative;overflow:hidden;margin-bottom:28px}
+.hero{background:linear-gradient(135deg,rgba(255,213,74,.06),rgba(255,167,38,.03),var(--card));border:1px solid var(--border-h);border-radius:24px;padding:36px;position:relative;overflow:hidden;margin-bottom:24px}
 .hero::before{content:'';position:absolute;top:-40%;right:-10%;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(255,213,74,.06),transparent 70%);pointer-events:none}
 .hero h1{font-size:clamp(24px,3vw,32px);font-weight:900;letter-spacing:-.5px;margin-bottom:6px;position:relative;z-index:2}
 .hero h1 em{font-style:normal;color:var(--accent)}
-.hero-sub{font-size:14px;color:var(--text);position:relative;z-index:2;margin-bottom:24px;max-width:560px;line-height:1.6}
-
-/* SEARCH */
+.hero-sub{font-size:14px;color:var(--text);position:relative;z-index:2;margin-bottom:24px;max-width:600px;line-height:1.6}
 .search-wrap{display:flex;gap:10px;position:relative;z-index:2;flex-wrap:wrap}
 .search-box{flex:1;min-width:200px;background:rgba(255,255,255,.05);backdrop-filter:blur(12px);border:1px solid var(--border);border-radius:14px;padding:14px 20px 14px 44px;color:var(--white);font-size:15px;font-family:var(--font);outline:none;transition:all .3s;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23555570' viewBox='0 0 24 24' width='18'%3E%3Cpath d='M15.5 14h-.79l-.28-.27A6.47 6.47 0 0016 9.5 6.5 6.5 0 109.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:16px center}
 .search-box:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-dim);background-color:rgba(255,255,255,.07)}
@@ -64,115 +60,54 @@ html{scroll-behavior:smooth}body{font-family:var(--font);background:var(--bg);co
 .search-btn{background:var(--accent);color:var(--bg);border:none;padding:14px 24px;border-radius:14px;font-size:14px;font-weight:700;cursor:pointer;font-family:var(--font);transition:all .3s;white-space:nowrap}
 .search-btn:hover{box-shadow:0 4px 16px var(--accent-glow);transform:translateY(-1px)}
 
-/* FILTERS */
-.filters{display:flex;gap:8px;overflow-x:auto;padding:4px 0;margin-bottom:28px;scrollbar-width:none}
+.filters{display:flex;gap:8px;overflow-x:auto;padding:4px 0;margin-bottom:24px;scrollbar-width:none}
 .filters::-webkit-scrollbar{display:none}
 .flt{background:none;border:1px solid var(--border);border-radius:20px;padding:7px 16px;font-size:12px;font-weight:600;color:var(--muted);cursor:pointer;font-family:var(--font);white-space:nowrap;transition:all .2s}
 .flt:hover{border-color:var(--border-h);color:var(--white)}.flt.act{border-color:var(--accent);color:var(--accent);background:var(--accent-dim)}
 
-/* BOOKMARKS BAR */
-.bm-bar{display:flex;gap:12px;overflow-x:auto;padding:0 0 4px;margin-bottom:28px;scrollbar-width:none}
-.bm-bar::-webkit-scrollbar{display:none}
-.bm-item{min-width:200px;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px;display:flex;align-items:center;gap:10px;cursor:pointer;transition:all .25s;flex-shrink:0}
-.bm-item:hover{border-color:var(--border-h);transform:translateY(-2px)}
-.bm-ic{width:36px;height:36px;min-width:36px;border-radius:10px;background:var(--accent-dim);display:flex;align-items:center;justify-content:center;font-size:18px}
-.bm-info{overflow:hidden}.bm-title{font-size:12px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.bm-meta{font-size:10px;color:var(--muted);margin-top:1px}
-
-/* FEATURED */
-.feat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
-.feat{background:var(--glass);backdrop-filter:blur(14px);border:1px solid var(--border);border-radius:20px;overflow:hidden;transition:all .3s;cursor:pointer;position:relative}
-.feat:hover{border-color:var(--border-h);transform:translateY(-4px)}
-.feat:hover .feat-cover{transform:scale(1.05)}
-.feat-cover{height:140px;background:var(--card2);display:flex;align-items:center;justify-content:center;font-size:48px;transition:transform .5s;overflow:hidden;border-bottom:1px solid var(--border)}
-.feat-body{padding:18px}
-.feat-cat{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--accent);margin-bottom:6px}
-.feat-title{font-size:16px;font-weight:800;margin-bottom:6px;letter-spacing:-.2px}
-.feat-desc{font-size:12px;color:var(--text);line-height:1.5;margin-bottom:12px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.feat-foot{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.feat-tag{font-size:10px;font-weight:600;padding:3px 10px;border-radius:100px;background:rgba(255,255,255,.04);border:1px solid var(--border);color:var(--text)}
-.feat-bm{margin-left:auto;background:none;border:none;font-size:16px;cursor:pointer;transition:transform .2s;padding:4px}
-.feat-bm:hover{transform:scale(1.2)}
-.feat-badge{position:absolute;top:12px;left:12px;padding:4px 10px;border-radius:100px;font-size:10px;font-weight:700;backdrop-filter:blur(8px)}
-.fb-feat{background:rgba(255,213,74,.15);color:var(--accent);border:1px solid rgba(255,213,74,.2)}
-.fb-new{background:rgba(0,230,150,.15);color:var(--green);border:1px solid rgba(0,230,150,.2)}
-.fb-pop{background:rgba(255,167,38,.15);color:var(--warm);border:1px solid rgba(255,167,38,.2)}
-
-/* RESOURCE GRID */
-.res-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
-.res{background:var(--card);border:1px solid var(--border);border-radius:16px;overflow:hidden;transition:all .3s;cursor:pointer}
-.res:hover{border-color:var(--border-h);transform:translateY(-3px)}
-.res-cover{height:100px;background:var(--card2);display:flex;align-items:center;justify-content:center;font-size:32px;border-bottom:1px solid var(--border);transition:transform .4s;overflow:hidden}
-.res:hover .res-cover{transform:scale(1.04)}
-.res-body{padding:14px}
-.res-type{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--accent);margin-bottom:4px}
-.res-title{font-size:13px;font-weight:700;margin-bottom:4px;line-height:1.3}
-.res-desc{font-size:11px;color:var(--muted);line-height:1.4;margin-bottom:10px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.res-foot{display:flex;align-items:center;justify-content:space-between}
-.res-meta{display:flex;gap:6px;font-size:10px;color:var(--muted)}
-.res-diff{padding:2px 8px;border-radius:100px;font-size:9px;font-weight:700}
-.rd-e{background:rgba(0,230,150,.1);color:var(--green)}.rd-m{background:var(--accent-dim);color:var(--accent)}.rd-h{background:rgba(255,95,87,.1);color:var(--red)}
-.res-bm{background:none;border:none;font-size:14px;cursor:pointer;transition:transform .2s;padding:2px}
-.res-bm:hover{transform:scale(1.2)}
-
-/* TYPES ROW */
 .types-row{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
-.type-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px 12px;text-align:center;cursor:pointer;transition:all .3s}
+.type-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px 12px;text-align:center;cursor:pointer;transition:all .3s;font:inherit;color:inherit;width:100%}
 .type-card:hover{border-color:var(--border-h);transform:translateY(-3px)}
 .type-card.active{border-color:var(--accent);background:var(--accent-dim)}
 .tc-ic{font-size:24px;margin-bottom:8px;display:block;transition:transform .3s}.type-card:hover .tc-ic{transform:scale(1.12)}
 .tc-nm{font-size:12px;font-weight:700;margin-bottom:2px}
 .tc-ct{font-size:10px;color:var(--muted)}
 
-/* LEARNING PATHS */
-.lp-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
-.lp{background:var(--glass);backdrop-filter:blur(14px);border:1px solid var(--border);border-radius:18px;padding:24px;transition:all .3s;cursor:pointer}
-.lp:hover{border-color:var(--border-h);transform:translateY(-3px)}
-.lp-emoji{font-size:32px;margin-bottom:12px}
-.lp-title{font-size:16px;font-weight:800;margin-bottom:4px}
-.lp-levels{font-size:11px;color:var(--text);margin-bottom:10px}
-.lp-meta{display:flex;gap:12px;font-size:11px;color:var(--muted);margin-bottom:14px}
-.lp-bar{height:6px;background:rgba(255,255,255,.05);border-radius:3px;overflow:hidden;margin-bottom:6px}
-.lp-fill{height:100%;border-radius:3px;transition:width 1.5s cubic-bezier(.16,1,.3,1)}
-.lp-pct{font-size:11px;color:var(--muted);margin-bottom:14px}
-.lp-btn{background:var(--accent);color:var(--bg);border:none;padding:10px 20px;border-radius:10px;font-size:12px;font-weight:700;cursor:pointer;font-family:var(--font);transition:all .25s;width:100%}
-.lp-btn:hover{box-shadow:0 4px 16px var(--accent-glow)}
+.res-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.res{background:var(--card);border:1px solid var(--border);border-radius:16px;overflow:hidden;transition:all .3s;cursor:pointer;text-decoration:none;color:inherit;display:flex;flex-direction:column}
+.res:hover{border-color:var(--border-h);transform:translateY(-3px)}
+.res-top{padding:16px 16px 0;display:flex;align-items:center;justify-content:space-between}
+.res-emoji{font-size:26px}
+.res-draft{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--warm);border:1px solid rgba(255,167,38,.25);background:rgba(255,167,38,.08);padding:3px 8px;border-radius:100px}
+.res-body{padding:12px 16px 16px;display:flex;flex-direction:column;flex:1}
+.res-type{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--accent);margin-bottom:4px}
+.res-title{font-size:14px;font-weight:700;margin-bottom:6px;line-height:1.3}
+.res-desc{font-size:11px;color:var(--muted);line-height:1.5;margin-bottom:12px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;flex:1}
+.res-foot{display:flex;align-items:center;justify-content:space-between}
+.res-meta{display:flex;gap:8px;font-size:10px;color:var(--muted)}
+.res-diff{padding:2px 8px;border-radius:100px;font-size:9px;font-weight:700}
+.rd-beginner{background:rgba(0,230,150,.1);color:var(--green)}.rd-intermediate{background:var(--accent-dim);color:var(--accent)}.rd-advanced{background:rgba(255,95,87,.1);color:var(--red)}
+.res-dl{display:flex;gap:4px}
+.res-dl span{font-size:8px;font-weight:800;letter-spacing:.5px;color:var(--muted);border:1px solid var(--border);border-radius:5px;padding:2px 5px;text-transform:uppercase}
 
-/* AI RECS */
-.ai-rec{background:linear-gradient(135deg,rgba(0,230,150,.05),rgba(0,230,150,.02),var(--card));border:1px solid rgba(0,230,150,.12);border-radius:18px;padding:20px;display:flex;align-items:center;gap:14px;margin-bottom:10px;cursor:pointer;transition:all .25s;flex-wrap:wrap}
-.ai-rec:hover{border-color:rgba(0,230,150,.25);transform:translateX(4px)}
-.ai-ic{width:40px;height:40px;min-width:40px;border-radius:12px;background:rgba(0,230,150,.1);display:flex;align-items:center;justify-content:center;font-size:20px}
-.ai-info{flex:1;min-width:180px}.ai-title{font-size:14px;font-weight:700;margin-bottom:2px}.ai-reason{font-size:12px;color:var(--text);font-style:italic}
-.ai-go{background:var(--green);color:var(--bg);border:none;padding:8px 16px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:var(--font);white-space:nowrap;transition:all .25s}
-.ai-go:hover{box-shadow:0 4px 16px rgba(0,230,150,.3)}
-
-/* COMMUNITY PICKS */
-.cp-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
-.cp{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px;text-align:center;cursor:pointer;transition:all .3s}
-.cp:hover{border-color:var(--border-h);transform:translateY(-3px)}
-.cp-emoji{font-size:24px;margin-bottom:8px}
-.cp-label{font-size:11px;font-weight:700;color:var(--text);margin-bottom:4px}
-.cp-title{font-size:12px;font-weight:600;color:var(--accent)}
-.cp-stat{font-size:10px;color:var(--muted);margin-top:4px}
-
-/* EMPTY STATE */
-.empty{display:none;text-align:center;padding:80px 24px}
+.empty{display:none;text-align:center;padding:70px 24px}
 .empty-emoji{font-size:56px;margin-bottom:16px}
 .empty-msg{font-size:18px;font-weight:700;margin-bottom:8px}
 .empty-sub{font-size:14px;color:var(--text);margin-bottom:24px}
-.empty-btn{background:var(--accent);color:var(--bg);border:none;padding:12px 28px;border-radius:12px;font-size:14px;font-weight:700;cursor:pointer;font-family:var(--font);transition:all .3s}
-.empty-btn:hover{box-shadow:0 4px 16px var(--accent-glow)}
+.empty-btn{background:var(--accent);color:var(--bg);border:none;padding:12px 28px;border-radius:12px;font-size:14px;font-weight:700;cursor:pointer;font-family:var(--font)}
 
-/* RESPONSIVE */
-@media(max-width:1000px){.feat-grid,.lp-grid{grid-template-columns:1fr 1fr}.res-grid{grid-template-columns:repeat(3,1fr)}.cp-grid{grid-template-columns:1fr 1fr}.types-row{grid-template-columns:repeat(5,1fr)}}
+.note-banner{display:flex;gap:10px;align-items:flex-start;background:rgba(100,181,246,.06);border:1px solid rgba(100,181,246,.18);border-radius:14px;padding:14px 16px;margin-bottom:24px;font-size:12px;color:var(--text);line-height:1.6}
+.note-banner b{color:var(--white)}
+
+@media(max-width:1000px){.res-grid{grid-template-columns:1fr 1fr}.types-row{grid-template-columns:repeat(5,1fr)}}
 @media(max-width:860px){
   .sb{transform:translateX(-100%)}.sb.open{transform:translateX(0)}.sb-x{display:block}
   .mh{display:flex}.main{margin-left:0;padding:72px 20px 48px}
-  .res-grid,.feat-grid{grid-template-columns:1fr 1fr}
+  .res-grid{grid-template-columns:1fr 1fr}.types-row{grid-template-columns:repeat(3,1fr)}
 }
-@media(max-width:480px){.res-grid,.lp-grid,.cp-grid{grid-template-columns:1fr}.types-row{grid-template-columns:repeat(3,1fr)}.feat-grid{grid-template-columns:1fr}}
+@media(max-width:480px){.res-grid{grid-template-columns:1fr}.types-row{grid-template-columns:repeat(2,1fr)}}
 @media(prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}}
-
-a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 </style>
 </head>
 <body>
@@ -187,216 +122,224 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
     <a class="si" href="journey.html"><span class="si-ic">🛤</span>Journey</a>
     <a class="si" href="coach-home.html"><span class="si-ic">🤖</span>AI Coach</a>
     <a class="si" href="challenges.html"><span class="si-ic">⚡</span>Challenges</a>
-    <a class="si act"><span class="si-ic">📚</span>Resources</a>
+    <a class="si act" href="resources.html"><span class="si-ic">📚</span>Resources</a>
     <div class="sb-d"></div>
     <a class="si" href="profile.html"><span class="si-ic">👤</span>Profile</a>
     <a class="si" href="settings.html"><span class="si-ic">⚙️</span>Settings</a>
   </nav>
-  <div class="sb-u"><div class="sb-av">?</div><div><div class="sb-un">Account</div><div class="sb-ur">Member</div></div></div>
+  <div class="sb-cta">
+    <a href="signin.html?redirect=resources.html">Sign in to save</a>
+    <p>Reading and downloads are free and open. Sign in later to bookmark and sync.</p>
+  </div>
 </aside>
 
 <div class="main">
 
-  <!-- HERO -->
   <div class="hero fu">
-    <h1>Learning <em>Resources</em></h1>
-    <p class="hero-sub">Master sales faster with professionally curated scripts, playbooks, templates, and practical guides.</p>
+    <h1>Resource <em>Library</em></h1>
+    <p class="hero-sub">Practical, original resources for aspiring SDRs — scripts, templates, cheat sheets, worksheets, and interview preparation. Read them here, copy what you need, print to PDF, or download an editable file.</p>
     <div class="search-wrap">
-      <input class="search-box" id="searchInput" aria-label="Search resources" placeholder="Search scripts, templates, playbooks, videos..." />
+      <input class="search-box" id="searchInput" aria-label="Search resources" placeholder="Search scripts, templates, cheat sheets, worksheets, interview prep..." />
       <button class="search-btn" id="searchBtn">Search</button>
     </div>
   </div>
 
-  <!-- FILTERS -->
-  <div class="filters fu" id="filters">
-    <button class="flt act" data-f="all">All</button>
-    <button class="flt" data-f="cold-calling">📞 Cold Calling</button>
-    <button class="flt" data-f="appointment">📅 Appointment Setting</button>
-    <button class="flt" data-f="discovery">🔍 Discovery</button>
-    <button class="flt" data-f="objections">🛡 Objection Handling</button>
-    <button class="flt" data-f="closing">🤝 Closing</button>
-    <button class="flt" data-f="psychology">🧠 Sales Psychology</button>
-    <button class="flt" data-f="ai">🤖 AI Coaching</button>
-    <button class="flt" data-f="email">✉️ Email</button>
-    <button class="flt" data-f="mindset">💪 Mindset</button>
-    <button class="flt" data-f="community">❤️ Community Picks</button>
+  <div class="note-banner fu" id="modeBanner">
+    <span aria-hidden="true">📝</span>
+    <div id="modeBannerText"><b>Library in editorial review.</b> Resources appear here once they pass human editorial review.</div>
   </div>
 
-  <!-- BOOKMARKS BAR -->
+  <div class="filters fu" id="filters"></div>
+
   <div class="sec fu">
-    <div class="sec-h"><h2>📌 Your Library</h2><a class="sec-link">View All →</a></div>
-    <div class="bm-bar">
-      <div class="bm-item"><div class="bm-ic">📖</div><div class="bm-info"><div class="bm-title">Cold Calling Playbook</div><div class="bm-meta">Continue reading · Page 12</div></div></div>
-      <div class="bm-item"><div class="bm-ic">🛡</div><div class="bm-info"><div class="bm-title">100 Objection Responses</div><div class="bm-meta">Recently opened</div></div></div>
-      <div class="bm-item"><div class="bm-ic">📝</div><div class="bm-info"><div class="bm-title">Auto Detailing Script</div><div class="bm-meta">Favorite · Saved 3 days ago</div></div></div>
-      <div class="bm-item"><div class="bm-ic">🎬</div><div class="bm-info"><div class="bm-title">Live Call Breakdown #4</div><div class="bm-meta">Video · 8 min left</div></div></div>
-    </div>
+    <div class="sec-h"><h2>Browse by type</h2></div>
+    <div class="types-row" id="typesRow"></div>
   </div>
 
-  <!-- RESOURCE TYPES -->
   <div class="sec fu">
-    <div class="sec-h"><h2>Browse by Type</h2></div>
-    <div class="types-row">
-      <div class="type-card active"><span class="tc-ic">📝</span><div class="tc-nm">Scripts</div><div class="tc-ct">24 items</div></div>
-      <div class="type-card"><span class="tc-ic">✉️</span><div class="tc-nm">Templates</div><div class="tc-ct">18 items</div></div>
-      <div class="type-card"><span class="tc-ic">📄</span><div class="tc-nm">PDF Guides</div><div class="tc-ct">15 items</div></div>
-      <div class="type-card"><span class="tc-ic">🎬</span><div class="tc-nm">Videos</div><div class="tc-ct">36 items</div></div>
-      <div class="type-card"><span class="tc-ic">✅</span><div class="tc-nm">Checklists</div><div class="tc-ct">12 items</div></div>
-      <div class="type-card"><span class="tc-ic">🧩</span><div class="tc-nm">Frameworks</div><div class="tc-ct">8 items</div></div>
-      <div class="type-card"><span class="tc-ic">📊</span><div class="tc-nm">Case Studies</div><div class="tc-ct">6 items</div></div>
-      <div class="type-card"><span class="tc-ic">⚡</span><div class="tc-nm">Cheat Sheets</div><div class="tc-ct">14 items</div></div>
-      <div class="type-card"><span class="tc-ic">🤖</span><div class="tc-nm">AI Prompts</div><div class="tc-ct">20 items</div></div>
-      <div class="type-card"><span class="tc-ic">📚</span><div class="tc-nm">Books</div><div class="tc-ct">9 items</div></div>
+    <div class="sec-h"><h2 id="gridHeading">All resources</h2><span style="font-size:12px;color:var(--muted)" id="resCount"></span></div>
+    <div class="res-grid" id="resGrid"></div>
+    <div class="empty" id="emptyState">
+      <div class="empty-emoji">🔍</div>
+      <div class="empty-msg">No resources match your search.</div>
+      <div class="empty-sub">Try different keywords or browse a category.</div>
+      <button class="empty-btn" id="clearBtn">Browse all resources</button>
     </div>
-  </div>
-
-  <!-- FEATURED -->
-  <div class="sec fu">
-    <div class="sec-h"><h2>⭐ Featured</h2></div>
-    <div class="feat-grid">
-      <div class="feat"><div class="feat-badge fb-feat">⭐ Featured</div><div class="feat-cover">📖</div><div class="feat-body"><div class="feat-cat">Playbook</div><div class="feat-title">Ultimate Cold Calling Playbook</div><div class="feat-desc">The complete A-to-Z guide for mastering cold calls in any industry. Covers opening lines, discovery, objections, and closing.</div><div class="feat-foot"><span class="feat-tag">⏱ 45 min</span><span class="feat-tag res-diff rd-m">Medium</span><button class="feat-bm" onclick="toggleBm(this)">🔖</button></div></div></div>
-      <div class="feat"><div class="feat-badge fb-pop">🔥 Popular</div><div class="feat-cover">🛡</div><div class="feat-body"><div class="feat-cat">Reference Guide</div><div class="feat-title">100 Objection Responses</div><div class="feat-desc">Every objection you'll ever hear, categorized by type, with word-for-word responses that actually work.</div><div class="feat-foot"><span class="feat-tag">⏱ 30 min</span><span class="feat-tag res-diff rd-h">Advanced</span><button class="feat-bm" onclick="toggleBm(this)">🔖</button></div></div></div>
-      <div class="feat"><div class="feat-badge fb-new">✨ New</div><div class="feat-cover">🧠</div><div class="feat-body"><div class="feat-cat">Psychology</div><div class="feat-title">Sales Psychology Guide</div><div class="feat-desc">Understand why prospects say yes (and no). Covers persuasion, framing, reciprocity, and emotional triggers.</div><div class="feat-foot"><span class="feat-tag">⏱ 35 min</span><span class="feat-tag res-diff rd-m">Medium</span><button class="feat-bm" onclick="toggleBm(this)">🔖</button></div></div></div>
-    </div>
-  </div>
-
-  <!-- AI RECOMMENDATIONS -->
-  <div class="sec fu">
-    <div class="sec-h"><h2>🤖 Recommended For You</h2></div>
-    <div class="ai-rec"><div class="ai-ic">📞</div><div class="ai-info"><div class="ai-title">Opening Line Cheat Sheet</div><div class="ai-reason">Based on your current Journey progress</div></div><button class="ai-go">Open →</button></div>
-    <div class="ai-rec"><div class="ai-ic">🛡</div><div class="ai-info"><div class="ai-title">"Not Interested" Response Framework</div><div class="ai-reason">Recommended after AI Coach practice</div></div><button class="ai-go">Open →</button></div>
-    <div class="ai-rec"><div class="ai-ic">🎯</div><div class="ai-info"><div class="ai-title">Discovery Questions Handbook</div><div class="ai-reason">Perfect for today's challenge</div></div><button class="ai-go">Open →</button></div>
-  </div>
-
-  <!-- LEARNING PATHS -->
-  <div class="sec fu">
-    <div class="sec-h"><h2>🛤 Learning Paths</h2></div>
-    <div class="lp-grid">
-      <div class="lp"><div class="lp-emoji">📞</div><div class="lp-title">Cold Calling Mastery</div><div class="lp-levels">Beginner → Intermediate → Advanced</div><div class="lp-meta"><span>📖 12 lessons</span><span>⏱ 4 hours</span></div><div class="lp-bar"><div class="lp-fill" data-w="65" style="background:var(--accent)"></div></div><div class="lp-pct">65% complete</div><button class="lp-btn">Continue →</button></div>
-      <div class="lp"><div class="lp-emoji">🛡</div><div class="lp-title">Objection Mastery</div><div class="lp-levels">Beginner → Intermediate → Advanced</div><div class="lp-meta"><span>📖 10 lessons</span><span>⏱ 3.5 hours</span></div><div class="lp-bar"><div class="lp-fill" data-w="30" style="background:var(--warm)"></div></div><div class="lp-pct">30% complete</div><button class="lp-btn">Continue →</button></div>
-      <div class="lp"><div class="lp-emoji">📅</div><div class="lp-title">Appointment Setting</div><div class="lp-levels">Beginner → Intermediate → Pro</div><div class="lp-meta"><span>📖 8 lessons</span><span>⏱ 3 hours</span></div><div class="lp-bar"><div class="lp-fill" data-w="15" style="background:var(--blue)"></div></div><div class="lp-pct">15% complete</div><button class="lp-btn">Start →</button></div>
-      <div class="lp"><div class="lp-emoji">🤖</div><div class="lp-title">AI Sales Training</div><div class="lp-levels">Fundamentals → Practice → Mastery</div><div class="lp-meta"><span>📖 9 lessons</span><span>⏱ 3 hours</span></div><div class="lp-bar"><div class="lp-fill" data-w="45" style="background:var(--green)"></div></div><div class="lp-pct">45% complete</div><button class="lp-btn">Continue →</button></div>
-      <div class="lp"><div class="lp-emoji">🤝</div><div class="lp-title">Closing Masterclass</div><div class="lp-levels">Basics → Techniques → Advanced</div><div class="lp-meta"><span>📖 7 lessons</span><span>⏱ 2.5 hours</span></div><div class="lp-bar"><div class="lp-fill" data-w="0" style="background:var(--purple)"></div></div><div class="lp-pct">Not started</div><button class="lp-btn">Start →</button></div>
-      <div class="lp"><div class="lp-emoji">🧠</div><div class="lp-title">Sales Psychology</div><div class="lp-levels">Foundations → Applied → Expert</div><div class="lp-meta"><span>📖 6 lessons</span><span>⏱ 2 hours</span></div><div class="lp-bar"><div class="lp-fill" data-w="50" style="background:var(--pink)"></div></div><div class="lp-pct">50% complete</div><button class="lp-btn">Continue →</button></div>
-    </div>
-  </div>
-
-  <!-- RESOURCE GRID -->
-  <div class="sec fu" id="resSection">
-    <div class="sec-h"><h2>All Resources</h2><span style="font-size:12px;color:var(--muted)" id="resCount">Showing 12 resources</span></div>
-    <div class="res-grid" id="resGrid">
-      <div class="res" data-cat="cold-calling"><div class="res-cover">📞</div><div class="res-body"><div class="res-type">Script</div><div class="res-title">Auto Detailing Cold Call Script</div><div class="res-desc">Industry-specific framework for auto detailing shops.</div><div class="res-foot"><div class="res-meta"><span>⏱ 5 min</span></div><span class="res-diff rd-e">Easy</span><button class="res-bm" onclick="event.stopPropagation();toggleBm(this)">🔖</button></div></div></div>
-      <div class="res" data-cat="objections"><div class="res-cover">🛡</div><div class="res-body"><div class="res-type">Cheat Sheet</div><div class="res-title">"Not Interested" Responses</div><div class="res-desc">12 proven comebacks for the most common objection.</div><div class="res-foot"><div class="res-meta"><span>⏱ 8 min</span></div><span class="res-diff rd-m">Medium</span><button class="res-bm" onclick="event.stopPropagation();toggleBm(this)">🔖</button></div></div></div>
-      <div class="res" data-cat="email"><div class="res-cover">✉️</div><div class="res-body"><div class="res-type">Template</div><div class="res-title">Follow-Up Email Pack</div><div class="res-desc">5 email templates for after the cold call.</div><div class="res-foot"><div class="res-meta"><span>⏱ 3 min</span></div><span class="res-diff rd-e">Easy</span><button class="res-bm" onclick="event.stopPropagation();toggleBm(this)">🔖</button></div></div></div>
-      <div class="res" data-cat="discovery"><div class="res-cover">🔍</div><div class="res-body"><div class="res-type">PDF Guide</div><div class="res-title">50 Discovery Questions</div><div class="res-desc">Questions that uncover pain, budget, and timeline.</div><div class="res-foot"><div class="res-meta"><span>⏱ 15 min</span></div><span class="res-diff rd-m">Medium</span><button class="res-bm" onclick="event.stopPropagation();toggleBm(this)">🔖</button></div></div></div>
-      <div class="res" data-cat="cold-calling"><div class="res-cover">🎬</div><div class="res-body"><div class="res-type">Video</div><div class="res-title">Live Call Breakdown #1</div><div class="res-desc">Watch a real cold call dissected move by move.</div><div class="res-foot"><div class="res-meta"><span>⏱ 12 min</span></div><span class="res-diff rd-e">Easy</span><button class="res-bm" onclick="event.stopPropagation();toggleBm(this)">🔖</button></div></div></div>
-      <div class="res" data-cat="closing"><div class="res-cover">🤝</div><div class="res-body"><div class="res-type">Framework</div><div class="res-title">The Assumptive Close</div><div class="res-desc">Book meetings without asking "Would you like to..."</div><div class="res-foot"><div class="res-meta"><span>⏱ 6 min</span></div><span class="res-diff rd-m">Medium</span><button class="res-bm" onclick="event.stopPropagation();toggleBm(this)">🔖</button></div></div></div>
-      <div class="res" data-cat="psychology"><div class="res-cover">🧠</div><div class="res-body"><div class="res-type">Guide</div><div class="res-title">Tonality Masterclass</div><div class="res-desc">How your voice controls the prospect's response.</div><div class="res-foot"><div class="res-meta"><span>⏱ 10 min</span></div><span class="res-diff rd-h">Advanced</span><button class="res-bm" onclick="event.stopPropagation();toggleBm(this)">🔖</button></div></div></div>
-      <div class="res" data-cat="ai"><div class="res-cover">🤖</div><div class="res-body"><div class="res-type">AI Prompts</div><div class="res-title">Coach Alex Prompt Library</div><div class="res-desc">25 prompts to get the most out of AI practice.</div><div class="res-foot"><div class="res-meta"><span>⏱ 5 min</span></div><span class="res-diff rd-e">Easy</span><button class="res-bm" onclick="event.stopPropagation();toggleBm(this)">🔖</button></div></div></div>
-      <div class="res" data-cat="appointment"><div class="res-cover">📅</div><div class="res-body"><div class="res-type">Checklist</div><div class="res-title">Pre-Call Checklist</div><div class="res-desc">Everything to prepare before picking up the phone.</div><div class="res-foot"><div class="res-meta"><span>⏱ 2 min</span></div><span class="res-diff rd-e">Easy</span><button class="res-bm" onclick="event.stopPropagation();toggleBm(this)">🔖</button></div></div></div>
-      <div class="res" data-cat="cold-calling"><div class="res-cover">📊</div><div class="res-body"><div class="res-type">Case Study</div><div class="res-title">From 0 to 50 Appointments</div><div class="res-desc">How one user went from nervous beginner to top performer.</div><div class="res-foot"><div class="res-meta"><span>⏱ 8 min</span></div><span class="res-diff rd-e">Easy</span><button class="res-bm" onclick="event.stopPropagation();toggleBm(this)">🔖</button></div></div></div>
-      <div class="res" data-cat="mindset"><div class="res-cover">💪</div><div class="res-body"><div class="res-type">Book Summary</div><div class="res-title">The Rejection Mindset</div><div class="res-desc">Reframe rejection as data — the mindset that changes everything.</div><div class="res-foot"><div class="res-meta"><span>⏱ 10 min</span></div><span class="res-diff rd-e">Easy</span><button class="res-bm" onclick="event.stopPropagation();toggleBm(this)">🔖</button></div></div></div>
-      <div class="res" data-cat="objections"><div class="res-cover">📝</div><div class="res-body"><div class="res-type">Script</div><div class="res-title">Gatekeeper Bypass Script</div><div class="res-desc">Three approaches to get past the front desk every time.</div><div class="res-foot"><div class="res-meta"><span>⏱ 4 min</span></div><span class="res-diff rd-h">Advanced</span><button class="res-bm" onclick="event.stopPropagation();toggleBm(this)">🔖</button></div></div></div>
-    </div>
-  </div>
-
-  <!-- COMMUNITY PICKS -->
-  <div class="sec fu">
-    <div class="sec-h"><h2>❤️ Community Picks</h2></div>
-    <div class="cp-grid">
-      <div class="cp"><div class="cp-emoji">🔖</div><div class="cp-label">Most Saved</div><div class="cp-title">100 Objection Responses</div><div class="cp-stat">842 saves</div></div>
-      <div class="cp"><div class="cp-emoji">💬</div><div class="cp-label">Most Discussed</div><div class="cp-title">Opening Line Cheat Sheet</div><div class="cp-stat">134 comments</div></div>
-      <div class="cp"><div class="cp-emoji">⭐</div><div class="cp-label">Highest Rated</div><div class="cp-title">Cold Calling Playbook</div><div class="cp-stat">4.9 / 5.0 rating</div></div>
-      <div class="cp"><div class="cp-emoji">👑</div><div class="cp-label">Editor's Choice</div><div class="cp-title">Sales Psychology Guide</div><div class="cp-stat">Curated by Coach Alex</div></div>
-    </div>
-  </div>
-
-  <!-- EMPTY STATE -->
-  <div class="empty" id="emptyState">
-    <div class="empty-emoji">🔍</div>
-    <div class="empty-msg">No resources match your search.</div>
-    <div class="empty-sub">Try different keywords or browse all resources.</div>
-    <button class="empty-btn" onclick="clearSearch()">Browse All Resources</button>
   </div>
 
 </div>
 
+<script src="assets/resource-catalog.js"></script>
 <script>
-// Scroll reveal
-const obs=new IntersectionObserver(es=>{es.forEach((e,i)=>{if(e.isIntersecting)setTimeout(()=>e.target.classList.add('v'),i*60)})},{threshold:.08});
-document.querySelectorAll('.fu').forEach(el=>obs.observe(el));
+(function(){
+  'use strict';
+  var catalog = window.ResourceCatalog;
+  var meta = catalog.categoryMeta;
 
-// Animated bars
-const barObs=new IntersectionObserver(es=>{es.forEach(e=>{if(!e.isIntersecting)return;e.target.querySelectorAll('[data-w]').forEach(f=>setTimeout(()=>f.style.width=f.dataset.w+'%',200));barObs.unobserve(e.target)})},{threshold:.15});
-document.querySelectorAll('.lp-grid,.feat-grid').forEach(el=>barObs.observe(el));
+  // Publication gate: the public library lists only active + reviewed resources.
+  // ?preview=review is an explicit editorial mode that also shows drafts, always
+  // labelled as such. Drafts never render publicly just because they are active.
+  var params = new URLSearchParams(window.location.search);
+  var previewMode = params.get('preview') === 'review';
+  var SOURCE = previewMode ? catalog.resources.filter(function(r){ return r.active !== false; }) : catalog.published();
+  var previewDraftCount = SOURCE.filter(function(r){ return r.status !== 'reviewed'; }).length;
+  var counts = {};
+  Object.keys(meta).forEach(function(k){ counts[k] = 0; });
+  SOURCE.forEach(function(r){ counts[r.category] = (counts[r.category]||0) + 1; });
+  var requestedCategory = params.get('category');
+  var initialCategory = requestedCategory && meta[requestedCategory] ? requestedCategory : 'all';
+  var state = { category: initialCategory, query: '' };
 
-// Filters
-document.querySelectorAll('.flt').forEach(f=>{
-  f.addEventListener('click',()=>{
-    document.querySelectorAll('.flt').forEach(x=>x.classList.remove('act'));
-    f.classList.add('act');
-    filterResources(f.dataset.f);
+  var $ = function(id){ return document.getElementById(id); };
+  function el(tag, className, text){ var n=document.createElement(tag); if(className)n.className=className; if(text!=null)n.textContent=String(text); return n; }
+  function diffClass(d){ return 'res-diff rd-' + d; }
+
+  // Mode banner.
+  var bannerText = $('modeBannerText');
+  bannerText.replaceChildren();
+  if (previewMode) {
+    bannerText.appendChild(el('b',null,'Editorial preview. '));
+    if (previewDraftCount > 0) {
+      bannerText.appendChild(document.createTextNode('This view includes '+previewDraftCount+' draft resource'+(previewDraftCount===1?'':'s')+'. Drafts remain hidden from the public library until reviewed.'));
+    } else {
+      bannerText.appendChild(document.createTextNode('All '+SOURCE.length+' resources in this catalog have passed human editorial review and are publicly available.'));
+    }
+  } else if (SOURCE.length === 0) {
+    bannerText.appendChild(el('b',null,'Library in final editorial review. '));
+    bannerText.appendChild(document.createTextNode('Every resource is being reviewed by a human editor before publication. Approved resources will appear here — nothing is shown until it has been reviewed.'));
+  } else {
+    bannerText.appendChild(el('b',null,'Reviewed resources. '));
+    bannerText.appendChild(document.createTextNode('Everything listed here has passed editorial review. Use each item as a practical starting point and adapt it to your own voice.'));
+  }
+
+  // Filter chips (derived counts).
+  var filters = $('filters');
+  var allChip = el('button','flt act','All ('+SOURCE.length+')');
+  allChip.dataset.cat='all';
+  filters.appendChild(allChip);
+  Object.keys(meta).forEach(function(key){
+    var m = meta[key];
+    var chip = el('button','flt', m.icon+' '+m.plural+' ('+(counts[key]||0)+')');
+    chip.dataset.cat = key;
+    filters.appendChild(chip);
   });
-});
 
-function filterResources(cat){
-  const cards=document.querySelectorAll('.res');
-  let shown=0;
-  cards.forEach(c=>{
-    const match=cat==='all'||c.dataset.cat===cat;
-    c.style.display=match?'':'none';
-    if(match)shown++;
+  // Type cards (derived counts).
+  var typesRow = $('typesRow');
+  Object.keys(meta).forEach(function(key){
+    var m = meta[key];
+    var card = el('button','type-card');
+    card.type = 'button';
+    card.dataset.cat = key;
+    card.setAttribute('aria-pressed','false');
+    card.appendChild(el('span','tc-ic',m.icon));
+    card.appendChild(el('div','tc-nm',m.plural));
+    card.appendChild(el('div','tc-ct',(counts[key]||0)+' item'+((counts[key]||0)===1?'':'s')));
+    typesRow.appendChild(card);
   });
-  document.getElementById('resCount').textContent=`Showing ${shown} resources`;
-  document.getElementById('emptyState').style.display=shown===0?'block':'none';
-}
 
-// Search
-document.getElementById('searchBtn').addEventListener('click',doSearch);
-document.getElementById('searchInput').addEventListener('keydown',e=>{if(e.key==='Enter')doSearch()});
+  function cardFor(r){
+    var m = meta[r.category] || { label:r.category, icon:'📄' };
+    var a = el('a','res');
+    a.href = 'resource.html?id=' + encodeURIComponent(r.id) + (previewMode ? '&preview=review' : '');
+    a.setAttribute('aria-label', r.title + ' — ' + m.label);
 
-function doSearch(){
-  const q=document.getElementById('searchInput').value.trim().toLowerCase();
-  if(!q){filterResources('all');document.querySelectorAll('.flt').forEach(f=>f.classList.remove('act'));document.querySelector('[data-f="all"]').classList.add('act');return}
-  const cards=document.querySelectorAll('.res');
-  let shown=0;
-  cards.forEach(c=>{
-    const text=(c.querySelector('.res-title')?.textContent+' '+c.querySelector('.res-desc')?.textContent+' '+c.querySelector('.res-type')?.textContent).toLowerCase();
-    const match=text.includes(q);
-    c.style.display=match?'':'none';
-    if(match)shown++;
-  });
-  document.getElementById('resCount').textContent=`Showing ${shown} results for "${q}"`;
-  document.getElementById('emptyState').style.display=shown===0?'block':'none';
-}
+    var top = el('div','res-top');
+    top.appendChild(el('span','res-emoji',m.icon));
+    if (r.status !== 'reviewed') top.appendChild(el('span','res-draft','Draft'));
+    a.appendChild(top);
 
-function clearSearch(){
-  document.getElementById('searchInput').value='';
-  filterResources('all');
-  document.querySelectorAll('.flt').forEach(f=>f.classList.remove('act'));
-  document.querySelector('[data-f="all"]').classList.add('act');
-  document.getElementById('emptyState').style.display='none';
-}
+    var body = el('div','res-body');
+    body.appendChild(el('div','res-type',m.label));
+    body.appendChild(el('div','res-title',r.title));
+    body.appendChild(el('div','res-desc',r.summary));
 
-// Bookmark toggle
-function toggleBm(btn){
-  const isSaved=btn.textContent==='✓';
-  btn.textContent=isSaved?'🔖':'✓';
-  btn.style.transform='scale(1.3)';
-  setTimeout(()=>btn.style.transform='',200);
-}
+    var foot = el('div','res-foot');
+    var metaWrap = el('div','res-meta');
+    metaWrap.appendChild(el('span',null,'⏱ '+r.duration+' min'));
+    metaWrap.appendChild(el('span',diffClass(r.difficulty), r.difficulty.charAt(0).toUpperCase()+r.difficulty.slice(1)));
+    foot.appendChild(metaWrap);
+    var dl = el('div','res-dl');
+    (r.downloads||[]).forEach(function(d){ dl.appendChild(el('span',null,d.format)); });
+    foot.appendChild(dl);
+    body.appendChild(foot);
+    a.appendChild(body);
+    return a;
+  }
 
-// Type cards
-document.querySelectorAll('.type-card').forEach(t=>{
-  t.addEventListener('click',()=>{
-    document.querySelectorAll('.type-card').forEach(x=>x.classList.remove('active'));
-    t.classList.add('active');
-  });
-});
+  function matches(r){
+    if(state.category!=='all' && r.category!==state.category) return false;
+    if(state.query){
+      var hay = (r.title+' '+r.summary+' '+r.skill+' '+(meta[r.category]?meta[r.category].label:'')+' '+(r.objectives||[]).join(' ')).toLowerCase();
+      if(hay.indexOf(state.query)===-1) return false;
+    }
+    return true;
+  }
 
-// Mobile
-document.getElementById('mobBtn').addEventListener('click',()=>document.getElementById('sb').classList.add('open'));
-document.getElementById('sbX').addEventListener('click',()=>document.getElementById('sb').classList.remove('open'));
+  function render(){
+    var grid = $('resGrid');
+    grid.replaceChildren();
+    var shown = SOURCE.filter(matches);
+    shown.forEach(function(r){ grid.appendChild(cardFor(r)); });
+
+    var label = state.category==='all' ? 'All resources' : (meta[state.category]?meta[state.category].plural:'Resources');
+    $('gridHeading').textContent = label;
+    var countText = 'Showing '+shown.length+' resource'+(shown.length===1?'':'s');
+    if(state.query) countText += ' for "'+state.query+'"';
+    $('resCount').textContent = countText;
+
+    var empty = $('emptyState');
+    if (SOURCE.length === 0) {
+      // Nothing published yet: an honest review-state message, not a search error.
+      empty.querySelector('.empty-emoji').textContent = '📝';
+      empty.querySelector('.empty-msg').textContent = 'The library is in final editorial review.';
+      empty.querySelector('.empty-sub').textContent = 'Resources are published one by one as a human editor approves them. Check back soon.';
+      $('clearBtn').style.display = 'none';
+      empty.style.display = 'block';
+    } else {
+      empty.style.display = shown.length===0 ? 'block' : 'none';
+    }
+
+    Array.prototype.forEach.call(document.querySelectorAll('.flt'),function(c){ c.classList.toggle('act', c.dataset.cat===state.category); });
+    Array.prototype.forEach.call(document.querySelectorAll('.type-card'),function(c){
+      var selected = c.dataset.cat===state.category;
+      c.classList.toggle('active', selected);
+      c.setAttribute('aria-pressed', selected ? 'true' : 'false');
+    });
+  }
+
+  function syncCategoryUrl(){
+    var url = new URL(window.location.href);
+    if(state.category==='all') url.searchParams.delete('category');
+    else url.searchParams.set('category',state.category);
+    window.history.replaceState(null,'',url.pathname+url.search+url.hash);
+  }
+
+  function setCategory(cat){
+    var valid = cat==='all' || Object.prototype.hasOwnProperty.call(meta,cat);
+    var next = valid ? cat : 'all';
+    state.category = (state.category===next && next!=='all') ? 'all' : next;
+    syncCategoryUrl();
+    render();
+  }
+
+  filters.addEventListener('click',function(e){ var b=e.target.closest('.flt'); if(b) setCategory(b.dataset.cat); });
+  typesRow.addEventListener('click',function(e){ var c=e.target.closest('.type-card'); if(c) setCategory(c.dataset.cat); });
+
+  function doSearch(){ state.query = $('searchInput').value.trim().toLowerCase(); render(); }
+  $('searchBtn').addEventListener('click', doSearch);
+  $('searchInput').addEventListener('keydown', function(e){ if(e.key==='Enter') doSearch(); });
+  $('searchInput').addEventListener('input', function(e){ if(e.target.value==='' ){ state.query=''; render(); } });
+  $('clearBtn').addEventListener('click', function(){ state.query=''; state.category='all'; $('searchInput').value=''; syncCategoryUrl(); render(); });
+
+  render();
+
+  // Reveal + mobile nav.
+  var obs=new IntersectionObserver(function(es){ es.forEach(function(e,i){ if(e.isIntersecting) setTimeout(function(){ e.target.classList.add('v'); }, i*50); }); },{threshold:.08});
+  Array.prototype.forEach.call(document.querySelectorAll('.fu'),function(el){ obs.observe(el); });
+  $('mobBtn').addEventListener('click',function(){ $('sb').classList.add('open'); });
+  $('sbX').addEventListener('click',function(){ $('sb').classList.remove('open'); });
+})();
 </script>
 <script src="assets/sidebar-user.js"></script>
 </body>

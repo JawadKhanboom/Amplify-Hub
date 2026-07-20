@@ -1,0 +1,6 @@
+# Resource Library download artifacts are binary and must never be EOL-normalized.
+# Line-ending conversion would corrupt PDF cross-reference offsets and DOCX/XLSX ZIP structure.
+assets/resources/downloads/** binary
+*.pdf binary
+*.docx binary
+*.xlsx binary

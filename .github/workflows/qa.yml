@@ -54,3 +54,6 @@ jobs:
 
       - name: QA — profile/progress (browser)
         run: npm run qa:profile-progress
+
+      - name: QA — resources (browser + artifact validation)
+        run: npm run qa:resources
