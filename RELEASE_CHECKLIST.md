@@ -23,10 +23,15 @@ plus the hosted Supabase project (`dsuahpcqrrlbudomjrye`).
 
 Verify these in the Supabase Dashboard when auth flows change:
 
+- [ ] **Auth → URL Configuration → Site URL** must be
+      `https://amplify-hub-six.vercel.app` — email templates build their links
+      from it. (Set via the Management API on 2026-07-20; it previously pointed
+      at `http://localhost:8000/signin.html`.)
 - [ ] **Auth → URL Configuration → Redirect URLs** must include
       `https://amplify-hub-six.vercel.app/reset-password.html`
-      (and `http://localhost:8742/reset-password.html` for local dev). Without
-      this, password-reset emails link to an unauthorized redirect and fail.
+      (plus `http://localhost:8000/*` and `http://localhost:8742/*` for local
+      dev — also set 2026-07-20). Without this, password-reset emails link to
+      an unauthorized redirect and fail.
 - [ ] **Email confirmations are ON** for the hosted project, and the built-in
       SMTP sender is limited to roughly 2 emails/hour. That quota covers signup
       confirmations AND password resets. Before any real launch, configure
@@ -43,11 +48,14 @@ Verify these in the Supabase Dashboard when auth flows change:
 ## 5. Post-deploy verification
 
 - [ ] Run the production smoke test (creates and then deletes ONE disposable
-      account; never touches real users):
+      account; never touches real users). It refuses to run without
+      `SMOKE_EMAIL_BASE` — an inbox YOU own; the disposable account is
+      plus-addressed on it and no email is ever sent to it:
 
-      # from sales-mindset-app/ — fetch the service key into env for this shell only
+      # from sales-mindset-app/ — both env vars live in this shell only
       $keys = supabase projects api-keys --project-ref dsuahpcqrrlbudomjrye -o json | ConvertFrom-Json
       $env:SUPABASE_SERVICE_ROLE_KEY = ($keys | Where-Object { $_.name -eq 'service_role' }).api_key
+      $env:SMOKE_EMAIL_BASE = 'you@yourdomain.com'
       npm run smoke:production
 
       All checks must pass, including "deployed signin page links to forgot-password flow".

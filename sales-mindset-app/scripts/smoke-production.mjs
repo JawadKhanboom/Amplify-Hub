@@ -36,16 +36,25 @@ function adminHeaders() {
   return { 'apikey': SERVICE_KEY, 'Authorization': 'Bearer ' + SERVICE_KEY, 'Content-Type': 'application/json' };
 }
 
-// Deletes ONLY disposable smoke accounts (the +smoke- plus-address pattern
-// this script itself creates) that previous runs left behind.
+// A leftover from a previous run is deleted ONLY when every condition holds:
+// it carries the smoke_test metadata tag this script itself stamps at creation,
+// AND its address is a +smoke- plus-address of the operator's own
+// SMOKE_EMAIL_BASE. A real user can satisfy neither by accident.
+function isSmokeAccount(u) {
+  const email = (u.email || '').toLowerCase();
+  const tagged = !!(u.user_metadata && u.user_metadata.smoke_test === true);
+  return tagged
+    && email.startsWith(baseLocal + '+smoke-')
+    && email.endsWith('@' + baseDomain);
+}
+
 async function sweepLeftoverSmokeAccounts() {
   if (!SERVICE_KEY) return;
   try {
     const res = await fetch(SUPABASE_URL + '/auth/v1/admin/users?per_page=100', { headers: adminHeaders() });
     if (!res.ok) return;
     const data = await res.json();
-    const users = data.users || [];
-    const leftovers = users.filter(u => /\+smoke-[a-z0-9]+@/.test(u.email || ''));
+    const leftovers = (data.users || []).filter(isSmokeAccount);
     for (const u of leftovers) {
       const del = await fetch(SUPABASE_URL + '/auth/v1/admin/users/' + u.id, { method: 'DELETE', headers: adminHeaders() });
       console.log(`  (cleanup) removed leftover smoke account ${u.email}: ${del.status}`);
@@ -54,10 +63,17 @@ async function sweepLeftoverSmokeAccounts() {
 }
 
 const runId = Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
-// Supabase validates email deliverability, so example.com is rejected. Default
-// to plus-addressing on the project owner's inbox (no email is actually sent —
-// confirmations are off). Override with SMOKE_EMAIL_BASE=you@domain.com.
-const emailBase = process.env.SMOKE_EMAIL_BASE || 'jawadwicda@gmail.com';
+// Supabase validates email deliverability (example.com is rejected), so the
+// disposable address is plus-addressed on an inbox you own. Required from the
+// environment — never committed. No email is ever sent to it: the account is
+// created pre-confirmed via the Admin API.
+const emailBase = process.env.SMOKE_EMAIL_BASE || '';
+if (!/^[^@\s+]+@[^@\s]+\.[^@\s]+$/.test(emailBase)) {
+  console.error('SMOKE_EMAIL_BASE is required (an inbox you own, e.g. you@yourdomain.com; no + in the local part).');
+  console.error('The disposable account is created as <local>+smoke-<id>@<domain>. No email is sent to it.');
+  process.exit(1);
+}
+const [baseLocal, baseDomain] = emailBase.toLowerCase().split('@');
 const EMAIL = emailBase.replace('@', `+smoke-${runId}@`);
 const PASSWORD = 'Smoke!' + runId + 'x9';
 
@@ -128,7 +144,7 @@ if (!SERVICE_KEY) {
 }
 const createRes = await fetch(SUPABASE_URL + '/auth/v1/admin/users', {
   method: 'POST', headers: adminHeaders(),
-  body: JSON.stringify({ email: EMAIL, password: PASSWORD, email_confirm: true, user_metadata: { full_name: 'Smoke Test' } }),
+  body: JSON.stringify({ email: EMAIL, password: PASSWORD, email_confirm: true, user_metadata: { full_name: 'Smoke Test', smoke_test: true } }),
 });
 const created = await createRes.json().catch(() => null);
 userId = created?.id || created?.user?.id || null;

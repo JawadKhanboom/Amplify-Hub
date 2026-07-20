@@ -233,12 +233,17 @@ ok('forgot: uses resetPasswordForEmail', forgot.includes('resetPasswordForEmail'
 ok('forgot: redirects recovery to reset-password.html', forgot.includes('reset-password.html'));
 ok('forgot: no user enumeration (same message either way)', forgot.includes('If an account exists'));
 ok('forgot: noindex', forgot.includes('noindex'));
+ok('forgot: truly disables submit (no pointerEvents hack)', forgot.includes('btn.disabled = true') && !forgot.includes('pointerEvents'));
+ok('forgot: guards against repeated requests', forgot.includes('if (sending) return'));
 
 ok('reset-password.html exists', await exists('reset-password.html'));
 const reset = await read('reset-password.html');
 ok('reset: uses updateUser to set password', reset.includes('updateUser'));
 ok('reset: enforces 8-char minimum', reset.includes('at least 8 characters') || reset.includes('p1.length < 8'));
 ok('reset: handles invalid/expired links', reset.includes('invalid or has expired'));
+ok('reset: gated on PASSWORD_RECOVERY auth event', reset.includes("'PASSWORD_RECOVERY'") && reset.includes('onAuthStateChange'));
+ok('reset: session fallback requires a real recovery link', reset.includes("=== 'recovery'"));
+ok('reset: surfaces expired-link errors from the URL', reset.includes('error_code'));
 ok('reset: never uses innerHTML', !reset.includes('innerHTML'));
 ok('reset: noindex', reset.includes('noindex'));
 
@@ -274,7 +279,10 @@ ok('monitor runs on a schedule', mon.includes('schedule:'));
 ok('smoke script exists', await exists('sales-mindset-app/scripts/smoke-production.mjs'));
 const smoke = await read('sales-mindset-app/scripts/smoke-production.mjs');
 ok('smoke: service key from env only', smoke.includes('process.env.SUPABASE_SERVICE_ROLE_KEY') && !smoke.includes('sb_secret'));
-ok('smoke: only deletes smoke-pattern accounts', smoke.includes('+smoke-'));
+ok('smoke: no personal email committed', !smoke.includes('jawadwicda') && !smoke.includes('@gmail.com'));
+ok('smoke: SMOKE_EMAIL_BASE required from env', smoke.includes('process.env.SMOKE_EMAIL_BASE') && smoke.includes('SMOKE_EMAIL_BASE is required'));
+ok('smoke: tags disposable accounts with smoke_test metadata', smoke.includes('smoke_test: true'));
+ok('smoke: sweep requires metadata tag AND own-base address', smoke.includes('u.user_metadata.smoke_test === true') && smoke.includes("baseLocal + '+smoke-'"));
 ok('smoke: verifies deletion end-to-end', smoke.includes('signin after deletion fails'));
 
 ok('monitor script exists', await exists('sales-mindset-app/scripts/monitor-health.mjs'));
