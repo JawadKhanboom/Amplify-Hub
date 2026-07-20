@@ -1,0 +1,184 @@
+/*!
+ * AmplifyHub shared UI foundation.
+ * Design tokens + accessibility baseline + a small set of `ah-` prefixed
+ * components. Pages keep their own embedded styles; this layer standardizes
+ * the black/gold identity (#FFD54A), focus visibility, reduced motion, and
+ * touch-target sizing without rewriting per-page CSS. All component classes
+ * are prefixed `ah-` so nothing collides with existing page styles.
+ */
+
+:root {
+  /* Core palette */
+  --ah-bg: #07070e;
+  --ah-bg2: #0b0b16;
+  --ah-card: #13132a;
+  --ah-glass: rgba(19, 19, 42, .55);
+  --ah-gold: #FFD54A;
+  --ah-gold-dim: rgba(255, 213, 74, .1);
+  --ah-gold-glow: rgba(255, 213, 74, .25);
+  --ah-white: #fff;
+  --ah-text: #b0b0c8;
+  --ah-muted: #8a8aa4;
+  --ah-border: rgba(255, 213, 74, .07);
+  --ah-border-h: rgba(255, 213, 74, .22);
+
+  /* Status colors */
+  --ah-success: #00e696;
+  --ah-error: #ff6b6b;
+  --ah-warn: #FFA726;
+  --ah-info: #64B5F6;
+
+  /* Typography & rhythm */
+  --ah-font: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --ah-radius: 14px;
+  --ah-radius-lg: 20px;
+  --ah-space-1: 8px;
+  --ah-space-2: 16px;
+  --ah-space-3: 24px;
+  --ah-space-4: 40px;
+  --ah-space-5: 64px;
+
+  /* Interaction */
+  --ah-touch: 44px;
+}
+
+/* ── Accessibility baseline ─────────────────────────────────────────────── */
+
+/* Visible keyboard focus everywhere, consistent gold ring. */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid var(--ah-gold);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Respect reduced-motion preferences globally. */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Comfortable touch targets for the shared nav patterns used across pages. */
+.si, .sb-item, .cat, .nav-cta, .mob-tog, .mb {
+  min-height: var(--ah-touch);
+}
+.mob-tog, .mb {
+  min-width: var(--ah-touch);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Screen-reader-only helper. */
+.ah-sr-only {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Skip link — hidden until focused. */
+.ah-skip {
+  position: absolute;
+  left: 12px; top: -48px;
+  z-index: 1000;
+  background: var(--ah-gold);
+  color: var(--ah-bg);
+  font-weight: 700;
+  font-size: 14px;
+  padding: 10px 18px;
+  border-radius: 10px;
+  text-decoration: none;
+  transition: top .2s;
+}
+.ah-skip:focus { top: 12px; }
+
+/* ── Shared components (ah- prefixed; opt-in) ───────────────────────────── */
+
+.ah-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: var(--ah-touch);
+  padding: 12px 26px;
+  border-radius: var(--ah-radius);
+  font-family: var(--ah-font);
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: none;
+  border: 1px solid transparent;
+  transition: transform .2s, box-shadow .2s, background .2s, border-color .2s;
+}
+.ah-btn:disabled { opacity: .5; cursor: not-allowed; transform: none !important; box-shadow: none !important; }
+
+.ah-btn-gold {
+  background: var(--ah-gold);
+  color: var(--ah-bg);
+}
+.ah-btn-gold:hover:not(:disabled) {
+  box-shadow: 0 8px 28px var(--ah-gold-glow);
+  transform: translateY(-2px);
+}
+
+.ah-btn-ghost {
+  background: transparent;
+  color: var(--ah-text);
+  border-color: var(--ah-border-h);
+}
+.ah-btn-ghost:hover:not(:disabled) {
+  color: var(--ah-white);
+  border-color: var(--ah-gold);
+  background: var(--ah-gold-dim);
+}
+
+.ah-card {
+  background: var(--ah-glass);
+  border: 1px solid var(--ah-border);
+  border-radius: var(--ah-radius-lg);
+  padding: var(--ah-space-3);
+  transition: border-color .3s;
+}
+.ah-card:hover { border-color: var(--ah-border-h); }
+
+.ah-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: .4px;
+  background: var(--ah-gold-dim);
+  border: 1px solid var(--ah-border-h);
+  color: var(--ah-gold);
+}
+
+/* Status text/messages */
+.ah-error-text { color: var(--ah-error); font-size: 13px; }
+.ah-success-text { color: var(--ah-success); font-size: 13px; }
+.ah-muted-text { color: var(--ah-muted); font-size: 13px; }
+
+/* Prevent accidental horizontal scroll on small screens. */
+.ah-clip-x { overflow-x: hidden; }
+
+/* Flex items default to min-width:auto and refuse to shrink below their
+   content's intrinsic width (e.g. tables with nowrap headers), which pushes
+   the whole page wider than the viewport on phones. The lesson/content pages
+   all use a flex `.main` column — let it shrink and let wide tables scroll
+   inside their own box instead of stretching the page. */
+.main { min-width: 0; }
+.fw-tbl { max-width: 100%; }
