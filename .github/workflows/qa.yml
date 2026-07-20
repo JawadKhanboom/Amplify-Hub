@@ -1,0 +1,59 @@
+name: Build & QA
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  build-and-qa:
+    runs-on: ubuntu-latest
+    env:
+      # Every browser-based QA script honors CHROME_PATH; ubuntu runners ship Chrome here.
+      CHROME_PATH: /usr/bin/google-chrome
+    defaults:
+      run:
+        working-directory: sales-mindset-app
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          # Node 24 strips TypeScript types natively, which qa-coach-request-security
+          # relies on when importing the Edge Function source directly.
+          node-version: 24
+          cache: npm
+          cache-dependency-path: sales-mindset-app/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build (typecheck + vite)
+        run: npm run build
+
+      - name: QA — account trust (static security checks)
+        run: npm run qa:account-trust
+
+      - name: QA — coach request security (unit)
+        run: node scripts/qa-coach-request-security.mjs
+
+      - name: QA — app smoke (browser)
+        run: npm run qa
+
+      - name: QA — booking (browser)
+        run: npm run qa:booking
+
+      - name: QA — progress (browser)
+        run: npm run qa:progress
+
+      - name: QA — coach security (browser)
+        run: node scripts/qa-coach-security.mjs
+
+      - name: QA — challenges (browser)
+        run: npm run qa:challenges
+
+      - name: QA — profile/progress (browser)
+        run: npm run qa:profile-progress
+
+      - name: QA — resources (browser + artifact validation)
+        run: npm run qa:resources

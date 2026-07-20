@@ -15,7 +15,11 @@
     "qa:challenges": "node scripts/qa-challenges.mjs",
     "qa:resources": "node scripts/qa-resources.mjs",
     "generate:resources": "node scripts/generate-resource-files.mjs",
-    "generate:resource-migration": "node scripts/generate-resource-migration.mjs"
+    "generate:resource-migration": "node scripts/generate-resource-migration.mjs",
+    "qa:profile-progress": "node scripts/qa-profile-progress.mjs",
+    "qa:account-trust": "node scripts/qa-account-trust.mjs",
+    "smoke:production": "node scripts/smoke-production.mjs",
+    "monitor:health": "node scripts/monitor-health.mjs"
   },
   "dependencies": {
     "react": "19.2.7",

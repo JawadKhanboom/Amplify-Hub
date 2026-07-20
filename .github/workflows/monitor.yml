@@ -1,0 +1,21 @@
+name: Production Health Monitor
+
+on:
+  schedule:
+    # Every hour. GitHub emails the repo owner when a scheduled workflow fails.
+    - cron: '17 * * * *'
+  workflow_dispatch:
+
+jobs:
+  health:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Run health checks
+        working-directory: sales-mindset-app
+        run: node scripts/monitor-health.mjs
