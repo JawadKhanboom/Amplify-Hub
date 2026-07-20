@@ -50,6 +50,17 @@
     return null;
   }
 
+  // Mark the current page's sidebar/nav link for assistive tech. Runs on every
+  // page that loads this script, regardless of which sidebar markup it uses.
+  try {
+    var page = (location.pathname.split('/').pop() || 'index.html').toLowerCase();
+    var navLinks = document.querySelectorAll('nav a[href], aside a[href], .sb a[href], .sb-nav a[href], .snav a[href]');
+    for (var j = 0; j < navLinks.length; j++) {
+      var href = (navLinks[j].getAttribute('href') || '').split('#')[0].split('?')[0].toLowerCase();
+      if (href && href === page) navLinks[j].setAttribute('aria-current', 'page');
+    }
+  } catch (e) {}
+
   // auth-config.js declares `const supabaseClient` (a global lexical binding,
   // NOT window.supabaseClient), so detect it with a bare typeof check.
   var client = null;
