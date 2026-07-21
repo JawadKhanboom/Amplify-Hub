@@ -22,6 +22,7 @@
     "monitor:health": "node scripts/monitor-health.mjs"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.110.8",
     "react": "19.2.7",
     "react-dom": "19.2.7"
   },

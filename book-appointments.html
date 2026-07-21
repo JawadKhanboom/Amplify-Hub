@@ -253,11 +253,17 @@ details{margin:9px 0;overflow:hidden;border:1px solid var(--border);border-radiu
 </main>
 
 <div class="toast" id="toast" role="status" aria-live="polite">Lesson complete · +250 XP</div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="auth-config.js"></script>
 <script src="assets/journey-progress.js"></script>
 <script>
 const AJP=window.AmplifyJourneyProgress;
-const LESSON_ID='m6l0';
-const saveStore=(completed,lessonMeta)=>AJP.writeProgress(completed,lessonMeta);
+const MODULE_INDEX=6; // Booking Appointments is module 6
+const LESSON_INDEX=0; // 0-indexed, only lesson in this module
+const LESSON_ID=AJP.lid(MODULE_INDEX,LESSON_INDEX);
+const saveStore=(completed,lessonMeta)=>completed.has(LESSON_ID)
+  ? AJP.markLessonComplete(MODULE_INDEX,LESSON_INDEX,lessonMeta[LESSON_ID])
+  : AJP.recordLessonMeta(MODULE_INDEX,LESSON_INDEX,lessonMeta[LESSON_ID]);
 const store=AJP.readProgress();const completed=new Set(store.completedLessons||[]);const lessonMeta=store.lessonMeta||{};const startedAt=Date.now();
 const completeBtn=document.getElementById('completeBtn');if(completed.has(LESSON_ID)){completeBtn.textContent='✓ Completed';completeBtn.classList.add('done');completeBtn.disabled=true}
 completeBtn.addEventListener('click',()=>{if(completed.has(LESSON_ID))return;completed.add(LESSON_ID);lessonMeta[LESSON_ID]={...(lessonMeta[LESSON_ID]||{}),mins:Math.max(1,Math.round((Date.now()-startedAt)/60000)),quizScore:document.getElementById('quizScore').dataset.score||null,completedAt:Date.now()};try{saveStore(completed,lessonMeta);completeBtn.textContent='✓ Completed';completeBtn.classList.add('done');completeBtn.disabled=true;const toast=document.getElementById('toast');toast.classList.add('show');setTimeout(()=>toast.classList.remove('show'),2600)}catch(error){console.error('Could not save progress',error)}});

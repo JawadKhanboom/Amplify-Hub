@@ -367,8 +367,9 @@ const JP = (() => {
   function markLessonComplete(m,l){
     const id = lid(m,l);
     if(completed.has(id)) return false; // idempotent — already done
-    completed.add(id);
-    saveProgress();
+    const store = AJP.markLessonComplete(m,l);
+    completed = new Set(store.completedLessons);
+    lessonMeta = store.lessonMeta;
     return true;
   }
 
@@ -558,6 +559,12 @@ document.getElementById('celBtn').addEventListener('click',()=>{
 // ── Continue Learning CTA → jump straight into current lesson ──
 document.querySelector('.h-cta').addEventListener('click', ()=>{
   const m = JP.currentModuleIndex();
+  const mod = JP.modules[m];
+  if(mod.pages){
+    const li = firstIncompleteLesson(m);
+    window.location.href = mod.pages[li];
+    return;
+  }
   openModuleView(m);
   openLessonView(m, firstIncompleteLesson(m));
 });
