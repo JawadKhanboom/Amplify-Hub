@@ -1,7 +1,11 @@
 -- AmplifyHub Practical Resource Library: authoritative resource catalog.
 -- GENERATED from assets/resource-catalog.js by scripts/generate-resource-migration.mjs.
 -- Do not edit by hand; regenerate after changing the catalog so the table and the
--- static file stay in sync. Content is DRAFT pending human editorial review (status='draft').
+-- static file stay in sync. The 25 seed records below are deliberately inserted as
+-- status='reviewed', active=true — they have already passed editorial review and
+-- are intended to be publicly readable as soon as this migration applies. The
+-- column default of status='draft' governs only future resources added without
+-- an explicit status (e.g. via a later editorial/admin flow), not this seed set.
 
 create table if not exists public.resource_catalog (
   id text primary key,
@@ -32,7 +36,22 @@ drop policy if exists "Public reads active resources" on public.resource_catalog
 drop policy if exists "Public reads reviewed active resources" on public.resource_catalog;
 create policy "Public reads reviewed active resources" on public.resource_catalog
   for select to anon, authenticated using (active = true and status = 'reviewed');
-revoke insert, update, delete on public.resource_catalog from anon, authenticated;
+
+-- Base table privilege — required before RLS is ever evaluated. Postgres checks
+-- table-level GRANTs first; without this, anon/authenticated get "permission
+-- denied for table resource_catalog" on every query regardless of the policy
+-- above (same GRANT-vs-RLS layering documented in
+-- 20260721140000_grant_user_lesson_progress_privileges.sql).
+--
+-- Exact least privilege: revoke everything first — including the
+-- REFERENCES/TRIGGER/TRUNCATE privileges this project grants to PUBLIC (and
+-- therefore every role) by default on new tables — then grant back only the
+-- one privilege each role actually needs. anon/authenticated get SELECT only
+-- (the policy's USING clause still filters every row to active+reviewed);
+-- service_role gets nothing, since no server-side code in this project
+-- queries resource_catalog with the service-role key.
+revoke all privileges on public.resource_catalog from public, anon, authenticated, service_role;
+grant select on public.resource_catalog to anon, authenticated;
 
 create index if not exists resource_catalog_category_idx on public.resource_catalog (category) where active;
 

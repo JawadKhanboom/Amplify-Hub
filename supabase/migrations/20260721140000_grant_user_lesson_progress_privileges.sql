@@ -53,10 +53,18 @@
 --   composite (user_id, lesson_id) — user_id is a uuid sourced from
 --   auth.uid(), not a serial/bigserial/identity column — so there is no
 --   sequence associated with this table at all.
+-- - This migration also explicitly REVOKEs everything from PUBLIC, anon,
+--   authenticated, and service_role before granting anything, so the only
+--   privileges left standing afterward are exactly the four granted to
+--   `authenticated` below. This strips even the REFERENCES/TRIGGER/TRUNCATE
+--   privileges this project grants to PUBLIC (and therefore every role) by
+--   default on new tables — not needed by any application code path, and
+--   removed here for exact least privilege.
 --
--- SAFE TO RUN: GRANT is itself idempotent — re-running this migration is
--- harmless and does not touch data, schema, or the RLS policy.
+-- SAFE TO RUN: GRANT and REVOKE are both idempotent — re-running this
+-- migration is harmless and does not touch data, schema, or the RLS policy.
 
+revoke all privileges on public.user_lesson_progress from public, anon, authenticated, service_role;
 grant select, insert, update, delete on public.user_lesson_progress to authenticated;
 
 -- ── VERIFY ─────────────────────────────────────────────────────────────────
@@ -66,7 +74,9 @@ grant select, insert, update, delete on public.user_lesson_progress to authentic
 --   from information_schema.role_table_grants
 --   where table_schema = 'public' and table_name = 'user_lesson_progress'
 --   order by grantee, privilege_type;
---   -- expect exactly: authenticated / {SELECT, INSERT, UPDATE, DELETE}. Nothing for anon.
+--   -- expect exactly: authenticated / {SELECT, INSERT, UPDATE, DELETE}.
+--   -- Nothing at all for anon, service_role, or PUBLIC — not even the
+--   -- REFERENCES/TRIGGER/TRUNCATE defaults this project normally grants.
 --
 --   select relrowsecurity from pg_class where relname = 'user_lesson_progress';
 --   -- expect: true
