@@ -109,7 +109,33 @@ assert.match(
   /for select to anon, authenticated using \(active = true and status = 'reviewed'\)/,
   'public read requires BOTH active and reviewed — drafts are never publicly readable'
 );
-assert.match(migration, /revoke insert, update, delete on public\.resource_catalog from anon, authenticated/, 'clients cannot mutate the catalog');
+// Least-privilege table grants: REVOKE ALL from every role first (including
+// PUBLIC, which anon/authenticated/service_role would otherwise inherit
+// REFERENCES/TRIGGER/TRUNCATE from by this project's default), then GRANT
+// back only SELECT to anon/authenticated. The older, narrower
+// "revoke insert, update, delete ... from anon, authenticated" pattern is
+// intentionally NOT accepted as an alternative — it left service_role and
+// the PUBLIC-default REFERENCES/TRIGGER/TRUNCATE privileges untouched.
+assert.doesNotMatch(
+  migration,
+  /revoke insert, update, delete on public\.resource_catalog from anon, authenticated;/,
+  'the old narrower REVOKE pattern must not remain as an alternative',
+);
+assert.match(
+  migration,
+  /revoke all privileges on public\.resource_catalog from public, anon, authenticated, service_role;/,
+  'REVOKE ALL privileges stripped from PUBLIC, anon, authenticated, and service_role',
+);
+// Strip comment lines before counting GRANT statements — several comments
+// above discuss grants in prose and would otherwise risk a false match.
+const migrationCode = migration.replace(/^--.*$/gm, '');
+const catalogGrants = migrationCode.match(/grant\s+[^;]*?\son\s+public\.resource_catalog\s+to\s+[^;]+;/gi) || [];
+assert.equal(catalogGrants.length, 1, 'exactly one GRANT statement targets resource_catalog');
+assert.equal(
+  catalogGrants[0].replace(/\s+/g, ' ').trim(),
+  'grant select on public.resource_catalog to anon, authenticated;',
+  'the sole grant is SELECT-only, to anon and authenticated only — no INSERT, UPDATE, DELETE, TRUNCATE, REFERENCES, or TRIGGER for any application role',
+);
 assert.match(migration, /check \(category in \('script','template','cheatsheet','worksheet','interview'\)\)/, 'category constraint present');
 for (const r of resources) {
   const expected = r.status === 'reviewed' ? 'reviewed' : 'draft';
