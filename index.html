@@ -71,7 +71,8 @@ nav.scrolled{padding:12px 48px;background:rgba(8,9,12,.94);box-shadow:0 8px 32px
 .hero-proof .dot{width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 8px rgba(0,230,150,.5)}
 
 /* live demo card */
-.demo-card{position:relative;background:var(--card);border:1px solid var(--border);border-radius:20px;overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,.5)}
+.demo-card{position:relative;background:var(--card);border:1px solid var(--border);border-radius:20px;overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,.5);transform-style:preserve-3d;will-change:transform;transition:transform .16s ease-out,border-color .3s,box-shadow .3s}
+.demo-card:hover{border-color:var(--border-h);box-shadow:0 34px 90px rgba(0,0,0,.6)}
 .demo-glow{position:absolute;top:-35%;left:15%;width:75%;height:70%;background:radial-gradient(ellipse,rgba(255,199,0,.18),transparent 70%);filter:blur(46px);pointer-events:none;z-index:0}
 .demo-top{position:relative;z-index:1;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border)}
 .mac-dots{display:flex;gap:7px}
@@ -116,6 +117,10 @@ nav.scrolled{padding:12px 48px;background:rgba(8,9,12,.94);box-shadow:0 8px 32px
 .ring-num{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:900;color:var(--white)}
 .ring-label{font-size:12.5px;color:var(--muted);font-weight:500}
 .ring-delta{font-size:13px;color:var(--green);font-weight:700;margin-top:3px}
+.demo-status{font-size:11px;color:var(--muted);line-height:1.45}
+.demo-status strong{display:block;color:var(--white);font-size:13px;margin-bottom:2px}
+.dm-bub,.dm-confirm,.ring-delta,.stat-row b{transition:opacity .18s ease,transform .18s ease}
+.is-changing{opacity:.16;transform:translateY(4px)}
 .stat-row{display:flex;align-items:center;justify-content:space-between;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:11px;padding:12px 16px;font-size:13.5px}
 .stat-row span{color:var(--muted)}
 .stat-row b{color:var(--text);font-weight:600}
@@ -142,6 +147,12 @@ nav.scrolled{padding:12px 48px;background:rgba(8,9,12,.94);box-shadow:0 8px 32px
 .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;text-align:center}
 .stat-num{font-size:clamp(32px,4vw,46px);font-weight:900;color:var(--accent);letter-spacing:-1.5px}
 .stat-label{font-size:13px;color:var(--muted);margin-top:6px}
+.practice-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.practice-card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:26px 22px;transition:transform .3s,border-color .3s}
+.practice-card:hover{transform:translateY(-4px);border-color:var(--border-h)}
+.practice-kicker{font-size:11px;text-transform:uppercase;letter-spacing:1.8px;font-weight:800;color:var(--accent);margin-bottom:12px}
+.practice-card h3{font-size:18px;margin-bottom:9px}.practice-card p{font-size:13.5px;line-height:1.6;color:var(--muted)}
+.practice-card a{display:inline-flex;margin-top:18px;color:var(--accent);font-size:13px;font-weight:700;text-decoration:none}
 
 /* ═══ HOW IT WORKS ═══ */
 .steps-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;max-width:1100px;margin:0 auto}
@@ -231,6 +242,7 @@ nav.scrolled{padding:12px 48px;background:rgba(8,9,12,.94);box-shadow:0 8px 32px
 .mega{background:var(--accent);color:#08090c;border:none;padding:20px 52px;border-radius:14px;font-size:18px;font-weight:800;cursor:pointer;transition:all .3s;text-decoration:none;display:inline-block;font-family:var(--font)}
 .mega:hover{transform:translateY(-3px);box-shadow:0 14px 46px var(--accent-glow)}
 .end-micro{font-size:12.5px;color:var(--muted);margin-top:18px}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}.demo-card{transform:none!important}}
 
 /* ═══ FOOTER ═══ */
 footer{border-top:1px solid var(--border);padding:56px 48px 26px;background:var(--bg)}
@@ -253,6 +265,7 @@ footer{border-top:1px solid var(--border);padding:56px 48px 26px;background:var(
   .demo-split{grid-template-columns:1fr}
   .demo-chat{border-right:none;border-bottom:1px solid var(--border)}
   .feat-grid{grid-template-columns:1fr 1fr}
+  .practice-grid{grid-template-columns:1fr}
   .stats-grid{grid-template-columns:1fr 1fr;gap:32px}
   .steps-grid{grid-template-columns:1fr;gap:36px}
   .trans-grid{grid-template-columns:1fr}
@@ -268,6 +281,7 @@ footer{border-top:1px solid var(--border);padding:56px 48px 26px;background:var(
   .hero-acts{flex-direction:column;width:100%}
   .btn{width:100%;justify-content:center}
   .feat-grid{grid-template-columns:1fr}
+  .practice-grid{grid-template-columns:1fr}
   .stats-grid{grid-template-columns:1fr 1fr}
   .ft-grid{grid-template-columns:1fr;gap:28px}
   .ft-bottom-row{flex-direction:column;align-items:flex-start}
@@ -286,7 +300,7 @@ footer{border-top:1px solid var(--border);padding:56px 48px 26px;background:var(
   <div class="nav-links" id="navLinks">
     <a href="#how">How it works</a>
     <a href="#coach">AI Coach</a>
-    <a href="#pricing">Pricing</a>
+    <a href="resources.html">Resources</a>
     <a href="#faq">FAQ</a>
     <a href="signup.html" class="nav-cta">Start Free</a>
   </div>
@@ -304,26 +318,26 @@ footer{border-top:1px solid var(--border);padding:56px 48px 26px;background:var(
         <a href="signup.html" class="btn btn-gold">Start Practicing Free</a>
         <a href="#how" class="btn btn-ghost">See how it works</a>
       </div>
-      <div class="hero-proof"><span class="dot"></span>500+ SDRs building confidence daily</div>
+      <div class="hero-proof"><span class="dot"></span>Start with guided practice — at your own pace</div>
     </div>
 
-    <div class="demo-card rv in">
+    <div class="demo-card rv in" id="roleplayPreview" aria-label="Guided roleplay preview">
       <div class="demo-glow" aria-hidden="true"></div>
       <div class="demo-top">
         <div class="mac-dots"><span class="d r"></span><span class="d y"></span><span class="d g"></span></div>
-        <div class="demo-top-r"><span class="live-dot"></span>Live practice call</div>
+        <div class="demo-top-r"><span class="live-dot"></span>Guided roleplay preview</div>
       </div>
       <div class="demo-split">
         <div class="demo-chat">
           <div class="dm ai">
             <div class="dm-av ai">AI</div>
-            <div class="dm-bub">"We already use another provider, so I'm not really interested."</div>
+            <div class="dm-bub" id="previewProspect">"We already use another provider, so I'm not really interested."</div>
           </div>
           <div class="dm you">
-            <div class="dm-bub">"Totally fair — most of our best customers said the same thing before they saw the 3-min demo."</div>
+            <div class="dm-bub" id="previewReply">"That makes sense. Would it be useful to compare what is working well before I explain why I called?"</div>
             <div class="dm-av you">You</div>
           </div>
-          <div class="dm-confirm">✓ Objection handled — acknowledged then redirected</div>
+          <div class="dm-confirm" id="previewFeedback">✓ Coaching cue — acknowledge, then ask one relevant question</div>
           <div class="waveform">
             <svg class="mic-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v4"/></svg>
             <div class="wave-bars"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
@@ -336,16 +350,16 @@ footer{border-top:1px solid var(--border);padding:56px 48px 26px;background:var(
                 <circle class="ring-track" cx="50" cy="50" r="42"/>
                 <circle class="ring-fill" cx="50" cy="50" r="42"/>
               </svg>
-              <div class="ring-num">87</div>
+              <div class="ring-num">↗</div>
             </div>
             <div>
-              <div class="ring-label">Confidence score</div>
-              <div class="ring-delta">+46 this call</div>
+              <div class="ring-label">Practice focus</div>
+              <div class="ring-delta" id="previewSkill">Opening</div>
             </div>
           </div>
-          <div class="stat-row"><span>Tone</span><b>Warm &amp; steady</b></div>
-          <div class="stat-row"><span>Pacing</span><b>Slightly fast</b></div>
-          <div class="stat-row"><span>Next step</span><b>Booked demo</b></div>
+          <div class="demo-status"><strong>Guided example</strong>Try the real AI Coach after you sign in. No call data is shown here.</div>
+          <div class="stat-row"><span>Scenario</span><b id="previewScenario">Not interested</b></div>
+          <div class="stat-row"><span>Next step</span><b>Try your response</b></div>
         </div>
       </div>
     </div>
@@ -386,7 +400,7 @@ footer{border-top:1px solid var(--border);padding:56px 48px 26px;background:var(
       <div class="feat-card rv">
         <div class="feat-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18M18 9l-5 5-4-4-4 4"/></svg></div>
         <h3>Progress tracking</h3>
-        <p>Watch your confidence score climb call after call.</p>
+        <p>Keep your lessons, practice sessions, and next steps in one place.</p>
       </div>
       <div class="feat-card rv">
         <div class="feat-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div>
@@ -400,11 +414,11 @@ footer{border-top:1px solid var(--border);padding:56px 48px 26px;background:var(
 <!-- ═══ STATS ═══ -->
 <section class="sc sc-stats">
   <div class="sc-inner">
-    <div class="stats-grid">
-      <div class="rv"><div class="stat-num">10,000+</div><div class="stat-label">Practice calls made</div></div>
-      <div class="rv"><div class="stat-num">92%</div><div class="stat-label">Confidence improvement</div></div>
-      <div class="rv"><div class="stat-num">500+</div><div class="stat-label">SDRs trained</div></div>
-      <div class="rv"><div class="stat-num">3,400+</div><div class="stat-label">Meetings booked</div></div>
+    <div class="sec-head"><div class="eyebrow">Practice your way</div><h2 class="sec-h rv">Choose the next useful rep.</h2></div>
+    <div class="practice-grid">
+      <article class="practice-card rv"><div class="practice-kicker">Learn</div><h3>Follow the journey</h3><p>Build foundational cold-calling skills through short, structured lessons.</p><a href="journey.html">Open the learning journey →</a></article>
+      <article class="practice-card rv"><div class="practice-kicker">Practice</div><h3>Try a roleplay</h3><p>Rehearse a cold-call scenario with the AI Coach before a real conversation.</p><a href="coach-home.html#roleplay">Start a roleplay →</a></article>
+      <article class="practice-card rv"><div class="practice-kicker">Apply</div><h3>Use practical resources</h3><p>Use scripts, worksheets, templates, cheat sheets, and interview preparation.</p><a href="resources.html">Browse resources →</a></article>
     </div>
   </div>
 </section>
@@ -441,24 +455,24 @@ footer{border-top:1px solid var(--border);padding:56px 48px 26px;background:var(
 <section class="sc sc-transform">
   <div class="sc-inner">
     <div class="eyebrow">The transformation</div>
-    <div class="sec-head"><h2 class="sec-h rv">Who you are before vs. after AmplifyHub</h2></div>
+    <div class="sec-head"><h2 class="sec-h rv">Turn uncertainty into a repeatable practice habit.</h2></div>
     <div class="trans-grid">
       <div class="trans-col before rv">
         <div class="trans-title">Before AmplifyHub</div>
         <ul class="trans-list">
-          <li>Fear of calling</li>
-          <li>Script dependency</li>
-          <li>Low confidence</li>
-          <li>Inconsistent results</li>
+          <li>Not sure what to say first</li>
+          <li>Generic scripts with no context</li>
+          <li>Avoiding difficult objections</li>
+          <li>No clear way to review practice</li>
         </ul>
       </div>
       <div class="trans-col after rv">
         <div class="trans-title">After AmplifyHub</div>
         <ul class="trans-list">
-          <li>Confident conversations</li>
-          <li>Better objection handling</li>
-          <li>Consistent performance</li>
-          <li>More booked meetings</li>
+          <li>A clear opener to rehearse</li>
+          <li>Relevant questions to prepare</li>
+          <li>Respectful objection practice</li>
+          <li>One specific next action</li>
         </ul>
       </div>
     </div>
@@ -471,35 +485,35 @@ footer{border-top:1px solid var(--border);padding:56px 48px 26px;background:var(
     <div class="coach-wrap">
       <div class="coach-copy rv">
         <div class="coach-eyebrow">Meet your AI coach</div>
-        <h2>ChatGPT-smart coaching meets call intelligence</h2>
-        <p>Practice a real conversation, then get the kind of breakdown top revenue teams pay thousands for — scored, timestamped, and turned into your next drill.</p>
+        <h2>AI practice built around the skills you are learning</h2>
+        <p>Use Ask Coach for a focused question or roleplay a sales conversation, then review the feedback and choose your next practice step.</p>
         <div class="coach-feats">
           <div class="coach-feat">
             <div class="coach-feat-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v4"/></svg></div>
-            <h4>Live coaching</h4><p>Real-time nudges as you talk — pacing, filler words, and momentum.</p>
+            <h4>Roleplay scenarios</h4><p>Practice openings, discovery, objections, and booking conversations.</p>
           </div>
           <div class="coach-feat">
             <div class="coach-feat-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20a8 8 0 1 0-8-8"/><path d="M12 12l4-4M4 12H2M12 2v2M20 12h2"/></svg></div>
-            <h4>Confidence scoring</h4><p>Every call scored so you can see improvement, not just feel it.</p>
+            <h4>Session feedback</h4><p>Review strengths, areas to improve, and one clear next action.</p>
           </div>
           <div class="coach-feat">
             <div class="coach-feat-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 4 5v6c0 5.2 3.4 9.9 8 11 4.6-1.1 8-5.8 8-11V5l-8-3z"/><path d="m9 12 2 2 4-4"/></svg></div>
-            <h4>Objection handling</h4><p>Drill the 12 most common objections until they stop scaring you.</p>
+            <h4>Objection handling</h4><p>Build responses that stay honest, relevant, and respectful.</p>
           </div>
           <div class="coach-feat">
             <div class="coach-feat-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></svg></div>
-            <h4>Personalized feedback</h4><p>Coaching tuned to your weak spots and your target role.</p>
+            <h4>Focused practice</h4><p>Move between lessons, challenges, and resources as you need them.</p>
           </div>
         </div>
       </div>
       <div class="analysis-card rv">
-        <div class="analysis-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.5 13.5 17 22l-5-3-5 3 1.5-8.5"/></svg>Call analysis — Discovery Call #14</div>
-        <div class="analysis-row"><span class="analysis-label">Talk / listen ratio</span><span class="analysis-val good">43 / 57</span></div>
-        <div class="analysis-row"><span class="analysis-label">Objections handled</span><span class="analysis-val good">3 of 3</span></div>
-        <div class="analysis-row"><span class="analysis-label">Filler words</span><span class="analysis-val warn">9 detected</span></div>
+        <div class="analysis-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.5 13.5 17 22l-5-3-5 3 1.5-8.5"/></svg>Example feedback format</div>
+        <div class="analysis-row"><span class="analysis-label">Opening</span><span class="analysis-val good">Clear intent</span></div>
+        <div class="analysis-row"><span class="analysis-label">Discovery</span><span class="analysis-val good">Ask one follow-up</span></div>
+        <div class="analysis-row"><span class="analysis-label">Next practice</span><span class="analysis-val warn">Handle “not interested”</span></div>
         <div class="analysis-note">
           <div class="analysis-note-ic"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l1.6 6.4L20 10l-6.4 1.6L12 18l-1.6-6.4L4 10l6.4-1.6z"/></svg></div>
-          <p>Strong recovery on the pricing objection. Next call, pause a beat longer before responding — it reads as confidence. Try Drill: <b>"Not interested" opener</b>.</p>
+          <p>This is an example, not a user result. In the app, your completed roleplay can guide a relevant next lesson or challenge.</p>
         </div>
       </div>
     </div>
@@ -507,24 +521,24 @@ footer{border-top:1px solid var(--border);padding:56px 48px 26px;background:var(
 </section>
 
 <!-- ═══ PRICING ═══ -->
-<section class="sc sc-price" id="pricing">
+<section class="sc sc-price" id="start">
   <div class="sc-inner">
-    <div class="eyebrow">Pricing</div>
-    <div class="sec-head"><h2 class="sec-h rv">Everything is free during beta.</h2></div>
+    <div class="eyebrow">Get started</div>
+    <div class="sec-head"><h2 class="sec-h rv">Your first practice session starts here.</h2></div>
     <div class="pgrid">
       <div class="pc glow rv">
-        <div class="ptag">BETA</div>
-        <div class="pn">Full Access</div>
-        <div class="pp">Free</div>
-        <div class="pd">All features, no limits, no credit card. Help us build the best SDR training platform.</div>
+        <div class="ptag">START HERE</div>
+        <div class="pn">Build your foundation</div>
+        <div class="pp">Practice</div>
+        <div class="pd">Create an account to access the learning journey, AI Coach, daily challenges, and practical resources — completely free during beta.</div>
         <ul class="pf">
-          <li>Guided learning journey (40 lessons)</li>
-          <li>AI Coach roleplay &amp; feedback</li>
+          <li>Guided learning journey</li>
+          <li>AI Coach roleplay and feedback</li>
           <li>Daily practice challenges</li>
-          <li>Progress tracking &amp; scoring</li>
-          <li>Personalized coaching feedback</li>
+          <li>Progress tracking</li>
+          <li>Downloadable resources</li>
         </ul>
-        <a href="signup.html" class="pb f">Start Practicing Free</a>
+        <a href="signup.html" class="pb f">Create your account</a>
       </div>
     </div>
   </div>
@@ -542,15 +556,15 @@ footer{border-top:1px solid var(--border);padding:56px 48px 26px;background:var(
       </div>
       <div class="faq-item rv">
         <button class="faq-q">Do I need sales experience? <span class="faq-arrow">+</span></button>
-        <div class="faq-a"><p>None at all. Most of our members are students, career switchers, or first-time SDRs. The coach adapts its difficulty to your current skill level.</p></div>
+        <div class="faq-a"><p>None at all. AmplifyHub is designed for aspiring SDRs, career switchers, and beginner SDRs who want a structured way to practise.</p></div>
       </div>
       <div class="faq-item rv">
         <button class="faq-q">Can AI really replace real practice? <span class="faq-arrow">+</span></button>
-        <div class="faq-a"><p>It's not a replacement — it's the safe rehearsal a real call never gives you. You get unlimited reps and honest feedback without the cost of blowing a real lead.</p></div>
+        <div class="faq-a"><p>No. Use AI practice to prepare, then apply what you learn in real conversations when you are ready.</p></div>
       </div>
       <div class="faq-item rv">
         <button class="faq-q">How long before I improve? <span class="faq-arrow">+</span></button>
-        <div class="faq-a"><p>Most members see a measurable jump in their confidence score within their first 5-10 practice calls, typically inside the first week.</p></div>
+        <div class="faq-a"><p>That depends on your starting point and practice. Start with one lesson or roleplay, review your feedback, and choose one skill to practise next.</p></div>
       </div>
     </div>
   </div>
@@ -560,9 +574,9 @@ footer{border-top:1px solid var(--border);padding:56px 48px 26px;background:var(
 <section class="sc-end">
   <div class="end-inner">
     <h2 class="rv">The SDR you want to become starts with <em style="color:var(--accent);font-style:normal">one practice call.</em></h2>
-    <p class="end-sub rv">Stop overthinking. Start practicing.</p>
-    <a href="signup.html" class="mega rv">Start Free Today</a>
-    <div class="end-micro rv">No credit card required · Free during beta</div>
+    <p class="end-sub rv">Start with a lesson, a roleplay, or a practical resource.</p>
+    <a href="signup.html" class="mega rv">Start practicing</a>
+    <div class="end-micro rv">Create an account to save your progress.</div>
   </div>
 </section>
 
@@ -584,10 +598,10 @@ footer{border-top:1px solid var(--border);padding:56px 48px 26px;background:var(
     </div>
     <div class="ft-col">
       <h4>Resources</h4>
-      <a href="roadmap.html">Learning Roadmap</a>
-      <a href="cold-calling.html">Cold Calling Guide</a>
-      <a href="sdr-career-guide.html">SDR Career Guide</a>
-      <a href="faq.html">FAQ</a>
+      <a href="resources.html">Resource Library</a>
+      <a href="resources.html?category=script">Scripts</a>
+      <a href="resources.html?category=template">Templates</a>
+      <a href="interview-prep.html">Interview Prep</a>
     </div>
     <div class="ft-col">
       <h4>Company</h4>
@@ -600,7 +614,7 @@ footer{border-top:1px solid var(--border);padding:56px 48px 26px;background:var(
   </div>
   <div class="ft-bottom-row">
     <div class="ft-bot">© 2026 AmplifyHub. All rights reserved.</div>
-    <div class="ft-status"><span class="ft-status-dot"></span>Free beta — building in public</div>
+    <div class="ft-status"><span class="ft-status-dot"></span>Practice at your own pace</div>
   </div>
 </footer>
 
@@ -620,6 +634,43 @@ const revealObs=new IntersectionObserver(es=>{
   es.forEach((e,i)=>{if(e.isIntersecting){setTimeout(()=>e.target.classList.add('in'),i*60);revealObs.unobserve(e.target)}});
 },{threshold:.12});
 document.querySelectorAll('.rv').forEach(el=>revealObs.observe(el));
+
+// Decorative guided-preview motion only. It does not call AI, store data, or show user results.
+const previewCard=document.getElementById('roleplayPreview');
+const previewProspect=document.getElementById('previewProspect');
+const previewReply=document.getElementById('previewReply');
+const previewFeedback=document.getElementById('previewFeedback');
+const previewSkill=document.getElementById('previewSkill');
+const previewScenario=document.getElementById('previewScenario');
+const previewScenes=[
+  {scenario:'Not interested',skill:'Opening',prospect:'“We already use another provider, so I’m not really interested.”',reply:'“That makes sense. Would it be useful to compare what is working well before I explain why I called?”',feedback:'✓ Coaching cue — acknowledge, then ask one relevant question'},
+  {scenario:'Budget concern',skill:'Discovery',prospect:'“There isn’t room in the budget for anything new right now.”',reply:'“Understood. How are you currently approaching the problem so I can see whether a later conversation would be relevant?”',feedback:'✓ Coaching cue — explore context before suggesting a next step'},
+  {scenario:'Wrong person',skill:'Qualification',prospect:'“I’m not the person who owns that decision.”',reply:'“Thanks for letting me know. Who is usually closest to that area, and would it make sense to speak with them?”',feedback:'✓ Coaching cue — ask for direction without applying pressure'}
+];
+let previewIndex=0;
+function showPreviewScene(){
+  const scene=previewScenes[previewIndex];
+  [previewProspect,previewReply,previewFeedback,previewSkill,previewScenario].forEach(el=>el.classList.add('is-changing'));
+  window.setTimeout(()=>{
+    previewProspect.textContent=scene.prospect;
+    previewReply.textContent=scene.reply;
+    previewFeedback.textContent=scene.feedback;
+    previewSkill.textContent=scene.skill;
+    previewScenario.textContent=scene.scenario;
+    [previewProspect,previewReply,previewFeedback,previewSkill,previewScenario].forEach(el=>el.classList.remove('is-changing'));
+  },180);
+  previewIndex=(previewIndex+1)%previewScenes.length;
+}
+if(previewCard && !window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+  window.setInterval(showPreviewScene,6000);
+  previewCard.addEventListener('mousemove',event=>{
+    const rect=previewCard.getBoundingClientRect();
+    const rotateY=((event.clientX-rect.left)/rect.width-.5)*8;
+    const rotateX=((event.clientY-rect.top)/rect.height-.5)*-8;
+    previewCard.style.transform=`perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+  });
+  previewCard.addEventListener('mouseleave',()=>{previewCard.style.transform='';});
+}
 
 document.querySelectorAll('.faq-q').forEach(btn=>{
   btn.addEventListener('click',()=>{

@@ -184,6 +184,8 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
 
 <div class="toast" id="toast">🎉 Lesson Complete! +50 XP</div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="auth-config.js"></script>
 <script src="assets/journey-progress.js"></script>
 <script>
 // ── PROGRESS SYNC (shared with journey.html + dashboard.html) ──
@@ -193,7 +195,9 @@ const LESSON_INDEX=7; // 0-indexed
 const AJP=window.AmplifyJourneyProgress;
 function lid(m,l){ return AJP.lid(m,l); }
 function saveProgress(completed, lessonMeta){
-  return AJP.writeProgress(completed, lessonMeta);
+  return completed.has(thisLid)
+    ? AJP.markLessonComplete(MODULE_INDEX,LESSON_INDEX,lessonMeta[thisLid])
+    : AJP.recordLessonMeta(MODULE_INDEX,LESSON_INDEX,lessonMeta[thisLid]);
 }
 
 // ── INIT STATE ──

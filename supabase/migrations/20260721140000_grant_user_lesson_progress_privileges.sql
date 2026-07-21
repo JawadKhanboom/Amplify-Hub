@@ -1,0 +1,82 @@
+-- AmplifyHub — grant the base table privilege missing on user_lesson_progress
+--
+-- WHY THIS EXISTS:
+-- Postgres enforces two independent, separate layers of access control on
+-- every query: (1) standard GRANT-based table privileges, checked first,
+-- and (2) Row-Level Security policies, which further restrict which ROWS
+-- are visible/writable once the base privilege already allows the
+-- operation. RLS can only ever narrow what a GRANT already permits — it
+-- cannot substitute for a missing GRANT, and it is never evaluated until
+-- the base privilege check passes.
+--
+-- public.user_lesson_progress (created in
+-- 20260719030000_practical_challenges.sql) enables RLS and defines an
+-- owner-only policy ("Users manage own lesson progress", for all using
+-- auth.uid() = user_id with check auth.uid() = user_id), but no migration
+-- ever explicitly granted `authenticated` the underlying SELECT/INSERT/
+-- UPDATE/DELETE privilege on the table itself. Confirmed by grepping every
+-- migration in this repo: no `grant ... on ... user_lesson_progress ...`
+-- statement exists anywhere. Locally, this was empirically confirmed by
+-- starting a fresh Supabase stack from these migrations alone: every
+-- query against this table — even from the row's own owner — failed with
+-- "permission denied for table user_lesson_progress" (Postgres 42501),
+-- before Postgres ever reached the RLS policy evaluation.
+--
+-- WHAT THIS MIGRATION DOES AND DOES NOT DO:
+-- - It ONLY adds the missing base table privilege for `authenticated`.
+-- - It does NOT create, alter, drop, or in any way weaken the existing
+--   RLS policy. That policy is untouched and remains the sole thing
+--   deciding which specific ROWS an authenticated user can see or change.
+-- - Granting table-level access to `authenticated` does NOT make other
+--   users' rows accessible: with RLS enabled, `authenticated` can now
+--   reach the table at all, but auth.uid() = user_id still filters every
+--   row by ownership exactly as before. A user can only ever see/modify
+--   their own progress rows — this migration changes who may attempt a
+--   query, not whose rows a query may return.
+-- - `anon` is granted nothing here. Unauthenticated access to this table
+--   remains fully blocked, unchanged from before this migration.
+-- - `service_role` is also granted nothing here. No Edge Function or
+--   other server-side code in this project queries user_lesson_progress
+--   with the service-role key — the only code paths that touch this
+--   table (assets/journey-progress.js, sales-mindset-app's
+--   supabaseSync.ts, and the standalone lesson pages) always operate as
+--   the signed-in end user via the anon-key client, which relies on the
+--   `authenticated` grant below. Account-deletion cleanup for this table
+--   happens via the `on delete cascade` foreign key to auth.users(id),
+--   which Postgres enforces internally when a user row is deleted — this
+--   does not require service_role to hold any privilege on this table.
+--   This mirrors the project's existing pattern of granting only to the
+--   role a real code path actually uses (e.g. consume_coach_quota in
+--   20260719010000_coach_api_usage_limits.sql is granted to
+--   `authenticated` only, never `service_role`).
+-- - No sequence grant is included: this table's primary key is the
+--   composite (user_id, lesson_id) — user_id is a uuid sourced from
+--   auth.uid(), not a serial/bigserial/identity column — so there is no
+--   sequence associated with this table at all.
+-- - This migration also explicitly REVOKEs everything from PUBLIC, anon,
+--   authenticated, and service_role before granting anything, so the only
+--   privileges left standing afterward are exactly the four granted to
+--   `authenticated` below. This strips even the REFERENCES/TRIGGER/TRUNCATE
+--   privileges this project grants to PUBLIC (and therefore every role) by
+--   default on new tables — not needed by any application code path, and
+--   removed here for exact least privilege.
+--
+-- SAFE TO RUN: GRANT and REVOKE are both idempotent — re-running this
+-- migration is harmless and does not touch data, schema, or the RLS policy.
+
+revoke all privileges on public.user_lesson_progress from public, anon, authenticated, service_role;
+grant select, insert, update, delete on public.user_lesson_progress to authenticated;
+
+-- ── VERIFY ─────────────────────────────────────────────────────────────────
+-- Confirm only `authenticated` received privileges, and RLS is still on:
+--
+--   select grantee, privilege_type
+--   from information_schema.role_table_grants
+--   where table_schema = 'public' and table_name = 'user_lesson_progress'
+--   order by grantee, privilege_type;
+--   -- expect exactly: authenticated / {SELECT, INSERT, UPDATE, DELETE}.
+--   -- Nothing at all for anon, service_role, or PUBLIC — not even the
+--   -- REFERENCES/TRIGGER/TRUNCATE defaults this project normally grants.
+--
+--   select relrowsecurity from pg_class where relname = 'user_lesson_progress';
+--   -- expect: true

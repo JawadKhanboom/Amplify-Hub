@@ -176,7 +176,14 @@
 
   // Merges the browser cache with Supabase after sign-in. Completion is a
   // union, so an older browser can never erase lessons completed elsewhere.
+  // Guarded against overlapping calls (e.g. a page-load sync and an
+  // 'online' retry firing close together) — a second call while one is
+  // already running just returns the current local state instead of
+  // starting a redundant network round trip.
+  var syncInProgress = false;
   async function syncWithCloud() {
+    if (syncInProgress) return readProgress();
+    syncInProgress = true;
     try {
       var client = getCloudClient();
       var user = await getCloudUser(client);
@@ -212,6 +219,8 @@
     } catch (e) {
       console.warn('Using offline lesson progress until cloud sync is available.');
       return readProgress();
+    } finally {
+      syncInProgress = false;
     }
   }
 
@@ -244,4 +253,12 @@
   };
 
   if (getCloudClient()) setTimeout(syncWithCloud, 0);
+
+  // Retry once connectivity returns. syncWithCloud is idempotent (upserts
+  // on user_id+lesson_id) and guarded against overlapping calls above, so
+  // this is always safe to fire, including if no client/user is available
+  // yet — getCloudClient() and getCloudUser() both fail gracefully.
+  global.addEventListener('online', function () {
+    if (getCloudClient()) syncWithCloud();
+  });
 })(typeof window !== 'undefined' ? window : globalThis);

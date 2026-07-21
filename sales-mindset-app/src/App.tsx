@@ -7,6 +7,7 @@ import {
 } from 'react';
 import { lessons, parseLesson } from './lessons';
 import { readProgress, writeProgress, type LessonMeta } from './progress';
+import { initSync, syncLessonToCloud } from './supabaseSync';
 
 interface QuizState {
   selections: Record<number, number>;
@@ -75,6 +76,13 @@ function App() {
       window.removeEventListener('hashchange', syncFromUrl);
       window.removeEventListener('popstate', syncFromUrl);
     };
+  }, []);
+
+  // Cloud sync is additive to the localStorage read above — this only ever
+  // pulls in/pushes out progress, never blocks or replaces the local state
+  // already loaded into initialProgress.
+  useEffect(() => {
+    initSync();
   }, []);
 
   useEffect(() => {
@@ -148,6 +156,7 @@ function App() {
     try {
       writeProgress(completed, nextMeta);
       setLessonMeta(nextMeta);
+      syncLessonToCloud(lesson.id, nextMeta[lesson.id], completed.has(lesson.id));
     } catch (error) {
       console.error('Unable to save quiz progress.', error);
       setToast('Progress could not be saved in this browser.');
@@ -205,6 +214,7 @@ function App() {
       setCompleted(nextCompleted);
       setLessonMeta(nextMeta);
       setToast(`Lesson ${lesson.number} complete · +${lesson.xp} XP`);
+      syncLessonToCloud(lesson.id, nextMeta[lesson.id], true);
     } catch (error) {
       console.error('Unable to save lesson completion.', error);
       setToast('Progress could not be saved in this browser.');
