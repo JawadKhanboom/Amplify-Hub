@@ -424,6 +424,9 @@ const CoachHome = (function () {
  
   function initDocuments() {
     const fileInput = $('docFile'), zone = $('docZone');
+    // Document Review is "coming soon": the uploader markup was removed, so
+    // there is nothing to wire. Guard prevents a null addEventListener crash.
+    if (!fileInput || !zone) return;
  
     document.querySelectorAll('#docsView .doc-type').forEach(t =>
       t.addEventListener('click', () => {
@@ -467,7 +470,11 @@ const CoachHome = (function () {
   }
  
   async function renderDocs() {
-    const list = $('docList'), docs = await CoachStore.listDocs();
+    const list = $('docList');
+    // Document Review is "coming soon": the list was removed from the page.
+    // Skip the render — and the CoachStore.listDocs() DB read — when absent.
+    if (!list) return;
+    const docs = await CoachStore.listDocs();
     if (!docs.length) {
       list.innerHTML = '<div class="empty">No documents yet. Upload a resume, cold email, or script above.</div>';
       return;
