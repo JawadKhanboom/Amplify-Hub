@@ -172,10 +172,15 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
   <div class="contact-grid">
     <div class="card fade-in">
       <form id="contactForm">
-        <div class="field"><label for="cName">Full Name</label><input id="cName" type="text" placeholder="Your name" required></div>
-        <div class="field"><label for="cEmail">Email</label><input id="cEmail" type="email" placeholder="you@example.com" required></div>
-        <div class="field"><label for="cSubject">Subject</label><input id="cSubject" type="text" placeholder="What's this about?"></div>
-        <div class="field"><label for="cMessage">Message</label><textarea id="cMessage" placeholder="Tell us what's on your mind..." required></textarea></div>
+        <div class="field"><label for="cName">Full Name</label><input id="cName" type="text" placeholder="Your name" autocomplete="name" maxlength="120" required></div>
+        <div class="field"><label for="cEmail">Email</label><input id="cEmail" type="email" placeholder="you@example.com" autocomplete="email" maxlength="254" required></div>
+        <div class="field"><label for="cSubject">Subject</label><input id="cSubject" type="text" placeholder="What's this about?" maxlength="200"></div>
+        <div class="field"><label for="cMessage">Message</label><textarea id="cMessage" placeholder="Tell us what's on your mind..." minlength="10" maxlength="4000" required></textarea></div>
+        <!-- Honeypot: invisible to people, tempting to bots. A filled value fakes success and stores nothing. -->
+        <div style="position:absolute;left:-9999px;top:auto;height:1px;overflow:hidden" aria-hidden="true">
+          <label for="cWebsite">Website</label><input id="cWebsite" type="text" tabindex="-1" autocomplete="off">
+        </div>
+        <p id="formError" style="display:none;color:#ff6b6b;font-size:13px;margin:0 0 14px"></p>
         <button type="submit" class="btn-primary" style="width:100%;justify-content:center;border:none;cursor:pointer">Send Message →</button>
       </form>
       <div class="form-success" id="formSuccess">
@@ -203,15 +208,73 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
     </div>
   </div>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="auth-config.js"></script>
 <script>
 // Sidebar mobile toggle
 document.getElementById('mobMenuBtn').addEventListener('click',()=>document.getElementById('sidebar').classList.add('open'));
 document.getElementById('sbClose').addEventListener('click',()=>document.getElementById('sidebar').classList.remove('open'));
 
-document.getElementById('contactForm').addEventListener('submit', function(e){
-  e.preventDefault();
-  this.style.display='none';
+// Contact form — inserts into the write-only contact_messages table
+// (see supabase/migrations/20260722160000_contact_messages.sql).
+const contactForm = document.getElementById('contactForm');
+const formError = document.getElementById('formError');
+
+function showFormError(msg) {
+  formError.textContent = msg;
+  formError.style.display = 'block';
+}
+
+function showFormSuccess() {
+  contactForm.style.display = 'none';
   document.getElementById('formSuccess').classList.add('show');
+}
+
+let sendingMessage = false;
+contactForm.addEventListener('submit', async function(e){
+  e.preventDefault();
+  if (sendingMessage) return;
+  formError.style.display = 'none';
+
+  // Honeypot: real visitors never see this field. Pretend success so bots
+  // get no feedback signal — nothing is stored.
+  if (document.getElementById('cWebsite').value) { showFormSuccess(); return; }
+
+  const name = document.getElementById('cName').value.trim();
+  const email = document.getElementById('cEmail').value.trim();
+  const subject = document.getElementById('cSubject').value.trim();
+  const message = document.getElementById('cMessage').value.trim();
+
+  if (!name || !email || !message) { showFormError('Please fill in your name, email, and message.'); return; }
+  if (message.length < 10) { showFormError('Please write at least a sentence (10+ characters) so we can actually help.'); return; }
+
+  const btn = contactForm.querySelector('button[type=submit]');
+  sendingMessage = true;
+  btn.disabled = true;
+  btn.style.opacity = '.6';
+  const originalLabel = btn.textContent;
+  btn.textContent = 'Sending…';
+
+  let failed = false;
+  try {
+    const { error } = await supabaseClient.from('contact_messages').insert({ name, email, subject, message });
+    failed = !!error;
+  } catch (_) {
+    // Covers a blocked/failed supabase-js CDN load or a thrown network error —
+    // never leave the button stuck on "Sending…".
+    failed = true;
+  }
+
+  if (failed) {
+    showFormError("Couldn't send your message right now. Please try again in a minute, or email hello@amplifyhub.app directly.");
+    sendingMessage = false;
+    btn.disabled = false;
+    btn.style.opacity = '';
+    btn.textContent = originalLabel;
+    return;
+  }
+
+  showFormSuccess();
 });
 </script>
 
