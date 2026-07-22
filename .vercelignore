@@ -1,0 +1,25 @@
+# Never deploy internal docs, database sources, or app source to production.
+# The live site needs only the static pages, assets/, and the committed
+# sales-mindset/ build.
+
+# Internal markdown docs (RELEASE_CHECKLIST.md, audits, README)
+*.md
+
+# Database schema, migrations, Edge Function source
+supabase/
+
+# React app source (its committed build lives in sales-mindset/)
+sales-mindset-app/
+
+# QA screenshots and internal design docs
+docs/
+
+# Legacy hand-run SQL tombstones kept in the repo by choice
+assets/*.sql
+
+# Tooling state
+.github/
+.vscode/
+.claude/
+.codex/
+.agents/
