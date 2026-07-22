@@ -12,6 +12,7 @@
  *
  * Usage: npm run smoke:production
  */
+import { randomBytes } from 'node:crypto';
 import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -75,7 +76,10 @@ if (!/^[^@\s+]+@[^@\s]+\.[^@\s]+$/.test(emailBase)) {
 }
 const [baseLocal, baseDomain] = emailBase.toLowerCase().split('@');
 const EMAIL = emailBase.replace('@', `+smoke-${runId}@`);
-const PASSWORD = 'Smoke!' + runId + 'x9';
+// Independent of runId: the runId is printed in logs, so a password derived
+// from it would be recoverable from CI output if a failed run leaves the
+// disposable account behind.
+const PASSWORD = 'Smoke!' + randomBytes(12).toString('base64url');
 
 let passed = 0;
 let failed = 0;
