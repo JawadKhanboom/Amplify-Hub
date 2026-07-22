@@ -69,10 +69,12 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
   <div class="logo">Amplify<span>Hub</span></div>
   <h1>Welcome back</h1>
   <p class="sub" id="subText">Sign in to keep your streak going.</p>
-  <div class="field"><label for="emailInput">Email</label><input type="email" id="emailInput" placeholder="you@example.com" autofocus></div>
-  <div class="field"><label for="passwordInput">Password</label><input type="password" id="passwordInput" placeholder="Your password"></div>
+  <form id="authForm" novalidate>
+  <div class="field"><label for="emailInput">Email</label><input type="email" id="emailInput" placeholder="you@example.com" autocomplete="email" autofocus></div>
+  <div class="field"><label for="passwordInput">Password</label><input type="password" id="passwordInput" placeholder="Your password" autocomplete="current-password"></div>
   <p id="errorText" style="display:none;color:#ff6b6b;font-size:13px;margin:-6px 0 14px;"></p>
-  <button class="submit" id="submitBtn">Sign In →</button>
+  <button class="submit" type="submit" id="submitBtn">Sign In →</button>
+  </form>
   <p class="footer-text">New here? <a href="signup.html">Create an account</a></p>
   <p class="footer-text" style="margin-top:10px"><a href="forgot-password.html">Forgot password?</a></p>
 </div>
@@ -82,10 +84,16 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
 <script>
 // Only allow redirects to known internal pages — anything else falls back to
 // the dashboard so a crafted ?redirect= link can't bounce users to another site.
-const ALLOWED_REDIRECTS = ['dashboard.html','journey.html','coach-home.html','progress.html','profile.html','challenges.html','settings.html','resources.html','interview-prep.html'];
+const ALLOWED_REDIRECTS = ['dashboard.html','journey.html','coach-home.html','progress.html','profile.html','challenges.html','settings.html','resources.html','resource.html','interview-prep.html'];
 const params = new URLSearchParams(window.location.search);
-const requestedRedirect = params.get('redirect');
-const redirect = ALLOWED_REDIRECTS.indexOf(requestedRedirect) !== -1 ? requestedRedirect : 'dashboard.html';
+const requestedRedirect = params.get('redirect') || '';
+// Allow a query string on whitelisted pages (e.g. resource.html?id=…) so
+// deep links survive the sign-in round trip. The PATH must still be on the
+// whitelist — the query can never change the destination page or origin.
+const redirParts = requestedRedirect.split('?');
+const redirect = ALLOWED_REDIRECTS.indexOf(redirParts[0]) !== -1
+  ? redirParts[0] + (redirParts[1] ? '?' + redirParts.slice(1).join('?') : '')
+  : 'dashboard.html';
 
 function showError(msg) {
   const el = document.getElementById('errorText');
@@ -93,10 +101,11 @@ function showError(msg) {
   el.style.display = 'block';
 }
 
-document.getElementById('submitBtn').addEventListener('click', async function() {
+document.getElementById('authForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
   const email = document.getElementById('emailInput').value.trim();
   const password = document.getElementById('passwordInput').value;
-  const btn = this;
+  const btn = document.getElementById('submitBtn');
 
   document.getElementById('errorText').style.display = 'none';
   if (!email || !password) { showError('Please enter your email and password.'); return; }

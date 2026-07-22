@@ -91,7 +91,7 @@
     }
     const actions=node('div','card-actions');const start=node('button','btn primary',a.status==='in_progress'?'Continue':'Start');start.addEventListener('click',()=>startChallenge(a));actions.appendChild(start);
     if(a.status==='in_progress'||c.verification_type==='coach'||c.verification_type==='lesson'){const check=node('button','btn secondary',c.verification_type==='coach'||c.verification_type==='lesson'?'Check completion':'Add evidence');check.addEventListener('click',()=>completeChallenge(a));actions.appendChild(check)}
-    if(c.verification_config&&c.verification_config.real_world_optional&&c.action_url){const alternative=node('a','btn secondary','Practice with AI');alternative.href=c.action_url;alternative.setAttribute('aria-label','Practice '+c.title+' with the AI Coach');actions.appendChild(alternative)}
+    if(c.verification_config&&c.verification_config.real_world_optional&&c.action_url&&!/^[a-z][a-z0-9+.-]*:/i.test(c.action_url)){const alternative=node('a','btn secondary','Practice with AI');alternative.href=c.action_url;alternative.setAttribute('aria-label','Practice '+c.title+' with the AI Coach');actions.appendChild(alternative)}
     const replace=node('button','btn replace','Replace');replace.addEventListener('click',()=>{activeAssignment=a;openModal('replaceModal')});actions.appendChild(replace);card.appendChild(actions);return card;
   }
   function render(){

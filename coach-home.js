@@ -189,15 +189,15 @@ const CoachHome = (function () {
  
     async function prepareAskSession() {
       const active = await CoachStore.activeSession();
-      if (active && active.mode === 'ask' && !active.endedAt) {
+      if (active && active.mode === 'ask' && !active.ended_at) {
         if (CoachEngine.getMode() !== 'ask') CoachEngine.setMode('ask');
         return;
       }
       const history = await CoachStore.listSessions();
-      const askSess = history.find(s => s.mode === 'ask' && !s.endedAt);
+      const askSess = history.find(s => s.mode === 'ask' && !s.ended_at);
       if (askSess) {
         await CoachStore.saveSession({ id: askSess.id });
-      } else if (active && !active.endedAt) {
+      } else if (active && !active.ended_at) {
         await CoachStore.endActiveSession();
       }
       CoachEngine.setMode('ask');
