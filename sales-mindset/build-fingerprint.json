@@ -1,0 +1,30 @@
+{
+  "version": 1,
+  "algorithm": "sha256",
+  "normalization": "utf8; CRLF/CR -> LF",
+  "note": "Fingerprint of Sales Mindset build INPUTS (not the non-deterministic Vite output). Regenerate with `npm run build`.",
+  "files": {
+    "sales-mindset-1.html": "0c011b9eb73b160205f2540c87c38bffa380fa22630b1424f65d6f02430f9f3e",
+    "sales-mindset-2.html": "928a3ee571456637fc81b08c2a5fc7c65a3c5a376809ec9155f35e2742828b25",
+    "sales-mindset-3.html": "fc4af0b8edc7b7d59eeed5ea8df59d1c5913633838bd25821b1e9773ecbf7e88",
+    "sales-mindset-4.html": "8ccfde05aec1c451839e781e20487cfe5a57bce32bf01e1eca08698199255333",
+    "sales-mindset-5.html": "26603bd7467f823c2ada148dd4d9213af6ea91ac3d30f6ce149a339f1e1d72b1",
+    "sales-mindset-6.html": "cf5261c59468b22ad14683153af536ecd547bd5ca0177a1f15f211c5a742ef38",
+    "sales-mindset-7.html": "dcbd6bb808988fc84c615d8abc6595e2b03d0c5d0838452d46902a83276c339d",
+    "sales-mindset-8.html": "c21b780e79c3ee7eb4df97529c43c831532224d1cc63d5fc648a667e2089e436",
+    "sales-mindset-app/index.html": "556a57d3d6cea72f73a7dc29de3bae40e64903e5d26a5b1999739604e8a232d0",
+    "sales-mindset-app/package-lock.json": "240ef33ef7a438b6391fcb78d024553d4ddd771b69dbc7b5eb84674e72d47a9b",
+    "sales-mindset-app/package.json": "9b609c674c10094d68e1cf2770d168296974f8121cce3518e50c551833d65bc2",
+    "sales-mindset-app/scripts/build-fingerprint.mjs": "d124ad2b1110290466a0bb5af01fa379da2f120d49f9730825a97d4a4ac72203",
+    "sales-mindset-app/src/App.tsx": "88f7d4e4860b09f715ea0e4bb41237552a2efe1f8ce6890b7b4ff503822cbf49",
+    "sales-mindset-app/src/lessons.ts": "b655ae4c47beaa43053230ff2e580721cdeffe0172165f5688b0589a61c436f3",
+    "sales-mindset-app/src/main.tsx": "0b10b96f94ee2833076460851d5a20dd2efcfaf5bb0ddea918b63ff9ab4aad4e",
+    "sales-mindset-app/src/progress.ts": "10b00fe49e45e05342cede420bda42087f2a3d2ec93e049278d5255ffbe585de",
+    "sales-mindset-app/src/styles.css": "ccccab6b6496e99881fc8572f9d1d7e394ba92ae39a4d9eb5c187f90d32276eb",
+    "sales-mindset-app/src/supabaseSync.ts": "ef7ca835ef8255b84d1d7a5c3a1b17b7f9b1c54378e77b8a8de337b46a17a7ed",
+    "sales-mindset-app/src/vite-env.d.ts": "65996936fbb042915f7b74a200fcdde7e410f32a669b1ab9597cfaa4b0faddb5",
+    "sales-mindset-app/tsconfig.json": "cc32a3c2be133425d30e112e3dc863c9dbe1ecbbdd81123abf6d6a0300a8ae5c",
+    "sales-mindset-app/vite.config.ts": "4606bcc1753b2d0a61b1abcf09e41e1a95dc04f702e3c7dc537d5141bdfea95a"
+  },
+  "digest": "6439bcd81c55e09fb71276f18d72bb9877e6da5afb28f2722774a0d254107cf8"
+}

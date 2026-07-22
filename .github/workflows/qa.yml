@@ -28,6 +28,9 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Verify Sales Mindset build fingerprint matches source
+        run: npm run fingerprint:check
+
       - name: Build (typecheck + vite)
         run: npm run build
 
