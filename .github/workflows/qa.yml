@@ -28,26 +28,11 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Verify Sales Mindset build fingerprint matches source
+        run: npm run fingerprint:check
+
       - name: Build (typecheck + vite)
         run: npm run build
-
-      - name: Verify committed production build is up to date
-        working-directory: ${{ github.workspace }}
-        run: |
-          git add -A -- sales-mindset
-          if ! git diff --cached --quiet -- sales-mindset; then
-            echo "::error::Committed sales-mindset/ is out of date with sales-mindset-app/ source."
-            echo "Changed build files:"
-            git --no-pager diff --cached --stat -- sales-mindset
-            git --no-pager diff --cached --name-status -- sales-mindset
-            echo ""
-            echo "Regenerate locally:"
-            echo "  npm --prefix sales-mindset-app ci"
-            echo "  npm --prefix sales-mindset-app run build"
-            echo "  git add -- sales-mindset"
-            exit 1
-          fi
-          echo "Committed sales-mindset/ build matches source."
 
       - name: QA — account trust (static security checks)
         run: npm run qa:account-trust

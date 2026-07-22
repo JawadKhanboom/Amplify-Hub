@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc --noEmit && vite build",
+    "build": "tsc --noEmit && vite build && node scripts/build-fingerprint.mjs --write",
+    "fingerprint:check": "node scripts/build-fingerprint.mjs --check",
     "typecheck": "tsc --noEmit --pretty false",
     "preview": "vite preview",
     "qa": "node scripts/qa.mjs",
