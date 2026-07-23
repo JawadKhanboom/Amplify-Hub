@@ -154,7 +154,7 @@ const PAGES = [
 
 async function newPage(viewportWidth, mock) {
   const page = await browser.newPage({ viewport: { width: viewportWidth, height: 844 }, reducedMotion: 'reduce' });
-  if (mock) await page.route('https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2', r => r.fulfill({ contentType: 'application/javascript', body: backendScript(USER) }));
+  if (mock) await page.route('**/assets/vendor/supabase-*.min.js', r => r.fulfill({ contentType: 'application/javascript', body: backendScript(USER) }));
   await page.route('https://fonts.gstatic.com/**', r => r.abort());
   return page;
 }
@@ -238,8 +238,10 @@ console.log('  ✓ aria-current marks active nav on authed pages');
   ok('signin: autocomplete attributes', signin.includes('autocomplete="current-password"') && signin.includes('autocomplete="email"'));
   ok('signup: guard against duplicate submits', signup.includes('if (signingUp) return'));
   ok('signup: autocomplete new-password', signup.includes('autocomplete="new-password"'));
-  ok('signin: Enter submits', signin.includes("e.key === 'Enter'"));
-  ok('signup: Enter submits', signup.includes("e.key === 'Enter'"));
+  // Enter-to-submit is provided by a real <form> with a submit handler (the
+  // implicit-submission the browser gives every form) — not a keydown shim.
+  ok('signin: Enter submits via a real form', signin.includes('<form id="authForm"') && signin.includes("addEventListener('submit'"));
+  ok('signup: Enter submits via a real form', signup.includes('<form id="authForm"') && signup.includes("addEventListener('submit'"));
 }
 console.log('  ✓ auth pages: duplicate-submit guards + autocomplete');
 

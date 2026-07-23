@@ -101,7 +101,7 @@ for (const [pageName, needsMock] of PAGES) {
   for (const [vpName, viewport] of VIEWPORTS) {
     const page = await browser.newPage({ viewport, reducedMotion: 'reduce' });
     if (needsMock) {
-      await page.route('https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2', (route) => route.fulfill({ contentType: 'application/javascript', body: backendScript(USER) }));
+      await page.route('**/assets/vendor/supabase-*.min.js', (route) => route.fulfill({ contentType: 'application/javascript', body: backendScript(USER) }));
     }
     await page.route('https://fonts.gstatic.com/**', (route) => route.abort());
     try {
