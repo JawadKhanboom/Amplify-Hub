@@ -31,6 +31,9 @@ jobs:
       - name: Verify Sales Mindset build fingerprint matches source
         run: npm run fingerprint:check
 
+      - name: Verify vendored supabase-js matches the pinned package
+        run: node scripts/vendor-supabase.mjs --check
+
       # The build below OVERWRITES sales-mindset/ in the workspace, so the
       # committed copy is set aside first and compared after — otherwise a
       # hand-edited committed bundle would ship to production untested.

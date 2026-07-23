@@ -34,7 +34,7 @@ if (!baseUrl) throw new Error('Vite did not expose a local URL.');
 const browser = await chromium.launch({ executablePath: chromePath, headless: true, args: ['--disable-gpu', '--no-first-run'] });
 
 async function mockSupabaseRoute(page, { user = null, getUserDelayMs = 0, selectData = [], selectDelayMs = 0 } = {}) {
-  await page.route('https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2', route => route.fulfill({
+  await page.route('**/assets/vendor/supabase-*.min.js', route => route.fulfill({
     contentType: 'application/javascript',
     body: `
       window.__calls = { select: 0, upsert: 0, getUser: 0 };
@@ -78,11 +78,11 @@ async function test(name, fn) {
 
 await test('graceful behavior with no Supabase client', async () => {
   const page = await browser.newPage();
-  // Simulates the CDN being unreachable (ad-blocker, network hiccup). This
-  // does make auth-config.js throw (a separate, expected failure mode, not
-  // what this test is about) — what matters here is that journey-progress.js
-  // still loads and its own functions resolve cleanly with no client ever set.
-  await page.route('https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2', route => route.abort());
+  // Simulates the vendored supabase-js failing to load (blocked request or
+  // deploy hiccup). This does make auth-config.js throw (a separate, expected
+  // failure mode, not what this test is about) — what matters here is that
+  // journey-progress.js still loads and resolves cleanly with no client set.
+  await page.route('**/assets/vendor/supabase-*.min.js', route => route.abort());
   await page.route('https://fonts.googleapis.com/**', route => route.abort());
   await page.route('https://fonts.gstatic.com/**', route => route.abort());
   await page.goto(`${baseUrl}mastery-1.html`, { waitUntil: 'domcontentloaded' });
