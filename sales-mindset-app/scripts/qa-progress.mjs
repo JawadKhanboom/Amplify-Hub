@@ -43,10 +43,56 @@ const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
 const pageErrors = [];
 page.on('pageerror', (error) => pageErrors.push(error.message));
 
+// The lesson pages are gated behind requireAuth(). Static pages get an authed
+// in-browser mock of the vendored client; the React app leg (bundled client)
+// instead gets a seeded local session plus intercepted auth/REST endpoints.
+const QA_USER = { id: 'qa-user', email: 'qa@example.com', user_metadata: { full_name: 'QA User' } };
+await page.route('**/assets/vendor/supabase-*.min.js', (route) => route.fulfill({
+  contentType: 'application/javascript',
+  body: `
+    const USER = ${JSON.stringify(QA_USER)};
+    function makeBuilder(rows) {
+      const b = {
+        select() { return b; }, eq() { return b; }, order() { return b; }, limit() { return b; },
+        maybeSingle: async () => ({ data: null, error: null }),
+        single: async () => ({ data: null, error: null }),
+        insert() { return b; }, update() { return b; }, delete() { return b; },
+        upsert: async () => ({ data: null, error: null }),
+        then(resolve) { resolve({ data: rows || [], error: null }); }
+      };
+      return b;
+    }
+    const db = {
+      auth: {
+        getSession: async () => ({ data: { session: { access_token: 't', user: USER } } }),
+        getUser: async () => ({ data: { user: USER }, error: null }),
+        onAuthStateChange: () => ({ data: { subscription: { unsubscribe() {} } } }),
+      },
+      from() { return makeBuilder([]); },
+    };
+    window.supabase = { createClient: () => db };
+  `,
+}));
+await page.route('**/auth/v1/user**', (route) => route.fulfill({ contentType: 'application/json', body: JSON.stringify({ ...QA_USER, aud: 'authenticated' }) }));
+await page.route('**/rest/v1/user_lesson_progress**', (route) => route.fulfill({ contentType: 'application/json', body: '[]' }));
+const seedReactSession = () =>
+  page.evaluate((user) => {
+    localStorage.setItem('sb-dsuahpcqrrlbudomjrye-auth-token', JSON.stringify({
+      access_token: 'qa-token', refresh_token: 'qa-refresh', token_type: 'bearer',
+      expires_in: 3600 * 24 * 365, expires_at: Math.floor(Date.now() / 1000) + 3600 * 24 * 365, user,
+    }));
+  }, QA_USER);
+
 const readStore = () =>
   page.evaluate(() => {
     if (window.AmplifyJourneyProgress) return window.AmplifyJourneyProgress.readProgress();
-    return JSON.parse(sessionStorage.getItem('amplifyHub_journeyProgress:v2:anonymous') ?? 'null');
+    // React app page: no static helper global — read the signed-in scope
+    // directly (same key the mocked qa-user session writes to).
+    return JSON.parse(
+      localStorage.getItem('amplifyHub_journeyProgress:v2:user:qa-user')
+        ?? sessionStorage.getItem('amplifyHub_journeyProgress:v2:anonymous')
+        ?? 'null',
+    );
   });
 
 const clearStore = async () => {
@@ -58,15 +104,15 @@ const completeLessonPage = async (file) => {
   await page.getByRole('button', { name: /mark as complete/i }).click();
 };
 
-// dashboard.html and journey.html are gated behind requireAuth() (Supabase
-// session check), which this QA suite intentionally does not fake or bypass
-// — auth is out of scope for progress-tracking QA. Their consumption of the
-// shared store is instead verified statically against source, combined with
-// the live data-layer assertions below (same fields, same storage key).
+// dashboard.html and journey.html (like every lesson page now) are gated
+// behind requireAuth(); the authed mock above satisfies the gate for the
+// pages this suite drives. Dashboard/journey consumption of the shared
+// store is still verified statically against source below.
 try {
   // ── 1. Progress survives completing lessons from different modules ──
   await page.goto(`${baseUrl}sales-mindset-1.html`, { waitUntil: 'networkidle' });
   await clearStore();
+  await seedReactSession(); // survives per-origin for the React app leg below
 
   await completeLessonPage('sales-mindset-1.html'); // m0l0
   await completeLessonPage('finding-prospects-1.html'); // m1l0
@@ -171,7 +217,7 @@ try {
   // ── 5. Corrupt or older localStorage data is handled safely ──
   const corruptResult = await page.evaluate(() => {
     const AJP = window.AmplifyJourneyProgress;
-    sessionStorage.setItem(AJP.getStorageKey(), '{not-valid-json');
+    (AJP.getOwner() ? localStorage : sessionStorage).setItem(AJP.getStorageKey(), '{not-valid-json');
     return AJP.readProgress();
   });
   assert.deepEqual(corruptResult.completedLessons, [], 'corrupt JSON is treated as empty progress');
@@ -179,7 +225,7 @@ try {
 
   const oldSchemaResult = await page.evaluate(() => {
     const AJP = window.AmplifyJourneyProgress;
-    sessionStorage.setItem(
+    (AJP.getOwner() ? localStorage : sessionStorage).setItem(
       AJP.getStorageKey(),
       JSON.stringify({ completedLessons: ['m0l0', 'm1l0'], updatedAt: 123 }),
     );
@@ -201,7 +247,7 @@ try {
   await clearStore();
   await page.evaluate(() => {
     const AJP = window.AmplifyJourneyProgress;
-    sessionStorage.setItem(AJP.getStorageKey(), '{not-valid-json');
+    (AJP.getOwner() ? localStorage : sessionStorage).setItem(AJP.getStorageKey(), '{not-valid-json');
   });
   await page.goto(`${baseUrl}mastery-1.html`, { waitUntil: 'networkidle' });
   await page.getByRole('button', { name: /mark as complete/i }).click();

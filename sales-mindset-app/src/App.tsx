@@ -7,7 +7,7 @@ import {
 } from 'react';
 import { lessons, parseLesson } from './lessons';
 import { hasUnassignedProgress, writeProgress, type LessonMeta } from './progress';
-import { initSync, syncLessonToCloud } from './supabaseSync';
+import { hasLocalSession, initSync, syncLessonToCloud } from './supabaseSync';
 
 interface QuizState {
   selections: Record<number, number>;
@@ -36,6 +36,7 @@ function App() {
   const [recoveryAvailable, setRecoveryAvailable] = useState(false);
   const [quizStates, setQuizStates] = useState<QuizStateByLesson>({});
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [authed, setAuthed] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
   const lessonStartedAt = useRef(Date.now());
   const headingRef = useRef<HTMLHeadingElement>(null);
@@ -57,6 +58,20 @@ function App() {
     setSidebarOpen(false);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
+
+  // Auth gate: the lesson app is part of the gated journey, mirroring the
+  // static lesson pages' requireAuth(). No session -> bounce to sign-in with
+  // a journey round-trip; the app renders nothing until the check passes so
+  // lesson content never flashes for signed-out visitors.
+  useEffect(() => {
+    let cancelled = false;
+    hasLocalSession().then((signedIn) => {
+      if (cancelled) return;
+      if (signedIn) setAuthed(true);
+      else window.location.replace('../signin.html?redirect=journey.html');
+    });
+    return () => { cancelled = true; };
+  }, []);
 
   useEffect(() => {
     if (!window.location.hash) navigateTo(0, true);
@@ -223,6 +238,10 @@ function App() {
       setToast('Progress could not be saved in this browser.');
     }
   };
+
+  // Render nothing until the auth gate resolves (signed-out visitors are
+  // already being redirected; signed-in users see at most one frame's delay).
+  if (!authed) return null;
 
   return (
     <div className="app-shell">

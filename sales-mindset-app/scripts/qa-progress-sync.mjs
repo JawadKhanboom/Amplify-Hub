@@ -43,6 +43,9 @@ async function mockSupabaseRoute(page, { user = null, getUserDelayMs = 0, select
       window.__emitAuth = (event, session) => window.__authCallbacks.forEach(callback => callback(event, session));
       const db = {
         auth: {
+          // Lesson pages are gated by requireAuth() (session check) — the
+          // mock reports a session exactly when a mock user is present.
+          getSession: async () => ({ data: { session: window.__mockUser ? { access_token: 't', user: window.__mockUser } : null } }),
           getUser: async () => {
             window.__calls.getUser++;
             const userAtRequestStart = window.__mockUser;
@@ -85,7 +88,9 @@ await test('graceful behavior with no Supabase client', async () => {
   await page.route('**/assets/vendor/supabase-*.min.js', route => route.abort());
   await page.route('https://fonts.googleapis.com/**', route => route.abort());
   await page.route('https://fonts.gstatic.com/**', route => route.abort());
-  await page.goto(`${baseUrl}mastery-1.html`, { waitUntil: 'domcontentloaded' });
+  // interview-prep.html loads the full progress stack but is public (not
+  // gated), so AJP resilience can be exercised without a session redirect.
+  await page.goto(`${baseUrl}interview-prep.html`, { waitUntil: 'domcontentloaded' });
   const result = await page.evaluate(() => window.AmplifyJourneyProgress.syncWithCloud());
   assert.ok(Array.isArray(result.completedLessons), 'syncWithCloud should still resolve to a valid progress shape');
   await page.close();
@@ -94,7 +99,7 @@ await test('graceful behavior with no Supabase client', async () => {
 await test('graceful behavior with no authenticated user', async () => {
   const page = await browser.newPage();
   await mockSupabaseRoute(page, { user: null });
-  await page.goto(`${baseUrl}mastery-1.html`, { waitUntil: 'domcontentloaded' });
+  await page.goto(`${baseUrl}interview-prep.html`, { waitUntil: 'domcontentloaded' });
   const result = await page.evaluate(() => window.AmplifyJourneyProgress.syncWithCloud());
   const calls = await page.evaluate(() => window.__calls);
   assert.ok(Array.isArray(result.completedLessons));
@@ -106,6 +111,10 @@ await test('in-flight guard prevents duplicate concurrent syncs', async () => {
   const page = await browser.newPage();
   await mockSupabaseRoute(page, { user: { id: 'user-a' }, selectData: [], selectDelayMs: 150 });
   await page.goto(`${baseUrl}mastery-1.html`, { waitUntil: 'domcontentloaded' });
+  // Let the page-load auto-syncs (requireAuth + journey-progress) fully
+  // settle, then measure the guard in isolation on a fresh counter.
+  await page.waitForTimeout(400);
+  await page.evaluate(() => { window.__calls.select = 0; });
   await page.evaluate(() => Promise.all([
     window.AmplifyJourneyProgress.syncWithCloud(),
     window.AmplifyJourneyProgress.syncWithCloud(),
@@ -290,6 +299,17 @@ await test('book-appointments.html uses the wrapped API, not raw writeProgress',
   assert.match(src, /AJP\.markLessonComplete\(/);
   assert.match(src, /AJP\.recordLessonMeta\(/);
   assert.doesNotMatch(src, /AJP\.writeProgress\(/);
+});
+
+await test('every journey lesson page is gated behind requireAuth()', async () => {
+  const groups = { 'sales-mindset': 8, 'finding-prospects': 3, 'building-script': 4, 'opening-call': 4, 'discovery-questions': 4, 'objection-handling': 5, 'follow-up': 3, 'live-practice': 4, 'mastery': 4 };
+  const files = Object.entries(groups).flatMap(([stem, n]) => Array.from({ length: n }, (_, i) => `${stem}-${i + 1}.html`));
+  files.push('book-appointments.html');
+  assert.equal(files.length, 40, 'lesson universe must stay 40 pages');
+  for (const file of files) {
+    const src = await readFile(path.join(siteRoot, file), 'utf8');
+    assert.ok(src.includes('<script src="auth.js"></script>') && src.includes('requireAuth();'), `${file} must load auth.js and call requireAuth()`);
+  }
 });
 
 await test('sales-mindset-8.html uses the wrapped API, not raw writeProgress', async () => {

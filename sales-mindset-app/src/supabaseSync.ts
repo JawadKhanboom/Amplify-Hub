@@ -46,6 +46,19 @@ async function getCloudUser() {
   }
 }
 
+/** Session presence only (no network round-trip): the auth gate uses this to
+ * decide whether the lesson app may render at all, mirroring the static
+ * pages' requireAuth() which also keys off the locally persisted session.
+ * Ownership of progress data still requires the verified getUser() path. */
+export async function hasLocalSession(): Promise<boolean> {
+  try {
+    const { data } = await supabase.auth.getSession();
+    return Boolean(data?.session);
+  } catch {
+    return false;
+  }
+}
+
 /** Pushes a single lesson's state. Fire-and-forget from the caller's
  * perspective — always resolves, never throws. Local writeProgress must
  * already have succeeded before this is called. */

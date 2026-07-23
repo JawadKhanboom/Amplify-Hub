@@ -105,6 +105,10 @@ body{font-family:var(--font);background:var(--bg);color:var(--white);display:fle
 
 a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 </style>
+<script src="assets/vendor/supabase-2.110.8.min.js"></script>
+<script src="auth-config.js"></script>
+<script src="auth.js"></script>
+<script>requireAuth();</script>
 <link rel="stylesheet" href="assets/ui.css">
 </head>
 <body>
@@ -185,8 +189,6 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
 
 <div class="toast" id="toast">🎉 Lesson Complete! +50 XP</div>
 
-<script src="assets/vendor/supabase-2.110.8.min.js"></script>
-<script src="auth-config.js"></script>
 <script src="assets/journey-progress.js"></script>
 <script>
 // ── PROGRESS SYNC (shared with journey.html + dashboard.html) ──

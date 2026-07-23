@@ -45,6 +45,23 @@ const page = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
 const pageErrors = [];
 page.on('pageerror', (error) => pageErrors.push(error.message));
 
+// The lesson app is gated: it renders only with a locally persisted Supabase
+// session. Seed one (the bundled client restores it without a network call —
+// far-future expiry means no refresh attempt) and intercept the auth/REST
+// endpoints its verified-owner sync path calls.
+const QA_USER = { id: 'qa-user', aud: 'authenticated', email: 'qa@example.com', user_metadata: { full_name: 'QA User' } };
+// Seed before EVERY document load (survives the localStorage.clear()+reload
+// below) — without a session the gate redirects, and vite preview's SPA
+// fallback would serve the app again in an endless loop.
+await page.addInitScript((user) => {
+  localStorage.setItem('sb-dsuahpcqrrlbudomjrye-auth-token', JSON.stringify({
+    access_token: 'qa-token', refresh_token: 'qa-refresh', token_type: 'bearer',
+    expires_in: 3600 * 24 * 365, expires_at: Math.floor(Date.now() / 1000) + 3600 * 24 * 365, user,
+  }));
+}, QA_USER);
+await page.route('**/auth/v1/user**', (route) => route.fulfill({ contentType: 'application/json', body: JSON.stringify(QA_USER) }));
+await page.route('**/rest/v1/user_lesson_progress**', (route) => route.fulfill({ contentType: 'application/json', body: '[]' }));
+
 try {
   await page.goto(`${baseUrl}#lesson-1`, { waitUntil: 'networkidle' });
   await page.evaluate(() => { localStorage.clear(); sessionStorage.clear(); });
@@ -68,8 +85,9 @@ try {
   );
 
   await page.getByRole('button', { name: 'Mark as Complete' }).click();
+  // Signed-in progress is user-scoped (per-account localStorage key).
   const storedProgress = await page.evaluate(() =>
-    JSON.parse(sessionStorage.getItem('amplifyHub_journeyProgress:v2:anonymous') ?? '{}'),
+    JSON.parse(localStorage.getItem('amplifyHub_journeyProgress:v2:user:qa-user') ?? '{}'),
   );
   assert.ok(storedProgress.completedLessons.includes('m0l1'), 'persists completion');
   assert.equal(storedProgress.lessonMeta.m0l1.quizScore, '1/4', 'persists quiz score');

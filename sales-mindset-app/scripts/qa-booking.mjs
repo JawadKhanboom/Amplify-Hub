@@ -43,6 +43,35 @@ const page = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
 const pageErrors = [];
 page.on('pageerror', (error) => pageErrors.push(error.message));
 
+// book-appointments.html is gated behind requireAuth(); serve an authed
+// in-browser Supabase mock in place of the vendored client.
+await page.route('**/assets/vendor/supabase-*.min.js', (route) => route.fulfill({
+  contentType: 'application/javascript',
+  body: `
+    const USER = { id: 'qa-user', email: 'qa@example.com', user_metadata: { full_name: 'QA User' } };
+    function makeBuilder(rows) {
+      const b = {
+        select() { return b; }, eq() { return b; }, order() { return b; }, limit() { return b; },
+        maybeSingle: async () => ({ data: null, error: null }),
+        single: async () => ({ data: null, error: null }),
+        insert() { return b; }, update() { return b; }, delete() { return b; },
+        upsert: async () => ({ data: null, error: null }),
+        then(resolve) { resolve({ data: rows || [], error: null }); }
+      };
+      return b;
+    }
+    const db = {
+      auth: {
+        getSession: async () => ({ data: { session: { access_token: 't', user: USER } } }),
+        getUser: async () => ({ data: { user: USER }, error: null }),
+        onAuthStateChange: () => ({ data: { subscription: { unsubscribe() {} } } }),
+      },
+      from() { return makeBuilder([]); },
+    };
+    window.supabase = { createClient: () => db };
+  `,
+}));
+
 try {
   await page.goto(`${baseUrl}book-appointments.html`, { waitUntil: 'networkidle' });
   await page.evaluate(() => { localStorage.clear(); sessionStorage.clear(); });
