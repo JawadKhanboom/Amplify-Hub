@@ -75,7 +75,12 @@ function loadTree(dir, label) {
 }
 
 function normalize(content, hashes) {
-  let out = content.replace(/\r\n/g, '\n').replace(/\r/g, '\n').replace(/\\r\\n/g, '\\n');
+  let out = content
+    // CR in every observed emission form, most specific first:
+    .replace(/\\r\\n/g, '\\n') // fully escaped pair in quoted strings
+    .replace(/\\r\n/g, '\n')   // hybrid: minifier escapes the CR but keeps a raw LF in template literals (observed on Windows builds)
+    .replace(/\r\n/g, '\n')    // raw pair (text files, raw template bytes)
+    .replace(/\r/g, '\n');     // any stray raw CR
   for (const hash of hashes) out = out.split(hash).join('HASH');
   return out;
 }
