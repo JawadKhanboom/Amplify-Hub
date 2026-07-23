@@ -372,6 +372,9 @@ const answers=[1, 1, 2, 1];\r
 document.getElementById('checkQuiz').addEventListener('click',function(){\r
   let correct=0, answeredAny=false;\r
   document.querySelectorAll('.qopt').forEach(opt=>{\r
+    opt.classList.remove('correct','wrong');\r
+  });\r
+  document.querySelectorAll('.qopt').forEach(opt=>{\r
     const qi=parseInt(opt.dataset.qi), oi=parseInt(opt.dataset.oi);\r
     const input=opt.querySelector('input');\r
     if(!input.checked) return;\r
@@ -683,6 +686,9 @@ const answers=[1, 2, 1, 1];\r
 document.getElementById('checkQuiz').addEventListener('click',function(){\r
   let correct=0, answeredAny=false;\r
   document.querySelectorAll('.qopt').forEach(opt=>{\r
+    opt.classList.remove('correct','wrong');\r
+  });\r
+  document.querySelectorAll('.qopt').forEach(opt=>{\r
     const qi=parseInt(opt.dataset.qi), oi=parseInt(opt.dataset.oi);\r
     const input=opt.querySelector('input');\r
     if(!input.checked) return;\r
@@ -985,6 +991,9 @@ btn.addEventListener('click',function(){\r
 const answers=[2, 2, 1, 2];\r
 document.getElementById('checkQuiz').addEventListener('click',function(){\r
   let correct=0, answeredAny=false;\r
+  document.querySelectorAll('.qopt').forEach(opt=>{\r
+    opt.classList.remove('correct','wrong');\r
+  });\r
   document.querySelectorAll('.qopt').forEach(opt=>{\r
     const qi=parseInt(opt.dataset.qi), oi=parseInt(opt.dataset.oi);\r
     const input=opt.querySelector('input');\r
@@ -1297,6 +1306,9 @@ const answers=[1, 2, 1, 1];\r
 document.getElementById('checkQuiz').addEventListener('click',function(){\r
   let correct=0, answeredAny=false;\r
   document.querySelectorAll('.qopt').forEach(opt=>{\r
+    opt.classList.remove('correct','wrong');\r
+  });\r
+  document.querySelectorAll('.qopt').forEach(opt=>{\r
     const qi=parseInt(opt.dataset.qi), oi=parseInt(opt.dataset.oi);\r
     const input=opt.querySelector('input');\r
     if(!input.checked) return;\r
@@ -1597,6 +1609,9 @@ const answers=[1, 2, 1, 0];\r
 document.getElementById('checkQuiz').addEventListener('click',function(){\r
   let correct=0, answeredAny=false;\r
   document.querySelectorAll('.qopt').forEach(opt=>{\r
+    opt.classList.remove('correct','wrong');\r
+  });\r
+  document.querySelectorAll('.qopt').forEach(opt=>{\r
     const qi=parseInt(opt.dataset.qi), oi=parseInt(opt.dataset.oi);\r
     const input=opt.querySelector('input');\r
     if(!input.checked) return;\r
@@ -1832,6 +1847,9 @@ btn.addEventListener('click',function(){\r
 const answers=[1, 2, 1, 1];\r
 document.getElementById('checkQuiz').addEventListener('click',function(){\r
   let correct=0, answeredAny=false;\r
+  document.querySelectorAll('.qopt').forEach(opt=>{\r
+    opt.classList.remove('correct','wrong');\r
+  });\r
   document.querySelectorAll('.qopt').forEach(opt=>{\r
     const qi=parseInt(opt.dataset.qi), oi=parseInt(opt.dataset.oi);\r
     const input=opt.querySelector('input');\r
@@ -2069,6 +2087,9 @@ const answers=[1, 2, 1, 1];\r
 document.getElementById('checkQuiz').addEventListener('click',function(){\r
   let correct=0, answeredAny=false;\r
   document.querySelectorAll('.qopt').forEach(opt=>{\r
+    opt.classList.remove('correct','wrong');\r
+  });\r
+  document.querySelectorAll('.qopt').forEach(opt=>{\r
     const qi=parseInt(opt.dataset.qi), oi=parseInt(opt.dataset.oi);\r
     const input=opt.querySelector('input');\r
     if(!input.checked) return;\r
@@ -2296,29 +2317,29 @@ const store=AJP.readProgress();\r
 let completed=new Set(store.completedLessons||[]);\r
 const lessonMeta=store.lessonMeta||{};\r
 const thisLid=lid(MODULE_INDEX,LESSON_INDEX);\r
-const btn=document.getElementById('completeBtn');
-const pageLoadTime=Date.now();
-let lastQuizScore=lessonMeta[thisLid]?.quizScore ?? null;
-const lessonBadge=document.querySelector('.lesson-badge');
-const lessonBadgeText=lessonBadge.textContent;
-
-// Review Mode: completed lessons show a review badge instead of fresh state
-function renderLessonProgress(){
-  const done=completed.has(thisLid);const ready=typeof AJP.isReadyForWrites!=='function'||AJP.isReadyForWrites();
-  btn.textContent=done?'✓ Completed':'Mark as Complete ✓';btn.classList.toggle('done',done);btn.disabled=done||!ready;
-  lessonBadge.textContent=lessonBadgeText+(done?' · 🔁 Review Mode':'');
-  document.getElementById('lastQuizProgress')?.remove();
-  if(done&&lastQuizScore!==null){
-    const meta=document.querySelector('.lesson-meta');
-    const s=document.createElement('span');s.id='lastQuizProgress';s.textContent='🧠 Last quiz: '+lastQuizScore;meta.appendChild(s);
-  }
-}
-function refreshSalesMindsetProgress(nextStore){
-  completed.clear();(nextStore.completedLessons||[]).forEach(id=>completed.add(id));
-  Object.keys(lessonMeta).forEach(id=>delete lessonMeta[id]);Object.assign(lessonMeta,nextStore.lessonMeta||{});
-  lastQuizScore=lessonMeta[thisLid]?.quizScore ?? null;renderLessonProgress();
-}
-renderLessonProgress();
+const btn=document.getElementById('completeBtn');\r
+const pageLoadTime=Date.now();\r
+let lastQuizScore=lessonMeta[thisLid]?.quizScore ?? null;\r
+const lessonBadge=document.querySelector('.lesson-badge');\r
+const lessonBadgeText=lessonBadge.textContent;\r
+\r
+// Review Mode: completed lessons show a review badge instead of fresh state\r
+function renderLessonProgress(){\r
+  const done=completed.has(thisLid);const ready=typeof AJP.isReadyForWrites!=='function'||AJP.isReadyForWrites();\r
+  btn.textContent=done?'✓ Completed':'Mark as Complete ✓';btn.classList.toggle('done',done);btn.disabled=done||!ready;\r
+  lessonBadge.textContent=lessonBadgeText+(done?' · 🔁 Review Mode':'');\r
+  document.getElementById('lastQuizProgress')?.remove();\r
+  if(done&&lastQuizScore!==null){\r
+    const meta=document.querySelector('.lesson-meta');\r
+    const s=document.createElement('span');s.id='lastQuizProgress';s.textContent='🧠 Last quiz: '+lastQuizScore;meta.appendChild(s);\r
+  }\r
+}\r
+function refreshSalesMindsetProgress(nextStore){\r
+  completed.clear();(nextStore.completedLessons||[]).forEach(id=>completed.add(id));\r
+  Object.keys(lessonMeta).forEach(id=>delete lessonMeta[id]);Object.assign(lessonMeta,nextStore.lessonMeta||{});\r
+  lastQuizScore=lessonMeta[thisLid]?.quizScore ?? null;renderLessonProgress();\r
+}\r
+renderLessonProgress();\r
 \r
 // ── MARK COMPLETE ──\r
 btn.addEventListener('click',function(){\r
@@ -2358,12 +2379,12 @@ document.getElementById('checkQuiz').addEventListener('click',function(){\r
 });\r
 \r
 // ── MOBILE ──\r
-document.getElementById('mobBtn').addEventListener('click',()=>document.getElementById('sb').classList.add('open'));
-document.getElementById('sbX').addEventListener('click',()=>document.getElementById('sb').classList.remove('open'));
-window.addEventListener('amplify-progress-changed',()=>refreshSalesMindsetProgress(AJP.readProgress()));
-window.addEventListener('amplify-progress-synced',()=>refreshSalesMindsetProgress(AJP.readProgress()));
-AJP.ready().then(refreshSalesMindsetProgress);
-<\/script>
+document.getElementById('mobBtn').addEventListener('click',()=>document.getElementById('sb').classList.add('open'));\r
+document.getElementById('sbX').addEventListener('click',()=>document.getElementById('sb').classList.remove('open'));\r
+window.addEventListener('amplify-progress-changed',()=>refreshSalesMindsetProgress(AJP.readProgress()));\r
+window.addEventListener('amplify-progress-synced',()=>refreshSalesMindsetProgress(AJP.readProgress()));\r
+AJP.ready().then(refreshSalesMindsetProgress);\r
+<\/script>\r
 <script src="assets/sidebar-user.js"><\/script>\r
 </body>\r
 </html>\r

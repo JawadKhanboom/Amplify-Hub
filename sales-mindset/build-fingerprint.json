@@ -4,13 +4,13 @@
   "normalization": "utf8; CRLF/CR -> LF",
   "note": "Fingerprint of Sales Mindset build INPUTS (not the non-deterministic Vite output). Regenerate with `npm run build`.",
   "files": {
-    "sales-mindset-1.html": "f396ac7c706c306a4c3d4caa952876cade2066f54ddbbf640c8f47011b127115",
-    "sales-mindset-2.html": "1de0a0c46e5babd5455507d9d03b3e077d5cf1242e1c777855ef9f6b79f53700",
-    "sales-mindset-3.html": "4c41dd4b3da6abc9629129ed956eade9975f0fc782eb9501b05f59cb91d6594c",
-    "sales-mindset-4.html": "3a85a1b06a3b2148984b25360f4a660850a3f43b1d80b4bc70d3e05700138f53",
-    "sales-mindset-5.html": "0d9aef7fce5db04f1f14029b124c86d0b0ac5233bba79574cd949f2130eecc08",
-    "sales-mindset-6.html": "d8d094d44d5b84cc0d6fbbedc7117abdee0b4dddf8451a18064038ed30d93b91",
-    "sales-mindset-7.html": "56bab850dbdf72d7fe24a4b44493004ec56298e4a6402e683693b9b03a8e7f4f",
+    "sales-mindset-1.html": "c676558f4085db2eaff889d7fdac29c2a9f41a28585abdefee4d3be02097e0d0",
+    "sales-mindset-2.html": "2ec1b10584cb6d5e2202648b55c39e9d809e266c70dd81c95337730c1922ae90",
+    "sales-mindset-3.html": "520914209df95444163e9df28d1f252c5f241e45ea209db26c28bf9538cd2fcb",
+    "sales-mindset-4.html": "eee38e8be73c08572c480322163945bc989518a5740b01d11171e70c8694efe9",
+    "sales-mindset-5.html": "9bfeead560a676f7b7f6ffd3cf6c35655b9bc2ad8c3d715aba5009d70301987a",
+    "sales-mindset-6.html": "a325f9edada1124805a77dd7eb2b4b66e4e94c1aa2865cb98db4fe7520728e97",
+    "sales-mindset-7.html": "de7f53ea09481f9c774be15a0099c23c27dee2418103bf807dfcf5dddd946c52",
     "sales-mindset-8.html": "35be565a69602e11fc6eb5615c887b71d96d291c1e59bb5be1769aeb7633f960",
     "sales-mindset-app/index.html": "556a57d3d6cea72f73a7dc29de3bae40e64903e5d26a5b1999739604e8a232d0",
     "sales-mindset-app/package-lock.json": "240ef33ef7a438b6391fcb78d024553d4ddd771b69dbc7b5eb84674e72d47a9b",
@@ -26,5 +26,5 @@
     "sales-mindset-app/tsconfig.json": "cc32a3c2be133425d30e112e3dc863c9dbe1ecbbdd81123abf6d6a0300a8ae5c",
     "sales-mindset-app/vite.config.ts": "4606bcc1753b2d0a61b1abcf09e41e1a95dc04f702e3c7dc537d5141bdfea95a"
   },
-  "digest": "c21f7da339a1d26b92bb276d876da3769333b051761b2f18cb882d4b51117519"
+  "digest": "ec9edc4ed3d83688edda703f9531f6cfed02ee3a0ec1f36cdbc1ad7d7bfe4020"
 }

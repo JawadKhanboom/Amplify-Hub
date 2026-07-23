@@ -375,6 +375,9 @@ const answers=[1, 1, 2, 0];
 document.getElementById('checkQuiz').addEventListener('click',function(){
   let correct=0, answeredAny=false;
   document.querySelectorAll('.qopt').forEach(opt=>{
+    opt.classList.remove('correct','wrong');
+  });
+  document.querySelectorAll('.qopt').forEach(opt=>{
     const qi=parseInt(opt.dataset.qi), oi=parseInt(opt.dataset.oi);
     const input=opt.querySelector('input');
     if(!input.checked) return;
