@@ -27,7 +27,7 @@ const makeChallenge = (id, title, tier, type) => ({
   verification_config:{},action_url:type==='coach'?'coach-home.html#roleplay':'challenges.html',objectives:['Complete the action','Review the result'],example_text:'A safe original example.',active:true,
 });
 
-await page.route('https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2', route => route.fulfill({
+await page.route('**/assets/vendor/supabase-*.min.js', route => route.fulfill({
   contentType:'application/javascript',
   body:`
     window.__xss=0;

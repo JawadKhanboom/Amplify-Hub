@@ -29,7 +29,7 @@ const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
 const pageErrors = [];
 page.on('pageerror', error => pageErrors.push(error.message));
 
-await page.route('https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2', route => route.fulfill({
+await page.route('**/assets/vendor/supabase-*.min.js', route => route.fulfill({
   contentType: 'application/javascript',
   body: `window.supabase={createClient:()=>({supabaseKey:'test-key',auth:{getSession:async()=>({data:{session:{access_token:'test-token'}},error:null}),getUser:async()=>({data:{user:{id:'test-user'}},error:null}),signOut:async()=>({})}})};`,
 }));

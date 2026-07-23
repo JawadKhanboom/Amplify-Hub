@@ -115,7 +115,7 @@ const browser = await chromium.launch({ executablePath: chromePath, headless: tr
 let currentData = NEW_USER;
 async function newPage(viewport) {
   const page = await browser.newPage(viewport || { viewport: { width: 1280, height: 900 } });
-  await page.route('https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2', (route) => route.fulfill({ contentType: 'application/javascript', body: backendScript(currentData) }));
+  await page.route('**/assets/vendor/supabase-*.min.js', (route) => route.fulfill({ contentType: 'application/javascript', body: backendScript(currentData) }));
   await page.route('https://fonts.googleapis.com/**', (route) => route.abort());
   await page.route('https://fonts.gstatic.com/**', (route) => route.abort());
   return page;
