@@ -32,11 +32,18 @@ Verify these in the Supabase Dashboard when auth flows change:
       (plus `http://localhost:8000/*` and `http://localhost:8742/*` for local
       dev — also set 2026-07-20). Without this, password-reset emails link to
       an unauthorized redirect and fail.
-- [ ] **Email confirmations are ON** for the hosted project, and the built-in
-      SMTP sender is limited to roughly 2 emails/hour. That quota covers signup
-      confirmations AND password resets. Before any real launch, configure
-      custom SMTP (Dashboard → Auth → SMTP) or users will hit
-      `over_email_send_rate_limit`.
+- [ ] **Email confirmations are ON** for the hosted project. **Custom SMTP is
+      configured via Brevo** (done 2026-07-23; the 2 emails/hour built-in
+      sender is no longer in use): sender `AmplifyHub <jawadwicda@gmail.com>`,
+      host `smtp-relay.brevo.com:587`. The SMTP **username is the
+      `…@smtp-brevo.com` login shown in Brevo → Settings → SMTP & API — NOT
+      the Gmail address** (using the Gmail silently fails with a 500 on
+      `/auth/v1/recover`). Password is a Brevo SMTP key from the same page.
+      Limits: Supabase caps sends at 30/hour (Auth → Rate Limits); Brevo free
+      tier caps 300/day. Delivery issues: check Brevo → Transactional → Logs
+      (an empty log means SMTP auth itself failed). After buying a custom
+      domain, add it as a verified Brevo domain and switch the sender off the
+      gmail address for proper DKIM/DMARC.
 - [ ] TOTP 2FA (settings page) requires **Auth → MFA → TOTP** enabled on the
       hosted project.
 
