@@ -11,20 +11,20 @@
     "sales-mindset-5.html": "0d9aef7fce5db04f1f14029b124c86d0b0ac5233bba79574cd949f2130eecc08",
     "sales-mindset-6.html": "d8d094d44d5b84cc0d6fbbedc7117abdee0b4dddf8451a18064038ed30d93b91",
     "sales-mindset-7.html": "56bab850dbdf72d7fe24a4b44493004ec56298e4a6402e683693b9b03a8e7f4f",
-    "sales-mindset-8.html": "1e9b27b52265cd005f32a4f031a7bf4b2a42a4c9dae6bd595b0db061e02dff46",
+    "sales-mindset-8.html": "35be565a69602e11fc6eb5615c887b71d96d291c1e59bb5be1769aeb7633f960",
     "sales-mindset-app/index.html": "556a57d3d6cea72f73a7dc29de3bae40e64903e5d26a5b1999739604e8a232d0",
     "sales-mindset-app/package-lock.json": "240ef33ef7a438b6391fcb78d024553d4ddd771b69dbc7b5eb84674e72d47a9b",
-    "sales-mindset-app/package.json": "9b609c674c10094d68e1cf2770d168296974f8121cce3518e50c551833d65bc2",
+    "sales-mindset-app/package.json": "590acd58e0367578e6e6aad9de09dec031cbda83b26d75b2eb9661d8e978efa9",
     "sales-mindset-app/scripts/build-fingerprint.mjs": "d124ad2b1110290466a0bb5af01fa379da2f120d49f9730825a97d4a4ac72203",
-    "sales-mindset-app/src/App.tsx": "88f7d4e4860b09f715ea0e4bb41237552a2efe1f8ce6890b7b4ff503822cbf49",
+    "sales-mindset-app/src/App.tsx": "a3cfd9fe73a4ef310ead42b58e49910ee325e10b03a75e1a43fd3e95aeee3303",
     "sales-mindset-app/src/lessons.ts": "b655ae4c47beaa43053230ff2e580721cdeffe0172165f5688b0589a61c436f3",
     "sales-mindset-app/src/main.tsx": "0b10b96f94ee2833076460851d5a20dd2efcfaf5bb0ddea918b63ff9ab4aad4e",
-    "sales-mindset-app/src/progress.ts": "10b00fe49e45e05342cede420bda42087f2a3d2ec93e049278d5255ffbe585de",
-    "sales-mindset-app/src/styles.css": "ccccab6b6496e99881fc8572f9d1d7e394ba92ae39a4d9eb5c187f90d32276eb",
-    "sales-mindset-app/src/supabaseSync.ts": "ef7ca835ef8255b84d1d7a5c3a1b17b7f9b1c54378e77b8a8de337b46a17a7ed",
+    "sales-mindset-app/src/progress.ts": "a4a084dae69b5831deb892d9bdee61cccc0f2fa0bb76251d49a63470edb0e2d0",
+    "sales-mindset-app/src/styles.css": "9d88fca01cf67b47e6b8b62a56645fe93a25e3ff55c706f6bde78120da8ead4c",
+    "sales-mindset-app/src/supabaseSync.ts": "f914a1790e476bd135c34307c5f875bafa0cfa12d4b92ab29b80a66b6900cc11",
     "sales-mindset-app/src/vite-env.d.ts": "65996936fbb042915f7b74a200fcdde7e410f32a669b1ab9597cfaa4b0faddb5",
     "sales-mindset-app/tsconfig.json": "cc32a3c2be133425d30e112e3dc863c9dbe1ecbbdd81123abf6d6a0300a8ae5c",
     "sales-mindset-app/vite.config.ts": "4606bcc1753b2d0a61b1abcf09e41e1a95dc04f702e3c7dc537d5141bdfea95a"
   },
-  "digest": "f85327c3ffd0c191e7de38fca1156487fea14b421b2455124c8a07895bde8130"
+  "digest": "c21f7da339a1d26b92bb276d876da3769333b051761b2f18cb882d4b51117519"
 }

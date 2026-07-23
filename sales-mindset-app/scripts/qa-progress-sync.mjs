@@ -33,14 +33,27 @@ if (!baseUrl) throw new Error('Vite did not expose a local URL.');
 
 const browser = await chromium.launch({ executablePath: chromePath, headless: true, args: ['--disable-gpu', '--no-first-run'] });
 
-async function mockSupabaseRoute(page, { user = null, selectData = [], selectDelayMs = 0 } = {}) {
+async function mockSupabaseRoute(page, { user = null, getUserDelayMs = 0, selectData = [], selectDelayMs = 0 } = {}) {
   await page.route('https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2', route => route.fulfill({
     contentType: 'application/javascript',
     body: `
       window.__calls = { select: 0, upsert: 0, getUser: 0 };
-      const user = ${JSON.stringify(user)};
+      window.__mockUser = ${JSON.stringify(user)};
+      window.__authCallbacks = [];
+      window.__emitAuth = (event, session) => window.__authCallbacks.forEach(callback => callback(event, session));
       const db = {
-        auth: { getUser: async () => { window.__calls.getUser++; return { data: { user } }; } },
+        auth: {
+          getUser: async () => {
+            window.__calls.getUser++;
+            const userAtRequestStart = window.__mockUser;
+            ${getUserDelayMs ? `await new Promise(r => setTimeout(r, ${getUserDelayMs}));` : ''}
+            return { data: { user: userAtRequestStart } };
+          },
+          onAuthStateChange: callback => {
+            window.__authCallbacks.push(callback);
+            return { data: { subscription: { unsubscribe: () => {} } } };
+          },
+        },
         from: () => ({
           select: async () => {
             window.__calls.select++;
@@ -129,6 +142,149 @@ await test('idempotent repeated full sync (no duplicate ids, stable completedAt)
   await page.close();
 });
 
+await test('static lesson UI refreshes after verified cloud progress arrives', async () => {
+  const page = await browser.newPage();
+  await mockSupabaseRoute(page, {
+    user: { id: 'user-a' },
+    selectData: [{ lesson_id: 'm9l0', completed_at: new Date().toISOString(), metadata: {}, updated_at: new Date().toISOString() }],
+  });
+  await page.goto(`${baseUrl}mastery-1.html`, { waitUntil: 'domcontentloaded' });
+  await page.waitForFunction(() => document.getElementById('completeBtn')?.classList.contains('done'));
+  assert.match(await page.locator('#completeBtn').textContent(), /Completed/);
+  await page.close();
+});
+
+await test('delayed A lesson sync cannot upload after switching to B', async () => {
+  const page = await browser.newPage();
+  await mockSupabaseRoute(page, { user: { id: 'user-a' }, getUserDelayMs: 150, selectData: [] });
+  await page.goto(`${baseUrl}mastery-1.html`, { waitUntil: 'domcontentloaded' });
+  await page.waitForTimeout(350);
+  await page.evaluate(() => {
+    window.AmplifyJourneyProgress.markLessonComplete(9, 0, { mins: 3 });
+    window.AmplifyJourneyProgress.clearOwner();
+    window.__mockUser = { id: 'user-b' };
+    window.AmplifyJourneyProgress.setOwner('user-b', true);
+  });
+  await page.waitForTimeout(250);
+  const result = await page.evaluate(() => ({
+    calls: window.__calls,
+    b: window.AmplifyJourneyProgress.readProgress(),
+  }));
+  assert.equal(result.calls.upsert, 0, 'stale A request must be discarded before upsert');
+  assert.ok(!result.b.completedLessons.includes('m9l0'), 'B cache must not receive A lesson action');
+  await page.close();
+});
+
+await test('auth event hides A immediately and loads only B progress', async () => {
+  const page = await browser.newPage();
+  await mockSupabaseRoute(page, { user: { id: 'user-a' }, selectData: [] });
+  await page.goto(`${baseUrl}mastery-1.html`, { waitUntil: 'domcontentloaded' });
+  await page.waitForTimeout(100);
+  await page.evaluate(() => window.AmplifyJourneyProgress.markLessonComplete(9, 0, { mins: 3 }));
+  await page.waitForTimeout(50);
+
+  const duringSwitch = await page.evaluate(() => {
+    window.__mockUser = { id: 'user-b' };
+    window.__emitAuth('SIGNED_IN', { user: window.__mockUser });
+    return {
+      owner: window.AmplifyJourneyProgress.getOwner(),
+      buttonDone: document.getElementById('completeBtn').classList.contains('done'),
+      buttonDisabled: document.getElementById('completeBtn').disabled,
+    };
+  });
+  assert.equal(duringSwitch.owner, null, 'old owner must be cleared synchronously');
+  assert.equal(duringSwitch.buttonDone, false, 'A completion must disappear during B verification');
+  assert.equal(duringSwitch.buttonDisabled, true, 'lesson actions must be blocked during B verification');
+
+  await page.waitForFunction(() => window.AmplifyJourneyProgress.getOwner() === 'user-b');
+  const bStore = await page.evaluate(() => window.AmplifyJourneyProgress.readProgress());
+  assert.ok(!bStore.completedLessons.includes('m9l0'), 'B must not inherit A completion');
+  assert.equal(await page.locator('#completeBtn').isDisabled(), false, 'lesson actions should resume after B is verified');
+  await page.close();
+});
+
+await test('user A progress never appears in or uploads to user B', async () => {
+  const page = await browser.newPage();
+  await mockSupabaseRoute(page, { user: { id: 'user-a' }, selectData: [] });
+  await page.goto(`${baseUrl}mastery-1.html`, { waitUntil: 'domcontentloaded' });
+  await page.waitForTimeout(100);
+
+  await page.evaluate(() => window.AmplifyJourneyProgress.markLessonComplete(9, 0, { mins: 3 }));
+  await page.waitForTimeout(50);
+  const keyA = await page.evaluate(() => window.AmplifyJourneyProgress.getStorageKey());
+  assert.match(keyA, /user-a$/);
+
+  const userB = await page.evaluate(async () => {
+    window.__mockUser = { id: 'user-b' };
+    const store = await window.AmplifyJourneyProgress.syncWithCloud();
+    return { key: window.AmplifyJourneyProgress.getStorageKey(), store };
+  });
+  assert.match(userB.key, /user-b$/);
+  assert.ok(!userB.store.completedLessons.includes('m9l0'), 'B must not inherit A progress');
+
+  const userA = await page.evaluate(async () => {
+    window.__mockUser = { id: 'user-a' };
+    const store = await window.AmplifyJourneyProgress.syncWithCloud();
+    return { key: window.AmplifyJourneyProgress.getStorageKey(), store };
+  });
+  assert.match(userA.key, /user-a$/);
+  assert.ok(userA.store.completedLessons.includes('m9l0'), 'A must retain A progress');
+  await page.close();
+});
+
+await test('legacy browser progress is quarantined and requires explicit import', async () => {
+  const page = await browser.newPage();
+  await mockSupabaseRoute(page, { user: { id: 'user-b' }, selectData: [] });
+  await page.addInitScript(() => {
+    localStorage.setItem('amplifyHub_journeyProgress', JSON.stringify({
+      completedLessons: ['m2l0'],
+      lessonMeta: { m2l0: { mins: 4 } },
+    }));
+  });
+  await page.goto(`${baseUrl}mastery-1.html`, { waitUntil: 'domcontentloaded' });
+  await page.waitForTimeout(100);
+
+  const beforeImport = await page.evaluate(() => ({
+    store: window.AmplifyJourneyProgress.readProgress(),
+    hasLegacy: window.AmplifyJourneyProgress.hasLegacyProgress(),
+    oldKey: localStorage.getItem('amplifyHub_journeyProgress'),
+  }));
+  assert.ok(!beforeImport.store.completedLessons.includes('m2l0'), 'legacy progress must not auto-attach to B');
+  assert.equal(beforeImport.hasLegacy, true);
+  assert.equal(beforeImport.oldKey, null);
+
+  const imported = await page.evaluate(() => window.AmplifyJourneyProgress.importLegacyProgress());
+  assert.ok(imported.completedLessons.includes('m2l0'), 'verified explicit import should recover legacy progress');
+  assert.equal(await page.evaluate(() => window.AmplifyJourneyProgress.hasLegacyProgress()), false);
+  await page.close();
+});
+
+await test('keeping recovery data hides it only for the current account', async () => {
+  const page = await browser.newPage();
+  await mockSupabaseRoute(page, { user: { id: 'user-b' }, selectData: [] });
+  await page.addInitScript(() => {
+    localStorage.setItem('amplifyHub_journeyProgress', JSON.stringify({
+      completedLessons: ['m2l0'],
+      lessonMeta: { m2l0: { mins: 4 } },
+    }));
+  });
+  await page.goto(`${baseUrl}mastery-1.html`, { waitUntil: 'domcontentloaded' });
+  await page.waitForTimeout(100);
+  const result = await page.evaluate(async () => {
+    window.AmplifyJourneyProgress.dismissRecovery('legacy');
+    const hiddenForB = window.AmplifyJourneyProgress.hasLegacyProgress();
+    const preserved = localStorage.getItem('amplifyHub_journeyProgress:legacy:v1');
+    window.AmplifyJourneyProgress.clearOwner();
+    window.__mockUser = { id: 'user-c' };
+    await window.AmplifyJourneyProgress.syncWithCloud();
+    return { hiddenForB, preserved, visibleForC: window.AmplifyJourneyProgress.hasLegacyProgress() };
+  });
+  assert.equal(result.hiddenForB, false);
+  assert.ok(result.preserved, 'Keep for another account must preserve the quarantined recovery copy');
+  assert.equal(result.visibleForC, true, 'another verified account must still be offered the recovery data');
+  await page.close();
+});
+
 await test('book-appointments.html uses the wrapped API, not raw writeProgress', async () => {
   const src = await readFile(path.join(siteRoot, 'book-appointments.html'), 'utf8');
   assert.match(src, /AJP\.markLessonComplete\(/);
@@ -156,6 +312,85 @@ await test('supabaseSync.ts derives the user from an authenticated session and u
   assert.match(src, /supabase\.auth\.getUser\(\)/, 'must derive the user from the authenticated session');
   assert.match(src, /onConflict:\s*'user_id,lesson_id'/, 'must upsert with the same conflict target as the static site');
   assert.doesNotMatch(src, /service_role/i, 'must never reference a service-role key');
+});
+
+await test('recovery import: current fields win on overlap, source-only fields survive', async () => {
+  const page = await browser.newPage();
+  await mockSupabaseRoute(page, { user: { id: 'user-b' }, selectData: [] });
+  await page.addInitScript(() => {
+    localStorage.setItem('amplifyHub_journeyProgress', JSON.stringify({
+      completedLessons: ['m2l0'],
+      lessonMeta: { m2l0: { mins: 4, quizScore: '3/4' } },
+    }));
+  });
+  await page.goto(`${baseUrl}mastery-1.html`, { waitUntil: 'domcontentloaded' });
+  await page.waitForFunction(() => window.AmplifyJourneyProgress.getOwner() === 'user-b');
+
+  // The signed-in account has its own fresher value for one overlapping field.
+  await page.evaluate(() => window.AmplifyJourneyProgress.recordLessonMeta(2, 0, { mins: 9 }));
+  const imported = await page.evaluate(() => window.AmplifyJourneyProgress.importLegacyProgress());
+  assert.ok(imported.completedLessons.includes('m2l0'), 'source completion must be recovered');
+  assert.equal(imported.lessonMeta.m2l0.mins, 9, 'current account value must win over the recovered value for the same field');
+  assert.equal(imported.lessonMeta.m2l0.quizScore, '3/4', 'source-only fields must survive the merge');
+  await page.close();
+});
+
+await test('book-appointments.html refreshes to Completed when verified cloud progress arrives', async () => {
+  const page = await browser.newPage();
+  await mockSupabaseRoute(page, {
+    user: { id: 'user-a' },
+    selectData: [{ lesson_id: 'm6l0', completed_at: new Date().toISOString(), metadata: {}, updated_at: new Date().toISOString() }],
+  });
+  await page.goto(`${baseUrl}book-appointments.html`, { waitUntil: 'domcontentloaded' });
+  await page.waitForFunction(() => document.getElementById('completeBtn')?.classList.contains('done'));
+  assert.match(await page.locator('#completeBtn').textContent(), /Completed/);
+  assert.equal(await page.locator('#completeBtn').isDisabled(), true, 'a completed lesson must not be re-completable');
+  await page.close();
+});
+
+await test('sales-mindset-8.html flips into Review Mode when verified cloud progress arrives', async () => {
+  const page = await browser.newPage();
+  await mockSupabaseRoute(page, {
+    user: { id: 'user-a' },
+    selectData: [{ lesson_id: 'm0l7', completed_at: new Date().toISOString(), metadata: {}, updated_at: new Date().toISOString() }],
+  });
+  await page.goto(`${baseUrl}sales-mindset-8.html`, { waitUntil: 'domcontentloaded' });
+  await page.waitForFunction(() => (document.querySelector('.lesson-badge')?.textContent || '').includes('Review Mode'));
+  assert.ok(
+    (await page.locator('#completeBtn').textContent()).includes('Completed'),
+    'the complete button must reflect the cloud completion alongside the Review Mode badge',
+  );
+  await page.close();
+});
+
+await test('sidebar name/avatar switch from A to B on an auth change', async () => {
+  const page = await browser.newPage();
+  await mockSupabaseRoute(page, { user: { id: 'user-a', user_metadata: { full_name: 'Alice Anders' } } });
+  await page.goto(`${baseUrl}contact.html`, { waitUntil: 'domcontentloaded' });
+  await page.waitForFunction(() => document.querySelector('.sb-uname')?.textContent === 'Alice Anders');
+  assert.equal(await page.locator('.sb-avatar').first().textContent(), 'A');
+
+  await page.evaluate(() => {
+    window.__mockUser = { id: 'user-b', user_metadata: { full_name: 'Bilal Khan' } };
+    window.__emitAuth('SIGNED_IN', { user: window.__mockUser });
+  });
+  await page.waitForFunction(() => document.querySelector('.sb-uname')?.textContent === 'Bilal Khan');
+  assert.equal(await page.locator('.sb-avatar').first().textContent(), 'B', 'avatar initial must switch with the account');
+  await page.close();
+});
+
+await test('supabaseSync.ts guards every stale path with generation/scope re-checks', async () => {
+  const src = await readFile(path.join(appDir, 'src', 'supabaseSync.ts'), 'utf8');
+  // initSync must tag each run and discard results from a superseded run.
+  assert.match(src, /const generation = \+\+syncGeneration/, 'each sync run must capture its own generation');
+  assert.match(src, /if \(generation !== syncGeneration\) return/, 'stale sync completions must be discarded');
+  // Signing out (and disposing) must invalidate any in-flight run.
+  assert.match(src, /syncGeneration \+= 1/, 'SIGNED_OUT/dispose must bump the generation to orphan in-flight runs');
+  // The full merge must re-validate owner + scope version after every await
+  // before it writes locally or upserts to the cloud.
+  assert.match(src, /getProgressScopeVersion\(\) !== startingVersion\) return readProgress\(\)/, 'owner resolution must abort on scope change');
+  assert.match(src, /getProgressOwner\(\) !== ownerId \|\| getProgressScopeVersion\(\) !== capturedVersion\) return readProgress\(\)/, 'post-select stale scope must abort before local write');
+  assert.match(src, /freshUser\.id !== ownerId/, 'the upload must re-verify the session user right before upsert');
 });
 
 await browser.close();

@@ -250,6 +250,30 @@ summary:focus-visible {
   padding: 3rem 0 6rem;
 }
 
+.recovery-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+  padding: 0.9rem 1rem;
+  border: 1px solid rgba(255, 167, 38, 0.35);
+  border-radius: 0.75rem;
+  background: rgba(255, 167, 38, 0.1);
+  color: var(--text);
+  font-size: 0.9rem;
+}
+
+.recovery-banner strong,
+.recovery-banner a {
+  color: var(--white);
+}
+
+.recovery-banner a {
+  flex: 0 0 auto;
+  font-weight: 700;
+}
+
 .lesson-header {
   margin-bottom: 2rem;
 }

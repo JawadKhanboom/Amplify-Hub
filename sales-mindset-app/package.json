@@ -12,6 +12,7 @@
     "qa": "node scripts/qa.mjs",
     "qa:booking": "node scripts/qa-booking.mjs",
     "qa:progress": "node scripts/qa-progress.mjs",
+    "qa:progress-sync": "node scripts/qa-progress-sync.mjs",
     "qa:coach-security": "node scripts/qa-coach-request-security.mjs && node scripts/qa-coach-security.mjs",
     "qa:challenges": "node scripts/qa-challenges.mjs",
     "qa:resources": "node scripts/qa-resources.mjs",

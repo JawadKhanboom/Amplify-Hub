@@ -31,6 +31,7 @@
 </script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="auth-config.js"></script>
+<script src="assets/journey-progress.js"></script>
 <script src="auth.js"></script>
 <script>requireAuth();</script>
 <style>
@@ -406,9 +407,8 @@ document.querySelectorAll('.fade-up').forEach(el=>obs.observe(el));
 // Journey state sync functions
 function readJourneyProgress(){
   try{
-    const raw = localStorage.getItem('amplifyHub_journeyProgress');
-    if(raw){
-      const d = JSON.parse(raw);
+    if(window.AmplifyJourneyProgress){
+      const d = window.AmplifyJourneyProgress.readProgress();
       return { pct: d.overallProgress ?? 0, milestone: d.currentModuleName || 'Getting Started', lessonsDone: d.lessonsCompleted ?? 0 };
     }
   }catch(e){}
@@ -438,8 +438,10 @@ const ringObs=new IntersectionObserver(es=>{es.forEach(e=>{if(!e.isIntersecting)
   ringObs.unobserve(e.target)})},{threshold:.3});
 ringObs.observe(document.querySelector('.welcome'));
 
-window.addEventListener('storage', (e)=>{
-  if(e.key==='amplifyHub_journeyProgress') applyJourneyProgress(false);
+let initializedProgressOwner;
+window.addEventListener('amplify-progress-changed', event=>{
+  if(initializedProgressOwner!==undefined&&event.detail?.reason==='scope'&&event.detail.ownerId!==initializedProgressOwner){location.reload();return;}
+  applyJourneyProgress(false);
 });
 
 // Stat counting micro-animations
@@ -468,12 +470,12 @@ document.querySelectorAll('.sb-item').forEach(item=>{
 // Conditional initialization
 function ahUserState(){
   try{
-    const d=JSON.parse(localStorage.getItem('amplifyHub_journeyProgress')||'null');
+    const d=window.AmplifyJourneyProgress?.readProgress();
     if(d&&((d.overallProgress||0)>0||(d.lessonsCompleted||0)>0))return 'active';
   }catch(e){}
   return 'new';
 }
-setTimeout(()=>{
+function initializeUserState(){
   const st=ahUserState();
   if(st==='new'){
     document.querySelector('.w-greeting h1').textContent='Welcome to AmplifyHub 👋';
@@ -486,7 +488,8 @@ setTimeout(()=>{
   }
   document.body.classList.remove('state-loading');
   document.body.classList.add(st==='new'?'state-new':'state-active');
-},450);
+}
+window.AmplifyJourneyProgress.ready().then(()=>{initializedProgressOwner=window.AmplifyJourneyProgress.getOwner();initializeUserState();});
 </script>
 </body>
 </html>

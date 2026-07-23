@@ -49,6 +49,9 @@ jobs:
       - name: QA — progress (browser)
         run: npm run qa:progress
 
+      - name: QA — progress account isolation (browser)
+        run: npm run qa:progress-sync
+
       - name: QA — coach security (browser)
         run: node scripts/qa-coach-security.mjs
 
