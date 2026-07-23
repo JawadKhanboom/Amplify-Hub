@@ -6,7 +6,7 @@ import {
   type MouseEvent as ReactMouseEvent,
 } from 'react';
 import { lessons, parseLesson } from './lessons';
-import { readProgress, writeProgress, type LessonMeta } from './progress';
+import { hasUnassignedProgress, writeProgress, type LessonMeta } from './progress';
 import { initSync, syncLessonToCloud } from './supabaseSync';
 
 interface QuizState {
@@ -29,14 +29,11 @@ const getQuizScore = (state: QuizState, answers: readonly number[]): string | nu
 };
 
 function App() {
-  const initialProgress = useMemo(readProgress, []);
   const [currentIndex, setCurrentIndex] = useState(getLessonFromHash);
-  const [completed, setCompleted] = useState(
-    () => new Set(initialProgress.completedLessons),
-  );
-  const [lessonMeta, setLessonMeta] = useState<Record<string, LessonMeta>>(
-    () => initialProgress.lessonMeta ?? {},
-  );
+  const [completed, setCompleted] = useState<Set<string>>(() => new Set());
+  const [lessonMeta, setLessonMeta] = useState<Record<string, LessonMeta>>({});
+  const [progressReady, setProgressReady] = useState(false);
+  const [recoveryAvailable, setRecoveryAvailable] = useState(false);
   const [quizStates, setQuizStates] = useState<QuizStateByLesson>({});
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
@@ -82,7 +79,12 @@ function App() {
   // pulls in/pushes out progress, never blocks or replaces the local state
   // already loaded into initialProgress.
   useEffect(() => {
-    initSync();
+    return initSync((store, ready) => {
+      setCompleted(new Set(store.completedLessons));
+      setLessonMeta(store.lessonMeta ?? {});
+      setRecoveryAvailable(ready && hasUnassignedProgress());
+      setProgressReady(ready);
+    });
   }, []);
 
   useEffect(() => {
@@ -145,6 +147,7 @@ function App() {
   }, [toast]);
 
   const persistQuizScore = (state: QuizState) => {
+    if (!progressReady) return;
     const quizScore = getQuizScore(state, lesson.answers);
     if (!quizScore) return;
 
@@ -195,7 +198,7 @@ function App() {
   };
 
   const markComplete = () => {
-    if (isComplete) return;
+    if (!progressReady || isComplete) return;
 
     const nextCompleted = new Set(completed).add(lesson.id);
     const quizScore = getQuizScore(quizState, lesson.answers) ?? lessonMeta[lesson.id]?.quizScore;
@@ -299,6 +302,12 @@ function App() {
       </aside>
 
       <main className="lesson-main">
+        {recoveryAvailable && (
+          <div className="recovery-banner" role="status">
+            <span><strong>Unassigned browser progress found.</strong> Review it before continuing.</span>
+            <a href="../journey.html">Review progress →</a>
+          </div>
+        )}
         <div className="lesson-header">
           <div className="lesson-badge">
             Sales Mindset · Lesson {lesson.number} of {lessons.length}
@@ -334,10 +343,10 @@ function App() {
           <button
             className={`nav-button complete${isComplete ? ' done' : ''}`}
             type="button"
-            disabled={isComplete}
+            disabled={!progressReady || isComplete}
             onClick={markComplete}
           >
-            {isComplete ? '✓ Completed' : 'Mark as Complete'}
+            {!progressReady ? 'Loading progress…' : isComplete ? '✓ Completed' : 'Mark as Complete'}
           </button>
           {currentIndex < lessons.length - 1 ? (
             <button

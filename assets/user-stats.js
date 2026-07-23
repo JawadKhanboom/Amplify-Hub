@@ -9,7 +9,7 @@
  *   - coaching_sessions       → AI Coach sessions, overall + per-skill scores
  *   - user_challenge_assignments → challenges completed, XP earned
  *   - challenge_catalog       → titles for the activity timeline
- * plus the local `amplifyHub_journeyProgress` cache as an offline fallback.
+ * plus the user-scoped AmplifyJourneyProgress cache as an offline fallback.
  *
  * There are NO invented metrics: no real-world call counts, no confidence
  * score, no XP beyond challenge XP, no resource bookmarks. A brand-new
@@ -170,6 +170,9 @@
 
     var user = await fetchUser(api);
     if (!user) { result.achievements = buildAchievements(result.totals); return result; }
+    if (global.AmplifyJourneyProgress && typeof global.AmplifyJourneyProgress.setOwner === 'function') {
+      global.AmplifyJourneyProgress.setOwner(user.id, true);
+    }
     result.authenticated = true;
     result.profile.email = user.email || '';
     result.profile.joinedAt = user.created_at || null;

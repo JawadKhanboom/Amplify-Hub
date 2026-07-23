@@ -325,7 +325,9 @@ const CoachStore = (() => {
 
   function getUserContext() {
     let journey = null;
-    try { journey = JSON.parse(localStorage.getItem(K.journey)); } catch (e) {}
+    try {
+      if (window.AmplifyJourneyProgress) journey = window.AmplifyJourneyProgress.readProgress();
+    } catch (e) {}
     return {
       journey: journey ? {
         module: journey.currentModuleName,

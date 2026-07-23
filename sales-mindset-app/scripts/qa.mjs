@@ -47,7 +47,7 @@ page.on('pageerror', (error) => pageErrors.push(error.message));
 
 try {
   await page.goto(`${baseUrl}#lesson-1`, { waitUntil: 'networkidle' });
-  await page.evaluate(() => localStorage.clear());
+  await page.evaluate(() => { localStorage.clear(); sessionStorage.clear(); });
   await page.reload({ waitUntil: 'networkidle' });
 
   assert.equal(await page.locator('.lesson-tab').count(), 8, 'renders all lesson tabs');
@@ -69,7 +69,7 @@ try {
 
   await page.getByRole('button', { name: 'Mark as Complete' }).click();
   const storedProgress = await page.evaluate(() =>
-    JSON.parse(localStorage.getItem('amplifyHub_journeyProgress') ?? '{}'),
+    JSON.parse(sessionStorage.getItem('amplifyHub_journeyProgress:v2:anonymous') ?? '{}'),
   );
   assert.ok(storedProgress.completedLessons.includes('m0l1'), 'persists completion');
   assert.equal(storedProgress.lessonMeta.m0l1.quizScore, '1/4', 'persists quiz score');

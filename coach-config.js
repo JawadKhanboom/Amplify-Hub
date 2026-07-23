@@ -83,8 +83,7 @@ const CoachConfig = {
 
   storageKeys: {
     root: 'amplifyHub_coach_v1',
-    msgs: id => `amplifyHub_coach_msgs_${id}`,
-    journey: 'amplifyHub_journeyProgress'
+    msgs: id => `amplifyHub_coach_msgs_${id}`
   },
 
   // Practice modes. `intro` is shown when the mode is selected; `system` is

@@ -185,23 +185,37 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
 
 <div class="toast" id="toast">✓ Portfolio saved</div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="auth-config.js"></script>
+<script src="assets/journey-progress.js"></script>
 <script>
-// ── LIVE PROGRESS SNAPSHOT (reads the shared Journey key) ──
+// ── LIVE PROGRESS SNAPSHOT (user-scoped journey progress) ──
+// Renders from AmplifyJourneyProgress (per-user/anonymous scoped store),
+// re-renders whenever the scope or data changes (sign-in, A→B account
+// switch, cloud sync landing), and never touches the legacy shared key.
 (function(){
-  let d={};
-  try{ d=JSON.parse(localStorage.getItem('amplifyHub_journeyProgress'))||{}; }catch(e){}
-  document.getElementById('snapLessons').textContent = d.lessonsCompleted ?? 0;
-  document.getElementById('snapProgress').textContent = (d.overallProgress ?? 0)+'%';
-  document.getElementById('snapModule').textContent = d.currentModuleName || 'Sales Mindset';
-  // Average quiz score from lessonMeta
-  const meta=d.lessonMeta||{};
-  const scores=Object.values(meta).map(m=>m.quizScore).filter(Boolean).map(s=>{
-    const [c,t]=s.split('/').map(Number); return t?c/t:null;
-  }).filter(v=>v!==null);
-  if(scores.length){
-    const avg=Math.round(scores.reduce((a,b)=>a+b,0)/scores.length*100);
-    document.getElementById('snapQuiz').textContent=avg+'%';
+  function renderSnapshot(){
+    let d={};
+    try{ d=(window.AmplifyJourneyProgress && AmplifyJourneyProgress.readProgress())||{}; }catch(e){}
+    document.getElementById('snapLessons').textContent = d.lessonsCompleted ?? 0;
+    document.getElementById('snapProgress').textContent = (d.overallProgress ?? 0)+'%';
+    document.getElementById('snapModule').textContent = d.currentModuleName || 'Sales Mindset';
+    // Average quiz score from lessonMeta — reset to the placeholder when the
+    // active scope has no scores, so a scope switch never leaves stale stats.
+    const meta=d.lessonMeta||{};
+    const scores=Object.values(meta).map(m=>m.quizScore).filter(Boolean).map(s=>{
+      const [c,t]=String(s).split('/').map(Number); return t?c/t:null;
+    }).filter(v=>v!==null);
+    if(scores.length){
+      const avg=Math.round(scores.reduce((a,b)=>a+b,0)/scores.length*100);
+      document.getElementById('snapQuiz').textContent=avg+'%';
+    } else {
+      document.getElementById('snapQuiz').textContent='—';
+    }
   }
+  renderSnapshot();
+  window.addEventListener('amplify-progress-changed', renderSnapshot);
+  if (window.AmplifyJourneyProgress) AmplifyJourneyProgress.ready().then(renderSnapshot);
 })();
 
 // ── PORTFOLIO PERSISTENCE ──

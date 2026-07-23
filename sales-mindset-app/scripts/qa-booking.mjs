@@ -45,7 +45,7 @@ page.on('pageerror', (error) => pageErrors.push(error.message));
 
 try {
   await page.goto(`${baseUrl}book-appointments.html`, { waitUntil: 'networkidle' });
-  await page.evaluate(() => localStorage.clear());
+  await page.evaluate(() => { localStorage.clear(); sessionStorage.clear(); });
   await page.reload({ waitUntil: 'networkidle' });
 
   assert.equal(await page.locator('h1').innerText(), 'Appointment Setting');
@@ -62,9 +62,7 @@ try {
   assert.equal(await page.locator('#quizScore').innerText(), 'Score: 10/10');
 
   await page.getByRole('button', { name: 'Mark as Complete' }).click();
-  const progress = await page.evaluate(() =>
-    JSON.parse(localStorage.getItem('amplifyHub_journeyProgress') ?? '{}'),
-  );
+  const progress = await page.evaluate(() => window.AmplifyJourneyProgress.readProgress());
   assert.ok(progress.completedLessons.includes('m6l0'), 'persists appointment-setting completion');
   assert.equal(progress.lessonMeta.m6l0.quizScore, '10/10', 'persists quiz score');
   assert.equal(progress.totalLessons, 40, 'uses the consolidated 40-lesson journey total');

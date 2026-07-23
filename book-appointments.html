@@ -265,11 +265,22 @@ const saveStore=(completed,lessonMeta)=>completed.has(LESSON_ID)
   ? AJP.markLessonComplete(MODULE_INDEX,LESSON_INDEX,lessonMeta[LESSON_ID])
   : AJP.recordLessonMeta(MODULE_INDEX,LESSON_INDEX,lessonMeta[LESSON_ID]);
 const store=AJP.readProgress();const completed=new Set(store.completedLessons||[]);const lessonMeta=store.lessonMeta||{};const startedAt=Date.now();
-const completeBtn=document.getElementById('completeBtn');if(completed.has(LESSON_ID)){completeBtn.textContent='✓ Completed';completeBtn.classList.add('done');completeBtn.disabled=true}
+const completeBtn=document.getElementById('completeBtn');
+function refreshBookingProgress(nextStore){
+  completed.clear();(nextStore.completedLessons||[]).forEach(id=>completed.add(id));
+  Object.keys(lessonMeta).forEach(id=>delete lessonMeta[id]);Object.assign(lessonMeta,nextStore.lessonMeta||{});
+  const done=completed.has(LESSON_ID);const ready=typeof AJP.isReadyForWrites!=='function'||AJP.isReadyForWrites();
+  completeBtn.textContent=done?'✓ Completed':'Mark as Complete ✓';completeBtn.classList.toggle('done',done);completeBtn.disabled=done||!ready;
+  const savedScore=lessonMeta[LESSON_ID]?.quizScore;if(savedScore){const output=document.getElementById('quizScore');output.textContent=`Score: ${savedScore}`;output.dataset.score=savedScore;}
+}
+refreshBookingProgress(store);
 completeBtn.addEventListener('click',()=>{if(completed.has(LESSON_ID))return;completed.add(LESSON_ID);lessonMeta[LESSON_ID]={...(lessonMeta[LESSON_ID]||{}),mins:Math.max(1,Math.round((Date.now()-startedAt)/60000)),quizScore:document.getElementById('quizScore').dataset.score||null,completedAt:Date.now()};try{saveStore(completed,lessonMeta);completeBtn.textContent='✓ Completed';completeBtn.classList.add('done');completeBtn.disabled=true;const toast=document.getElementById('toast');toast.classList.add('show');setTimeout(()=>toast.classList.remove('show'),2600)}catch(error){console.error('Could not save progress',error)}});
 const answers=[1,0,2,1,1,1,1,1,2,0];document.getElementById('checkQuiz').addEventListener('click',()=>{let correct=0;document.querySelectorAll('.q-item').forEach((item,qi)=>{const chosen=item.querySelector('input:checked');const options=item.querySelectorAll('.qopt');options.forEach(option=>option.classList.remove('correct','wrong'));const feedback=item.querySelector('.q-fb');if(!chosen){feedback.textContent='Choose an answer.';feedback.style.color='var(--muted)';return}const oi=[...item.querySelectorAll('input')].indexOf(chosen);const right=oi===answers[qi];chosen.closest('.qopt').classList.add(right?'correct':'wrong');feedback.textContent=right?'✓ Correct':'✕ Review this section';feedback.style.color=right?'var(--green)':'var(--red)';if(right)correct++});const score=`${correct}/${answers.length}`;const output=document.getElementById('quizScore');output.textContent=`Score: ${score}`;output.dataset.score=score;lessonMeta[LESSON_ID]={...(lessonMeta[LESSON_ID]||{}),quizScore:score};try{saveStore(completed,lessonMeta)}catch(error){console.error('Could not save quiz score',error)}});
 const sidebar=document.getElementById('sidebar'),menuBtn=document.getElementById('menuBtn');menuBtn.addEventListener('click',()=>{const open=sidebar.classList.toggle('open');menuBtn.setAttribute('aria-expanded',String(open))});document.getElementById('sideClose').addEventListener('click',()=>{sidebar.classList.remove('open');menuBtn.setAttribute('aria-expanded','false')});
 const progress=document.getElementById('readingProgress');const updateProgress=()=>{const max=document.documentElement.scrollHeight-innerHeight;progress.style.width=`${max?Math.min(100,scrollY/max*100):100}%`};addEventListener('scroll',updateProgress,{passive:true});updateProgress();
+window.addEventListener('amplify-progress-changed',()=>refreshBookingProgress(AJP.readProgress()));
+window.addEventListener('amplify-progress-synced',()=>refreshBookingProgress(AJP.readProgress()));
+AJP.ready().then(refreshBookingProgress);
 </script>
 </body>
 </html>

@@ -44,10 +44,13 @@ const pageErrors = [];
 page.on('pageerror', (error) => pageErrors.push(error.message));
 
 const readStore = () =>
-  page.evaluate(() => JSON.parse(localStorage.getItem('amplifyHub_journeyProgress') ?? 'null'));
+  page.evaluate(() => {
+    if (window.AmplifyJourneyProgress) return window.AmplifyJourneyProgress.readProgress();
+    return JSON.parse(sessionStorage.getItem('amplifyHub_journeyProgress:v2:anonymous') ?? 'null');
+  });
 
 const clearStore = async () => {
-  await page.evaluate(() => localStorage.clear());
+  await page.evaluate(() => { localStorage.clear(); sessionStorage.clear(); });
 };
 
 const completeLessonPage = async (file) => {
@@ -120,8 +123,8 @@ try {
   const dashboardSource = await readFile(path.join(siteRoot, 'dashboard.html'), 'utf8');
   assert.match(
     dashboardSource,
-    /localStorage\.getItem\('amplifyHub_journeyProgress'\)/,
-    'dashboard reads the shared journey-progress storage key',
+    /AmplifyJourneyProgress\.readProgress\(\)/,
+    'dashboard reads progress through the user-scoped helper',
   );
   assert.match(dashboardSource, /d\.overallProgress\s*\?\?\s*0/, 'dashboard reads overallProgress');
   assert.match(dashboardSource, /d\.lessonsCompleted\s*\?\?\s*0/, 'dashboard reads lessonsCompleted');
@@ -167,18 +170,19 @@ try {
 
   // ── 5. Corrupt or older localStorage data is handled safely ──
   const corruptResult = await page.evaluate(() => {
-    localStorage.setItem('amplifyHub_journeyProgress', '{not-valid-json');
-    return window.AmplifyJourneyProgress.readProgress();
+    const AJP = window.AmplifyJourneyProgress;
+    sessionStorage.setItem(AJP.getStorageKey(), '{not-valid-json');
+    return AJP.readProgress();
   });
   assert.deepEqual(corruptResult.completedLessons, [], 'corrupt JSON is treated as empty progress');
   assert.deepEqual(corruptResult.lessonMeta, {}, 'corrupt JSON yields empty lessonMeta');
 
   const oldSchemaResult = await page.evaluate(() => {
-    localStorage.setItem(
-      'amplifyHub_journeyProgress',
+    const AJP = window.AmplifyJourneyProgress;
+    sessionStorage.setItem(
+      AJP.getStorageKey(),
       JSON.stringify({ completedLessons: ['m0l0', 'm1l0'], updatedAt: 123 }),
     );
-    const AJP = window.AmplifyJourneyProgress;
     const read = AJP.readProgress();
     const written = AJP.markLessonComplete(2, 1, { mins: 2 });
     return { read, written };
@@ -195,7 +199,10 @@ try {
   assert.equal(oldSchemaResult.written.totalLessons, 40, 'recovers totalLessons=40 from older schema');
 
   await clearStore();
-  await page.evaluate(() => localStorage.setItem('amplifyHub_journeyProgress', '{not-valid-json'));
+  await page.evaluate(() => {
+    const AJP = window.AmplifyJourneyProgress;
+    sessionStorage.setItem(AJP.getStorageKey(), '{not-valid-json');
+  });
   await page.goto(`${baseUrl}mastery-1.html`, { waitUntil: 'networkidle' });
   await page.getByRole('button', { name: /mark as complete/i }).click();
   const recoveredStore = await readStore();

@@ -10,10 +10,10 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="auth-config.js"></script>
+<script src="assets/journey-progress.js"></script>
 <script src="auth.js"></script>
 <script src="coach-config.js"></script>
 <script src="coach-store.js"></script>
-<script src="assets/journey-progress.js"></script>
 <script src="assets/challenge-system.js"></script>
 <script src="assets/resource-catalog.js"></script>
 <script src="assets/user-stats.js"></script>
@@ -476,12 +476,12 @@ document.querySelectorAll('.sb-item').forEach(item => { item.addEventListener('c
   });
 })();
 
-function readJourneyProgress() { try { const raw = localStorage.getItem('amplifyHub_journeyProgress'); if (raw) { const d = JSON.parse(raw); return { pct: d.overallProgress ?? 0, milestone: d.currentModuleName || 'Getting Started', lessonsDone: d.lessonsCompleted ?? 0 }; } } catch(e) {} return { pct: 0, milestone: 'Getting Started', lessonsDone: 0 }; }
+function readJourneyProgress() { try { const d = window.AmplifyJourneyProgress ? AmplifyJourneyProgress.readProgress() : null; if (d) return { pct: d.overallProgress ?? 0, milestone: d.currentModuleName || 'Getting Started', lessonsDone: d.lessonsCompleted ?? 0 }; } catch(e) {} return { pct: 0, milestone: 'Getting Started', lessonsDone: 0 }; }
 function applyJourneyProgress(animate) { const jp = readJourneyProgress(); const milestoneEl = document.getElementById('wMilestoneText'); if (milestoneEl) milestoneEl.textContent = jp.milestone; const pctEl = document.getElementById('ringPct'); const circ = document.getElementById('ringFill'); if (!pctEl || !circ) return; const dashTotal = 176; circ.style.transition = animate ? '' : 'none'; circ.style.strokeDashoffset = dashTotal - (dashTotal * jp.pct / 100); if (animate) { let c = parseInt(pctEl.textContent) || 0; const dir = jp.pct > c ? 1 : -1; const iv = setInterval(() => { if (c === jp.pct) { clearInterval(iv); return; } c += dir; pctEl.textContent = c + '%'; }, 20); } else { pctEl.textContent = jp.pct + '%'; } }
 const ringObs = new IntersectionObserver(es => { es.forEach(e => { if (!e.isIntersecting) return; applyJourneyProgress(true); ringObs.unobserve(e.target); }); }, { threshold: .3 });
 const welcomeEl = document.querySelector('.welcome');
 if (welcomeEl) ringObs.observe(welcomeEl);
-window.addEventListener('storage', e => { if (e.key === 'amplifyHub_journeyProgress') applyJourneyProgress(false); });
+window.addEventListener('amplify-progress-changed', () => applyJourneyProgress(false));
 
 const _esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 function fmtAgo(ts) { if (!ts) return ''; const mins = Math.floor((Date.now() - new Date(ts)) / 60000); if (mins < 2) return 'Just now'; if (mins < 60) return mins + 'm ago'; const hrs = Math.floor(mins / 60); if (hrs < 24) return hrs + 'h ago'; const days = Math.floor(hrs / 24); return days === 1 ? 'Yesterday' : days + 'd ago'; }
@@ -611,7 +611,14 @@ async function loadDailyChallenge() {
   }
 }
 
-getCurrentUser().then(user => { if (user) { loadDashboard(); loadDailyChallenge(); loadAchievements(); } });
+getCurrentUser().then(async user => {
+  if (!user) return;
+  if (window.AmplifyJourneyProgress) await AmplifyJourneyProgress.ready();
+  applyJourneyProgress(false);
+  loadDashboard();
+  loadDailyChallenge();
+  loadAchievements();
+});
 </script>
 </body>
 </html>

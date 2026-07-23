@@ -208,20 +208,26 @@ const thisLid=lid(MODULE_INDEX,LESSON_INDEX);
 const btn=document.getElementById('completeBtn');
 const pageLoadTime=Date.now();
 let lastQuizScore=lessonMeta[thisLid]?.quizScore ?? null;
+const lessonBadge=document.querySelector('.lesson-badge');
+const lessonBadgeText=lessonBadge.textContent;
 
 // Review Mode: completed lessons show a review badge instead of fresh state
-if(completed.has(thisLid)){
-  btn.textContent='✓ Completed';
-  btn.classList.add('done');
-  const badge=document.querySelector('.lesson-badge');
-  badge.textContent+=' · 🔁 Review Mode';
-  if(lastQuizScore!==null){
+function renderLessonProgress(){
+  const done=completed.has(thisLid);const ready=typeof AJP.isReadyForWrites!=='function'||AJP.isReadyForWrites();
+  btn.textContent=done?'✓ Completed':'Mark as Complete ✓';btn.classList.toggle('done',done);btn.disabled=done||!ready;
+  lessonBadge.textContent=lessonBadgeText+(done?' · 🔁 Review Mode':'');
+  document.getElementById('lastQuizProgress')?.remove();
+  if(done&&lastQuizScore!==null){
     const meta=document.querySelector('.lesson-meta');
-    const s=document.createElement('span');
-    s.textContent='🧠 Last quiz: '+lastQuizScore;
-    meta.appendChild(s);
+    const s=document.createElement('span');s.id='lastQuizProgress';s.textContent='🧠 Last quiz: '+lastQuizScore;meta.appendChild(s);
   }
 }
+function refreshSalesMindsetProgress(nextStore){
+  completed.clear();(nextStore.completedLessons||[]).forEach(id=>completed.add(id));
+  Object.keys(lessonMeta).forEach(id=>delete lessonMeta[id]);Object.assign(lessonMeta,nextStore.lessonMeta||{});
+  lastQuizScore=lessonMeta[thisLid]?.quizScore ?? null;renderLessonProgress();
+}
+renderLessonProgress();
 
 // ── MARK COMPLETE ──
 btn.addEventListener('click',function(){
@@ -263,6 +269,9 @@ document.getElementById('checkQuiz').addEventListener('click',function(){
 // ── MOBILE ──
 document.getElementById('mobBtn').addEventListener('click',()=>document.getElementById('sb').classList.add('open'));
 document.getElementById('sbX').addEventListener('click',()=>document.getElementById('sb').classList.remove('open'));
+window.addEventListener('amplify-progress-changed',()=>refreshSalesMindsetProgress(AJP.readProgress()));
+window.addEventListener('amplify-progress-synced',()=>refreshSalesMindsetProgress(AJP.readProgress()));
+AJP.ready().then(refreshSalesMindsetProgress);
 </script>
 <script src="assets/sidebar-user.js"></script>
 </body>
