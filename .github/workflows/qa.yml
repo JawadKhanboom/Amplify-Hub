@@ -31,8 +31,17 @@ jobs:
       - name: Verify Sales Mindset build fingerprint matches source
         run: npm run fingerprint:check
 
+      # The build below OVERWRITES sales-mindset/ in the workspace, so the
+      # committed copy is set aside first and compared after — otherwise a
+      # hand-edited committed bundle would ship to production untested.
+      - name: Snapshot committed Sales Mindset bundle
+        run: node scripts/verify-committed-bundle.mjs --snapshot /tmp/committed-bundle
+
       - name: Build (typecheck + vite)
         run: npm run build
+
+      - name: Verify committed bundle corresponds to source
+        run: node scripts/verify-committed-bundle.mjs --compare /tmp/committed-bundle
 
       - name: QA — account trust (static security checks)
         run: npm run qa:account-trust
