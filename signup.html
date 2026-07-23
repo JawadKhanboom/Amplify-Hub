@@ -91,14 +91,17 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
 <script>
 // Read redirect destination from URL param. Only known internal pages are
 // allowed — anything else falls back to the dashboard (prevents open redirects).
-const ALLOWED_REDIRECTS = ['dashboard.html','journey.html','coach-home.html','progress.html','profile.html','challenges.html','settings.html','resources.html','resource.html','interview-prep.html'];
+const ALLOWED_REDIRECTS = ['dashboard.html','journey.html','coach-home.html','progress.html','profile.html','challenges.html','settings.html','resources.html','resource.html','interview-prep.html','book-appointments.html'];
+// Gated journey lesson pages are whitelisted by pattern so a signed-out
+// click on any lesson returns there after account creation.
+const LESSON_RE = /^(?:sales-mindset|finding-prospects|building-script|opening-call|discovery-questions|objection-handling|follow-up|live-practice|mastery)-\d+\.html$/;
 const params = new URLSearchParams(window.location.search);
 const requestedRedirect = params.get('redirect') || '';
 // Allow a query string on whitelisted pages (e.g. resource.html?id=…) so
 // deep links survive the sign-up round trip. The PATH must still be on the
 // whitelist — the query can never change the destination page or origin.
 const redirParts = requestedRedirect.split('?');
-const redirectPath = ALLOWED_REDIRECTS.indexOf(redirParts[0]) !== -1 ? redirParts[0] : 'dashboard.html';
+const redirectPath = (ALLOWED_REDIRECTS.indexOf(redirParts[0]) !== -1 || LESSON_RE.test(redirParts[0])) ? redirParts[0] : 'dashboard.html';
 const redirect = redirectPath === redirParts[0] && redirParts[1]
   ? redirectPath + '?' + redirParts.slice(1).join('?')
   : redirectPath;

@@ -129,6 +129,10 @@ details[open] summary{border-bottom:1px solid var(--border)}
 .fw-tbl tr:last-child td{border-bottom:none}
 .fw-tbl td:first-child{color:var(--white);font-weight:600}
 </style>
+<script src="assets/vendor/supabase-2.110.8.min.js"></script>
+<script src="auth-config.js"></script>
+<script src="auth.js"></script>
+<script>requireAuth();</script>
 <link rel="stylesheet" href="assets/ui.css">
 </head>
 <body>
@@ -256,8 +260,6 @@ details[open] summary{border-bottom:1px solid var(--border)}
 
 <div class="toast" id="toast">🎉 Lesson Complete! +50 XP</div>
 
-<script src="assets/vendor/supabase-2.110.8.min.js"></script>
-<script src="auth-config.js"></script>
 <script src="assets/journey-progress.js"></script>
 <script>
 // ── PROGRESS SYNC (shared with journey.html) ──

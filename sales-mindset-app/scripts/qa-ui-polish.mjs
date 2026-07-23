@@ -151,7 +151,7 @@ const PAGES = [
   ['progress.html', true, [360, 1280]],
   ['settings.html', true, ALL_WIDTHS],
   ['interview-prep.html', false, [360, 1280]],
-  ['sales-mindset-1.html', false, ALL_WIDTHS],
+  ['sales-mindset-1.html', true, ALL_WIDTHS],
 ];
 
 async function newPage(viewportWidth, mock) {
