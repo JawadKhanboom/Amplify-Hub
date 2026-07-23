@@ -61,7 +61,9 @@ const BANNED = [
   [/500\+|\bSDRs trained\b|meetings booked/i, 'fake usage stats'],
   [/ChatGPT/i, 'unverifiable comparison'],
   [/money.?back|guarantee/i, 'refund claims'],
-  [/\$\d/, 'pricing claims'],
+  // "$0 during beta" is an honest statement of the current price; any nonzero
+  // dollar amount on the landing page would be a fabricated paid tier.
+  [/\$[1-9]/, 'paid pricing claims'],
   // "no trial clock" (an honest denial) is fine; selling a trial is not.
   [/\b(free|\d+.?day|start\s+your?)\s+trial\b|\btrial\s+(period|ends)/i, 'trial offers'],
   [/confidence score/i, 'fake scoring UI'],
@@ -69,8 +71,8 @@ const BANNED = [
 for (const [re, label] of BANNED) {
   ok(`landing: no ${label}`, !re.test(landing.replace(/<script[\s\S]*?<\/script>/g, '')), String(re));
 }
-ok('landing: drill is labeled as a guided example', landing.includes('Guided example'));
-ok('landing: drill renders coaching via textContent', landing.includes('drillCoach.textContent'));
+ok('landing: demo is labeled as a guided example', landing.includes('Guided example'));
+ok('landing: demo renders conversation via textContent', landing.includes('bubAi.textContent') && landing.includes('bubYou.textContent'));
 // The landing page's scripts must be fully local: no network calls, no
 // storage, no backend SDKs. (Mentioning Gemini in the FAQ copy is fine.)
 const landingScripts = [...landing.matchAll(/<script[^>]*>([\s\S]*?)<\/script>/g)].map(m => m[1]).join('\n');
@@ -185,32 +187,36 @@ for (const [pageName, mock, widths] of PAGES) {
   ok('landing: has footer', await page.locator('footer').count() === 1);
   ok('landing: skip link present', await page.locator('.ah-skip').count() === 1);
 
-  // Drill via mouse
-  await page.locator('[data-choice="redirect"]').click();
-  ok('drill: feedback appears on choice', await page.locator('#drillFeedback.show').count() === 1);
-  ok('drill: good verdict for acknowledge-and-redirect', (await page.locator('#drillVerdict').textContent()).includes('Strong'));
-  ok('drill: chosen option marked aria-pressed', await page.locator('[data-choice="redirect"][aria-pressed="true"]').count() === 1);
-  await page.locator('#drillReset').click();
-  ok('drill: reset hides feedback', await page.locator('#drillFeedback.show').count() === 0);
+  // Guided demo widget renders its final (reduced-motion) frame honestly
+  ok('demo: widget present with guided label', await page.locator('#demoCard').count() === 1
+    && (await page.locator('#demoCard').textContent()).includes('Guided practice demo'));
+  ok('demo: example disclaimer visible', (await page.locator('.demo-note').textContent()).includes('Guided example'));
 
-  // Drill via keyboard only
-  await page.locator('[data-choice="push"]').focus();
+  // FAQ accordion via mouse
+  const firstQ = page.locator('.faq-q').first();
+  await firstQ.click();
+  ok('faq: opens on click with aria-expanded=true', await page.locator('.faq-q[aria-expanded="true"]').count() === 1);
+  await page.locator('.faq-q').nth(1).click();
+  ok('faq: exclusive open — second click closes the first', await page.locator('.faq-q[aria-expanded="true"]').count() === 1
+    && await firstQ.getAttribute('aria-expanded') === 'false');
+
+  // FAQ via keyboard only (real <button>s — Enter must toggle)
+  await page.locator('.faq-q').nth(2).focus();
   await page.keyboard.press('Enter');
-  ok('drill: keyboard Enter activates an option', await page.locator('#drillFeedback.show').count() === 1);
-  ok('drill: focus lands on feedback region', await page.evaluate(() => document.activeElement === document.getElementById('drillFeedback')));
+  ok('faq: keyboard Enter toggles a real button', await page.locator('.faq-q').nth(2).getAttribute('aria-expanded') === 'true');
   await page.close();
 }
-console.log('  ✓ landing structure + drill (mouse & keyboard)');
+console.log('  ✓ landing structure + demo label + FAQ (mouse & keyboard)');
 
 {
   const page = await newPage(390, false);
   await page.goto(baseUrl + 'index.html', { waitUntil: 'domcontentloaded' });
-  const tog = page.locator('.mob-tog');
+  const tog = page.locator('.mob-btn');
   ok('mobile menu: hamburger visible at 390', await tog.isVisible());
   await tog.click();
-  ok('mobile menu: opens with aria-expanded=true', await page.locator('.mob-tog[aria-expanded="true"]').count() === 1);
+  ok('mobile menu: opens with aria-expanded=true', await page.locator('.mob-btn[aria-expanded="true"]').count() === 1);
   await page.keyboard.press('Escape');
-  ok('mobile menu: Escape closes it', await page.locator('.mob-tog[aria-expanded="false"]').count() === 1);
+  ok('mobile menu: Escape closes it', await page.locator('.mob-btn[aria-expanded="false"]').count() === 1);
   await page.close();
 }
 console.log('  ✓ mobile menu open/Escape');
