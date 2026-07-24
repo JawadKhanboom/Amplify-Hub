@@ -151,9 +151,10 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
     <a class="si" href="dashboard.html"><span class="si-ic">🏠</span>Dashboard</a>\r
     <a class="si act" href="journey.html"><span class="si-ic">🛤</span>Journey</a>\r
     <a class="si" href="coach-home.html"><span class="si-ic">🤖</span>AI Coach</a>\r
-    <a class="si" href="dashboard.html#challenge"><span class="si-ic">⚡</span>Challenges</a>\r
-    <a class="si" href="dashboard.html#resources"><span class="si-ic">📚</span>Resources</a>\r
+    <a class="si" href="challenges.html"><span class="si-ic">⚡</span>Challenges</a>\r
+    <a class="si" href="resources.html"><span class="si-ic">📚</span>Resources</a>\r
     <div class="sb-d"></div>\r
+    <a class="si" href="profile.html"><span class="si-ic">👤</span>Profile</a>
     <a class="si" href="settings.html"><span class="si-ic">⚙️</span>Settings</a>\r
   </nav>\r
   <div class="sb-u"><div class="sb-av">?</div><div><div class="sb-un">Account</div><div class="sb-ur">Member</div></div></div>\r
@@ -545,9 +546,10 @@ details[open] summary{border-bottom:1px solid var(--border)}\r
     <a class="si" href="dashboard.html"><span class="si-ic">🏠</span>Dashboard</a>\r
     <a class="si act" href="journey.html"><span class="si-ic">🛤</span>Journey</a>\r
     <a class="si" href="coach-home.html"><span class="si-ic">🤖</span>AI Coach</a>\r
-    <a class="si" href="dashboard.html#challenge"><span class="si-ic">⚡</span>Challenges</a>\r
-    <a class="si" href="dashboard.html#resources"><span class="si-ic">📚</span>Resources</a>\r
+    <a class="si" href="challenges.html"><span class="si-ic">⚡</span>Challenges</a>\r
+    <a class="si" href="resources.html"><span class="si-ic">📚</span>Resources</a>\r
     <div class="sb-d"></div>\r
+    <a class="si" href="profile.html"><span class="si-ic">👤</span>Profile</a>
     <a class="si" href="settings.html"><span class="si-ic">⚙️</span>Settings</a>\r
   </nav>\r
   <div class="sb-u"><div class="sb-av">?</div><div><div class="sb-un">Account</div><div class="sb-ur">Member</div></div></div>\r
@@ -863,9 +865,10 @@ details[open] summary{border-bottom:1px solid var(--border)}\r
     <a class="si" href="dashboard.html"><span class="si-ic">🏠</span>Dashboard</a>\r
     <a class="si act" href="journey.html"><span class="si-ic">🛤</span>Journey</a>\r
     <a class="si" href="coach-home.html"><span class="si-ic">🤖</span>AI Coach</a>\r
-    <a class="si" href="dashboard.html#challenge"><span class="si-ic">⚡</span>Challenges</a>\r
-    <a class="si" href="dashboard.html#resources"><span class="si-ic">📚</span>Resources</a>\r
+    <a class="si" href="challenges.html"><span class="si-ic">⚡</span>Challenges</a>\r
+    <a class="si" href="resources.html"><span class="si-ic">📚</span>Resources</a>\r
     <div class="sb-d"></div>\r
+    <a class="si" href="profile.html"><span class="si-ic">👤</span>Profile</a>
     <a class="si" href="settings.html"><span class="si-ic">⚙️</span>Settings</a>\r
   </nav>\r
   <div class="sb-u"><div class="sb-av">?</div><div><div class="sb-un">Account</div><div class="sb-ur">Member</div></div></div>\r
@@ -1172,9 +1175,10 @@ details[open] summary{border-bottom:1px solid var(--border)}\r
     <a class="si" href="dashboard.html"><span class="si-ic">🏠</span>Dashboard</a>\r
     <a class="si act" href="journey.html"><span class="si-ic">🛤</span>Journey</a>\r
     <a class="si" href="coach-home.html"><span class="si-ic">🤖</span>AI Coach</a>\r
-    <a class="si" href="dashboard.html#challenge"><span class="si-ic">⚡</span>Challenges</a>\r
-    <a class="si" href="dashboard.html#resources"><span class="si-ic">📚</span>Resources</a>\r
+    <a class="si" href="challenges.html"><span class="si-ic">⚡</span>Challenges</a>\r
+    <a class="si" href="resources.html"><span class="si-ic">📚</span>Resources</a>\r
     <div class="sb-d"></div>\r
+    <a class="si" href="profile.html"><span class="si-ic">👤</span>Profile</a>
     <a class="si" href="settings.html"><span class="si-ic">⚙️</span>Settings</a>\r
   </nav>\r
   <div class="sb-u"><div class="sb-av">?</div><div><div class="sb-un">Account</div><div class="sb-ur">Member</div></div></div>\r
@@ -1489,9 +1493,10 @@ details[open] summary{border-bottom:1px solid var(--border)}\r
     <a class="si" href="dashboard.html"><span class="si-ic">🏠</span>Dashboard</a>\r
     <a class="si act" href="journey.html"><span class="si-ic">🛤</span>Journey</a>\r
     <a class="si" href="coach-home.html"><span class="si-ic">🤖</span>AI Coach</a>\r
-    <a class="si" href="dashboard.html#challenge"><span class="si-ic">⚡</span>Challenges</a>\r
-    <a class="si" href="dashboard.html#resources"><span class="si-ic">📚</span>Resources</a>\r
+    <a class="si" href="challenges.html"><span class="si-ic">⚡</span>Challenges</a>\r
+    <a class="si" href="resources.html"><span class="si-ic">📚</span>Resources</a>\r
     <div class="sb-d"></div>\r
+    <a class="si" href="profile.html"><span class="si-ic">👤</span>Profile</a>
     <a class="si" href="settings.html"><span class="si-ic">⚙️</span>Settings</a>\r
   </nav>\r
   <div class="sb-u"><div class="sb-av">?</div><div><div class="sb-un">Account</div><div class="sb-ur">Member</div></div></div>\r
@@ -1771,9 +1776,10 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
     <a class="si" href="dashboard.html"><span class="si-ic">🏠</span>Dashboard</a>\r
     <a class="si act" href="journey.html"><span class="si-ic">🛤</span>Journey</a>\r
     <a class="si" href="coach-home.html"><span class="si-ic">🤖</span>AI Coach</a>\r
-    <a class="si" href="dashboard.html#challenge"><span class="si-ic">⚡</span>Challenges</a>\r
-    <a class="si" href="dashboard.html#resources"><span class="si-ic">📚</span>Resources</a>\r
+    <a class="si" href="challenges.html"><span class="si-ic">⚡</span>Challenges</a>\r
+    <a class="si" href="resources.html"><span class="si-ic">📚</span>Resources</a>\r
     <div class="sb-d"></div>\r
+    <a class="si" href="profile.html"><span class="si-ic">👤</span>Profile</a>
     <a class="si" href="settings.html"><span class="si-ic">⚙️</span>Settings</a>\r
   </nav>\r
   <div class="sb-u"><div class="sb-av">?</div><div><div class="sb-un">Account</div><div class="sb-ur">Member</div></div></div>\r
@@ -2013,9 +2019,10 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
     <a class="si" href="dashboard.html"><span class="si-ic">🏠</span>Dashboard</a>\r
     <a class="si act" href="journey.html"><span class="si-ic">🛤</span>Journey</a>\r
     <a class="si" href="coach-home.html"><span class="si-ic">🤖</span>AI Coach</a>\r
-    <a class="si" href="dashboard.html#challenge"><span class="si-ic">⚡</span>Challenges</a>\r
-    <a class="si" href="dashboard.html#resources"><span class="si-ic">📚</span>Resources</a>\r
+    <a class="si" href="challenges.html"><span class="si-ic">⚡</span>Challenges</a>\r
+    <a class="si" href="resources.html"><span class="si-ic">📚</span>Resources</a>\r
     <div class="sb-d"></div>\r
+    <a class="si" href="profile.html"><span class="si-ic">👤</span>Profile</a>
     <a class="si" href="settings.html"><span class="si-ic">⚙️</span>Settings</a>\r
   </nav>\r
   <div class="sb-u"><div class="sb-av">?</div><div><div class="sb-un">Account</div><div class="sb-ur">Member</div></div></div>\r
@@ -2255,9 +2262,10 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
     <a class="si" href="dashboard.html"><span class="si-ic">🏠</span>Dashboard</a>\r
     <a class="si act" href="journey.html"><span class="si-ic">🛤</span>Journey</a>\r
     <a class="si" href="coach-home.html"><span class="si-ic">🤖</span>AI Coach</a>\r
-    <a class="si" href="dashboard.html#challenge"><span class="si-ic">⚡</span>Challenges</a>\r
-    <a class="si" href="dashboard.html#resources"><span class="si-ic">📚</span>Resources</a>\r
+    <a class="si" href="challenges.html"><span class="si-ic">⚡</span>Challenges</a>\r
+    <a class="si" href="resources.html"><span class="si-ic">📚</span>Resources</a>\r
     <div class="sb-d"></div>\r
+    <a class="si" href="profile.html"><span class="si-ic">👤</span>Profile</a>
     <a class="si" href="settings.html"><span class="si-ic">⚙️</span>Settings</a>\r
   </nav>\r
   <div class="sb-u"><div class="sb-av">?</div><div><div class="sb-un">Account</div><div class="sb-ur">Member</div></div></div>\r
