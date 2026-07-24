@@ -2,7 +2,7 @@ import { defineConfig, searchForWorkspaceRoot } from 'vite';
 import react from '@vitejs/plugin-react';
 
 export default defineConfig({
-  base: './',
+  base: '/sales-mindset/',
   plugins: [react()],
   server: {
     fs: {

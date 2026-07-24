@@ -24,7 +24,7 @@
     "sales-mindset-app/src/supabaseSync.ts": "8d0cc33c5ce9c893f6230ac244557a71d731ca45b6130dc332a58bfe792cbd5f",
     "sales-mindset-app/src/vite-env.d.ts": "65996936fbb042915f7b74a200fcdde7e410f32a669b1ab9597cfaa4b0faddb5",
     "sales-mindset-app/tsconfig.json": "cc32a3c2be133425d30e112e3dc863c9dbe1ecbbdd81123abf6d6a0300a8ae5c",
-    "sales-mindset-app/vite.config.ts": "4606bcc1753b2d0a61b1abcf09e41e1a95dc04f702e3c7dc537d5141bdfea95a"
+    "sales-mindset-app/vite.config.ts": "a91e9873d866967fe73ed55b9695da471d81737f2e29d05fe4ff5ca1b9a64a1f"
   },
-  "digest": "576fccf319084121fa7c8db7c6deb25ebdb90ac2de3344c82a1420e8d96deb1b"
+  "digest": "07cce0256f5375e3389562645553b3a55686f7b1318b74e299e9891db311366f"
 }
