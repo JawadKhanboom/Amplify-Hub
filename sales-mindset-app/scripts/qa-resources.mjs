@@ -15,11 +15,14 @@ const resources = catalog.resources;
 
 /* ---------------------------------------------- Part A: static / structural */
 
-// Catalog shape.
-assert.equal(resources.length, 25, 'catalog holds exactly 25 resources');
+// Catalog shape. Scripts were expanded to 20; the other categories remain 5.
+const EXPECTED = { script: 20, template: 5, cheatsheet: 5, worksheet: 5, interview: 5 };
+const TOTAL = Object.values(EXPECTED).reduce((a, b) => a + b, 0); // 40
+const TOTAL_FILES = TOTAL * 2; // each resource ships pdf + one editable format
+assert.equal(resources.length, TOTAL, `catalog holds exactly ${TOTAL} resources`);
 const counts = catalog.categoryCounts();
-for (const category of ['script', 'template', 'cheatsheet', 'worksheet', 'interview']) {
-  assert.equal(counts[category], 5, `category ${category} has five resources`);
+for (const category of Object.keys(EXPECTED)) {
+  assert.equal(counts[category], EXPECTED[category], `category ${category} has ${EXPECTED[category]} resources`);
 }
 const ids = new Set();
 for (const r of resources) {
@@ -42,7 +45,7 @@ for (const r of resources) {
 
 // Publication gate semantics.
 const published = catalog.published();
-assert.equal(published.length, 25, 'all 25 approved resources are publicly published');
+assert.equal(published.length, TOTAL, `all ${TOTAL} approved resources are publicly published`);
 assert.deepEqual(
   published.map((r) => r.id),
   resources.filter((r) => r.active === true && r.status === 'reviewed').map((r) => r.id),
@@ -52,8 +55,8 @@ for (const r of resources.filter((x) => x.status !== 'reviewed')) {
   assert.ok(!catalog.isPublished(r), `${r.id} (draft) is never published merely because it is active`);
 }
 const pubCounts = catalog.publishedCounts();
-for (const category of ['script', 'template', 'cheatsheet', 'worksheet', 'interview']) {
-  assert.equal(pubCounts[category], 5, `published ${category} category has five resources`);
+for (const category of Object.keys(EXPECTED)) {
+  assert.equal(pubCounts[category], EXPECTED[category], `published ${category} category has ${EXPECTED[category]} resources`);
 }
 assert.equal(
   Object.values(pubCounts).reduce((a, b) => a + b, 0),
@@ -87,7 +90,7 @@ for (const r of resources) {
     checkedFiles++;
   }
 }
-assert.equal(checkedFiles, 50, 'all 50 download artifacts present and structurally valid');
+assert.equal(checkedFiles, TOTAL_FILES, `all ${TOTAL_FILES} download artifacts present and structurally valid`);
 
 // XLSX quality: styles, column widths, and wrap must be present (visual-QA regression).
 {
@@ -100,7 +103,7 @@ assert.equal(checkedFiles, 50, 'all 50 download artifacts present and structural
 
 // Migration parity + publication-gated security.
 const migration = await readFile(path.join(siteRoot, 'supabase/migrations/20260719040000_resource_library.sql'), 'utf8');
-assert.equal((migration.match(/^ {2}\('/gm) || []).length, 25, 'migration seeds all 25 resources');
+assert.equal((migration.match(/^ {2}\('/gm) || []).length, TOTAL, `migration seeds all ${TOTAL} resources`);
 for (const r of resources) assert.ok(migration.includes(`'${r.id}'`), `migration seeds ${r.id}`);
 assert.match(migration, /create table if not exists public\.resource_catalog/, 'migration creates resource_catalog');
 assert.match(migration, /enable row level security/, 'RLS is enabled');
@@ -142,7 +145,7 @@ for (const r of resources) {
   assert.ok(migration.includes(`'${r.id}'`) && migration.match(new RegExp(`'${r.id}',[\\s\\S]*?'${expected}',(true|false)\\)`)), `migration carries ${r.id} status=${expected}`);
 }
 
-console.log('Static QA passed: 25-resource catalog, publication gate, 50 valid artifacts, format rules, xlsx styling, and a reviewed-only public read policy.');
+console.log(`Static QA passed: ${TOTAL}-resource catalog, publication gate, ${TOTAL_FILES} valid artifacts, format rules, xlsx styling, and a reviewed-only public read policy.`);
 
 /* ---------------------------------------------------- Part B: browser tests */
 
@@ -181,20 +184,20 @@ try {
   // --- EDITORIAL PREVIEW: all drafts visible, clearly labelled ---
   await page.goto(`${baseUrl}resources.html?preview=review`, { waitUntil: 'domcontentloaded' });
   await page.waitForSelector('.res');
-  assert.equal(await page.locator('.res').count(), 25, 'preview mode renders all 25 resources');
+  assert.equal(await page.locator('.res').count(), TOTAL, `preview mode renders all ${TOTAL} resources`);
   assert.match(await page.locator('#modeBannerText').innerText(), /Editorial preview/i, 'preview mode is explicitly labelled');
   assert.equal(await page.locator('.res-draft').count(), draftCount, 'every draft carries a Draft chip');
 
   // Catalog-derived counts.
-  assert.match(await page.locator('.flt', { hasText: 'All' }).innerText(), /All \(25\)/, 'preview All filter shows real total');
-  assert.match(await page.locator('.flt', { hasText: 'Scripts' }).innerText(), /\(5\)/, 'Scripts chip shows derived count');
+  assert.match(await page.locator('.flt', { hasText: 'All' }).innerText(), new RegExp(`All \\(${TOTAL}\\)`), 'preview All filter shows real total');
+  assert.match(await page.locator('.flt', { hasText: 'Scripts' }).innerText(), new RegExp(`\\(${EXPECTED.script}\\)`), 'Scripts chip shows derived count');
   assert.equal(await page.locator('.type-card').count(), 5, 'five category type cards (videos removed)');
   assert.equal(await page.locator('.type-card').evaluateAll((cards) => cards.every((card) => card.tagName === 'BUTTON')), true, 'category cards are semantic buttons');
 
   // A dashboard/category link opens the library already filtered to that type.
   await page.goto(`${baseUrl}resources.html?category=script`, { waitUntil: 'domcontentloaded' });
   await page.waitForSelector('.res');
-  assert.equal(await page.locator('.res').count(), 5, 'direct Scripts URL renders the five script resources');
+  assert.equal(await page.locator('.res').count(), EXPECTED.script, `direct Scripts URL renders the ${EXPECTED.script} script resources`);
   assert.equal(await page.locator('#gridHeading').innerText(), 'Scripts', 'direct Scripts URL labels the filtered grid');
   const scriptsCard = page.locator('.type-card', { hasText: 'Scripts' });
   assert.equal(await scriptsCard.getAttribute('aria-pressed'), 'true', 'Scripts category control exposes its selected state');
@@ -218,9 +221,9 @@ try {
   await page.locator('#searchInput').fill('objection');
   await page.locator('#searchBtn').click();
   const searchHits = await page.locator('.res').count();
-  assert.ok(searchHits >= 1 && searchHits < 25, `search narrows results (${searchHits})`);
+  assert.ok(searchHits >= 1 && searchHits < TOTAL, `search narrows results (${searchHits})`);
   await page.locator('#searchInput').fill('');
-  await page.waitForFunction(() => document.querySelectorAll('.res').length === 25);
+  await page.waitForFunction((n) => document.querySelectorAll('.res').length === n, TOTAL);
 
   // Cards keep the reviewer in preview mode.
   const firstHref = await page.locator('.res').first().getAttribute('href');
@@ -308,7 +311,7 @@ try {
   assert.match(dashboard, /resources\.html\?category=/, 'dashboard category cards deep-link to filtered resource lists');
   assert.doesNotMatch(dashboard, /36 videos|18 templates|24 scripts/, 'dashboard no longer shows invented counts');
 
-  console.log('Browser QA passed: reviewed-only public library, draft blocking, labelled editorial preview, search/filter, 25 detail pages, downloads, safe rendering, and honest dashboard.');
+  console.log(`Browser QA passed: reviewed-only public library, draft blocking, labelled editorial preview, search/filter, ${TOTAL} detail pages, downloads, safe rendering, and honest dashboard.`);
 } finally {
   await browser.close();
   await server.close();
