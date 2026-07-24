@@ -78,7 +78,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--white);overflow-x:
 
 /* ═══ JOURNEY ROADMAP ═══ */
 .roadmap{display:flex;flex-direction:column;align-items:center;gap:0;padding:8px 0}
-.rm-node{display:flex;align-items:center;gap:16px;width:100%;max-width:500px;padding:16px 20px;border-radius:16px;border:2px solid var(--border);background:var(--card);transition:all .3s;cursor:pointer;position:relative}
+.rm-node{display:flex;align-items:center;gap:16px;width:100%;max-width:500px;padding:16px 20px;border-radius:16px;border:2px solid var(--border);background:var(--card);transition:all .3s;cursor:pointer;position:relative;color:inherit;text-decoration:none}
 .rm-node:hover{border-color:var(--border-h);transform:translateX(4px)}
 .rm-node.current{border-color:var(--accent);background:linear-gradient(135deg,rgba(255,213,74,.07),var(--card));box-shadow:0 0 32px rgba(255,213,74,.06)}
 .rm-node.done{border-color:rgba(0,230,150,.2);opacity:.7}
@@ -297,32 +297,9 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
   <!-- JOURNEY ROADMAP -->
   <div class="sec fade-up">
     <div class="sec-h"><h2>Your Journey</h2><a class="sec-link" href="journey.html">View Full Path →</a></div>
-    <div class="roadmap only-new">
-      <div class="rm-node current"><div class="rm-dot">1</div><div class="rm-info"><h3>Find Your Leads</h3><p>Identify ideal prospects</p></div><span class="rm-tag curr-tag">Start Here</span></div>
-      <div class="rm-line"></div>
-      <div class="rm-node locked"><div class="rm-dot">🔒</div><div class="rm-info"><h3>Build Your Script</h3><p>Create your framework</p></div><span class="rm-tag lock-tag">Locked</span></div>
-      <div class="rm-line"></div>
-      <div class="rm-node locked"><div class="rm-dot">🔒</div><div class="rm-info"><h3>Practice With AI</h3><p>Roleplay realistic calls</p></div><span class="rm-tag lock-tag">Locked</span></div>
-      <div class="rm-line"></div>
-      <div class="rm-node locked"><div class="rm-dot">🔒</div><div class="rm-info"><h3>Handle Objections</h3><p>Turn every "no" around</p></div><span class="rm-tag lock-tag">Locked</span></div>
-      <div class="rm-line"></div>
-      <div class="rm-node locked"><div class="rm-dot">🔒</div><div class="rm-info"><h3>Book Meetings</h3><p>Close real appointments</p></div><span class="rm-tag lock-tag">Locked</span></div>
-      <div class="rm-line"></div>
-      <div class="rm-node locked"><div class="rm-dot">🔒</div><div class="rm-info"><h3>Scale & Refine</h3><p>Optimize your system</p></div><span class="rm-tag lock-tag">Locked</span></div>
-    </div>
-    <div class="roadmap only-active">
-      <div class="rm-node done"><div class="rm-dot">✓</div><div class="rm-info"><h3>Find Your Leads</h3><p>Identify ideal prospects</p></div><span class="rm-tag done-tag">Complete</span></div>
-      <div class="rm-line done-line"></div>
-      <div class="rm-node done"><div class="rm-dot">✓</div><div class="rm-info"><h3>Build Your Script</h3><p>Create your framework</p></div><span class="rm-tag done-tag">Complete</span></div>
-      <div class="rm-line curr-line"></div>
-      <div class="rm-node current"><div class="rm-dot">3</div><div class="rm-info"><h3>Practice With AI</h3><p>Roleplay realistic calls</p></div><span class="rm-tag curr-tag">In Progress</span></div>
-      <div class="rm-line"></div>
-      <div class="rm-node locked"><div class="rm-dot">🔒</div><div class="rm-info"><h3>Handle Objections</h3><p>Turn every "no" around</p></div><span class="rm-tag lock-tag">Locked</span></div>
-      <div class="rm-line"></div>
-      <div class="rm-node locked"><div class="rm-dot">🔒</div><div class="rm-info"><h3>Book Meetings</h3><p>Close real appointments</p></div><span class="rm-tag lock-tag">Locked</span></div>
-      <div class="rm-line"></div>
-      <div class="rm-node locked"><div class="rm-dot">🔒</div><div class="rm-info"><h3>Scale & Refine</h3><p>Optimize your system</p></div><span class="rm-tag lock-tag">Locked</span></div>
-    </div>
+    <!-- Rendered live from AmplifyJourneyProgress (the real 10 modules) by
+         renderRoadmap() — states reflect the signed-in user's completions. -->
+    <div class="roadmap" id="roadmapList" aria-label="Journey modules"></div>
   </div>
 
   <!-- CONTINUE LEARNING -->
@@ -478,7 +455,51 @@ document.querySelectorAll('.sb-item').forEach(item => { item.addEventListener('c
 })();
 
 function readJourneyProgress() { try { const d = window.AmplifyJourneyProgress ? AmplifyJourneyProgress.readProgress() : null; if (d) return { pct: d.overallProgress ?? 0, milestone: d.currentModuleName || 'Getting Started', lessonsDone: d.lessonsCompleted ?? 0 }; } catch(e) {} return { pct: 0, milestone: 'Getting Started', lessonsDone: 0 }; }
-function applyJourneyProgress(animate) { const jp = readJourneyProgress(); const milestoneEl = document.getElementById('wMilestoneText'); if (milestoneEl) milestoneEl.textContent = jp.milestone; const pctEl = document.getElementById('ringPct'); const circ = document.getElementById('ringFill'); if (!pctEl || !circ) return; const dashTotal = 176; circ.style.transition = animate ? '' : 'none'; circ.style.strokeDashoffset = dashTotal - (dashTotal * jp.pct / 100); if (animate) { let c = parseInt(pctEl.textContent) || 0; const dir = jp.pct > c ? 1 : -1; const iv = setInterval(() => { if (c === jp.pct) { clearInterval(iv); return; } c += dir; pctEl.textContent = c + '%'; }, 20); } else { pctEl.textContent = jp.pct + '%'; } }
+// Renders the Journey roadmap from the user's REAL module progress (the same
+// AmplifyJourneyProgress store the ring/milestone use) — replaces the old
+// hardcoded six-step mock. Done modules link to the journey; the first
+// incomplete module is "current"; later modules render locked.
+function renderRoadmap() {
+  const host = document.getElementById('roadmapList');
+  const AJP = window.AmplifyJourneyProgress;
+  if (!host || !AJP) return;
+  const completed = new Set(AJP.readProgress().completedLessons || []);
+  const anyDone = completed.size > 0;
+  host.replaceChildren();
+  let currentAssigned = false;
+  AJP.MODULE_MAP.forEach(([name, count], m) => {
+    let done = 0;
+    for (let l = 0; l < count; l++) if (completed.has(AJP.lid(m, l))) done++;
+    const isDone = done === count;
+    let state = 'locked';
+    if (isDone) state = 'done';
+    else if (!currentAssigned) { state = 'current'; currentAssigned = true; }
+    if (m > 0) {
+      const line = document.createElement('div');
+      line.className = 'rm-line' + (state === 'done' ? ' done-line' : state === 'current' ? ' curr-line' : '');
+      host.appendChild(line);
+    }
+    const node = document.createElement(state === 'locked' ? 'div' : 'a');
+    node.className = 'rm-node ' + state;
+    if (state !== 'locked') node.href = 'journey.html';
+    const dot = document.createElement('div');
+    dot.className = 'rm-dot';
+    dot.textContent = state === 'done' ? '✓' : state === 'current' ? String(m + 1) : '🔒';
+    const info = document.createElement('div');
+    info.className = 'rm-info';
+    const h3 = document.createElement('h3');
+    h3.textContent = name;
+    const p = document.createElement('p');
+    p.textContent = done + ' of ' + count + ' lessons';
+    info.append(h3, p);
+    const tag = document.createElement('span');
+    tag.className = 'rm-tag ' + (state === 'done' ? 'done-tag' : state === 'current' ? 'curr-tag' : 'lock-tag');
+    tag.textContent = state === 'done' ? 'Complete' : state === 'current' ? (anyDone ? 'In Progress' : 'Start Here') : 'Locked';
+    node.append(dot, info, tag);
+    host.appendChild(node);
+  });
+}
+function applyJourneyProgress(animate) { renderRoadmap(); const jp = readJourneyProgress(); const milestoneEl = document.getElementById('wMilestoneText'); if (milestoneEl) milestoneEl.textContent = jp.milestone; const pctEl = document.getElementById('ringPct'); const circ = document.getElementById('ringFill'); if (!pctEl || !circ) return; const dashTotal = 176; circ.style.transition = animate ? '' : 'none'; circ.style.strokeDashoffset = dashTotal - (dashTotal * jp.pct / 100); if (animate) { let c = parseInt(pctEl.textContent) || 0; const dir = jp.pct > c ? 1 : -1; const iv = setInterval(() => { if (c === jp.pct) { clearInterval(iv); return; } c += dir; pctEl.textContent = c + '%'; }, 20); } else { pctEl.textContent = jp.pct + '%'; } }
 const ringObs = new IntersectionObserver(es => { es.forEach(e => { if (!e.isIntersecting) return; applyJourneyProgress(true); ringObs.unobserve(e.target); }); }, { threshold: .3 });
 const welcomeEl = document.querySelector('.welcome');
 if (welcomeEl) ringObs.observe(welcomeEl);
