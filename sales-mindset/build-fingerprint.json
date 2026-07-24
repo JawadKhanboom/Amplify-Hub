@@ -4,14 +4,14 @@
   "normalization": "utf8; CRLF/CR -> LF",
   "note": "Fingerprint of Sales Mindset build INPUTS (not the non-deterministic Vite output). Regenerate with `npm run build`.",
   "files": {
-    "sales-mindset-1.html": "6f12fa78b9b3618bd244f522ea878b84c565560b9d53cfc9f9bcf748267bb79d",
-    "sales-mindset-2.html": "3e61d2c1506591a1b66e72dd0f0a75278cf8c1af50e349e88fb94fe18ad5fa5f",
-    "sales-mindset-3.html": "478ea194d81948048b36beb16ed24d952aaeb3ac86246702e6086c2d0ec685bd",
-    "sales-mindset-4.html": "e3f9088e8cc03c8e806b06f7e74d1fa95608843a75f0aa3efe697d440761e4ad",
-    "sales-mindset-5.html": "49d03cd73de3733ba5ae1f3cbce839e0bc1658f1e93e588c892ab1686ae04250",
-    "sales-mindset-6.html": "faf26cf0923a14cace7099736537fe68e1488e63e554d7b1023ebaa72e66d022",
-    "sales-mindset-7.html": "ce8181975a2fd2f3ffb98c9c11ce3686ac9fadb65b861ce8c9dd9f914c1a034b",
-    "sales-mindset-8.html": "32edbf74f1aab73e6d7aad8481ec8eaaa3855ebd62d4cf530a8f95f0139ff2f5",
+    "sales-mindset-1.html": "9b218c33ca194ccb87ee9ad915cb6eda31a88a80f1bc9ab63de34602c81f467c",
+    "sales-mindset-2.html": "5ce85aa1e87efec86e9f42f66245074ccbce658142b685323d0821a32176e3f1",
+    "sales-mindset-3.html": "de9c2d2de38e7da216c8ae25889bd95a184ad7b65289b9282bc0bd58c40fbd69",
+    "sales-mindset-4.html": "312d1f07e8d5554d1acfde070bd6758a9e7ec0f9065d0363572d16ff44a4ec51",
+    "sales-mindset-5.html": "788c49bc5e17354a2fd01e5663f1a97ca5c5f403ab848a95aec182ee41bad8da",
+    "sales-mindset-6.html": "acd88fb32aa14df6f5ad43cfde03dd46a42f5d66ab6ac606813a4c682f52d86a",
+    "sales-mindset-7.html": "2b224c869f82983156bfe4bf3ee7084211f2f3d83ff873d52c07990a2bc5af78",
+    "sales-mindset-8.html": "3c7fed8fdfef5bca88a9cea6cbc111edb19670636cd4a4897c03eaada387a159",
     "sales-mindset-app/index.html": "556a57d3d6cea72f73a7dc29de3bae40e64903e5d26a5b1999739604e8a232d0",
     "sales-mindset-app/package-lock.json": "240ef33ef7a438b6391fcb78d024553d4ddd771b69dbc7b5eb84674e72d47a9b",
     "sales-mindset-app/package.json": "1f00de2b3c412dd3582938017585518c27b442210efd787a5dd4b234a569265f",
@@ -26,5 +26,5 @@
     "sales-mindset-app/tsconfig.json": "cc32a3c2be133425d30e112e3dc863c9dbe1ecbbdd81123abf6d6a0300a8ae5c",
     "sales-mindset-app/vite.config.ts": "a91e9873d866967fe73ed55b9695da471d81737f2e29d05fe4ff5ca1b9a64a1f"
   },
-  "digest": "07cce0256f5375e3389562645553b3a55686f7b1318b74e299e9891db311366f"
+  "digest": "9ec47e5215a4127c553744fa0291b2f18c424b924046148a223c7189acb4e2a0"
 }

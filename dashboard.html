@@ -252,8 +252,9 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
     <a class="sb-item" href="journey.html"><span class="sb-icon">🛤</span>Journey</a>
     <a class="sb-item" href="coach-home.html"><span class="sb-icon">🤖</span>AI Coach</a>
     <a class="sb-item" href="challenges.html"><span class="sb-icon">⚡</span>Challenges</a>
-    <a class="sb-item" href="#resources"><span class="sb-icon">📚</span>Resources</a>
+    <a class="sb-item" href="resources.html"><span class="sb-icon">📚</span>Resources</a>
     <div class="sb-divider"></div>
+    <a class="sb-item" href="profile.html"><span class="sb-icon">👤</span>Profile</a>
     <a class="sb-item" href="settings.html"><span class="sb-icon">⚙️</span>Settings</a>
   </nav>
   <div class="sb-user" onclick="location.href='profile.html'" style="cursor:pointer">
@@ -324,16 +325,16 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
     <div class="cards-row only-active">
       <div class="learn-card lesson">
         <div class="lc-icon gold">📞</div>
-        <div class="lc-h">Lesson 7: The Opening Line</div>
-        <div class="lc-p">Learn the 3-second hook that keeps prospects from hanging up.</div>
-        <button class="lc-btn gold">Resume Lesson →</button>
-        <div class="lc-meta"><span>⏱ 8 min</span><span>🎯 +50 XP</span></div>
+        <div class="lc-h" id="resumeLessonTitle">Continue Your Journey</div>
+        <div class="lc-p">Pick up where you left off and keep building your cold-calling skills.</div>
+        <a class="lc-btn gold" href="journey.html" style="text-decoration:none">Resume Lesson →</a>
+        <div class="lc-meta"><span>⏱ Self-paced</span><span>🎯 Earn XP</span></div>
       </div>
       <div class="learn-card coach">
         <div class="lc-icon green">🤖</div>
         <div class="lc-h">AI Coach: Practice Call</div>
-        <div class="lc-p">Roleplay a cold call to an auto detailing shop. AI plays the prospect.</div>
-        <button class="lc-btn green">Start Practice →</button>
+        <div class="lc-p">Roleplay a realistic cold call — the AI plays the prospect, you practice the conversation.</div>
+        <a class="lc-btn green" href="coach-home.html#roleplay" style="text-decoration:none">Start Practice →</a>
         <div class="lc-meta"><span>⏱ 5 min</span><span>📈 Builds confidence</span></div>
       </div>
     </div>
@@ -499,7 +500,7 @@ function renderRoadmap() {
     host.appendChild(node);
   });
 }
-function applyJourneyProgress(animate) { renderRoadmap(); const jp = readJourneyProgress(); const milestoneEl = document.getElementById('wMilestoneText'); if (milestoneEl) milestoneEl.textContent = jp.milestone; const pctEl = document.getElementById('ringPct'); const circ = document.getElementById('ringFill'); if (!pctEl || !circ) return; const dashTotal = 176; circ.style.transition = animate ? '' : 'none'; circ.style.strokeDashoffset = dashTotal - (dashTotal * jp.pct / 100); if (animate) { let c = parseInt(pctEl.textContent) || 0; const dir = jp.pct > c ? 1 : -1; const iv = setInterval(() => { if (c === jp.pct) { clearInterval(iv); return; } c += dir; pctEl.textContent = c + '%'; }, 20); } else { pctEl.textContent = jp.pct + '%'; } }
+function applyJourneyProgress(animate) { renderRoadmap(); const jp = readJourneyProgress(); const milestoneEl = document.getElementById('wMilestoneText'); if (milestoneEl) milestoneEl.textContent = jp.milestone; const resumeTitle = document.getElementById('resumeLessonTitle'); if (resumeTitle && jp.milestone) resumeTitle.textContent = 'Continue: ' + jp.milestone; const pctEl = document.getElementById('ringPct'); const circ = document.getElementById('ringFill'); if (!pctEl || !circ) return; const dashTotal = 176; circ.style.transition = animate ? '' : 'none'; circ.style.strokeDashoffset = dashTotal - (dashTotal * jp.pct / 100); if (animate) { let c = parseInt(pctEl.textContent) || 0; const dir = jp.pct > c ? 1 : -1; const iv = setInterval(() => { if (c === jp.pct) { clearInterval(iv); return; } c += dir; pctEl.textContent = c + '%'; }, 20); } else { pctEl.textContent = jp.pct + '%'; } }
 const ringObs = new IntersectionObserver(es => { es.forEach(e => { if (!e.isIntersecting) return; applyJourneyProgress(true); ringObs.unobserve(e.target); }); }, { threshold: .3 });
 const welcomeEl = document.querySelector('.welcome');
 if (welcomeEl) ringObs.observe(welcomeEl);
