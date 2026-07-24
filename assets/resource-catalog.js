@@ -219,6 +219,533 @@
       downloads: [{ format: 'pdf' }, { format: 'docx' }]
     },
 
+    {
+      id: 'scripts-referral-opener',
+      status: 'reviewed',
+      title: 'Honest Referral Opener',
+      category: 'script',
+      skill: 'opening',
+      difficulty: 'beginner',
+      duration: 6,
+      summary: 'An opener for when a real person pointed you toward this prospect — it names the connection honestly, explains why they thought of them, and hands control back with one question.',
+      objectives: [
+        'Name a genuine connection without overstating it',
+        'Explain the specific reason you were pointed here',
+        'Keep the borrowed trust intact by being honest',
+        'End with a question that lets the prospect react'
+      ],
+      sections: [
+        { type: 'steps', heading: 'The four beats', items: [
+          'Name the person and how you know them, exactly as it happened.',
+          'Say why that person thought this prospect was worth a conversation.',
+          'Give one honest sentence about what you do for people in their role.',
+          'Ask whether the reason still fits, instead of assuming it does.'
+        ]},
+        { type: 'list', heading: 'Keep it truthful', items: [
+          'Only use a referral if the person actually agreed to be named.',
+          'Do not upgrade "we spoke once" into "they are a close contact".',
+          'If the connection is thin, say so — thin but honest beats warm but false.'
+        ]}
+      ],
+      example: {
+        title: 'Worked example',
+        text: '"Hi Priya, this is Sam with Northlight. Dana Okafor on your ops team mentioned you when we talked last week — she thought driver scheduling might be worth a quick conversation with you specifically. I work with ops leads who are scaling headcount faster than their tools. Is scheduling actually a pain point for you, or did Dana catch it wrong?"'
+      },
+      safePractice: 'Never claim a referral, introduction, or relationship that did not happen — it is the fastest way to lose a prospect and your own credibility. If the person only agreed to be mentioned in general terms, keep it general. If the prospect says the reason does not fit, believe them and move on.',
+      related: { label: 'Practice openings with the AI Coach', route: 'coach-home.html#roleplay' },
+      downloads: [{ format: 'pdf' }, { format: 'docx' }]
+    },
+    {
+      id: 'scripts-callback-voicemail',
+      status: 'reviewed',
+      title: 'Voicemail That Earns a Callback',
+      category: 'script',
+      skill: 'opening',
+      difficulty: 'beginner',
+      duration: 5,
+      summary: 'A short voicemail structure — under twenty seconds — that gives a real reason to call back without hype, false urgency, or a mystery you refuse to explain.',
+      objectives: [
+        'Leave a voicemail the prospect can act on',
+        'State a specific, honest reason for the call',
+        'Make the callback easy with a clear number',
+        'Avoid pressure tactics that damage trust'
+      ],
+      sections: [
+        { type: 'steps', heading: 'Say it in this order', items: [
+          'Your name and company, spoken slowly.',
+          'One honest sentence about why you called this person.',
+          'What a callback would cover, so it is not a mystery.',
+          'Your number, said twice and clearly, then a short thank you.'
+        ]},
+        { type: 'table', heading: 'What to avoid', columns: ['Tempting line', 'Why to drop it'], rows: [
+          ['"Call me back urgently."', 'Fake urgency reads as a trick and erodes trust.'],
+          ['"I have something important for you."', 'A withheld mystery feels manipulative, not intriguing.'],
+          ['"You will want to hear this."', 'You are deciding for them what they want.']
+        ]}
+      ],
+      example: {
+        title: 'Worked example',
+        text: '"Hi Jordan, this is Sam with Northlight — that is S-A-M. I called because I saw your team is hiring support reps, and weekend coverage is usually where things get tight when you scale. If it is worth a short conversation I can walk you through how two similar teams handled it — no pressure either way. My number is 555-0142, again 555-0142. Thanks Jordan."'
+      },
+      safePractice: 'One voicemail per attempt is plenty — stacking messages feels like pressure. Never imply a prior conversation that did not happen, and never leave a deliberately vague message designed to force a callback. If they never call back, that is an answer too.',
+      related: { label: 'Practice voicemails with the AI Coach', route: 'coach-home.html#roleplay' },
+      downloads: [{ format: 'pdf' }, { format: 'docx' }]
+    },
+    {
+      id: 'scripts-pattern-interrupt-opener',
+      status: 'reviewed',
+      title: 'Gentle Pattern-Interrupt Opener',
+      category: 'script',
+      skill: 'opening',
+      difficulty: 'intermediate',
+      duration: 7,
+      summary: 'A way to open with a guarded prospect that breaks the auto-pilot "no" by being unexpectedly honest about the call, rather than using a gimmick or a trick question.',
+      objectives: [
+        'Acknowledge the cold call honestly up front',
+        'Give the prospect a genuine reason to stay on',
+        'Lower defenses with candor, not manipulation',
+        'Offer an easy exit so staying is their choice'
+      ],
+      sections: [
+        { type: 'list', heading: 'The honest interrupt', items: [
+          'Name it: "This is a cold call — I will be quick and you can hang up any time."',
+          'Earn the next ten seconds with one specific, relevant reason.',
+          'Ask permission to continue instead of barreling ahead.',
+          'If they say no, thank them and end the call cleanly.'
+        ]},
+        { type: 'paragraph', heading: 'Why candor works', text: 'Guarded prospects expect a rehearsed pitch and are ready to decline it. Naming the call for what it is breaks that script and treats them like an adult, which often buys a few real seconds of attention. The goal is not to trap them into listening — it is to make staying an easy, informed choice.' }
+      ],
+      example: {
+        title: 'Worked example',
+        text: '"Hi Alex — I will be honest, this is a cold call, so feel free to hang up. I called because your job posting mentioned onboarding delays, and that is the exact thing I help ops teams shorten. Can I take thirty seconds to explain why I thought of you, and then you decide if it is worth continuing?"'
+      },
+      safePractice: 'Honesty is the point — do not turn "pattern interrupt" into a bag of tricks like fake wrong numbers or pretending to know them. Always give a real exit and honor it the moment they take it. Candor earns attention; deception destroys it.',
+      related: { label: 'Study openings in the Journey', route: 'opening-call-1.html' },
+      downloads: [{ format: 'pdf' }, { format: 'docx' }]
+    },
+    {
+      id: 'scripts-reconnect-dormant-lead',
+      status: 'reviewed',
+      title: 'Reconnect a Dormant Lead',
+      category: 'script',
+      skill: 'follow-up',
+      difficulty: 'intermediate',
+      duration: 8,
+      summary: 'A call for reaching someone who went quiet months ago — it references the past honestly, gives them an easy way to say the timing changed, and never guilt-trips them for going dark.',
+      objectives: [
+        'Reference the earlier conversation accurately',
+        'Give a real reason you are reaching out now',
+        'Make it easy to restart or to close the loop',
+        'Avoid any guilt about the silence'
+      ],
+      sections: [
+        { type: 'steps', heading: 'How to reopen', items: [
+          'Remind them who you are and when you last spoke.',
+          'Name what changed that makes now worth a call — a new feature, a trigger event, a promised follow-up.',
+          'Offer a genuine choice: pick this back up, or close it out for now.',
+          'Whatever they choose, thank them and respect it.'
+        ]},
+        { type: 'list', heading: 'Reasons that justify a reconnect', items: [
+          'You said you would circle back at a specific time, and that time is now.',
+          'Something changed on their side (funding, hiring, a launch).',
+          'Something changed on your side that directly addresses what they cared about.'
+        ]}
+      ],
+      example: {
+        title: 'Worked example',
+        text: '"Hi Priya, Sam from Northlight — we spoke back in the spring about weekend support coverage, and you asked me to check back once your headcount plan was set. I saw you are hiring again, so this felt like the right time. Totally fine if the priority has shifted — do you want to pick this up, or should I close it out for now?"'
+      },
+      safePractice: 'Never guilt someone for going quiet ("I never heard back from you…") — silence is a normal, acceptable answer. Only claim a promised follow-up if it genuinely happened. Give a clean way to end the thread, and take a second no as final.',
+      related: { label: 'Learn follow-up in the Journey', route: 'follow-up-1.html' },
+      downloads: [{ format: 'pdf' }, { format: 'docx' }]
+    },
+    {
+      id: 'scripts-trigger-event-opener',
+      status: 'reviewed',
+      title: 'Trigger-Event Opener',
+      category: 'script',
+      skill: 'prospecting',
+      difficulty: 'intermediate',
+      duration: 7,
+      summary: 'An opener built around a public event — funding, hiring, a launch, a leadership change — that connects the event to a plausible problem without pretending to know more than you do.',
+      objectives: [
+        'Reference a real, public trigger event',
+        'Connect it to a problem the event often creates',
+        'Stay tentative — you are guessing, and you say so',
+        'Invite the prospect to confirm or correct you'
+      ],
+      sections: [
+        { type: 'table', heading: 'Event to plausible problem', columns: ['Trigger event', 'Problem it often creates'], rows: [
+          ['New funding round', 'Pressure to scale the team and process fast'],
+          ['Hiring a lot of one role', 'Onboarding and ramp become the bottleneck'],
+          ['New product launch', 'Support and sales volume spike unpredictably'],
+          ['New leader in the function', 'Reviewing tools and looking for quick wins']
+        ]},
+        { type: 'list', heading: 'Keep it a hypothesis', items: [
+          'Say "I could be wrong" — because you might be.',
+          'Ask them to confirm the problem, do not assert it.',
+          'Use only public information; never imply insider knowledge.'
+        ]}
+      ],
+      example: {
+        title: 'Worked example',
+        text: '"Hi Marco, Sam with Northlight. I saw the announcement that you raised your Series A — congratulations. Usually when teams your size raise, the next few months are a scramble to add people without the process breaking. I could be off base, but is scaling the team cleanly something on your plate right now, or is that already handled?"'
+      },
+      safePractice: 'Reference only public, business-level information — never personal details or anything that suggests you have been digging where you should not. Present the connection as a guess the prospect can correct, not a fact. If your read is wrong, thank them and move on rather than arguing for your theory.',
+      related: { label: 'Learn prospecting in the Journey', route: 'finding-prospects-1.html' },
+      downloads: [{ format: 'pdf' }, { format: 'docx' }]
+    },
+    {
+      id: 'scripts-linkedin-to-call-bridge',
+      status: 'reviewed',
+      title: 'LinkedIn-to-Call Bridge',
+      category: 'script',
+      skill: 'prospecting',
+      difficulty: 'beginner',
+      duration: 6,
+      summary: 'An opener for calling someone you have interacted with on LinkedIn — it references the online context truthfully and moves to a call without pretending the connection is closer than it is.',
+      objectives: [
+        'Reference the real online interaction accurately',
+        'Explain why a call is worth more than more messages',
+        'Keep the prospect in control of the shift',
+        'Avoid overstating a light online connection'
+      ],
+      sections: [
+        { type: 'steps', heading: 'Bridge in four beats', items: [
+          'Name the specific interaction: a comment, a shared post, an accepted connection.',
+          'Say why you are moving to a call rather than another message.',
+          'Give one relevant reason the conversation could help them.',
+          'Ask if now is a fair time or if you should suggest another.'
+        ]},
+        { type: 'list', heading: 'Honest framing of light connections', items: [
+          '"We are connected on LinkedIn" is true; "we know each other" usually is not.',
+          'A single accepted request is not a relationship — do not treat it as one.',
+          'If they do not remember you, accept that gracefully and re-introduce yourself.'
+        ]}
+      ],
+      example: {
+        title: 'Worked example',
+        text: '"Hi Dana, Sam here — we connected on LinkedIn after your post about support ticket backlogs a couple weeks ago. I figured a quick call would be more useful than trading messages. I work with support leads on exactly that backlog problem. Is now a fair moment for two minutes, or should I catch you another time?"'
+      },
+      safePractice: 'Only reference interactions that actually happened, and describe them at their true weight — a like is not a conversation. Do not use LinkedIn data to imply you have researched them personally beyond what they posted publicly. If they do not recall you, re-introduce yourself honestly instead of insisting on a bond.',
+      related: { label: 'Build a prospect list in the Journey', route: 'finding-prospects-2.html' },
+      downloads: [{ format: 'pdf' }, { format: 'docx' }]
+    },
+    {
+      id: 'scripts-discovery-call-opening',
+      status: 'reviewed',
+      title: 'First Five Minutes of a Discovery Call',
+      category: 'script',
+      skill: 'discovery',
+      difficulty: 'intermediate',
+      duration: 9,
+      summary: 'A structure for opening a booked discovery call so the prospect knows the plan, agrees to it, and does most of the talking — instead of sitting through a premature pitch.',
+      objectives: [
+        'Set a clear agenda and get agreement to it',
+        'Confirm how much time you actually have',
+        'Earn the right to ask questions before pitching',
+        'Hand the floor to the prospect early'
+      ],
+      sections: [
+        { type: 'steps', heading: 'Open in this order', items: [
+          'Thank them and restate why the meeting is happening, in one line.',
+          'Propose a simple agenda and ask if it works for them.',
+          'Confirm the time you have so you can pace the call.',
+          'Ask an opening question and then listen more than you talk.'
+        ]},
+        { type: 'list', heading: 'Agreement checks', items: [
+          '"Does that agenda work, or is there something you want to add?"',
+          '"Do we still have the full 30 minutes, or should I be tighter?"',
+          '"Mind if I start with a couple of questions before I explain anything?"'
+        ]}
+      ],
+      example: {
+        title: 'Worked example',
+        text: '"Thanks for making time, Priya. My understanding is we are here because weekend coverage has been slipping — is that right? I was thinking we spend most of this on your side of it, then I will show only what is actually relevant, and we decide together on a next step. Does that work? And do we still have the full half hour? Great — mind if I start with a few questions?"'
+      },
+      safePractice: 'Do not skip straight to a pitch because you are nervous about the silence — a discovery call the prospect did not shape feels like an ambush. Only restate the meeting reason if it is accurate. If they have less time than expected, adjust honestly rather than rushing them.',
+      related: { label: 'Learn discovery in the Journey', route: 'discovery-questions-1.html' },
+      downloads: [{ format: 'pdf' }, { format: 'docx' }]
+    },
+    {
+      id: 'scripts-not-interested-recovery',
+      status: 'reviewed',
+      title: '"Not Interested" Recovery',
+      category: 'script',
+      skill: 'objections',
+      difficulty: 'intermediate',
+      duration: 7,
+      summary: 'A calm response to a reflex "not interested" that acknowledges it, asks one honest question to learn what is behind it, and knows when the no is real enough to stop.',
+      objectives: [
+        'Acknowledge the objection without arguing',
+        'Ask one question to understand the real reason',
+        'Offer a small, relevant next step if there is interest',
+        'Recognise a firm no and exit respectfully'
+      ],
+      sections: [
+        { type: 'steps', heading: 'The recovery in three moves', items: [
+          'Acknowledge genuinely: "That is fair, thanks for being direct."',
+          'Ask one clarifying question to separate a reflex from a real no.',
+          'If a door opens, offer one small next step; if not, thank them and end.'
+        ]},
+        { type: 'list', heading: 'Questions that respect the person', items: [
+          '"Is it the timing, or is this just not something you deal with?"',
+          '"Fair enough — out of interest, is it a priority thing or a fit thing?"',
+          '"Understood. Would it help if I checked back another time, or should I leave it?"'
+        ]}
+      ],
+      example: {
+        title: 'Worked example',
+        text: 'Prospect: "Not interested." You: "That is fair, thanks for being direct. Can I ask — is it that the timing is off, or that this kind of thing is not a priority right now?" Prospect: "Just not a priority this quarter." You: "Understood. I will not chase you — would a check-in next quarter be welcome, or would you rather I close this out?"'
+      },
+      safePractice: 'One honest question after a "not interested" is fair; a second push after a clear, repeated no is not. Never imply the prospect is making a mistake or use guilt to keep them talking. A firm no is a complete answer — thank them and end the call.',
+      related: { label: 'Drill objections in the Journey', route: 'objection-handling-1.html' },
+      downloads: [{ format: 'pdf' }, { format: 'docx' }]
+    },
+    {
+      id: 'scripts-send-me-an-email-redirect',
+      status: 'reviewed',
+      title: '"Send Me an Email" Redirect',
+      category: 'script',
+      skill: 'objections',
+      difficulty: 'beginner',
+      duration: 5,
+      summary: 'A response to "just send me an email" that agrees happily, then asks one question so the email is actually relevant — without refusing to send it or turning it into a fight.',
+      objectives: [
+        'Agree to send the email without resistance',
+        'Ask one question so the email is worth reading',
+        'Set a light, optional next touch',
+        'Accept that an email request can be a polite exit'
+      ],
+      sections: [
+        { type: 'steps', heading: 'Redirect in three beats', items: [
+          'Say yes immediately — "Happy to."',
+          'Ask one question so you send something relevant, not generic.',
+          'Offer a small optional follow-up so the email is not a dead end.'
+        ]},
+        { type: 'paragraph', heading: 'Read the request honestly', text: 'Sometimes "send me an email" means "I am mildly curious," and sometimes it means "this is how I end calls politely." Both are fine. Ask your one question; if the answer is thin, send a short, genuinely useful email and let them come back on their own terms rather than pushing for a call they did not offer.' }
+      ],
+      example: {
+        title: 'Worked example',
+        text: '"Happy to send that over. So I do not send you a generic overview — is weekend coverage the part that is actually painful, or is it more the onboarding side? … Got it, I will keep the email focused on coverage. If it is useful, reply and I will share how two teams handled it. If not, no worries at all."'
+      },
+      safePractice: 'Always send the email you promised — refusing to send one unless they book a call is a bait-and-switch that burns trust. Keep it short and relevant, never mark it "urgent," and do not follow a single email with a barrage. If they do not reply, that is a legitimate answer.',
+      related: { label: 'Drill objections in the Journey', route: 'objection-handling-1.html' },
+      downloads: [{ format: 'pdf' }, { format: 'docx' }]
+    },
+    {
+      id: 'scripts-pricing-objection-hold',
+      status: 'reviewed',
+      title: 'Holding Steady on a Price Objection',
+      category: 'script',
+      skill: 'objections',
+      difficulty: 'advanced',
+      duration: 9,
+      summary: 'A response to "it is too expensive" that stays calm, understands what is behind the concern, and reconnects price to value honestly — without discounting on reflex or overpromising.',
+      objectives: [
+        'Acknowledge the price concern without panic',
+        'Find out what "too expensive" actually means',
+        'Reconnect cost to value the prospect named',
+        'Hold your price honestly, or say you cannot help'
+      ],
+      sections: [
+        { type: 'list', heading: 'What "too expensive" can mean', items: [
+          'Compared to a competitor or their current tool.',
+          'More than the budget they have this quarter.',
+          'They are not yet convinced the value is worth it.'
+        ]},
+        { type: 'steps', heading: 'Hold steady in three moves', items: [
+          'Acknowledge: "That is a fair thing to raise."',
+          'Ask which kind of "expensive" it is, so you address the real one.',
+          'Reconnect price to the specific problem and impact they described earlier.'
+        ]}
+      ],
+      example: {
+        title: 'Worked example',
+        text: '"That is a fair thing to raise. Can I ask — is it more than you expected compared to what you use now, or more than there is room for this quarter? … Budget this quarter. Understood. Earlier you said a bad coverage week costs you overtime and missed pickups — if that is the real cost, it might be worth revisiting when budget frees up. I would rather do that than discount into something that does not fit."'
+      },
+      safePractice: 'Do not reflexively discount to save a deal — it teaches the buyer your price is negotiable fiction and can trap you in a bad fit. Never invent ROI figures or cite results you cannot back up. If the value genuinely is not there for them, it is honest to say so and step back.',
+      related: { label: 'Drill objections in the Journey', route: 'objection-handling-1.html' },
+      downloads: [{ format: 'pdf' }, { format: 'docx' }]
+    },
+    {
+      id: 'scripts-competitor-displacement-opener',
+      status: 'reviewed',
+      title: 'Respectful Competitor-in-Place Opener',
+      category: 'script',
+      skill: 'objections',
+      difficulty: 'advanced',
+      duration: 8,
+      summary: 'An approach for prospects who already use a competitor — it respects their current choice, asks what is and is not working, and offers a specific difference instead of trash-talking the incumbent.',
+      objectives: [
+        'Respect the prospect\'s existing decision',
+        'Learn what works and what they would change',
+        'Offer one concrete, honest point of difference',
+        'Never disparage the competitor'
+      ],
+      sections: [
+        { type: 'steps', heading: 'Approach in four beats', items: [
+          'Acknowledge they already have a solution — no surprise, no judgment.',
+          'Ask what is working well before anything else.',
+          'Ask the one thing they would change if they could.',
+          'Only if there is a real gap, offer one specific difference you can stand behind.'
+        ]},
+        { type: 'list', heading: 'Talk about them, not the competitor', items: [
+          'Never call the incumbent bad — it insults their choice and your credibility.',
+          'Anchor on the change they named, not on a feature war.',
+          'If they are genuinely happy, thank them and leave the door open.'
+        ]}
+      ],
+      example: {
+        title: 'Worked example',
+        text: '"You are already using Meridian — good tool, I am not here to knock it. Out of curiosity, what is working well with it for you? … And if you could change one thing about it, what would it be? … The reporting delay you mentioned is actually the one area we are built differently, so that might be worth a look. If everything is fine as-is, though, I will not try to talk you out of a setup that works."'
+      },
+      safePractice: 'Never disparage a competitor or imply the prospect made a poor choice — it damages trust and often backfires. Only claim a difference you can genuinely deliver and demonstrate. If the prospect is satisfied with what they have, respect that and leave without pressure.',
+      related: { label: 'Drill objections in the Journey', route: 'objection-handling-1.html' },
+      downloads: [{ format: 'pdf' }, { format: 'docx' }]
+    },
+    {
+      id: 'scripts-second-attempt-callback',
+      status: 'reviewed',
+      title: 'Second-Attempt Callback',
+      category: 'script',
+      skill: 'follow-up',
+      difficulty: 'beginner',
+      duration: 5,
+      summary: 'A script for your second call after a missed first one — it references the earlier attempt lightly, gives a fresh reason to talk, and does not scold them for not answering.',
+      objectives: [
+        'Reference the earlier attempt without pressure',
+        'Lead with a reason, not a complaint',
+        'Offer an easy way to talk now or later',
+        'Keep the tone patient and low-key'
+      ],
+      sections: [
+        { type: 'list', heading: 'How to reference attempt one', items: [
+          '"I tried you earlier this week" is fine; "you did not pick up" is not.',
+          'Assume they were busy, not avoiding you — usually true, always kinder.',
+          'Lead with the reason for calling, not the fact that you called before.'
+        ]},
+        { type: 'steps', heading: 'Structure the callback', items: [
+          'Re-introduce yourself briefly — they may not remember the first attempt.',
+          'Give the one relevant reason for the call.',
+          'Offer to be quick now or to find a better time.'
+        ]}
+      ],
+      example: {
+        title: 'Worked example',
+        text: '"Hi Jordan, Sam with Northlight again — I tried you earlier in the week, figured the timing was just busy. I called because weekend coverage tends to get harder as support teams grow, and I help with exactly that. Happy to be quick now if it is a decent moment, or I can catch you another time — whichever is easier for you."'
+      },
+      safePractice: 'Do not let a second attempt carry any edge of "why did you not call me back" — the prospect owes you nothing. Keep attempts spaced and reasonable; repeated rapid calls read as pressure. If the second attempt goes nowhere, treat that as a signal, not a reason to try five more times.',
+      related: { label: 'Learn follow-up in the Journey', route: 'follow-up-1.html' },
+      downloads: [{ format: 'pdf' }, { format: 'docx' }]
+    },
+    {
+      id: 'scripts-event-followup-call',
+      status: 'reviewed',
+      title: 'Event or Webinar Follow-Up Call',
+      category: 'script',
+      skill: 'follow-up',
+      difficulty: 'intermediate',
+      duration: 7,
+      summary: 'A call for following up with someone after they attended an event or webinar — it references what they showed up for, connects it to a relevant next step, and respects that attending is not the same as buying.',
+      objectives: [
+        'Reference the specific event they attended',
+        'Connect their attendance to a plausible interest',
+        'Offer a next step that matches that interest',
+        'Avoid treating attendance as a commitment'
+      ],
+      sections: [
+        { type: 'steps', heading: 'Follow up in four beats', items: [
+          'Name the event and thank them for attending or registering.',
+          'Reference the topic or session as the reason you are calling.',
+          'Ask an open question about whether the topic is a live issue for them.',
+          'Offer a next step sized to their actual interest, not your hope.'
+        ]},
+        { type: 'list', heading: 'Keep attendance in perspective', items: [
+          'Registering for a webinar is curiosity, not intent to buy.',
+          'They may have attended for one narrow reason — ask, do not assume.',
+          'A "just browsing" answer is legitimate; leave a friendly door open.'
+        ]}
+      ],
+      example: {
+        title: 'Worked example',
+        text: '"Hi Marco, Sam from Northlight — thanks for joining our session on scaling support last Thursday. I am reaching out to the folks who came because the coverage part tends to be a real, current headache. Is that something you are actually wrestling with right now, or were you mostly there for the hiring section? … Got it — then the piece worth sharing is probably X. Want me to send it, or set up a short call?"'
+      },
+      safePractice: 'Attending an event is a small signal, not permission to hard-sell — treat it as a reason to ask, not to assume. Reference only the event they actually joined. If they were there out of general curiosity, offer something useful and let them decide the pace.',
+      related: { label: 'Learn follow-up in the Journey', route: 'follow-up-1.html' },
+      downloads: [{ format: 'pdf' }, { format: 'docx' }]
+    },
+    {
+      id: 'scripts-inbound-lead-qualifying',
+      status: 'reviewed',
+      title: 'Warm Inbound-Lead Qualifying Call',
+      category: 'script',
+      skill: 'discovery',
+      difficulty: 'beginner',
+      duration: 7,
+      summary: 'A call for someone who reached out or requested information — it thanks them, understands what prompted the interest, and qualifies gently without interrogating a warm hand.',
+      objectives: [
+        'Thank the lead and confirm what they were after',
+        'Understand what prompted them to reach out',
+        'Qualify with open questions, not a checklist',
+        'Match the next step to their real readiness'
+      ],
+      sections: [
+        { type: 'steps', heading: 'Open a warm lead well', items: [
+          'Thank them for reaching out and confirm what they downloaded or asked about.',
+          'Ask what prompted them to look now — the answer shapes everything.',
+          'Ask one or two open questions to understand their situation.',
+          'Suggest a next step that fits how ready they actually are.'
+        ]},
+        { type: 'list', heading: 'Qualify without interrogating', items: [
+          'A warm lead expects a conversation, not a rapid-fire form.',
+          'Lead with "what prompted this?" before "what is your budget?"',
+          'Let them volunteer detail; follow their thread rather than a rigid script.'
+        ]}
+      ],
+      example: {
+        title: 'Worked example',
+        text: '"Hi Dana, thanks for grabbing our coverage guide — I wanted to reach out personally. Out of curiosity, what made you look into this now? … Makes sense, the new depots would do it. How are you handling weekend scheduling across them today? … Got it. Depending on where you are, the useful next step is either a short walkthrough or just a couple of resources — which feels right for you?"'
+      },
+      safePractice: 'A warm lead is still a person deciding at their own pace, not a closed deal — do not treat inbound interest as a green light to push. Qualify with genuine curiosity rather than a scripted interrogation, and offer the lighter next step if they are early. Respect a "just researching" answer.',
+      related: { label: 'Learn discovery in the Journey', route: 'discovery-questions-1.html' },
+      downloads: [{ format: 'pdf' }, { format: 'docx' }]
+    },
+    {
+      id: 'scripts-meeting-confirmation',
+      status: 'reviewed',
+      title: 'Meeting Confirmation & No-Show Prevention',
+      category: 'script',
+      skill: 'booking',
+      difficulty: 'beginner',
+      duration: 6,
+      summary: 'A short confirmation touch — call or message — that locks in a booked meeting by restating the value, the time, and an easy way to reschedule, so no-shows drop without nagging.',
+      objectives: [
+        'Restate the meeting time and what it will cover',
+        'Remind them of the value they will get',
+        'Make rescheduling easy and guilt-free',
+        'Reduce no-shows without pressure'
+      ],
+      sections: [
+        { type: 'steps', heading: 'Confirm in three parts', items: [
+          'Restate the day, time, and how long it will take.',
+          'Remind them of the one useful thing they will walk away with.',
+          'Offer an easy reschedule path in case something comes up.'
+        ]},
+        { type: 'list', heading: 'Why this lowers no-shows', items: [
+          'A concrete, valuable reason to attend beats a bare calendar hold.',
+          'An easy reschedule option turns a would-be no-show into a new time.',
+          'A friendly tone makes them more likely to actually show up.'
+        ]}
+      ],
+      example: {
+        title: 'Worked example',
+        text: '"Hi Jordan — just confirming our 20 minutes on Wednesday at 10:00. I will show you how two teams your size handled weekend coverage, so you leave with at least one idea you can use whether or not we work together. If something comes up, no problem at all — just reply and we will find another slot. Looking forward to it."'
+      },
+      safePractice: 'A confirmation should reassure, not pressure — never guilt someone into keeping a meeting or imply they owe you attendance. Only promise value you can actually deliver in the meeting. Always make rescheduling genuinely easy; a moved meeting is a far better outcome than a resentful attendee.',
+      related: { label: 'Learn appointment setting in the Journey', route: 'book-appointments.html' },
+      downloads: [{ format: 'pdf' }, { format: 'docx' }]
+    },
     /* -------------------------------------------------------------- TEMPLATES */
     {
       id: 'templates-three-touch-followup',
