@@ -101,8 +101,11 @@ const requestedRedirect = params.get('redirect') || '';
 // deep links survive the sign-up round trip. The PATH must still be on the
 // whitelist — the query can never change the destination page or origin.
 const redirParts = requestedRedirect.split('?');
-const redirectPath = (ALLOWED_REDIRECTS.indexOf(redirParts[0]) !== -1 || LESSON_RE.test(redirParts[0])) ? redirParts[0] : 'dashboard.html';
-const redirect = redirectPath === redirParts[0] && redirParts[1]
+// Clean-URL safe: normalize to the .html form for the whitelist/pattern check
+// (requireAuth may pass 'dashboard' or 'dashboard.html'); Vercel serves it clean.
+const redirPage = redirParts[0] && !redirParts[0].endsWith('.html') ? redirParts[0] + '.html' : redirParts[0];
+const redirectPath = (ALLOWED_REDIRECTS.indexOf(redirPage) !== -1 || LESSON_RE.test(redirPage)) ? redirPage : 'dashboard.html';
+const redirect = redirectPath === redirPage && redirParts[1]
   ? redirectPath + '?' + redirParts.slice(1).join('?')
   : redirectPath;
 
