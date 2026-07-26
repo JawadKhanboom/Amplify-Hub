@@ -145,9 +145,460 @@ for (const r of resources) {
   assert.ok(migration.includes(`'${r.id}'`) && migration.match(new RegExp(`'${r.id}',[\\s\\S]*?'${expected}',(true|false)\\)`)), `migration carries ${r.id} status=${expected}`);
 }
 
-console.log(`Static QA passed: ${TOTAL}-resource catalog, publication gate, ${TOTAL_FILES} valid artifacts, format rules, xlsx styling, and a reviewed-only public read policy.`);
+// Phase 2 schema, grants, RPC safety, and static-client integration.
+const catalogSyncMigration = await readFile(path.join(siteRoot, 'supabase/migrations/20260726104712_resource_catalog_sync.sql'), 'utf8');
+const phase2Migration = await readFile(path.join(siteRoot, 'supabase/migrations/20260726104713_resources_phase_2.sql'), 'utf8');
+const activityClient = await readFile(path.join(siteRoot, 'assets/resource-activity.js'), 'utf8');
+const resourceDetailSource = await readFile(path.join(siteRoot, 'resource.html'), 'utf8');
+const resourceLibrarySource = await readFile(path.join(siteRoot, 'resources.html'), 'utf8');
+const interviewPrepSource = await readFile(path.join(siteRoot, 'interview-prep.html'), 'utf8');
+
+assert.equal((migration.match(/^ {2}\('/gm) || []).length, 40, 'catalog migration stays synchronized with all 40 catalog rows');
+const catalogSyncIds = [...catalogSyncMigration.matchAll(/^ {2}\('([^']+)'/gm)].map((match) => match[1]);
+assert.equal(catalogSyncIds.length, TOTAL, 'catalog sync contains exactly 40 resource rows');
+assert.equal(new Set(catalogSyncIds).size, TOTAL, 'catalog sync resource IDs are unique');
+assert.deepEqual(
+  [...catalogSyncIds].sort(),
+  resources.map((resource) => resource.id).sort(),
+  'catalog sync carries every authoritative catalog ID verbatim',
+);
+const catalogUpsertMarker = 'insert into public.resource_catalog';
+const catalogSeedUpsertIndex = migration.indexOf(catalogUpsertMarker);
+const catalogSyncUpsertIndex = catalogSyncMigration.indexOf(catalogUpsertMarker);
+const catalogSeedUpsert = migration.slice(catalogSeedUpsertIndex);
+const catalogSyncUpsert = catalogSyncMigration.slice(catalogSyncUpsertIndex);
+assert.ok(catalogSeedUpsert.startsWith(catalogUpsertMarker), 'catalog seed contains its generated upsert block');
+assert.equal(catalogSyncUpsert, catalogSeedUpsert, 'catalog sync replays the generated 40-row upsert block verbatim');
+assert.deepEqual(
+  catalogSyncMigration.slice(0, catalogSyncUpsertIndex)
+    .split(/\r?\n/)
+    .filter((line) => line.trim() && !line.trim().startsWith('--')),
+  [],
+  'catalog sync contains only comments/whitespace before the verbatim upsert',
+);
+assert.match(catalogSyncMigration, /insert into public\.resource_catalog/, 'catalog sync targets resource_catalog');
+assert.match(catalogSyncMigration, /on conflict \(id\) do update set/, 'catalog sync is a replay-safe upsert');
+const catalogSyncCode = catalogSyncMigration.replace(/^--.*$/gm, '');
+assert.doesNotMatch(
+  catalogSyncCode,
+  /^\s*(?:create|alter|drop)\s+table\b/gim,
+  'catalog sync contains no table DDL',
+);
+assert.doesNotMatch(
+  catalogSyncCode,
+  /^\s*(?:create|alter|drop)\s+policy\b/gim,
+  'catalog sync contains no policy DDL',
+);
+assert.doesNotMatch(
+  catalogSyncCode,
+  /^\s*(?:create|alter|drop)\s+(?:unique\s+)?index\b/gim,
+  'catalog sync contains no index DDL',
+);
+assert.doesNotMatch(
+  catalogSyncCode,
+  /^\s*(?:grant|revoke)\b/gim,
+  'catalog sync contains no privilege changes',
+);
+assert.match(
+  phase2Migration,
+  /resource_id text not null references public\.resource_catalog\(id\) on delete cascade/,
+  'resource activity uses the catalog text key with cascading cleanup',
+);
+assert.doesNotMatch(phase2Migration, /resource_id uuid/, 'resource activity never guesses a uuid catalog key');
+assert.match(phase2Migration, /\n  helpful boolean,\n/, 'helpful is nullable for the one-way useful affordance');
+assert.doesNotMatch(phase2Migration, /helpful boolean not null/, 'helpful remains nullable');
+assert.match(phase2Migration, /primary key \(user_id, resource_id\)/, 'resource activity is unique per user and resource');
+assert.match(
+  phase2Migration,
+  /create index if not exists user_resource_activity_resource_id_idx\s+on public\.user_resource_activity \(resource_id\)/,
+  'resource_id foreign key has a covering index',
+);
+assert.match(
+  phase2Migration,
+  /user_id uuid primary key references auth\.users\(id\) on delete cascade/,
+  'interview prep primary key covers its cascading user foreign key',
+);
+
+for (const table of ['user_resource_activity', 'user_interview_prep']) {
+  assert.match(
+    phase2Migration,
+    new RegExp(`alter table public\\.${table} enable row level security`),
+    `${table} has RLS enabled`,
+  );
+  assert.match(
+    phase2Migration,
+    new RegExp(
+      `create policy[\\s\\S]*?on public\\.${table}[\\s\\S]*?to authenticated` +
+      `[\\s\\S]*?using \\(\\(select auth\\.uid\\(\\)\\) = user_id\\)` +
+      `[\\s\\S]*?with check \\(\\(select auth\\.uid\\(\\)\\) = user_id\\)`,
+    ),
+    `${table} policy is authenticated, owner-scoped, and init-plan cached`,
+  );
+  assert.match(
+    phase2Migration,
+    new RegExp(
+      `revoke all privileges on public\\.${table}\\s+from public, anon, authenticated, service_role;` +
+      `[\\s\\S]*?grant select, insert, update, delete on public\\.${table}\\s+to authenticated;`,
+    ),
+    `${table} exposes authenticated CRUD only, with RLS deciding the rows`,
+  );
+}
+
+assert.equal((phase2Migration.match(/security invoker\s+set search_path = ''/g) || []).length, 2, 'both Phase 2 RPCs are security-invoker with a fixed empty search_path');
+assert.match(
+  phase2Migration,
+  /create or replace function public\.record_resource_download\(p_resource_id text\)[\s\S]*?returns public\.user_resource_activity[\s\S]*?download_count = public\.user_resource_activity\.download_count \+ 1/,
+  'download RPC atomically increments and returns the owner activity row',
+);
+assert.match(
+  phase2Migration,
+  /create or replace function public\.migrate_legacy_interview_prep\([\s\S]*?p_legacy_updated_at timestamptz[\s\S]*?returns public\.user_interview_prep/,
+  'legacy migration RPC accepts the verified legacy field map',
+);
+assert.match(
+  phase2Migration,
+  /insert into public\.user_interview_prep as existing \(\s*user_id,\s*opener,\s*objections,\s*rejection,\s*routine,\s*why,\s*first_call_done,\s*legacy_migrated_at,\s*updated_at\s*\)\s*values \(\s*v_user_id,\s*coalesce\(p_opener, ''\),\s*coalesce\(p_objections, ''\),\s*coalesce\(p_rejection, ''\),\s*coalesce\(p_routine, ''\),\s*coalesce\(p_why, ''\),\s*coalesce\(p_first_call_done, false\),\s*pg_catalog\.now\(\),\s*coalesce\(p_legacy_updated_at, pg_catalog\.now\(\)\)\s*\)\s*on conflict \(user_id\)/,
+  'first-time legacy migration maps every field and sets its one-time marker',
+);
+assert.match(phase2Migration, /where existing\.legacy_migrated_at is null/, 'legacy merge is guarded by the one-time marker');
+for (const field of ['opener', 'objections', 'rejection', 'routine', 'why']) {
+  assert.match(
+    phase2Migration,
+    new RegExp(`when pg_catalog\\.btrim\\(existing\\.${field}\\) = '' then excluded\\.${field}[\\s\\S]*?else existing\\.${field}`),
+    `legacy ${field} fills a blank cloud value without overwriting a non-blank value`,
+  );
+}
+assert.match(phase2Migration, /first_call_done = existing\.first_call_done or excluded\.first_call_done/, 'first-call completion can never be erased by legacy data');
+assert.match(phase2Migration, /legacy_migrated_at = pg_catalog\.now\(\)/, 'successful conflict-path migration sets its one-time marker');
+
+for (const signature of [
+  'public\\.record_resource_download\\(text\\)',
+  'public\\.migrate_legacy_interview_prep\\([\\s\\S]*?timestamptz[\\s\\S]*?\\)',
+]) {
+  assert.match(
+    phase2Migration,
+    new RegExp(
+      `revoke all privileges on function ${signature}\\s+from public, anon, authenticated, service_role;` +
+      `[\\s\\S]*?grant execute on function ${signature}\\s+to authenticated;`,
+    ),
+    'Phase 2 RPC execute privilege is authenticated-only',
+  );
+}
+
+assert.match(activityClient, /typeof supabaseClient !== 'undefined'/, 'activity client uses the lexical Supabase binding');
+assert.match(activityClient, /client\.auth\.getUser\(\)/, 'activity operations verify the current user');
+assert.match(activityClient, /SELECT_FIELDS\s*=\s*'[^']*\bhelpful\b[^']*'/, 'activity hydration explicitly selects helpful');
+assert.match(activityClient, /onConflict: 'user_id,resource_id'/, 'activity writes use the composite conflict target');
+assert.match(activityClient, /defaultToNull: false/, 'partial activity upserts preserve fields they do not own');
+assert.match(activityClient, /client\.rpc\('record_resource_download'/, 'downloads use the atomic RPC');
+assert.match(interviewPrepSource, /function getLegacySupabaseClient\(\)/, 'interview page guards access to the lexical Supabase binding');
+assert.match(interviewPrepSource, /typeof\s+supabaseClient\s*!==\s*'undefined'/, 'interview page feature-detects the lexical Supabase binding safely');
+assert.match(interviewPrepSource, /LEGACY_MIGRATION_OWNER_KEY/, 'legacy migration records a persistent browser-owner claim');
+assert.match(interviewPrepSource, /if\(!claimLegacyPortfolio\(user\.id\)\)return;/, 'another account cannot claim the same browser-global portfolio');
+assert.match(interviewPrepSource, /client\.rpc\(LEGACY_MIGRATION_RPC/, 'interview page invokes the one-time migration RPC through the guarded client');
+assert.match(interviewPrepSource, /p_legacy_updated_at:legacyUpdatedAt\(portfolio\.updatedAt\)/, 'legacy epoch milliseconds are normalized before migration');
+
+for (const [label, source] of [
+  ['resource detail', resourceDetailSource],
+  ['resource library', resourceLibrarySource],
+  ['interview prep', interviewPrepSource],
+]) {
+  assert.match(source, /assets\/vendor\/supabase-2\.110\.8\.min\.js/, `${label} uses the pinned self-hosted Supabase client`);
+  assert.doesNotMatch(source, /<script[^>]+src=["']https?:\/\/[^"']*supabase/i, `${label} adds no Supabase CDN origin`);
+}
+
+console.log(`Static QA passed: ${TOTAL}-resource catalog + migration parity, publication gate, ${TOTAL_FILES} valid artifacts, Phase 2 RLS/grants/indexes, secure RPCs, and self-hosted sync clients.`);
 
 /* ---------------------------------------------------- Part B: browser tests */
+
+const QA_BACKEND_KEY = '__amplifyhub_resource_qa_backend_v1';
+
+function mockSupabaseScript(fixture = {}) {
+  const initial = {
+    user: fixture.user || null,
+    tables: {
+      user_resource_activity: fixture.activityRows || [],
+      user_interview_prep: fixture.interviewRows || [],
+      user_lesson_progress: [],
+    },
+    calls: {
+      getUser: 0,
+      tableReads: 0,
+      tableWrites: 0,
+      rpcCalls: 0,
+      rpcWrites: 0,
+      rpcByName: {},
+    },
+  };
+
+  return `
+    (function () {
+      const STATE_KEY = ${JSON.stringify(QA_BACKEND_KEY)};
+      const INITIAL = ${JSON.stringify(initial)};
+
+      function clone(value) {
+        return JSON.parse(JSON.stringify(value));
+      }
+
+      function readState() {
+        const raw = localStorage.getItem(STATE_KEY);
+        return raw ? JSON.parse(raw) : clone(INITIAL);
+      }
+
+      function writeState(state) {
+        localStorage.setItem(STATE_KEY, JSON.stringify(state));
+        window.__qaSupabaseState = clone(state);
+      }
+
+      if (!localStorage.getItem(STATE_KEY)) writeState(clone(INITIAL));
+      window.__readQaSupabaseState = readState;
+      const authCallbacks = [];
+      window.__setQaUser = (user) => {
+        const state = readState();
+        state.user = user || null;
+        writeState(state);
+        const session = user ? { access_token: 'qa-token', user } : null;
+        const event = user ? 'SIGNED_IN' : 'SIGNED_OUT';
+        authCallbacks.slice().forEach((callback) => callback(event, session));
+      };
+
+      function currentUser() {
+        return readState().user || null;
+      }
+
+      function resourceDefaults(payload) {
+        const now = new Date().toISOString();
+        return {
+          user_id: payload.user_id,
+          resource_id: payload.resource_id,
+          bookmarked: false,
+          helpful: null,
+          last_viewed_at: null,
+          download_count: 0,
+          created_at: now,
+          updated_at: now,
+        };
+      }
+
+      function rowMatches(table, row, payload) {
+        if (table === 'user_resource_activity') {
+          return row.user_id === payload.user_id && row.resource_id === payload.resource_id;
+        }
+        if (table === 'user_lesson_progress') {
+          return row.user_id === payload.user_id && row.lesson_id === payload.lesson_id;
+        }
+        if (table === 'user_interview_prep') return row.user_id === payload.user_id;
+        return false;
+      }
+
+      function makeBuilder(table) {
+        let action = 'select';
+        let payload = null;
+        const filters = [];
+        let ordering = null;
+        let selectedColumns = null;
+
+        function selectedRows(state) {
+          let rows = (state.tables[table] || []).filter((row) =>
+            filters.every((filter) => row[filter.column] === filter.value)
+          );
+          if (ordering) {
+            rows = rows.slice().sort((a, b) => {
+              const av = a[ordering.column];
+              const bv = b[ordering.column];
+              if (av == null && bv == null) return 0;
+              if (av == null) return ordering.nullsFirst ? -1 : 1;
+              if (bv == null) return ordering.nullsFirst ? 1 : -1;
+              if (av === bv) return 0;
+              const direction = av < bv ? -1 : 1;
+              return ordering.ascending ? direction : -direction;
+            });
+          }
+          return rows;
+        }
+
+        function projectRow(row) {
+          if (!selectedColumns || selectedColumns.includes('*')) return row;
+          return Object.fromEntries(selectedColumns.map((column) => [column, row[column]]));
+        }
+
+        function execute(mode) {
+          const state = readState();
+          state.tables[table] = state.tables[table] || [];
+          let rows;
+
+          if (action === 'upsert') {
+            const inputs = Array.isArray(payload) ? payload : [payload];
+            rows = inputs.map((item) => {
+              const index = state.tables[table].findIndex((row) => rowMatches(table, row, item));
+              const existing = index === -1 ? null : state.tables[table][index];
+              const base = table === 'user_resource_activity'
+                ? resourceDefaults(item)
+                : {};
+              const saved = Object.assign({}, base, existing || {}, item);
+              if (index === -1) state.tables[table].push(saved);
+              else state.tables[table][index] = saved;
+              return saved;
+            });
+            if (table === 'user_resource_activity' || table === 'user_interview_prep') {
+              state.calls.tableWrites += inputs.length;
+            }
+          } else {
+            rows = selectedRows(state);
+            if (table === 'user_resource_activity' || table === 'user_interview_prep') {
+              state.calls.tableReads += 1;
+            }
+          }
+
+          writeState(state);
+          const projectedRows = rows.map(projectRow);
+          if (mode === 'single') return { data: projectedRows[0] || null, error: rows.length ? null : { message: 'Row not found' } };
+          if (mode === 'maybeSingle') return { data: projectedRows[0] || null, error: null };
+          return { data: projectedRows, error: null };
+        }
+
+        const builder = {
+          select(columns) {
+            selectedColumns = typeof columns === 'string'
+              ? columns.split(',').map((column) => column.trim()).filter(Boolean)
+              : null;
+            return builder;
+          },
+          eq(column, value) { filters.push({ column, value }); return builder; },
+          order(column, options) {
+            ordering = {
+              column,
+              ascending: !options || options.ascending !== false,
+              nullsFirst: !!(options && options.nullsFirst),
+            };
+            return builder;
+          },
+          upsert(value) { action = 'upsert'; payload = value; return builder; },
+          maybeSingle() { return Promise.resolve(execute('maybeSingle')); },
+          single() { return Promise.resolve(execute('single')); },
+          then(resolve, reject) { return Promise.resolve(execute('many')).then(resolve, reject); },
+        };
+        return builder;
+      }
+
+      function laterTimestamp(left, right) {
+        if (!left) return right;
+        if (!right) return left;
+        return new Date(left).getTime() >= new Date(right).getTime() ? left : right;
+      }
+
+      function rpc(name, args) {
+        const request = Promise.resolve().then(() => {
+          const state = readState();
+          state.calls.rpcCalls += 1;
+          state.calls.rpcByName[name] = (state.calls.rpcByName[name] || 0) + 1;
+          const user = state.user;
+          if (!user) {
+            writeState(state);
+            return { data: null, error: { message: 'Authentication required', code: '28000' } };
+          }
+
+          if (name === 'record_resource_download') {
+            const table = state.tables.user_resource_activity;
+            let row = table.find((item) =>
+              item.user_id === user.id && item.resource_id === args.p_resource_id
+            );
+            if (!row) {
+              row = resourceDefaults({ user_id: user.id, resource_id: args.p_resource_id });
+              table.push(row);
+            }
+            row.download_count += 1;
+            row.updated_at = new Date().toISOString();
+            state.calls.rpcWrites += 1;
+            writeState(state);
+            return { data: clone(row), error: null };
+          }
+
+          if (name === 'migrate_legacy_interview_prep') {
+            const table = state.tables.user_interview_prep;
+            let row = table.find((item) => item.user_id === user.id);
+            const now = new Date().toISOString();
+            const legacyUpdatedAt = args.p_legacy_updated_at || now;
+            let changed = false;
+
+            if (!row) {
+              row = {
+                user_id: user.id,
+                opener: args.p_opener || '',
+                objections: args.p_objections || '',
+                rejection: args.p_rejection || '',
+                routine: args.p_routine || '',
+                why: args.p_why || '',
+                first_call_done: args.p_first_call_done === true,
+                legacy_migrated_at: now,
+                updated_at: legacyUpdatedAt,
+              };
+              table.push(row);
+              changed = true;
+            } else if (!row.legacy_migrated_at) {
+              for (const field of ['opener', 'objections', 'rejection', 'routine', 'why']) {
+                if (typeof row[field] !== 'string' || row[field].trim() === '') {
+                  row[field] = args['p_' + field] || '';
+                }
+              }
+              row.first_call_done = row.first_call_done === true || args.p_first_call_done === true;
+              row.legacy_migrated_at = now;
+              row.updated_at = laterTimestamp(row.updated_at, legacyUpdatedAt);
+              changed = true;
+            }
+
+            if (changed) state.calls.rpcWrites += 1;
+            writeState(state);
+            return { data: clone(row), error: null };
+          }
+
+          writeState(state);
+          return { data: null, error: null };
+        });
+        request.abortSignal = () => request;
+        return request;
+      }
+
+      const db = {
+        auth: {
+          getSession: async () => {
+            const user = currentUser();
+            return { data: { session: user ? { access_token: 'qa-token', user } : null }, error: null };
+          },
+          getUser: async () => {
+            const state = readState();
+            state.calls.getUser += 1;
+            writeState(state);
+            return { data: { user: state.user || null }, error: null };
+          },
+          onAuthStateChange(callback) {
+            authCallbacks.push(callback);
+            setTimeout(() => {
+              const user = currentUser();
+              callback('INITIAL_SESSION', user ? { access_token: 'qa-token', user } : null);
+            }, 0);
+            return { data: { subscription: { unsubscribe() {} } } };
+          },
+        },
+        from(table) { return makeBuilder(table); },
+        rpc,
+      };
+
+      window.supabase = { createClient: () => db };
+    })();
+  `;
+}
+
+async function installMockSupabase(page, fixture) {
+  await page.route('**/assets/vendor/supabase-*.min.js', (route) => route.fulfill({
+    contentType: 'application/javascript',
+    body: mockSupabaseScript(fixture),
+  }));
+}
+
+async function readMockState(page) {
+  return page.evaluate((key) => JSON.parse(localStorage.getItem(key)), QA_BACKEND_KEY);
+}
 
 const candidates = [process.env.CHROME_PATH, 'C:/Program Files/Google/Chrome/Application/chrome.exe', 'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe'].filter(Boolean);
 let chromePath = null;
@@ -163,8 +614,18 @@ const browser = await chromium.launch({ executablePath: chromePath, headless: tr
 const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
 const pageErrors = [];
 page.on('pageerror', (error) => pageErrors.push(error.message));
+await installMockSupabase(page, { user: null });
 await page.route('https://fonts.googleapis.com/**', (route) => route.abort());
 await page.route('https://fonts.gstatic.com/**', (route) => route.abort());
+
+async function newMockedPage(fixture) {
+  const context = await browser.newContext({ viewport: { width: 1280, height: 900 } });
+  const mockedPage = await context.newPage();
+  await installMockSupabase(mockedPage, fixture);
+  await mockedPage.route('https://fonts.googleapis.com/**', (route) => route.abort());
+  await mockedPage.route('https://fonts.gstatic.com/**', (route) => route.abort());
+  return { context, page: mockedPage };
+}
 
 const draftCount = resources.filter((r) => r.status !== 'reviewed').length;
 const publishedCount = resources.length - draftCount;
@@ -269,11 +730,333 @@ try {
   assert.equal(dlResp.status(), 200, 'download file is publicly served');
   assert.ok((await dlResp.body()).length > 300, 'served download is non-empty');
 
-  // Bookmark prompts sign-in for anonymous users (Phase 2 wires real sync).
-  await page.locator('.save-row .tb', { hasText: 'Bookmark' }).click();
+  // Anonymous visitors keep the prompt path and never reach a table/RPC write.
+  await page.waitForFunction(() => {
+    const buttons = Array.from(document.querySelectorAll('.save-row button'));
+    return buttons.length === 2 && buttons.every((button) => !button.disabled);
+  });
+  await page.getByRole('button', { name: /Bookmark/i }).click();
   await page.waitForSelector('.save-note', { state: 'visible' });
   const signHref = await page.locator('.save-note a').getAttribute('href');
   assert.match(signHref, /signin\.html\?redirect=/, 'bookmark prompts sign-in');
+  await page.locator('.save-note').evaluate((note) => { note.style.display = 'none'; });
+  await page.getByRole('button', { name: /useful/i }).click();
+  await page.waitForSelector('.save-note', { state: 'visible' });
+  assert.equal(await page.locator('.save-note').isVisible(), true, 'useful independently prompts sign-in');
+  const signedOutBackend = await readMockState(page);
+  assert.equal(signedOutBackend.calls.tableWrites, 0, 'signed-out resource actions make zero table writes');
+  assert.equal(signedOutBackend.calls.rpcWrites, 0, 'signed-out resource actions make zero RPC writes');
+  assert.deepEqual(signedOutBackend.tables.user_resource_activity, [], 'signed-out resource actions persist no activity row');
+
+  // --- Authenticated resource activity: view, bookmark, useful, download, reload, library ---
+  const qaUser = { id: 'resource-qa-user', email: 'resource-qa@example.test', user_metadata: { full_name: 'Resource QA' } };
+  const signedIn = await newMockedPage({ user: qaUser });
+  const signedInErrors = [];
+  signedIn.page.on('pageerror', (error) => signedInErrors.push(error.message));
+  try {
+    await signedIn.page.goto(`${baseUrl}resource.html?id=${encodeURIComponent(sample.id)}`, { waitUntil: 'domcontentloaded' });
+    await signedIn.page.waitForFunction(() => {
+      const buttons = Array.from(document.querySelectorAll('.save-row button'));
+      return buttons.length === 2 && buttons.every((button) => !button.disabled);
+    });
+    await signedIn.page.waitForFunction(({ key, id }) => {
+      const state = JSON.parse(localStorage.getItem(key));
+      const row = state.tables.user_resource_activity.find((item) => item.resource_id === id);
+      return !!(row && row.last_viewed_at);
+    }, { key: QA_BACKEND_KEY, id: sample.id });
+
+    const signedBookmark = signedIn.page.getByRole('button', { name: /Bookmark/i });
+    await signedBookmark.click();
+    await signedIn.page.waitForFunction(({ key, id }) => {
+      const state = JSON.parse(localStorage.getItem(key));
+      return state.tables.user_resource_activity.some((row) => row.resource_id === id && row.bookmarked === true);
+    }, { key: QA_BACKEND_KEY, id: sample.id });
+    assert.equal(await signedBookmark.getAttribute('aria-pressed'), 'true', 'signed-in bookmark exposes its saved state');
+
+    await signedIn.page.reload({ waitUntil: 'domcontentloaded' });
+    await signedIn.page.waitForFunction(() => {
+      const button = Array.from(document.querySelectorAll('.save-row button')).find((item) => /bookmark/i.test(item.textContent));
+      return !!button && !button.disabled && button.getAttribute('aria-pressed') === 'true';
+    });
+    assert.equal(
+      await signedIn.page.getByRole('button', { name: /Bookmarked/i }).getAttribute('aria-pressed'),
+      'true',
+      'bookmark round-trips across reload',
+    );
+
+    let signedUseful = signedIn.page.getByRole('button', { name: /useful/i });
+    await signedUseful.click();
+    await signedIn.page.waitForFunction(({ key, id }) => {
+      const state = JSON.parse(localStorage.getItem(key));
+      const row = state.tables.user_resource_activity.find((item) => item.resource_id === id);
+      return !!row && row.helpful === true;
+    }, { key: QA_BACKEND_KEY, id: sample.id });
+    assert.equal(await signedUseful.getAttribute('aria-pressed'), 'true', 'useful toggle stores true');
+
+    await signedIn.page.reload({ waitUntil: 'domcontentloaded' });
+    await signedIn.page.waitForFunction(() => {
+      const button = Array.from(document.querySelectorAll('.save-row button'))
+        .find((item) => /useful/i.test(item.textContent));
+      return !!button && !button.disabled && button.getAttribute('aria-pressed') === 'true';
+    });
+    signedUseful = signedIn.page.getByRole('button', { name: /useful/i });
+    assert.equal(await signedUseful.getAttribute('aria-pressed'), 'true', 'useful rating hydrates from the selected cloud fields after reload');
+
+    await signedUseful.click();
+    await signedIn.page.waitForFunction(({ key, id }) => {
+      const state = JSON.parse(localStorage.getItem(key));
+      const row = state.tables.user_resource_activity.find((item) => item.resource_id === id);
+      return !!row && row.helpful === null;
+    }, { key: QA_BACKEND_KEY, id: sample.id });
+    assert.equal(await signedUseful.getAttribute('aria-pressed'), 'false', 'useful toggle returns to the nullable state');
+
+    const downloadStarted = signedIn.page.waitForEvent('download');
+    await signedIn.page.locator('.tb.dl').first().click();
+    await downloadStarted;
+    await signedIn.page.waitForFunction(({ key, id }) => {
+      const state = JSON.parse(localStorage.getItem(key));
+      const row = state.tables.user_resource_activity.find((item) => item.resource_id === id);
+      return !!row && row.download_count === 1 &&
+        state.calls.rpcByName.record_resource_download === 1;
+    }, { key: QA_BACKEND_KEY, id: sample.id });
+
+    const persistedActivity = (await readMockState(signedIn.page)).tables.user_resource_activity
+      .find((row) => row.resource_id === sample.id);
+    assert.equal(persistedActivity.bookmarked, true, 'later activity writes preserve the bookmark');
+    assert.ok(persistedActivity.last_viewed_at, 'detail view records a recent-view timestamp');
+    assert.equal(persistedActivity.download_count, 1, 'download invokes the atomic counter RPC');
+
+    const detailOtherUser = { id: 'resource-detail-user-b', email: 'resource-detail-b@example.test', user_metadata: {} };
+    const detailClearedSynchronously = await signedIn.page.evaluate((user) => {
+      window.__setQaUser(user);
+      const button = Array.from(document.querySelectorAll('.save-row button'))
+        .find((item) => /bookmark/i.test(item.textContent));
+      return {
+        disabled: button && button.disabled,
+        pressed: button && button.getAttribute('aria-pressed'),
+      };
+    }, detailOtherUser);
+    assert.equal(detailClearedSynchronously.disabled, true, 'detail auth change blocks actions synchronously');
+    assert.equal(detailClearedSynchronously.pressed, 'false', 'detail auth change clears the previous bookmark synchronously');
+    await signedIn.page.waitForFunction(() => {
+      const button = Array.from(document.querySelectorAll('.save-row button'))
+        .find((item) => /bookmark/i.test(item.textContent));
+      return !!button && !button.disabled && button.getAttribute('aria-pressed') === 'false';
+    });
+    await signedIn.page.evaluate((user) => window.__setQaUser(user), qaUser);
+    await signedIn.page.waitForFunction(() => {
+      const button = Array.from(document.querySelectorAll('.save-row button'))
+        .find((item) => /bookmark/i.test(item.textContent));
+      return !!button && !button.disabled && button.getAttribute('aria-pressed') === 'true';
+    });
+
+    const secondRecent = resources[1];
+    await signedIn.page.evaluate(({ key, userId, firstId, secondId }) => {
+      const state = JSON.parse(localStorage.getItem(key));
+      const first = state.tables.user_resource_activity.find((row) =>
+        row.user_id === userId && row.resource_id === firstId
+      );
+      first.last_viewed_at = new Date(Date.now() - 120000).toISOString();
+      const now = new Date().toISOString();
+      state.tables.user_resource_activity.push({
+        user_id: userId,
+        resource_id: secondId,
+        bookmarked: false,
+        helpful: null,
+        last_viewed_at: now,
+        download_count: 0,
+        created_at: now,
+        updated_at: now,
+      });
+      localStorage.setItem(key, JSON.stringify(state));
+    }, {
+      key: QA_BACKEND_KEY,
+      userId: qaUser.id,
+      firstId: sample.id,
+      secondId: secondRecent.id,
+    });
+
+    await signedIn.page.goto(`${baseUrl}resources.html`, { waitUntil: 'domcontentloaded' });
+    await signedIn.page.waitForSelector('#bookmarkedSection:not([hidden])');
+    await signedIn.page.waitForSelector('#recentSection:not([hidden])');
+    assert.equal(
+      await signedIn.page.locator('#bookmarkedGrid .res-title', { hasText: sample.title }).count(),
+      1,
+      'saved resource appears in Your bookmarks',
+    );
+    assert.equal(
+      await signedIn.page.locator('#recentGrid .res-title', { hasText: sample.title }).count(),
+      1,
+      'viewed resource appears in Recently viewed',
+    );
+    assert.deepEqual(
+      await signedIn.page.locator('#recentGrid .res-title').allTextContents(),
+      [secondRecent.title, sample.title],
+      'recent resources render newest-first from the cloud ordering',
+    );
+    assert.match(
+      await signedIn.page.locator('#bookmarkedGrid .res').first().getAttribute('aria-label'),
+      /Bookmarked/,
+      'bookmark state is included in the personalized card accessible name',
+    );
+    assert.match(
+      await signedIn.page.locator('#recentGrid .res').first().getAttribute('aria-label'),
+      /Viewed/,
+      'recent-view state is included in the personalized card accessible name',
+    );
+
+    const nextUser = { id: 'resource-qa-user-b', email: 'resource-qa-b@example.test', user_metadata: {} };
+    const clearedSynchronously = await signedIn.page.evaluate((user) => {
+      window.__setQaUser(user);
+      return {
+        bookmarksHidden: document.getElementById('bookmarkedSection').hidden,
+        recentsHidden: document.getElementById('recentSection').hidden,
+        oldSavedBadgeVisible: Array.from(document.querySelectorAll('#resGrid .res'))
+          .some((card) => /Bookmarked/.test(card.getAttribute('aria-label') || '')),
+      };
+    }, nextUser);
+    assert.equal(clearedSynchronously.bookmarksHidden, true, 'auth change hides the previous account bookmarks synchronously');
+    assert.equal(clearedSynchronously.recentsHidden, true, 'auth change hides the previous account recents synchronously');
+    assert.equal(clearedSynchronously.oldSavedBadgeVisible, false, 'auth change clears previous-account saved badges synchronously');
+    await signedIn.page.waitForFunction(() => document.getElementById('resourceSaveCta')?.textContent === 'Browse resources');
+    assert.deepEqual(signedInErrors, [], `signed-in resource errors: ${signedInErrors.join(', ')}`);
+  } finally {
+    await signedIn.context.close();
+  }
+
+  // --- Legacy portfolio migration: fill blanks once, preserve server data ---
+  const legacyUser = { id: 'legacy-qa-user', email: 'legacy-qa@example.test', user_metadata: {} };
+  const cloudBefore = {
+    user_id: legacyUser.id,
+    opener: 'Server opener must win',
+    objections: '',
+    rejection: 'Server rejection must win',
+    routine: '',
+    why: '',
+    first_call_done: false,
+    legacy_migrated_at: null,
+    updated_at: '2026-01-01T00:00:00.000Z',
+  };
+  const legacyLocal = {
+    Opener: 'Legacy opener must not overwrite',
+    Objections: 'Legacy objections fill',
+    Rejection: 'Legacy rejection must not overwrite',
+    Routine: 'Legacy routine fills',
+    Why: 'Legacy why fills',
+    firstCallDone: true,
+    updatedAt: 1710000000000,
+  };
+  const legacy = await newMockedPage({ user: legacyUser, interviewRows: [cloudBefore] });
+  const legacyErrors = [];
+  legacy.page.on('pageerror', (error) => legacyErrors.push(error.message));
+  try {
+    await legacy.page.addInitScript(({ portfolio }) => {
+      localStorage.setItem('amplifyHub_sdrPortfolio', JSON.stringify(portfolio));
+    }, { portfolio: legacyLocal });
+    await legacy.page.goto(`${baseUrl}interview-prep.html`, { waitUntil: 'domcontentloaded' });
+    await legacy.page.waitForFunction(({ key, userId }) => {
+      const state = JSON.parse(localStorage.getItem(key));
+      const row = state.tables.user_interview_prep.find((item) => item.user_id === userId);
+      return !!(row && row.legacy_migrated_at);
+    }, { key: QA_BACKEND_KEY, userId: legacyUser.id });
+
+    let legacyState = await readMockState(legacy.page);
+    let migrated = legacyState.tables.user_interview_prep.find((row) => row.user_id === legacyUser.id);
+    assert.equal(migrated.opener, cloudBefore.opener, 'migration preserves a non-empty cloud opener');
+    assert.equal(migrated.rejection, cloudBefore.rejection, 'migration preserves a non-empty cloud rejection');
+    assert.equal(migrated.objections, legacyLocal.Objections, 'migration fills an empty cloud objections field');
+    assert.equal(migrated.routine, legacyLocal.Routine, 'migration fills an empty cloud routine field');
+    assert.equal(migrated.why, legacyLocal.Why, 'migration fills an empty cloud why field');
+    assert.equal(migrated.first_call_done, true, 'migration carries first-call completion');
+    assert.ok(migrated.legacy_migrated_at, 'migration sets the server marker');
+    assert.equal(legacyState.calls.rpcByName.migrate_legacy_interview_prep, 1, 'legacy migration runs once initially');
+    assert.equal(legacyState.calls.rpcWrites, 1, 'legacy migration performs one server write');
+
+    const migratedSnapshot = JSON.stringify(migrated);
+    const sessionMarker = `amplifyHub_sdrPortfolio:migrated:${encodeURIComponent(legacyUser.id)}`;
+    assert.equal(
+      await legacy.page.evaluate((key) => sessionStorage.getItem(key), sessionMarker),
+      '1',
+      'successful migration records the user-scoped session marker',
+    );
+
+    await legacy.page.evaluate((portfolio) => {
+      localStorage.setItem('amplifyHub_sdrPortfolio', JSON.stringify(portfolio));
+    }, {
+      Opener: 'Changed local opener',
+      Objections: 'Changed local objections',
+      Rejection: 'Changed local rejection',
+      Routine: 'Changed local routine',
+      Why: 'Changed local why',
+      firstCallDone: false,
+      updatedAt: 1810000000000,
+    });
+    await legacy.page.reload({ waitUntil: 'domcontentloaded' });
+    await legacy.page.waitForTimeout(50);
+    legacyState = await readMockState(legacy.page);
+    assert.equal(legacyState.calls.rpcByName.migrate_legacy_interview_prep, 1, 'session marker prevents a reload re-run');
+    migrated = legacyState.tables.user_interview_prep.find((row) => row.user_id === legacyUser.id);
+    assert.equal(JSON.stringify(migrated), migratedSnapshot, 'reload cannot overwrite the migrated server row');
+
+    // The database marker remains authoritative if a new tab/session lacks the
+    // optimization marker: the RPC may be retried, but it performs no write.
+    await legacy.page.evaluate((key) => sessionStorage.removeItem(key), sessionMarker);
+    await legacy.page.reload({ waitUntil: 'domcontentloaded' });
+    await legacy.page.waitForFunction((key) => {
+      const state = JSON.parse(localStorage.getItem(key));
+      return state.calls.rpcByName.migrate_legacy_interview_prep === 2;
+    }, QA_BACKEND_KEY);
+    legacyState = await readMockState(legacy.page);
+    assert.equal(legacyState.calls.rpcWrites, 1, 'database marker makes a later RPC retry a no-op');
+    migrated = legacyState.tables.user_interview_prep.find((row) => row.user_id === legacyUser.id);
+    assert.equal(JSON.stringify(migrated), migratedSnapshot, 'database marker preserves every server field on retry');
+
+    const legacyOwnerKey = 'amplifyHub_sdrPortfolio:migrationOwner:v1';
+    const ownerClaim = await legacy.page.evaluate((key) => JSON.parse(localStorage.getItem(key)), legacyOwnerKey);
+    assert.equal(ownerClaim.userId, legacyUser.id, 'the first verified account claims the browser-global legacy portfolio');
+    const otherLegacyUser = { id: 'legacy-qa-user-b', email: 'legacy-qa-b@example.test', user_metadata: {} };
+    await legacy.page.evaluate((user) => window.__setQaUser(user), otherLegacyUser);
+    await legacy.page.waitForTimeout(100);
+    legacyState = await readMockState(legacy.page);
+    assert.equal(
+      legacyState.calls.rpcByName.migrate_legacy_interview_prep,
+      2,
+      'switching accounts cannot migrate the same browser-global portfolio again',
+    );
+    assert.equal(
+      legacyState.tables.user_interview_prep.some((row) => row.user_id === otherLegacyUser.id),
+      false,
+      'the second account receives no row from the first account legacy portfolio',
+    );
+    assert.deepEqual(legacyErrors, [], `legacy migration errors: ${legacyErrors.join(', ')}`);
+  } finally {
+    await legacy.context.close();
+  }
+
+  const freshLegacyUser = { id: 'legacy-fresh-user', email: 'legacy-fresh@example.test', user_metadata: {} };
+  const freshLegacy = await newMockedPage({ user: freshLegacyUser });
+  try {
+    await freshLegacy.page.addInitScript(({ portfolio }) => {
+      localStorage.setItem('amplifyHub_sdrPortfolio', JSON.stringify(portfolio));
+    }, { portfolio: legacyLocal });
+    await freshLegacy.page.goto(`${baseUrl}interview-prep.html`, { waitUntil: 'domcontentloaded' });
+    await freshLegacy.page.waitForFunction(({ key, userId }) => {
+      const state = JSON.parse(localStorage.getItem(key));
+      const row = state.tables.user_interview_prep.find((item) => item.user_id === userId);
+      return !!(row && row.legacy_migrated_at);
+    }, { key: QA_BACKEND_KEY, userId: freshLegacyUser.id });
+    const freshState = await readMockState(freshLegacy.page);
+    const inserted = freshState.tables.user_interview_prep.find((row) => row.user_id === freshLegacyUser.id);
+    assert.deepEqual(
+      [inserted.opener, inserted.objections, inserted.rejection, inserted.routine, inserted.why],
+      [legacyLocal.Opener, legacyLocal.Objections, legacyLocal.Rejection, legacyLocal.Routine, legacyLocal.Why],
+      'legacy migration creates a complete cloud row when none exists',
+    );
+    assert.equal(inserted.first_call_done, true, 'new legacy row carries first-call completion');
+    assert.equal(freshState.calls.rpcWrites, 1, 'new legacy row is written exactly once');
+  } finally {
+    await freshLegacy.context.close();
+  }
 
   // --- Rendering safety: catalog content is rendered as text, never HTML ---
   // The stub resource is marked reviewed so this also exercises the PUBLIC path.
@@ -311,7 +1094,7 @@ try {
   assert.match(dashboard, /resources\.html\?category=/, 'dashboard category cards deep-link to filtered resource lists');
   assert.doesNotMatch(dashboard, /36 videos|18 templates|24 scripts/, 'dashboard no longer shows invented counts');
 
-  console.log(`Browser QA passed: reviewed-only public library, draft blocking, labelled editorial preview, search/filter, ${TOTAL} detail pages, downloads, safe rendering, and honest dashboard.`);
+  console.log(`Browser QA passed: reviewed-only public library, draft blocking, search/filter, ${TOTAL} detail pages, anonymous write blocking, signed-in activity round-trips, personalized lists, atomic downloads, one-time legacy migration, safe rendering, and honest dashboard.`);
 } finally {
   await browser.close();
   await server.close();

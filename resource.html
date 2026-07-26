@@ -42,6 +42,8 @@ h1.title{font-size:clamp(24px,4vw,34px);font-weight:900;letter-spacing:-.5px;lin
 .tb.primary:hover{box-shadow:0 4px 16px var(--accent-glow)}
 .tb.dl{background:rgba(0,230,150,.08);border-color:rgba(0,230,150,.2);color:var(--green)}
 .tb .fmt{font-size:9px;font-weight:800;letter-spacing:.5px;opacity:.85}
+.tb.is-active{background:var(--accent-dim);border-color:var(--accent);color:var(--accent)}
+.tb:disabled{cursor:wait;opacity:.62}
 
 section.block{margin-bottom:26px}
 section.block h2{font-size:17px;font-weight:800;margin-bottom:12px;letter-spacing:-.2px}
@@ -108,6 +110,9 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-off
 <main id="main"><!-- rendered by script --></main>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
+<script src="assets/vendor/supabase-2.110.8.min.js"></script>
+<script src="auth-config.js"></script>
+<script src="assets/resource-activity.js"></script>
 <script src="assets/resource-catalog.js"></script>
 <script>
 (function(){
@@ -193,6 +198,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-off
     a.setAttribute('download','');
     a.appendChild(el('span',null,'⬇ Download'));
     a.appendChild(el('span','fmt', d.format.toUpperCase()));
+    a.addEventListener('click', trackDownload);
     toolbar.appendChild(a);
   });
   main.appendChild(toolbar);
@@ -268,25 +274,218 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-off
     main.appendChild(rel);
   }
 
-  // Save / feedback (Phase 1: sign-in prompt; synced saving arrives in Phase 2)
+  // Save / feedback. Public reading stays open; signed-in activity syncs.
   var saveRow = el('div','save-row');
   var bookmarkBtn = el('button','tb','🔖 Bookmark');
   var usefulBtn = el('button','tb','👍 Was this useful?');
+  bookmarkBtn.type = 'button';
+  usefulBtn.type = 'button';
+  bookmarkBtn.disabled = true;
+  usefulBtn.disabled = true;
+  bookmarkBtn.setAttribute('aria-pressed','false');
+  usefulBtn.setAttribute('aria-pressed','false');
   saveRow.appendChild(bookmarkBtn);
   saveRow.appendChild(usefulBtn);
   main.appendChild(saveRow);
 
   var saveNote = el('div','save-note'); saveNote.style.display='none';
-  var signHref = 'signin.html?redirect=' + encodeURIComponent('resource.html?id='+resource.id);
-  saveNote.appendChild(document.createTextNode('Saving, synced history, and ratings are coming with accounts. '));
+  var detailRedirect = 'resource.html?id=' + encodeURIComponent(resource.id) + (previewMode ? '&preview=review' : '');
+  var signHref = 'signin.html?redirect=' + encodeURIComponent(detailRedirect);
+  saveNote.appendChild(document.createTextNode('Bookmarking and synced activity require an account. '));
   var signLink = el('a',null,'Sign in'); signLink.href = signHref;
   saveNote.appendChild(signLink);
-  saveNote.appendChild(document.createTextNode(' to be ready when they arrive.'));
   main.appendChild(saveNote);
 
-  function promptSignIn(){ saveNote.style.display='block'; toast('Sign in to save — coming soon.'); }
-  bookmarkBtn.addEventListener('click', promptSignIn);
-  usefulBtn.addEventListener('click', promptSignIn);
+  var activityStatus = 'loading';
+  var activityState = { bookmarked:false, helpful:null };
+  var activityInitVersion = 0;
+  var activityMutationVersion = 0;
+  var activityReloadScheduled = false;
+
+  function logActivityError(message, error){
+    if(error) console.warn(message, error);
+    else console.warn(message);
+  }
+
+  function renderActivityState(row){
+    if(row){
+      activityState.bookmarked = row.bookmarked === true;
+      activityState.helpful = row.helpful === true ? true : null;
+    }
+    bookmarkBtn.textContent = activityState.bookmarked ? '✓ Bookmarked' : '🔖 Bookmark';
+    usefulBtn.textContent = activityState.helpful === true ? '✓ Marked useful' : '👍 Was this useful?';
+    bookmarkBtn.classList.toggle('is-active', activityState.bookmarked);
+    usefulBtn.classList.toggle('is-active', activityState.helpful === true);
+    bookmarkBtn.setAttribute('aria-pressed', activityState.bookmarked ? 'true' : 'false');
+    usefulBtn.setAttribute('aria-pressed', activityState.helpful === true ? 'true' : 'false');
+  }
+
+  function setActivityControlsBusy(busy){
+    bookmarkBtn.disabled = !!busy;
+    usefulBtn.disabled = !!busy;
+    if(busy){
+      bookmarkBtn.setAttribute('aria-busy','true');
+      usefulBtn.setAttribute('aria-busy','true');
+    } else {
+      bookmarkBtn.removeAttribute('aria-busy');
+      usefulBtn.removeAttribute('aria-busy');
+    }
+  }
+
+  function promptSignIn(){
+    saveNote.style.display='block';
+    toast('Sign in to bookmark and sync.');
+  }
+
+  function mutationMessage(kind){
+    return kind === 'bookmark'
+      ? (activityState.bookmarked ? 'Resource bookmarked' : 'Bookmark removed')
+      : (activityState.helpful === true ? 'Thanks for the feedback' : 'Useful rating removed');
+  }
+
+  async function mutateActivity(kind){
+    if(activityStatus === 'signed_out'){
+      promptSignIn();
+      return;
+    }
+    if(!window.ResourceActivityStore){
+      toast('Saved activity is temporarily unavailable.');
+      return;
+    }
+
+    var mutationVersion = ++activityMutationVersion;
+    var previous = { bookmarked:activityState.bookmarked, helpful:activityState.helpful };
+    var nextValue = kind === 'bookmark' ? !activityState.bookmarked : (activityState.helpful === true ? null : true);
+    setActivityControlsBusy(true);
+
+    var result = kind === 'bookmark'
+      ? await window.ResourceActivityStore.setBookmarked(resource.id, nextValue)
+      : await window.ResourceActivityStore.setHelpful(resource.id, nextValue);
+
+    if(mutationVersion !== activityMutationVersion) return;
+    setActivityControlsBusy(false);
+
+    if(result.status === 'signed_out'){
+      activityStatus = 'signed_out';
+      renderActivityState(previous);
+      promptSignIn();
+      return;
+    }
+    if(result.status === 'stale'){
+      initializeActivity();
+      return;
+    }
+    if(result.status !== 'authenticated' || !result.data){
+      renderActivityState(previous);
+      logActivityError('Unable to save resource activity.', result.error);
+      toast('Could not save that change. Please try again.');
+      return;
+    }
+
+    activityStatus = 'authenticated';
+    saveNote.style.display='none';
+    renderActivityState(result.data);
+    toast(mutationMessage(kind));
+  }
+
+  async function initializeActivity(){
+    var initVersion = ++activityInitVersion;
+    activityMutationVersion += 1;
+    // Clear synchronously so one account's state is never shown while a new
+    // identity is being verified or when that verification is unavailable.
+    activityState = { bookmarked:false, helpful:null };
+    setActivityControlsBusy(true);
+    renderActivityState(null);
+
+    if(!window.ResourceActivityStore){
+      if(initVersion !== activityInitVersion) return;
+      activityStatus = 'unavailable';
+      setActivityControlsBusy(false);
+      return;
+    }
+
+    var auth = await window.ResourceActivityStore.getAuthState();
+    if(initVersion !== activityInitVersion) return;
+
+    if(auth.status === 'stale'){
+      initializeActivity();
+      return;
+    }
+    if(auth.status === 'signed_out'){
+      activityStatus = 'signed_out';
+      activityState = { bookmarked:false, helpful:null };
+      renderActivityState(null);
+      setActivityControlsBusy(false);
+      return;
+    }
+    if(auth.status !== 'authenticated'){
+      activityStatus = 'unavailable';
+      setActivityControlsBusy(false);
+      logActivityError('Unable to verify saved-resource access.', auth.error);
+      return;
+    }
+
+    activityStatus = 'authenticated';
+    saveNote.style.display='none';
+    var result = (!previewMode && catalog.isPublished(resource))
+      ? await window.ResourceActivityStore.recordView(resource.id)
+      : await window.ResourceActivityStore.getActivity(resource.id);
+    if(initVersion !== activityInitVersion) return;
+
+    if(result.status === 'stale'){
+      initializeActivity();
+      return;
+    }
+    if(result.status === 'signed_out'){
+      activityStatus = 'signed_out';
+      activityState = { bookmarked:false, helpful:null };
+      renderActivityState(null);
+      setActivityControlsBusy(false);
+      return;
+    }
+    if(result.status !== 'authenticated'){
+      logActivityError('Unable to load saved resource activity.', result.error);
+      toast('Saved activity could not be loaded.');
+    } else {
+      renderActivityState(result.data);
+    }
+    setActivityControlsBusy(false);
+  }
+
+  function handleActivityAuthChange(){
+    activityInitVersion += 1;
+    activityMutationVersion += 1;
+    activityStatus = 'loading';
+    activityState = { bookmarked:false, helpful:null };
+    saveNote.style.display='none';
+    setActivityControlsBusy(true);
+    renderActivityState(null);
+    if(activityReloadScheduled)return;
+    activityReloadScheduled=true;
+    setTimeout(function(){
+      activityReloadScheduled=false;
+      initializeActivity();
+    },0);
+  }
+
+  function trackDownload(){
+    if(!window.ResourceActivityStore) return;
+    window.ResourceActivityStore.recordDownload(resource.id).then(function(result){
+      if(result.status === 'error' || result.status === 'unavailable'){
+        logActivityError('The download succeeded, but its activity count was not synced.', result.error);
+      }
+    }).catch(function(error){
+      logActivityError('The download succeeded, but its activity count was not synced.', error);
+    });
+  }
+
+  bookmarkBtn.addEventListener('click', function(){ mutateActivity('bookmark'); });
+  usefulBtn.addEventListener('click', function(){ mutateActivity('helpful'); });
+  renderActivityState(null);
+  initializeActivity();
+  if(window.ResourceActivityStore){
+    window.ResourceActivityStore.onAuthChange(handleActivityAuthChange);
+  }
 
   // Review line
   main.appendChild(el('div','review-line', isDraft
