@@ -223,10 +223,35 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
 // ── PORTFOLIO PERSISTENCE ──
 const PORTFOLIO_KEY='amplifyHub_sdrPortfolio';
 const fields=['Opener','Objections','Rejection','Routine','Why'];
+const LEGACY_MIGRATION_RPC='migrate_legacy_interview_prep';
+const LEGACY_MIGRATION_SESSION_PREFIX='amplifyHub_sdrPortfolio:migrated:';
+const LEGACY_MIGRATION_OWNER_KEY='amplifyHub_sdrPortfolio:migrationOwner:v1';
+let legacyIdentityVersion=0;
+let legacyObservedUserId;
+let legacyMigrationScheduled=false;
+let legacyMigrationController=null;
+let legacyMigrationInFlight=null;
+let legacyMigrationInFlightUserId=null;
+
+function getLegacySupabaseClient(){
+  try{
+    if(typeof supabaseClient!=='undefined' && supabaseClient && supabaseClient.auth)return supabaseClient;
+  }catch(e){}
+  return null;
+}
+
+function readLegacyPortfolio(){
+  try{
+    const parsed=JSON.parse(localStorage.getItem(PORTFOLIO_KEY))||{};
+    return parsed && typeof parsed==='object' && !Array.isArray(parsed) ? parsed : {};
+  }catch(e){
+    console.warn('The legacy interview portfolio could not be read.',e);
+    return {};
+  }
+}
 
 function loadPortfolio(){
-  let p={};
-  try{ p=JSON.parse(localStorage.getItem(PORTFOLIO_KEY))||{}; }catch(e){}
+  const p=readLegacyPortfolio();
   fields.forEach(f=>{ if(p[f]) document.getElementById('f'+f).value=p[f]; });
   if(p.firstCallDone) markChallengeDone();
   return p;
@@ -270,6 +295,148 @@ document.getElementById('chalBtn').addEventListener('click',function(){
 });
 
 loadPortfolio();
+
+function legacyText(value){
+  return typeof value==='string' ? value : '';
+}
+
+function legacyUpdatedAt(value){
+  const timestamp=Number(value);
+  if(!Number.isFinite(timestamp) || timestamp<=0)return null;
+  const date=new Date(timestamp);
+  return Number.isNaN(date.getTime()) ? null : date.toISOString();
+}
+
+function hasMeaningfulLegacyPortfolio(portfolio){
+  return fields.some(f=>legacyText(portfolio[f]).trim()!=='') || portfolio.firstCallDone===true;
+}
+
+function claimLegacyPortfolio(userId){
+  try{
+    const existing=localStorage.getItem(LEGACY_MIGRATION_OWNER_KEY);
+    if(existing){
+      const claim=JSON.parse(existing);
+      return claim && claim.userId===userId;
+    }
+    localStorage.setItem(LEGACY_MIGRATION_OWNER_KEY,JSON.stringify({
+      userId,
+      claimedAt:new Date().toISOString()
+    }));
+    const claimed=JSON.parse(localStorage.getItem(LEGACY_MIGRATION_OWNER_KEY));
+    return claimed && claimed.userId===userId;
+  }catch(error){
+    console.warn('Legacy interview portfolio ownership could not be verified.',error);
+    return false;
+  }
+}
+
+function isMissingLegacySession(error){
+  return !!error && (error.name==='AuthSessionMissingError' || error.code==='session_not_found');
+}
+
+function legacyMigrationWasConfirmed(userId){
+  try{return sessionStorage.getItem(LEGACY_MIGRATION_SESSION_PREFIX+encodeURIComponent(userId))==='1';}
+  catch(e){return false;}
+}
+
+function confirmLegacyMigration(userId){
+  try{sessionStorage.setItem(LEGACY_MIGRATION_SESSION_PREFIX+encodeURIComponent(userId),'1');}
+  catch(e){}
+}
+
+async function runLegacyPortfolioMigration(client, user, capturedVersion, portfolio){
+  if(legacyMigrationWasConfirmed(user.id))return null;
+  if(legacyMigrationInFlight && legacyMigrationInFlightUserId===user.id)return legacyMigrationInFlight;
+
+  legacyMigrationInFlightUserId=user.id;
+  const controller=typeof AbortController==='function' ? new AbortController() : null;
+  legacyMigrationController=controller;
+  const migrationJob=(async()=>{
+    if(capturedVersion!==legacyIdentityVersion)return null;
+
+    let request=client.rpc(LEGACY_MIGRATION_RPC,{
+      p_opener:legacyText(portfolio.Opener),
+      p_objections:legacyText(portfolio.Objections),
+      p_rejection:legacyText(portfolio.Rejection),
+      p_routine:legacyText(portfolio.Routine),
+      p_why:legacyText(portfolio.Why),
+      p_first_call_done:portfolio.firstCallDone===true,
+      p_legacy_updated_at:legacyUpdatedAt(portfolio.updatedAt)
+    });
+    if(controller && typeof request.abortSignal==='function'){
+      request=request.abortSignal(controller.signal);
+    }
+
+    const {data,error}=await request;
+    if(capturedVersion!==legacyIdentityVersion)return null;
+    if(error)throw error;
+    const row=Array.isArray(data) ? (data[0]||null) : data;
+    if(row && row.legacy_migrated_at)confirmLegacyMigration(user.id);
+    return row;
+  })();
+  legacyMigrationInFlight=migrationJob;
+
+  try{
+    return await migrationJob;
+  }finally{
+    if(legacyMigrationInFlight===migrationJob){
+      legacyMigrationController=null;
+      legacyMigrationInFlight=null;
+      legacyMigrationInFlightUserId=null;
+    }
+  }
+}
+
+async function migrateLegacyPortfolio(){
+  const portfolio=readLegacyPortfolio();
+  if(!hasMeaningfulLegacyPortfolio(portfolio))return;
+  const client=getLegacySupabaseClient();
+  if(!client)return;
+  const capturedVersion=legacyIdentityVersion;
+
+  try{
+    const {data,error}=await client.auth.getUser();
+    if(capturedVersion!==legacyIdentityVersion)return;
+    if(error){
+      if(isMissingLegacySession(error))return;
+      console.warn('Legacy interview portfolio migration is waiting for a verified session.',error);
+      return;
+    }
+    const user=data && data.user;
+    if(!user)return; // Signed-out visitors keep using local portfolio data only.
+    // The legacy key is browser-global. The first verified account claims it
+    // non-destructively so another account cannot receive the same portfolio.
+    if(!claimLegacyPortfolio(user.id))return;
+    await runLegacyPortfolioMigration(client,user,capturedVersion,portfolio);
+  }catch(error){
+    if(error && error.name==='AbortError')return;
+    console.warn('Legacy interview portfolio could not be synced yet.',error);
+  }
+}
+
+function scheduleLegacyPortfolioMigration(){
+  if(legacyMigrationScheduled)return;
+  legacyMigrationScheduled=true;
+  setTimeout(()=>{
+    legacyMigrationScheduled=false;
+    migrateLegacyPortfolio();
+  },0);
+}
+
+const legacySupabaseClient=getLegacySupabaseClient();
+if(legacySupabaseClient){
+  legacySupabaseClient.auth.onAuthStateChange((event,session)=>{
+    if(event!=='SIGNED_IN' && event!=='SIGNED_OUT' && event!=='USER_DELETED' && event!=='INITIAL_SESSION')return;
+    const nextUserId=session && session.user ? session.user.id : null;
+    if(nextUserId!==legacyObservedUserId){
+      legacyObservedUserId=nextUserId;
+      legacyIdentityVersion+=1;
+      if(legacyMigrationController)legacyMigrationController.abort();
+    }
+    if(nextUserId)scheduleLegacyPortfolioMigration();
+  });
+  scheduleLegacyPortfolioMigration();
+}
 
 // ── MOBILE ──
 document.getElementById('mobBtn').addEventListener('click',()=>document.getElementById('sb').classList.add('open'));

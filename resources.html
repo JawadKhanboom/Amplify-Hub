@@ -78,7 +78,9 @@ html{scroll-behavior:smooth}body{font-family:var(--font);background:var(--bg);co
 .res:hover{border-color:var(--border-h);transform:translateY(-3px)}
 .res-top{padding:16px 16px 0;display:flex;align-items:center;justify-content:space-between}
 .res-emoji{font-size:26px}
+.res-badges{display:flex;align-items:center;gap:5px}
 .res-draft{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--warm);border:1px solid rgba(255,167,38,.25);background:rgba(255,167,38,.08);padding:3px 8px;border-radius:100px}
+.res-bookmarked{font-size:10px;font-weight:700;color:var(--accent);border:1px solid var(--border-h);background:var(--accent-dim);padding:3px 8px;border-radius:100px}
 .res-body{padding:12px 16px 16px;display:flex;flex-direction:column;flex:1}
 .res-type{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--accent);margin-bottom:4px}
 .res-title{font-size:14px;font-weight:700;margin-bottom:6px;line-height:1.3}
@@ -89,6 +91,8 @@ html{scroll-behavior:smooth}body{font-family:var(--font);background:var(--bg);co
 .rd-beginner{background:rgba(0,230,150,.1);color:var(--green)}.rd-intermediate{background:var(--accent-dim);color:var(--accent)}.rd-advanced{background:rgba(255,95,87,.1);color:var(--red)}
 .res-dl{display:flex;gap:4px}
 .res-dl span{font-size:8px;font-weight:800;letter-spacing:.5px;color:var(--muted);border:1px solid var(--border);border-radius:5px;padding:2px 5px;text-transform:uppercase}
+.res-activity-time{display:block;color:var(--muted);font-size:10px;margin:-2px 0 10px}
+.personalized-count{font-size:12px;color:var(--muted)}
 
 .empty{display:none;text-align:center;padding:70px 24px}
 .empty-emoji{font-size:56px;margin-bottom:16px}
@@ -129,8 +133,8 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(-
     <a class="si" href="settings.html"><span class="si-ic">⚙️</span>Settings</a>
   </nav>
   <div class="sb-cta">
-    <a href="signin.html?redirect=resources.html">Sign in to save</a>
-    <p>Reading and downloads are free and open. Sign in later to bookmark and sync.</p>
+    <a id="resourceSaveCta" href="signin.html?redirect=resources.html">Sign in to save</a>
+    <p id="resourceSaveCopy">Reading and downloads are free and open. Sign in to bookmark resources and sync recent views.</p>
   </div>
 </aside>
 
@@ -152,6 +156,16 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(-
 
   <div class="filters fu" id="filters"></div>
 
+  <section class="sec" id="bookmarkedSection" aria-labelledby="bookmarkedHeading" hidden>
+    <div class="sec-h"><h2 id="bookmarkedHeading">Your bookmarks</h2><span class="personalized-count" id="bookmarkedCount"></span></div>
+    <div class="res-grid" id="bookmarkedGrid"></div>
+  </section>
+
+  <section class="sec" id="recentSection" aria-labelledby="recentHeading" hidden>
+    <div class="sec-h"><h2 id="recentHeading">Recently viewed</h2><span class="personalized-count" id="recentCount"></span></div>
+    <div class="res-grid" id="recentGrid"></div>
+  </section>
+
   <div class="sec fu">
     <div class="sec-h"><h2>Browse by type</h2></div>
     <div class="types-row" id="typesRow"></div>
@@ -170,6 +184,9 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(-
 
 </div>
 
+<script src="assets/vendor/supabase-2.110.8.min.js"></script>
+<script src="auth-config.js"></script>
+<script src="assets/resource-activity.js"></script>
 <script src="assets/resource-catalog.js"></script>
 <script>
 (function(){
@@ -190,6 +207,11 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(-
   var requestedCategory = params.get('category');
   var initialCategory = requestedCategory && meta[requestedCategory] ? requestedCategory : 'all';
   var state = { category: initialCategory, query: '' };
+  var activityRows = [];
+  var activityById = Object.create(null);
+  var activityStatus = 'loading';
+  var activityInitVersion = 0;
+  var activityReloadScheduled = false;
 
   var $ = function(id){ return document.getElementById(id); };
   function el(tag, className, text){ var n=document.createElement(tag); if(className)n.className=className; if(text!=null)n.textContent=String(text); return n; }
@@ -239,21 +261,54 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(-
     typesRow.appendChild(card);
   });
 
-  function cardFor(r){
+  function viewedLabel(value){
+    var viewedAt = new Date(value);
+    var age = Date.now() - viewedAt.getTime();
+    if(!Number.isFinite(age) || age < 0) return 'Viewed recently';
+    var minutes = Math.floor(age / 60000);
+    if(minutes < 1) return 'Viewed just now';
+    if(minutes < 60) return 'Viewed '+minutes+' min ago';
+    var hours = Math.floor(minutes / 60);
+    if(hours < 24) return 'Viewed '+hours+' hr'+(hours===1?'':'s')+' ago';
+    var days = Math.floor(hours / 24);
+    if(days < 7) return 'Viewed '+days+' day'+(days===1?'':'s')+' ago';
+    return 'Viewed '+viewedAt.toLocaleDateString();
+  }
+
+  function cardFor(r, activity, context){
     var m = meta[r.category] || { label:r.category, icon:'📄' };
+    var recentLabel = context === 'recent' && activity && activity.last_viewed_at
+      ? viewedLabel(activity.last_viewed_at)
+      : '';
+    var accessibleLabel = [r.title, m.label];
+    if(activity && activity.bookmarked) accessibleLabel.push('Bookmarked');
+    if(r.status !== 'reviewed') accessibleLabel.push('Draft');
+    if(recentLabel) accessibleLabel.push(recentLabel);
     var a = el('a','res');
     a.href = 'resource.html?id=' + encodeURIComponent(r.id) + (previewMode ? '&preview=review' : '');
-    a.setAttribute('aria-label', r.title + ' — ' + m.label);
+    a.setAttribute('aria-label', accessibleLabel.join(' — '));
 
     var top = el('div','res-top');
     top.appendChild(el('span','res-emoji',m.icon));
-    if (r.status !== 'reviewed') top.appendChild(el('span','res-draft','Draft'));
+    var badges = el('span','res-badges');
+    if(activity && activity.bookmarked) {
+      var bookmarkBadge = el('span','res-bookmarked','🔖 Saved');
+      bookmarkBadge.setAttribute('aria-label','Bookmarked');
+      badges.appendChild(bookmarkBadge);
+    }
+    if (r.status !== 'reviewed') badges.appendChild(el('span','res-draft','Draft'));
+    if(badges.childNodes.length) top.appendChild(badges);
     a.appendChild(top);
 
     var body = el('div','res-body');
     body.appendChild(el('div','res-type',m.label));
     body.appendChild(el('div','res-title',r.title));
     body.appendChild(el('div','res-desc',r.summary));
+    if(recentLabel){
+      var viewed = el('time','res-activity-time',recentLabel);
+      viewed.dateTime = activity.last_viewed_at;
+      body.appendChild(viewed);
+    }
 
     var foot = el('div','res-foot');
     var metaWrap = el('div','res-meta');
@@ -266,6 +321,120 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(-
     body.appendChild(foot);
     a.appendChild(body);
     return a;
+  }
+
+  function updateActivityCta(bookmarkedTotal, recentTotal){
+    var link = $('resourceSaveCta');
+    var copy = $('resourceSaveCopy');
+    link.removeAttribute('aria-disabled');
+    if(activityStatus === 'authenticated'){
+      if(bookmarkedTotal > 0){
+        link.textContent = 'View saved resources';
+        link.href = '#bookmarkedSection';
+        copy.textContent = 'Your bookmarks and recent views sync across signed-in devices.';
+      } else if(recentTotal > 0){
+        link.textContent = 'View recent resources';
+        link.href = '#recentSection';
+        copy.textContent = 'Your recent views sync across signed-in devices. Bookmark any resource to save it here.';
+      } else {
+        link.textContent = 'Browse resources';
+        link.href = '#gridHeading';
+        copy.textContent = 'Bookmark a resource or open one to build your synced activity history.';
+      }
+    } else if(activityStatus === 'signed_out'){
+      link.textContent = 'Sign in to save';
+      link.href = 'signin.html?redirect=resources.html';
+      copy.textContent = 'Reading and downloads are free and open. Sign in to bookmark resources and sync recent views.';
+    } else if(activityStatus === 'error' || activityStatus === 'unavailable'){
+      link.textContent = 'Saved activity unavailable';
+      link.removeAttribute('href');
+      link.setAttribute('aria-disabled','true');
+      copy.textContent = 'The public library is still available. Saved activity could not be loaded right now.';
+    } else {
+      link.textContent = 'Loading saved activity…';
+      link.removeAttribute('href');
+      link.setAttribute('aria-disabled','true');
+      copy.textContent = 'Reading and downloads remain free and open.';
+    }
+  }
+
+  function renderPersonalized(){
+    var showForCurrentView = activityStatus === 'authenticated';
+    var bookmarked = catalog.published().filter(function(r){
+      return activityById[r.id] && activityById[r.id].bookmarked === true;
+    });
+    var recent = activityRows.map(function(row){
+      var found = catalog.byId(row.resource_id);
+      return found && catalog.isPublished(found) && row.last_viewed_at ? { resource:found, activity:row } : null;
+    }).filter(Boolean).slice(0,6);
+
+    var bookmarkedGrid = $('bookmarkedGrid');
+    bookmarkedGrid.replaceChildren();
+    bookmarked.forEach(function(r){ bookmarkedGrid.appendChild(cardFor(r, activityById[r.id], 'bookmark')); });
+    $('bookmarkedCount').textContent = bookmarked.length+' saved';
+    $('bookmarkedSection').hidden = !showForCurrentView || bookmarked.length === 0;
+
+    var recentGrid = $('recentGrid');
+    recentGrid.replaceChildren();
+    recent.forEach(function(item){ recentGrid.appendChild(cardFor(item.resource, item.activity, 'recent')); });
+    $('recentCount').textContent = recent.length+' recent';
+    $('recentSection').hidden = !showForCurrentView || recent.length === 0;
+    updateActivityCta(bookmarked.length, recent.length);
+  }
+
+  async function initializePersonalized(){
+    var initVersion = ++activityInitVersion;
+    activityStatus = 'loading';
+    activityRows = [];
+    activityById = Object.create(null);
+    render();
+
+    if(!window.ResourceActivityStore){
+      if(initVersion !== activityInitVersion) return;
+      activityStatus = 'unavailable';
+      render();
+      return;
+    }
+
+    var result = await window.ResourceActivityStore.listActivity();
+    if(initVersion !== activityInitVersion) return;
+    if(result.status === 'stale'){
+      initializePersonalized();
+      return;
+    }
+    if(result.status === 'signed_out'){
+      activityStatus = 'signed_out';
+      render();
+      return;
+    }
+    if(result.status !== 'authenticated'){
+      activityStatus = result.status === 'unavailable' ? 'unavailable' : 'error';
+      console.warn('Unable to load saved resource activity.', result.error);
+      render();
+      return;
+    }
+
+    activityStatus = 'authenticated';
+    activityRows = Array.isArray(result.data) ? result.data : [];
+    activityRows.forEach(function(row){
+      var item = catalog.byId(row.resource_id);
+      if(item && catalog.isPublished(item)) activityById[row.resource_id] = row;
+    });
+    render();
+  }
+
+  function handlePersonalizedAuthChange(){
+    activityInitVersion += 1;
+    activityStatus = 'loading';
+    activityRows = [];
+    activityById = Object.create(null);
+    render();
+    if(activityReloadScheduled)return;
+    activityReloadScheduled=true;
+    setTimeout(function(){
+      activityReloadScheduled=false;
+      initializePersonalized();
+    },0);
   }
 
   function matches(r){
@@ -281,7 +450,7 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(-
     var grid = $('resGrid');
     grid.replaceChildren();
     var shown = SOURCE.filter(matches);
-    shown.forEach(function(r){ grid.appendChild(cardFor(r)); });
+    shown.forEach(function(r){ grid.appendChild(cardFor(r, activityById[r.id], 'browse')); });
 
     var label = state.category==='all' ? 'All resources' : (meta[state.category]?meta[state.category].plural:'Resources');
     $('gridHeading').textContent = label;
@@ -307,6 +476,7 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(-
       c.classList.toggle('active', selected);
       c.setAttribute('aria-pressed', selected ? 'true' : 'false');
     });
+    renderPersonalized();
   }
 
   function syncCategoryUrl(){
@@ -334,6 +504,10 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(-
   $('clearBtn').addEventListener('click', function(){ state.query=''; state.category='all'; $('searchInput').value=''; syncCategoryUrl(); render(); });
 
   render();
+  initializePersonalized();
+  if(window.ResourceActivityStore){
+    window.ResourceActivityStore.onAuthChange(handlePersonalizedAuthChange);
+  }
 
   // Reveal + mobile nav.
   var obs=new IntersectionObserver(function(es){ es.forEach(function(e,i){ if(e.isIntersecting) setTimeout(function(){ e.target.classList.add('v'); }, i*50); }); },{threshold:.08});
