@@ -22,16 +22,37 @@
     }
   }
 
+  // Render an uploaded avatar image when one exists, else the name initial.
+  // Leaves id-carrying elements alone (their own page script owns them).
+  function fillAvatar(selector, url, initial) {
+    var els = document.querySelectorAll(selector);
+    for (var i = 0; i < els.length; i++) {
+      var el = els[i];
+      if (el.id) continue;
+      el.textContent = '';
+      if (url) {
+        var img = document.createElement('img');
+        img.src = url;
+        img.alt = 'Profile photo';
+        img.style.cssText = 'width:100%;height:100%;object-fit:cover;border-radius:inherit;display:block';
+        el.appendChild(img);
+      } else {
+        el.textContent = initial;
+      }
+    }
+  }
+
   function apply(user) {
     var meta = (user && user.user_metadata) || {};
     var name = meta.full_name || meta.name || '';
     var initial = name ? name.charAt(0).toUpperCase() : '?';
     var display = name || 'Account';
+    var avatarUrl = meta.avatar_url || null;
 
     // Pattern 1: sb-av / sb-un (majority of pages); Pattern 2: sb-avatar / sb-uname
-    fill('.sb-av', initial);
+    fillAvatar('.sb-av', avatarUrl, initial);
     fill('.sb-un', display);
-    fill('.sb-avatar', initial);
+    fillAvatar('.sb-avatar', avatarUrl, initial);
     fill('.sb-uname', display);
   }
 

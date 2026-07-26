@@ -262,7 +262,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
     <div class="ai-card">
       <div class="ai-ic">🤖</div>
       <div class="ai-info"><h3>Practice with AI Coach</h3><p>Roleplay this lesson's scenarios with a realistic AI prospect.</p></div>
-      <button class="ai-btn">Launch Coach →</button>
+      <button class="ai-btn" id="launchCoach">Launch Coach →</button>
     </div>
   </div>
 
@@ -627,6 +627,10 @@ document.querySelector('.h-cta').addEventListener('click', ()=>{
   }
   openModuleView(m);
   openLessonView(m, firstIncompleteLesson(m));
+});
+
+document.getElementById('launchCoach').addEventListener('click', ()=>{
+  window.location.href = 'coach-home.html';
 });
 
 // Mobile

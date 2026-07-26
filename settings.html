@@ -215,7 +215,7 @@ body.no-animations *{animation-duration:.01ms!important;transition-duration:.01m
     <div class="panel act" id="p-account">
       <div class="p-h fu"><h2>Account</h2><p>Manage your personal information and public profile.</p></div>
       <div class="card fu">
-        <div class="av-row"><div class="av-big" id="accountAvatar">?</div><button class="av-btn">Upload New Photo</button></div>
+        <div class="av-row"><div class="av-big" id="accountAvatar">?</div><button class="av-btn" id="uploadPhotoBtn" type="button">Upload New Photo</button><input type="file" id="avatarFile" accept="image/png,image/jpeg,image/webp,image/gif" hidden></div>
         <div class="field-row">
           <div class="field"><label for="fullNameInput">Full Name</label><input type="text" id="fullNameInput" value="" class="track"></div>
           <div class="field"><label for="usernameInput">Username</label><input type="text" id="usernameInput" value="" class="track"></div>
@@ -499,9 +499,9 @@ function applySettingsToDOM(p){
   // Update sidebar and account avatar from loaded prefs
   var name = p.full_name || '';
   var initial = name ? name.charAt(0).toUpperCase() : '?';
-  document.getElementById('sbAvatar').textContent = initial;
+  avatarInitial = initial;
   document.getElementById('sbName').textContent = name || 'Account';
-  document.getElementById('accountAvatar').textContent = initial;
+  renderAvatars();
 }
 
 function collectSettingsFromDOM(){
@@ -556,6 +556,71 @@ async function runSave(btn){
 }
 document.getElementById('saveBtn').addEventListener('click', () => runSave(document.getElementById('saveBtn')));
 document.getElementById('accountSaveBtn').addEventListener('click', () => runSave(document.getElementById('accountSaveBtn')));
+
+/* ── Profile photo upload (Supabase Storage `avatars` bucket) ─────────────── */
+var currentAvatarUrl = null;
+var avatarInitial = '?';
+
+function setAvatarEl(el, url, initial){
+  if(!el) return;
+  el.textContent = '';
+  if(url){
+    var img = document.createElement('img');
+    img.src = url; img.alt = 'Profile photo';
+    img.style.cssText = 'width:100%;height:100%;object-fit:cover;border-radius:inherit;display:block';
+    el.appendChild(img);
+  } else {
+    el.textContent = initial || '?';
+  }
+}
+function renderAvatars(){
+  setAvatarEl(document.getElementById('accountAvatar'), currentAvatarUrl, avatarInitial);
+  setAvatarEl(document.getElementById('sbAvatar'), currentAvatarUrl, avatarInitial);
+}
+async function initAvatar(){
+  try{
+    const { data:{ user } } = await supabaseClient.auth.getUser();
+    currentAvatarUrl = (user && user.user_metadata && user.user_metadata.avatar_url) || null;
+  }catch(e){}
+  renderAvatars();
+}
+document.getElementById('uploadPhotoBtn').addEventListener('click', function(){
+  document.getElementById('avatarFile').click();
+});
+document.getElementById('avatarFile').addEventListener('change', async function(e){
+  const file = e.target.files && e.target.files[0];
+  if(!file) return;
+  const okTypes = ['image/png','image/jpeg','image/webp','image/gif'];
+  if(okTypes.indexOf(file.type) === -1){ showToast('Please choose a PNG, JPG, WEBP or GIF image.'); e.target.value=''; return; }
+  if(file.size > 2*1024*1024){ showToast('Image must be under 2 MB.'); e.target.value=''; return; }
+  const btn = document.getElementById('uploadPhotoBtn');
+  const prevText = btn.textContent;
+  btn.disabled = true; btn.textContent = 'Uploading…';
+  try{
+    const { data:{ user } } = await supabaseClient.auth.getUser();
+    if(!user) throw new Error('Not signed in');
+    // Derive the extension from the validated MIME type, never the raw
+    // filename, so a crafted name can't shape the storage path.
+    const extByType = { 'image/png':'png', 'image/jpeg':'jpg', 'image/webp':'webp', 'image/gif':'gif' };
+    const ext = extByType[file.type] || 'png';
+    const path = user.id + '/avatar-' + Date.now() + '.' + ext;
+    const up = await supabaseClient.storage.from('avatars').upload(path, file, { upsert:true, contentType:file.type });
+    if(up.error) throw up.error;
+    const { data:{ publicUrl } } = supabaseClient.storage.from('avatars').getPublicUrl(path);
+    const upd = await supabaseClient.auth.updateUser({ data:{ avatar_url: publicUrl } });
+    if(upd.error) throw upd.error;
+    currentAvatarUrl = publicUrl;
+    renderAvatars();
+    showToast('Profile photo updated.');
+  }catch(err){
+    showToast('Upload failed — ' + (err.message || 'please try again.'));
+  }finally{
+    btn.disabled = false; btn.textContent = prevText;
+    e.target.value = '';
+  }
+});
+initAvatar();
+
 document.getElementById('discardBtn').addEventListener('click', async () => {
   savebar.classList.remove('show');
   await loadSettings();
