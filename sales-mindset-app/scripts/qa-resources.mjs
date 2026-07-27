@@ -153,6 +153,9 @@ const resourceDetailSource = await readFile(path.join(siteRoot, 'resource.html')
 const resourceLibrarySource = await readFile(path.join(siteRoot, 'resources.html'), 'utf8');
 const interviewPrepSource = await readFile(path.join(siteRoot, 'interview-prep.html'), 'utf8');
 
+assert.match(resourceLibrarySource, /<script src="auth\.js"><\/script>/, 'resource library loads the shared auth guard');
+assert.match(resourceLibrarySource, /<script>requireAuth\(\);<\/script>/, 'resource library requires a signed-in session');
+
 assert.equal((migration.match(/^ {2}\('/gm) || []).length, 40, 'catalog migration stays synchronized with all 40 catalog rows');
 const catalogSyncIds = [...catalogSyncMigration.matchAll(/^ {2}\('([^']+)'/gm)].map((match) => match[1]);
 assert.equal(catalogSyncIds.length, TOTAL, 'catalog sync contains exactly 40 resource rows');
@@ -631,14 +634,27 @@ const draftCount = resources.filter((r) => r.status !== 'reviewed').length;
 const publishedCount = resources.length - draftCount;
 
 try {
-  // --- PUBLIC library: only published resources, drafts never listed ---
+  await page.goto(`${baseUrl}resources.html`, { waitUntil: 'domcontentloaded' });
+  await page.waitForURL(/signin\.html\?redirect=resources\.html$/);
+  assert.match(
+    page.url(),
+    /signin\.html\?redirect=resources\.html$/,
+    'anonymous library visit redirects to sign-in and preserves the destination',
+  );
+  await page.evaluate(() => window.__setQaUser({
+    id: 'resource-library-viewer',
+    email: 'resource-library-viewer@example.test',
+    user_metadata: {},
+  }));
+
+  // --- SIGNED-IN library: only published resources, drafts never listed ---
   await page.goto(`${baseUrl}resources.html`, { waitUntil: 'domcontentloaded' });
   await page.waitForSelector('#resCount');
-  assert.ok(!page.url().includes('signin'), 'library is public — no auth redirect');
-  assert.equal(await page.locator('.res').count(), publishedCount, `public view lists exactly ${publishedCount} published resources (drafts excluded)`);
+  assert.ok(!page.url().includes('signin'), 'signed-in visitor can open the library');
+  assert.equal(await page.locator('.res').count(), publishedCount, `member view lists exactly ${publishedCount} published resources (drafts excluded)`);
   if (publishedCount === 0) {
-    assert.match(await page.locator('#emptyState').innerText(), /final editorial review/i, 'public empty state explains the review gate honestly');
-    assert.match(await page.locator('#modeBannerText').innerText(), /editorial review/i, 'public banner explains nothing shows until reviewed');
+    assert.match(await page.locator('#emptyState').innerText(), /final editorial review/i, 'member empty state explains the review gate honestly');
+    assert.match(await page.locator('#modeBannerText').innerText(), /editorial review/i, 'member banner explains nothing shows until reviewed');
   }
   assert.match(await page.locator('.flt', { hasText: 'All' }).innerText(), new RegExp(`All \\(${publishedCount}\\)`), 'public All count is derived from published resources only');
 
@@ -689,6 +705,8 @@ try {
   // Cards keep the reviewer in preview mode.
   const firstHref = await page.locator('.res').first().getAttribute('href');
   assert.match(firstHref, /^resource\.html\?id=.+&preview=review$/, 'preview cards link into preview detail pages');
+
+  await page.evaluate(() => window.__setQaUser(null));
 
   // --- Every resource opens on the detail page (preview mode) ---
   for (const r of resources) {
@@ -1094,7 +1112,7 @@ try {
   assert.match(dashboard, /resources\.html\?category=/, 'dashboard category cards deep-link to filtered resource lists');
   assert.doesNotMatch(dashboard, /36 videos|18 templates|24 scripts/, 'dashboard no longer shows invented counts');
 
-  console.log(`Browser QA passed: reviewed-only public library, draft blocking, search/filter, ${TOTAL} detail pages, anonymous write blocking, signed-in activity round-trips, personalized lists, atomic downloads, one-time legacy migration, safe rendering, and honest dashboard.`);
+  console.log(`Browser QA passed: signed-in reviewed-only library, draft blocking, search/filter, ${TOTAL} detail pages, anonymous write blocking, signed-in activity round-trips, personalized lists, atomic downloads, one-time legacy migration, safe rendering, and honest dashboard.`);
 } finally {
   await browser.close();
   await server.close();
