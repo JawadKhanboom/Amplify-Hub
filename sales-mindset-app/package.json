@@ -16,6 +16,7 @@
     "qa:coach-security": "node scripts/qa-coach-request-security.mjs && node scripts/qa-coach-security.mjs",
     "qa:challenges": "node scripts/qa-challenges.mjs",
     "qa:resources": "node scripts/qa-resources.mjs",
+    "qa:routes": "node scripts/qa-routes.mjs",
     "generate:resources": "node scripts/generate-resource-files.mjs",
     "generate:resource-migration": "node scripts/generate-resource-migration.mjs",
     "qa:profile-progress": "node scripts/qa-profile-progress.mjs",

@@ -63,6 +63,15 @@ await page.route('**/auth/v1/user**', (route) => route.fulfill({ contentType: 'a
 await page.route('**/rest/v1/user_lesson_progress**', (route) => route.fulfill({ contentType: 'application/json', body: '[]' }));
 
 try {
+  await page.goto(`${baseUrl}?lesson=2`, { waitUntil: 'networkidle' });
+  await page.waitForURL(/#lesson-2$/);
+  assert.equal(new URL(page.url()).search, '', 'legacy redirect query is removed from the canonical URL');
+  assert.equal(await page.locator('h1').innerText(), 'Rejection is Information');
+
+  await page.goto(`${baseUrl}?lesson=invalid`, { waitUntil: 'networkidle' });
+  await page.waitForURL(/#lesson-1$/);
+  assert.match(await page.locator('h1').innerText(), /Sort, Don't Convert/);
+
   await page.goto(`${baseUrl}#lesson-1`, { waitUntil: 'networkidle' });
   await page.evaluate(() => { localStorage.clear(); sessionStorage.clear(); });
   await page.reload({ waitUntil: 'networkidle' });

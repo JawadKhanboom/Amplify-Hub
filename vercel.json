@@ -1,6 +1,18 @@
 {
   "cleanUrls": true,
   "trailingSlash": false,
+  "redirects": [
+    { "source": "/sales-mindset-1", "destination": "/sales-mindset/index?lesson=1", "permanent": true },
+    { "source": "/sales-mindset-2", "destination": "/sales-mindset/index?lesson=2", "permanent": true },
+    { "source": "/sales-mindset-3", "destination": "/sales-mindset/index?lesson=3", "permanent": true },
+    { "source": "/sales-mindset-4", "destination": "/sales-mindset/index?lesson=4", "permanent": true },
+    { "source": "/sales-mindset-5", "destination": "/sales-mindset/index?lesson=5", "permanent": true },
+    { "source": "/sales-mindset-6", "destination": "/sales-mindset/index?lesson=6", "permanent": true },
+    { "source": "/sales-mindset-7", "destination": "/sales-mindset/index?lesson=7", "permanent": true },
+    { "source": "/sales-mindset-8", "destination": "/sales-mindset/index?lesson=8", "permanent": true },
+    { "source": "/Sales_mindset_lesson", "destination": "/dashboard", "permanent": true },
+    { "source": "/emotional-journey", "destination": "/journey", "permanent": true }
+  ],
   "headers": [
     {
       "source": "/(.*)",
