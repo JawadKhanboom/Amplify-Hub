@@ -49,6 +49,9 @@ jobs:
       - name: QA — account trust (static security checks)
         run: npm run qa:account-trust
 
+      - name: QA - canonical routes (static redirects)
+        run: npm run qa:routes
+
       - name: QA — coach request security (unit)
         run: node scripts/qa-coach-request-security.mjs
 

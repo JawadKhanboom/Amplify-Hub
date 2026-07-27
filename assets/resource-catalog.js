@@ -1220,7 +1220,7 @@
         text: 'Instead of "I am terrible at cold calls," write: "My opener ran 40 seconds before I asked anything. Next test: reason plus question in under 15 seconds." Same call, but now it points to a specific, fixable behaviour.'
       },
       safePractice: 'Record only your own actions and general outcomes — no prospect names, numbers, or private details. This log is a learning tool, not a place to store personal data or to punish yourself.',
-      related: { label: 'Build rejection resilience in the Journey', route: 'sales-mindset-2.html' },
+      related: { label: 'Build rejection resilience in the Journey', route: 'sales-mindset/index.html#lesson-2' },
       downloads: [{ format: 'pdf' }, { format: 'xlsx' }],
       sheet: {
         columns: ['Date', 'What happened', 'What I said', 'Their response', 'Neutral lesson', 'Next test'],

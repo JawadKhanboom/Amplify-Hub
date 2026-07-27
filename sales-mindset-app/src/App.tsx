@@ -16,9 +16,11 @@ interface QuizState {
 
 type QuizStateByLesson = Record<number, QuizState>;
 
-const getLessonFromHash = (): number => {
+const getLessonFromLocation = (): number => {
   const match = window.location.hash.match(/^#lesson-(\d+)$/);
-  const lessonNumber = Number(match?.[1] ?? 1);
+  const queryLesson = new URLSearchParams(window.location.search).get('lesson');
+  const requestedLesson = Number(match?.[1] ?? queryLesson ?? 1);
+  const lessonNumber = Number.isInteger(requestedLesson) ? requestedLesson : 1;
   return Math.min(Math.max(lessonNumber - 1, 0), lessons.length - 1);
 };
 
@@ -29,7 +31,7 @@ const getQuizScore = (state: QuizState, answers: readonly number[]): string | nu
 };
 
 function App() {
-  const [currentIndex, setCurrentIndex] = useState(getLessonFromHash);
+  const [currentIndex, setCurrentIndex] = useState(getLessonFromLocation);
   const [completed, setCompleted] = useState<Set<string>>(() => new Set());
   const [lessonMeta, setLessonMeta] = useState<Record<string, LessonMeta>>({});
   const [progressReady, setProgressReady] = useState(false);
@@ -52,7 +54,10 @@ function App() {
   const navigateTo = (index: number, replace = false) => {
     const nextIndex = Math.min(Math.max(index, 0), lessons.length - 1);
     const nextHash = `#lesson-${nextIndex + 1}`;
-    window.history[replace ? 'replaceState' : 'pushState'](null, '', nextHash);
+    const nextUrl = replace
+      ? `${window.location.pathname}${nextHash}`
+      : nextHash;
+    window.history[replace ? 'replaceState' : 'pushState'](null, '', nextUrl);
     lessonStartedAt.current = Date.now();
     setCurrentIndex(nextIndex);
     setSidebarOpen(false);
@@ -74,11 +79,11 @@ function App() {
   }, []);
 
   useEffect(() => {
-    if (!window.location.hash) navigateTo(0, true);
+    if (!window.location.hash) navigateTo(getLessonFromLocation(), true);
 
     const syncFromUrl = () => {
       lessonStartedAt.current = Date.now();
-      setCurrentIndex(getLessonFromHash());
+      setCurrentIndex(getLessonFromLocation());
       setSidebarOpen(false);
     };
 
