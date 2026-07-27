@@ -4,7 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AmplifyHub — Resource Library</title>
-<meta name="description" content="A public library of practical, original SDR resources: scripts, templates, cheat sheets, worksheets, and interview preparation. Read, copy, print, or download.">
+<meta name="description" content="A member library of practical, original SDR resources: scripts, templates, cheat sheets, worksheets, and interview preparation. Read, copy, print, or download.">
+<meta name="robots" content="noindex">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="AmplifyHub">
 <meta property="og:title" content="AmplifyHub — Resource Library">
@@ -13,6 +14,10 @@
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script src="assets/vendor/supabase-2.110.8.min.js"></script>
+<script src="auth-config.js"></script>
+<script src="auth.js"></script>
+<script>requireAuth();</script>
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 :root{
@@ -184,8 +189,6 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(-
 
 </div>
 
-<script src="assets/vendor/supabase-2.110.8.min.js"></script>
-<script src="auth-config.js"></script>
 <script src="assets/resource-activity.js"></script>
 <script src="assets/resource-catalog.js"></script>
 <script>
@@ -223,9 +226,9 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(-
   if (previewMode) {
     bannerText.appendChild(el('b',null,'Editorial preview. '));
     if (previewDraftCount > 0) {
-      bannerText.appendChild(document.createTextNode('This view includes '+previewDraftCount+' draft resource'+(previewDraftCount===1?'':'s')+'. Drafts remain hidden from the public library until reviewed.'));
+      bannerText.appendChild(document.createTextNode('This view includes '+previewDraftCount+' draft resource'+(previewDraftCount===1?'':'s')+'. Drafts remain hidden from the member library until reviewed.'));
     } else {
-      bannerText.appendChild(document.createTextNode('All '+SOURCE.length+' resources in this catalog have passed human editorial review and are publicly available.'));
+      bannerText.appendChild(document.createTextNode('All '+SOURCE.length+' resources in this catalog have passed human editorial review and are available in the member library.'));
     }
   } else if (SOURCE.length === 0) {
     bannerText.appendChild(el('b',null,'Library in final editorial review. '));
@@ -349,7 +352,7 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(-
       link.textContent = 'Saved activity unavailable';
       link.removeAttribute('href');
       link.setAttribute('aria-disabled','true');
-      copy.textContent = 'The public library is still available. Saved activity could not be loaded right now.';
+      copy.textContent = 'The resource library is still available. Saved activity could not be loaded right now.';
     } else {
       link.textContent = 'Loading saved activity…';
       link.removeAttribute('href');
