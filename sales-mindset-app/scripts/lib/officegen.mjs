@@ -95,15 +95,17 @@ const CATEGORY_LABELS = {
   worksheet: 'Worksheet', interview: 'Interview Prep'
 };
 
-const DRAFT_NOTICE = 'Draft resource pending human editorial review — not yet professionally verified.';
+const DRAFT_NOTICE = 'Draft resource pending human editorial review - not yet professionally verified.';
+const REVIEWED_NOTICE = 'Reviewed professional resource - AmplifyHub Practical Resource Library';
 
 // Flatten a resource into an ordered list of blocks the generators can render.
 // block: { kind:'title'|'meta'|'h'|'p'|'li'|'oli'|'th'|'tr'|'note'|'footer', text?, cells?, level? }
 export function resourceBlocks(resource) {
   const blocks = [];
   blocks.push({ kind: 'title', text: resource.title });
-  blocks.push({ kind: 'meta', text: `${CATEGORY_LABELS[resource.category] || resource.category} · Skill: ${resource.skill} · Difficulty: ${resource.difficulty} · Est. ${resource.duration} min` });
-  blocks.push({ kind: 'note', text: DRAFT_NOTICE });
+  blocks.push({ kind: 'meta', text: `${CATEGORY_LABELS[resource.category] || resource.category} | Skill: ${resource.skill} | Difficulty: ${resource.difficulty} | Est. ${resource.duration} min` });
+  blocks.push({ kind: 'note', text: resource.status === 'reviewed' ? REVIEWED_NOTICE : DRAFT_NOTICE });
+  blocks.push({ kind: 'h', text: 'Overview' });
   blocks.push({ kind: 'p', text: resource.summary });
 
   blocks.push({ kind: 'h', text: 'Learning objectives' });
@@ -134,7 +136,7 @@ export function resourceBlocks(resource) {
     blocks.push({ kind: 'h', text: 'Safe-practice note' });
     blocks.push({ kind: 'p', text: resource.safePractice });
   }
-  blocks.push({ kind: 'footer', text: `Last reviewed: ${resource.reviewDate || ''} · AmplifyHub Practical Resource Library` });
+  blocks.push({ kind: 'footer', text: `Last reviewed: ${resource.reviewDate || ''} | AmplifyHub Practical Resource Library` });
   return blocks;
 }
 
@@ -142,82 +144,201 @@ export function resourceBlocks(resource) {
 
 function docxParagraph(text, opts) {
   const o = opts || {};
-  const runProps = [];
+  const pProps = [];
+  const runProps = [
+    `<w:rFonts w:ascii="${escapeXml(o.font || 'Calibri')}" w:hAnsi="${escapeXml(o.font || 'Calibri')}"/>`
+  ];
+  if (o.style) pProps.push(`<w:pStyle w:val="${o.style}"/>`);
+  if (o.keepNext) pProps.push('<w:keepNext/>');
+  if (o.numId) {
+    pProps.push(`<w:numPr><w:ilvl w:val="0"/><w:numId w:val="${o.numId}"/></w:numPr>`);
+  }
+  if (o.spacingBefore || o.spacingAfter || o.line) {
+    pProps.push(`<w:spacing${o.spacingBefore ? ` w:before="${o.spacingBefore}"` : ''}${o.spacingAfter ? ` w:after="${o.spacingAfter}"` : ''}${o.line ? ` w:line="${o.line}" w:lineRule="auto"` : ''}/>`);
+  }
+  if (o.shading) pProps.push(`<w:shd w:val="clear" w:color="auto" w:fill="${o.shading}"/>`);
+  if (o.indentLeft) pProps.push(`<w:ind w:left="${o.indentLeft}"/>`);
   if (o.bold) runProps.push('<w:b/>');
+  if (o.italic) runProps.push('<w:i/>');
   if (o.size) runProps.push(`<w:sz w:val="${o.size}"/><w:szCs w:val="${o.size}"/>`);
   if (o.color) runProps.push(`<w:color w:val="${o.color}"/>`);
-  const rPr = runProps.length ? `<w:rPr>${runProps.join('')}</w:rPr>` : '';
-  const pPr = o.spacingBefore || o.spacingAfter
-    ? `<w:pPr><w:spacing${o.spacingBefore ? ` w:before="${o.spacingBefore}"` : ''}${o.spacingAfter ? ` w:after="${o.spacingAfter}"` : ''}/></w:pPr>`
-    : '';
-  return `<w:p>${pPr}<w:r>${rPr}<w:t xml:space="preserve">${escapeXml(text)}</w:t></w:r></w:p>`;
+  return `<w:p>${pProps.length ? `<w:pPr>${pProps.join('')}</w:pPr>` : ''}` +
+    `<w:r><w:rPr>${runProps.join('')}</w:rPr><w:t xml:space="preserve">${escapeXml(text)}</w:t></w:r></w:p>`;
 }
+
+function docxColumnWidths(rows) {
+  const columns = rows[0].cells.length;
+  const weights = Array.from({ length: columns }, (_, column) => {
+    const max = Math.max(...rows.map((row) => String(row.cells[column] || '').length));
+    return Math.min(Math.max(max, 12), 44);
+  });
+  const total = weights.reduce((sum, value) => sum + value, 0);
+  const widths = weights.map((weight) => Math.max(1200, Math.floor((weight / total) * 9360)));
+  const difference = 9360 - widths.reduce((sum, value) => sum + value, 0);
+  widths[widths.length - 1] += difference;
+  return widths;
+}
+
+function docxTable(rows) {
+  const widths = docxColumnWidths(rows);
+  const borders = ['top', 'left', 'bottom', 'right', 'insideH', 'insideV']
+    .map((edge) => `<w:${edge} w:val="single" w:sz="4" w:color="D9DEE7"/>`)
+    .join('');
+  const trs = rows.map((row, rowIndex) => {
+    const isHeader = rowIndex === 0;
+    const tcs = row.cells.map((cell, column) => {
+      const cellProps = `<w:tcPr><w:tcW w:w="${widths[column]}" w:type="dxa"/>` +
+        `<w:vAlign w:val="center"/>${isHeader ? '<w:shd w:val="clear" w:color="auto" w:fill="FFF3C4"/>' : ''}</w:tcPr>`;
+      return `<w:tc>${cellProps}${docxParagraph(cell || ' ', {
+        bold: isHeader,
+        size: 19,
+        color: isHeader ? '6B4F00' : '283548',
+        spacingAfter: 40,
+        line: 280
+      })}</w:tc>`;
+    }).join('');
+    return `<w:tr>${isHeader ? '<w:trPr><w:tblHeader/></w:trPr>' : ''}${tcs}</w:tr>`;
+  }).join('');
+  return `<w:tbl><w:tblPr><w:tblW w:w="9360" w:type="dxa"/><w:tblInd w:w="120" w:type="dxa"/>` +
+    `<w:tblLayout w:type="fixed"/><w:tblCellMar><w:top w:w="100" w:type="dxa"/><w:left w:w="120" w:type="dxa"/>` +
+    `<w:bottom w:w="100" w:type="dxa"/><w:right w:w="120" w:type="dxa"/></w:tblCellMar>` +
+    `<w:tblBorders>${borders}</w:tblBorders></w:tblPr>` +
+    `<w:tblGrid>${widths.map((width) => `<w:gridCol w:w="${width}"/>`).join('')}</w:tblGrid>${trs}</w:tbl>`;
+}
+
+const DOCX_STYLES = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>` +
+  `<w:styles xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">` +
+  `<w:docDefaults><w:rPrDefault><w:rPr><w:rFonts w:ascii="Calibri" w:hAnsi="Calibri"/><w:sz w:val="22"/></w:rPr></w:rPrDefault>` +
+  `<w:pPrDefault><w:pPr><w:spacing w:after="120" w:line="300" w:lineRule="auto"/></w:pPr></w:pPrDefault></w:docDefaults>` +
+  `<w:style w:type="paragraph" w:default="1" w:styleId="Normal"><w:name w:val="Normal"/>` +
+  `<w:pPr><w:spacing w:after="120" w:line="300" w:lineRule="auto"/></w:pPr>` +
+  `<w:rPr><w:rFonts w:ascii="Calibri" w:hAnsi="Calibri"/><w:sz w:val="22"/><w:color w:val="283548"/></w:rPr></w:style>` +
+  `<w:style w:type="paragraph" w:styleId="Title"><w:name w:val="Title"/>` +
+  `<w:pPr><w:keepNext/><w:spacing w:after="120"/></w:pPr>` +
+  `<w:rPr><w:rFonts w:ascii="Calibri" w:hAnsi="Calibri"/><w:b/><w:sz w:val="56"/><w:color w:val="172033"/></w:rPr></w:style>` +
+  `<w:style w:type="paragraph" w:styleId="Heading1"><w:name w:val="Heading 1"/>` +
+  `<w:pPr><w:keepNext/><w:spacing w:before="280" w:after="140"/></w:pPr>` +
+  `<w:rPr><w:rFonts w:ascii="Calibri" w:hAnsi="Calibri"/><w:b/><w:sz w:val="30"/><w:color w:val="8A6200"/></w:rPr></w:style>` +
+  `</w:styles>`;
+
+const DOCX_NUMBERING = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>` +
+  `<w:numbering xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">` +
+  `<w:abstractNum w:abstractNumId="0"><w:multiLevelType w:val="singleLevel"/>` +
+  `<w:lvl w:ilvl="0"><w:start w:val="1"/><w:numFmt w:val="bullet"/><w:lvlText w:val="•"/>` +
+  `<w:lvlJc w:val="left"/><w:pPr><w:tabs><w:tab w:val="num" w:pos="540"/></w:tabs><w:ind w:left="540" w:hanging="270"/>` +
+  `<w:spacing w:after="80" w:line="300" w:lineRule="auto"/></w:pPr><w:rPr><w:rFonts w:ascii="Calibri" w:hAnsi="Calibri"/></w:rPr></w:lvl></w:abstractNum>` +
+  `<w:abstractNum w:abstractNumId="1"><w:multiLevelType w:val="singleLevel"/>` +
+  `<w:lvl w:ilvl="0"><w:start w:val="1"/><w:numFmt w:val="decimal"/><w:lvlText w:val="%1."/>` +
+  `<w:lvlJc w:val="left"/><w:pPr><w:tabs><w:tab w:val="num" w:pos="540"/></w:tabs><w:ind w:left="540" w:hanging="270"/>` +
+  `<w:spacing w:after="80" w:line="300" w:lineRule="auto"/></w:pPr></w:lvl></w:abstractNum>` +
+  `<w:num w:numId="1"><w:abstractNumId w:val="0"/></w:num><w:num w:numId="2"><w:abstractNumId w:val="1"/></w:num>` +
+  `</w:numbering>`;
 
 export function buildDocx(resource) {
   const blocks = resourceBlocks(resource);
   const body = [];
-  let pendingHeader = null;
-
-  const flushTable = (rows) => {
-    const grid = rows[0].cells.length;
-    const colW = Math.floor(9000 / grid);
-    const trs = rows.map((r, ri) => {
-      const tcs = r.cells.map((c) => {
-        const bold = ri === 0;
-        return `<w:tc><w:tcPr><w:tcW w:w="${colW}" w:type="dxa"/><w:tcBorders>` +
-          `<w:top w:val="single" w:sz="4" w:color="CCCCCC"/><w:bottom w:val="single" w:sz="4" w:color="CCCCCC"/>` +
-          `<w:left w:val="single" w:sz="4" w:color="CCCCCC"/><w:right w:val="single" w:sz="4" w:color="CCCCCC"/>` +
-          `</w:tcBorders></w:tcPr>${docxParagraph(c || ' ', { bold, size: 18 })}</w:tc>`;
-      }).join('');
-      return `<w:tr>${tcs}</w:tr>`;
-    }).join('');
-    return `<w:tbl><w:tblPr><w:tblW w:w="9000" w:type="dxa"/><w:tblLayout w:type="fixed"/></w:tblPr>${trs}</w:tbl>`;
-  };
-
   let tableRows = [];
   const flushPending = () => {
-    if (tableRows.length) { body.push(flushTable(tableRows)); tableRows = []; }
+    if (tableRows.length) {
+      body.push(docxTable(tableRows));
+      body.push(docxParagraph('', { spacingAfter: 80 }));
+      tableRows = [];
+    }
   };
 
-  for (const b of blocks) {
-    if (b.kind === 'th' || b.kind === 'tr') { tableRows.push(b); continue; }
+  for (const block of blocks) {
+    if (block.kind === 'th' || block.kind === 'tr') {
+      tableRows.push(block);
+      continue;
+    }
     flushPending();
-    switch (b.kind) {
-      case 'title': body.push(docxParagraph(b.text, { bold: true, size: 40, spacingAfter: 80 })); break;
-      case 'meta': body.push(docxParagraph(b.text, { size: 18, color: '666666', spacingAfter: 60 })); break;
-      case 'note': body.push(docxParagraph(b.text, { bold: true, size: 18, color: 'B26A00', spacingAfter: 120 })); break;
-      case 'h': body.push(docxParagraph(b.text, { bold: true, size: 26, spacingBefore: 200, spacingAfter: 60 })); break;
-      case 'p': body.push(docxParagraph(b.text, { size: 22, spacingAfter: 80 })); break;
-      case 'li': body.push(docxParagraph(`•  ${b.text}`, { size: 22, spacingAfter: 40 })); break;
-      case 'oli': body.push(docxParagraph(`${b.index}.  ${b.text}`, { size: 22, spacingAfter: 40 })); break;
-      case 'footer': body.push(docxParagraph(b.text, { size: 16, color: '999999', spacingBefore: 200 })); break;
-      default: break;
+    switch (block.kind) {
+      case 'title':
+        body.push(docxParagraph(block.text, { style: 'Title' }));
+        break;
+      case 'meta':
+        body.push(docxParagraph(block.text.toUpperCase(), { bold: true, size: 18, color: '6B7280', spacingAfter: 100 }));
+        break;
+      case 'note':
+        body.push(docxParagraph(block.text, {
+          bold: true,
+          size: 18,
+          color: resource.status === 'reviewed' ? '166534' : '9A5B00',
+          shading: resource.status === 'reviewed' ? 'EAF7EF' : 'FFF4E5',
+          indentLeft: 160,
+          spacingBefore: 40,
+          spacingAfter: 160
+        }));
+        break;
+      case 'h':
+        body.push(docxParagraph(block.text, { style: 'Heading1', keepNext: true }));
+        break;
+      case 'p':
+        body.push(docxParagraph(block.text, { size: 22, color: '283548', spacingAfter: 120, line: 300 }));
+        break;
+      case 'li':
+        body.push(docxParagraph(block.text, { numId: 1, size: 22, color: '283548', spacingAfter: 80, line: 300 }));
+        break;
+      case 'oli':
+        body.push(docxParagraph(block.text, { numId: 2, size: 22, color: '283548', spacingAfter: 80, line: 300 }));
+        break;
+      case 'footer':
+        body.push(docxParagraph(block.text, { size: 17, color: '7B8494', spacingBefore: 240, spacingAfter: 40 }));
+        break;
+      default:
+        break;
     }
   }
   flushPending();
 
   const documentXml = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>` +
-    `<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">` +
+    `<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" ` +
+    `xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">` +
     `<w:body>${body.join('')}` +
-    `<w:sectPr><w:pgSz w:w="11906" w:h="16838"/><w:pgMar w:top="1440" w:right="1440" w:bottom="1440" w:left="1440" w:header="720" w:footer="720" w:gutter="0"/></w:sectPr>` +
+    `<w:sectPr><w:headerReference w:type="default" r:id="rId3"/><w:footerReference w:type="default" r:id="rId4"/>` +
+    `<w:pgSz w:w="12240" w:h="15840"/><w:pgMar w:top="1440" w:right="1440" w:bottom="1440" w:left="1440" w:header="708" w:footer="708" w:gutter="0"/></w:sectPr>` +
     `</w:body></w:document>`;
+
+  const headerXml = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>` +
+    `<w:hdr xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">` +
+    `${docxParagraph('AMPLIFYHUB  |  PRACTICAL RESOURCE LIBRARY', { bold: true, size: 16, color: '8A6200', spacingAfter: 40 })}</w:hdr>`;
+  const footerXml = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>` +
+    `<w:ftr xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">` +
+    `<w:p><w:pPr><w:jc w:val="right"/></w:pPr><w:r><w:rPr><w:color w:val="7B8494"/><w:sz w:val="16"/></w:rPr>` +
+    `<w:t>AmplifyHub  |  Page </w:t></w:r><w:fldSimple w:instr="PAGE"><w:r><w:rPr><w:color w:val="7B8494"/><w:sz w:val="16"/></w:rPr><w:t>1</w:t></w:r></w:fldSimple></w:p></w:ftr>`;
 
   const contentTypes = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>` +
     `<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">` +
     `<Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>` +
     `<Default Extension="xml" ContentType="application/xml"/>` +
     `<Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/>` +
+    `<Override PartName="/word/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.styles+xml"/>` +
+    `<Override PartName="/word/numbering.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.numbering+xml"/>` +
+    `<Override PartName="/word/header1.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.header+xml"/>` +
+    `<Override PartName="/word/footer1.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.footer+xml"/>` +
     `</Types>`;
 
   const rels = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>` +
     `<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">` +
     `<Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/>` +
     `</Relationships>`;
+  const documentRels = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>` +
+    `<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">` +
+    `<Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/>` +
+    `<Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/numbering" Target="numbering.xml"/>` +
+    `<Relationship Id="rId3" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/header" Target="header1.xml"/>` +
+    `<Relationship Id="rId4" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/footer" Target="footer1.xml"/>` +
+    `</Relationships>`;
 
   return zipStore([
     { name: '[Content_Types].xml', data: contentTypes },
     { name: '_rels/.rels', data: rels },
-    { name: 'word/document.xml', data: documentXml }
+    { name: 'word/document.xml', data: documentXml },
+    { name: 'word/_rels/document.xml.rels', data: documentRels },
+    { name: 'word/styles.xml', data: DOCX_STYLES },
+    { name: 'word/numbering.xml', data: DOCX_NUMBERING },
+    { name: 'word/header1.xml', data: headerXml },
+    { name: 'word/footer1.xml', data: footerXml }
   ]);
 }
 
@@ -230,9 +351,14 @@ function xlsxCol(index) {
   return s;
 }
 
-// Style indexes into styles.xml cellXfs: 0 default, 1 wrap+top, 2 bold, 3 bold+wrap.
+// Style indexes into styles.xml cellXfs:
+// 0 default, 1 wrapped body, 2 bold, 3 bold wrapped, 4 title, 5 metadata,
+// 6 reviewed/draft status, 7 section label, 8 table header, 9 editable cell.
 function xlsxSheet(rows, opts) {
-  const { widths = [], wrapCols = [], boldRows = [] } = opts || {};
+  const {
+    widths = [], wrapCols = [], boldRows = [], rowStyles = {}, rowHeights = {},
+    freezeRows = 0, showGridLines = false, autoFilter = '', merges = []
+  } = opts || {};
   const boldSet = new Set(boldRows);
   const wrapSet = new Set(wrapCols);
   const colXml = widths.length
@@ -240,66 +366,117 @@ function xlsxSheet(rows, opts) {
     : '';
   const rowXml = rows.map((cells, r) => {
     const rowNum = r + 1;
+    const rowStyle = rowStyles[rowNum];
+    const height = rowHeights[rowNum];
     const cellXml = cells.map((value, c) => {
       const ref = `${xlsxCol(c)}${rowNum}`;
       const bold = boldSet.has(rowNum);
       const wrapText = wrapSet.has(c);
-      const style = bold && wrapText ? 3 : bold ? 2 : wrapText ? 1 : 0;
+      const style = rowStyle == null ? (bold && wrapText ? 3 : bold ? 2 : wrapText ? 1 : 0) : rowStyle;
       const sAttr = style ? ` s="${style}"` : '';
-      if (value === '' || value == null) return `<c r="${ref}"${sAttr} t="inlineStr"><is><t xml:space="preserve"> </t></is></c>`;
+      if (value === '' || value == null) return `<c r="${ref}"${sAttr}/>`;
       return `<c r="${ref}"${sAttr} t="inlineStr"><is><t xml:space="preserve">${escapeXml(value)}</t></is></c>`;
     }).join('');
-    return `<row r="${rowNum}">${cellXml}</row>`;
+    return `<row r="${rowNum}"${height ? ` ht="${height}" customHeight="1"` : ''}>${cellXml}</row>`;
   }).join('');
+  const pane = freezeRows
+    ? `<pane ySplit="${freezeRows}" topLeftCell="A${freezeRows + 1}" activePane="bottomLeft" state="frozen"/>`
+    : '';
+  const sheetViews = `<sheetViews><sheetView showGridLines="${showGridLines ? '1' : '0'}" workbookViewId="0">${pane}</sheetView></sheetViews>`;
+  const mergeXml = merges.length
+    ? `<mergeCells count="${merges.length}">${merges.map((ref) => `<mergeCell ref="${ref}"/>`).join('')}</mergeCells>`
+    : '';
   return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>` +
     `<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">` +
-    `${colXml}<sheetData>${rowXml}</sheetData></worksheet>`;
+    `${sheetViews}${colXml}<sheetData>${rowXml}</sheetData>${mergeXml}${autoFilter ? `<autoFilter ref="${autoFilter}"/>` : ''}</worksheet>`;
 }
 
 const XLSX_STYLES = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>` +
   `<styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">` +
-  `<fonts count="2"><font><sz val="11"/><name val="Calibri"/></font><font><b/><sz val="11"/><name val="Calibri"/></font></fonts>` +
-  `<fills count="2"><fill><patternFill patternType="none"/></fill><fill><patternFill patternType="gray125"/></fill></fills>` +
-  `<borders count="1"><border><left/><right/><top/><bottom/><diagonal/></border></borders>` +
+  `<fonts count="6">` +
+  `<font><sz val="11"/><color rgb="FF283548"/><name val="Calibri"/></font>` +
+  `<font><b/><sz val="11"/><color rgb="FF283548"/><name val="Calibri"/></font>` +
+  `<font><b/><sz val="18"/><color rgb="FFFFFFFF"/><name val="Calibri"/></font>` +
+  `<font><b/><sz val="11"/><color rgb="FF6B4F00"/><name val="Calibri"/></font>` +
+  `<font><b/><sz val="11"/><color rgb="FFFFFFFF"/><name val="Calibri"/></font>` +
+  `<font><b/><sz val="10"/><color rgb="FF166534"/><name val="Calibri"/></font>` +
+  `</fonts>` +
+  `<fills count="7"><fill><patternFill patternType="none"/></fill><fill><patternFill patternType="gray125"/></fill>` +
+  `<fill><patternFill patternType="solid"><fgColor rgb="FF172033"/><bgColor indexed="64"/></patternFill></fill>` +
+  `<fill><patternFill patternType="solid"><fgColor rgb="FFF4C84A"/><bgColor indexed="64"/></patternFill></fill>` +
+  `<fill><patternFill patternType="solid"><fgColor rgb="FFFFF6D8"/><bgColor indexed="64"/></patternFill></fill>` +
+  `<fill><patternFill patternType="solid"><fgColor rgb="FFEAF7EF"/><bgColor indexed="64"/></patternFill></fill>` +
+  `<fill><patternFill patternType="solid"><fgColor rgb="FFE8EEF5"/><bgColor indexed="64"/></patternFill></fill></fills>` +
+  `<borders count="2"><border><left/><right/><top/><bottom/><diagonal/></border>` +
+  `<border><left style="thin"><color rgb="FFD9DEE7"/></left><right style="thin"><color rgb="FFD9DEE7"/></right>` +
+  `<top style="thin"><color rgb="FFD9DEE7"/></top><bottom style="thin"><color rgb="FFD9DEE7"/></bottom><diagonal/></border></borders>` +
   `<cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs>` +
-  `<cellXfs count="4">` +
+  `<cellXfs count="10">` +
   `<xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"/>` +
   `<xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0" applyAlignment="1"><alignment wrapText="1" vertical="top"/></xf>` +
   `<xf numFmtId="0" fontId="1" fillId="0" borderId="0" xfId="0" applyFont="1"/>` +
   `<xf numFmtId="0" fontId="1" fillId="0" borderId="0" xfId="0" applyFont="1" applyAlignment="1"><alignment wrapText="1" vertical="top"/></xf>` +
+  `<xf numFmtId="0" fontId="2" fillId="2" borderId="0" xfId="0" applyFont="1" applyFill="1" applyAlignment="1"><alignment horizontal="left" vertical="center"/></xf>` +
+  `<xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0" applyAlignment="1"><alignment wrapText="1" vertical="center"/></xf>` +
+  `<xf numFmtId="0" fontId="5" fillId="5" borderId="0" xfId="0" applyFont="1" applyFill="1" applyAlignment="1"><alignment wrapText="1" vertical="center"/></xf>` +
+  `<xf numFmtId="0" fontId="3" fillId="4" borderId="0" xfId="0" applyFont="1" applyFill="1" applyAlignment="1"><alignment wrapText="1" vertical="center"/></xf>` +
+  `<xf numFmtId="0" fontId="4" fillId="2" borderId="1" xfId="0" applyFont="1" applyFill="1" applyBorder="1" applyAlignment="1"><alignment wrapText="1" horizontal="center" vertical="center"/></xf>` +
+  `<xf numFmtId="0" fontId="0" fillId="6" borderId="1" xfId="0" applyFill="1" applyBorder="1" applyAlignment="1"><alignment wrapText="1" vertical="top"/></xf>` +
   `</cellXfs></styleSheet>`;
 
 export function buildXlsx(resource) {
   // Sheet 1: Instructions (flattened text). Sheet 2: Worksheet grid.
   const instructions = [];
-  instructions.push([resource.title]);
-  instructions.push([`${CATEGORY_LABELS[resource.category] || resource.category} · Skill: ${resource.skill} · Difficulty: ${resource.difficulty} · Est. ${resource.duration} min`]);
-  instructions.push([DRAFT_NOTICE]);
-  instructions.push(['']);
-  instructions.push(['Summary', resource.summary]);
-  instructions.push(['']);
-  instructions.push(['Objectives']);
-  (resource.objectives || []).forEach((o) => instructions.push(['', o]));
-  instructions.push(['']);
+  const instructionStyles = {};
+  const instructionHeights = {};
+  const addInstruction = (cells, style, height) => {
+    instructions.push(cells);
+    const row = instructions.length;
+    if (style != null) instructionStyles[row] = style;
+    if (height) instructionHeights[row] = height;
+  };
+  addInstruction([resource.title, '', ''], 4, 32);
+  addInstruction([
+    `${CATEGORY_LABELS[resource.category] || resource.category} | Skill: ${resource.skill} | Difficulty: ${resource.difficulty} | Est. ${resource.duration} min`,
+    '',
+    ''
+  ], 5, 24);
+  addInstruction([resource.status === 'reviewed' ? REVIEWED_NOTICE : DRAFT_NOTICE, '', ''], 6, 26);
+  addInstruction(['', '', '']);
+  addInstruction(['Summary', '', ''], 7, 24);
+  addInstruction(['', resource.summary, ''], 1);
+  addInstruction(['', '', '']);
+  addInstruction(['Learning objectives', '', ''], 7, 24);
+  (resource.objectives || []).forEach((objective) => addInstruction(['', objective, ''], 1));
+  addInstruction(['', '', '']);
   (resource.sections || []).forEach((section) => {
-    if (section.type === 'table') return; // grid goes on the Worksheet sheet
-    if (section.heading) instructions.push([section.heading]);
-    if (section.type === 'paragraph' && section.text) instructions.push(['', section.text]);
-    if ((section.type === 'list' || section.type === 'steps') && section.items) section.items.forEach((it) => instructions.push(['', it]));
-    if (section.type === 'fields' && section.items) section.items.forEach((it) => instructions.push(['', `${it}:`, '']));
-    instructions.push(['']);
+    if (section.heading) addInstruction([section.heading, '', ''], 7, 24);
+    if (section.type === 'table') {
+      addInstruction(section.columns || [], 8, 28);
+      (section.rows || []).forEach((row) => addInstruction(row, 9));
+      addInstruction(['', '', '']);
+      return;
+    }
+    if (section.type === 'paragraph' && section.text) addInstruction(['', section.text, ''], 1);
+    if ((section.type === 'list' || section.type === 'steps') && section.items) {
+      section.items.forEach((item) => addInstruction(['', item, ''], 1));
+    }
+    if (section.type === 'fields' && section.items) {
+      section.items.forEach((item) => addInstruction(['', `${item}:`, ''], 1));
+    }
+    addInstruction(['', '', '']);
   });
   if (resource.example) {
-    instructions.push([(resource.example.title) || 'Worked example']);
-    instructions.push(['', (resource.example.text) || String(resource.example)]);
-    instructions.push(['']);
+    addInstruction([(resource.example.title) || 'Worked example', '', ''], 7, 24);
+    addInstruction(['', (resource.example.text) || String(resource.example), ''], 1);
+    addInstruction(['', '', '']);
   }
   if (resource.safePractice) {
-    instructions.push(['Safe-practice note']);
-    instructions.push(['', resource.safePractice]);
-    instructions.push(['']);
+    addInstruction(['Safe-practice note', '', ''], 7, 24);
+    addInstruction(['', resource.safePractice, ''], 1);
+    addInstruction(['', '', '']);
   }
-  instructions.push([`Last reviewed: ${resource.reviewDate || ''} · AmplifyHub Practical Resource Library`]);
+  addInstruction([`Last reviewed: ${resource.reviewDate || ''} | AmplifyHub Practical Resource Library`, '', ''], 5);
 
   // Worksheet grid: prefer an explicit sheet, else the first table section, else objectives.
   let gridRows = [];
@@ -362,8 +539,28 @@ export function buildXlsx(resource) {
     { name: 'xl/workbook.xml', data: workbook },
     { name: 'xl/_rels/workbook.xml.rels', data: workbookRels },
     { name: 'xl/styles.xml', data: XLSX_STYLES },
-    { name: 'xl/worksheets/sheet1.xml', data: xlsxSheet(instructions, { widths: [26, 80, 18], wrapCols: [1], boldRows: [1] }) },
-    { name: 'xl/worksheets/sheet2.xml', data: xlsxSheet(gridRows, { widths: gridWidths, wrapCols: gridRows[0].map((_, c) => c), boldRows: [1] }) }
+    {
+      name: 'xl/worksheets/sheet1.xml',
+      data: xlsxSheet(instructions, {
+        widths: [24, 62, 42],
+        wrapCols: [0, 1, 2],
+        rowStyles: instructionStyles,
+        rowHeights: instructionHeights,
+        freezeRows: 3,
+        merges: ['A1:C1', 'A2:C2', 'A3:C3']
+      })
+    },
+    {
+      name: 'xl/worksheets/sheet2.xml',
+      data: xlsxSheet(gridRows, {
+        widths: gridWidths,
+        wrapCols: gridRows[0].map((_, c) => c),
+        rowStyles: Object.fromEntries(gridRows.map((_, index) => [index + 1, index === 0 ? 8 : 9])),
+        rowHeights: { 1: 30 },
+        freezeRows: 1,
+        autoFilter: `A1:${xlsxCol(gridRows[0].length - 1)}${gridRows.length}`
+      })
+    }
   ]);
 }
 
@@ -417,8 +614,8 @@ export function buildPdf(resource) {
     }
   }
 
-  // Page geometry (A4-ish in points).
-  const pageW = 595, pageH = 842, marginX = 56, top = 786, bottom = 64;
+  // Page geometry: US Letter with a compact reference-guide header/footer.
+  const pageW = 612, pageH = 792, marginX = 58, top = 724, bottom = 58;
   const pages = [];
   let current = { lines: [], rules: [] };
   let y = top;
@@ -430,9 +627,11 @@ export function buildPdf(resource) {
     y -= gapAfter;
   };
 
-  const textBlock = (text, { font = 'F1', size = 10.5, gap = 14, indent = 0, maxChars = 88 } = {}) => {
+  const textBlock = (text, {
+    font = 'F1', size = 10.5, gap = 14, indent = 0, maxChars = 88, color = '283548'
+  } = {}) => {
     const lines = wrap(text, maxChars);
-    lines.forEach((ln) => pushLine([{ font, size, x: marginX + indent, text: ln }], gap));
+    lines.forEach((ln) => pushLine([{ font, size, x: marginX + indent, text: ln, color }], gap));
   };
 
   let tableRows = [];
@@ -458,7 +657,8 @@ export function buildPdf(resource) {
         if (y < bottom) breakPage();
         const segments = wrapped.map((w, ci) => ({
           font: ri === 0 ? 'F2' : 'F1', size: 9.5,
-          x: marginX + ci * colW, text: w[lineIdx] || ''
+          x: marginX + ci * colW, text: w[lineIdx] || '',
+          color: ri === 0 ? '6B4F00' : '283548'
         }));
         current.lines.push({ y, segments });
         y -= 12;
@@ -474,14 +674,17 @@ export function buildPdf(resource) {
     if (b.kind === 'th' || b.kind === 'tr') { tableRows.push(b); continue; }
     flushTable();
     switch (b.kind) {
-      case 'title': textBlock(b.text, { font: 'F2', size: 19, gap: 24, maxChars: 46 }); break;
-      case 'meta': textBlock(b.text, { font: 'F1', size: 9.5, gap: 14, maxChars: 100 }); break;
-      case 'note': textBlock(b.text, { font: 'F2', size: 9.5, gap: 18, maxChars: 96 }); break;
-      case 'h': y -= 6; textBlock(b.text, { font: 'F2', size: 13, gap: 17, maxChars: 70 }); break;
-      case 'p': textBlock(b.text, { font: 'F1', size: 10.5, gap: 14 }); y -= 4; break;
-      case 'li': textBlock(`-  ${b.text}`, { font: 'F1', size: 10.5, gap: 14, indent: 10, maxChars: 84 }); break;
-      case 'oli': textBlock(`${b.index}.  ${b.text}`, { font: 'F1', size: 10.5, gap: 14, indent: 10, maxChars: 84 }); break;
-      case 'footer': y -= 10; textBlock(b.text, { font: 'F1', size: 8.5, gap: 12, maxChars: 110 }); break;
+      case 'title': textBlock(b.text, { font: 'F2', size: 22, gap: 27, maxChars: 46, color: '172033' }); break;
+      case 'meta': textBlock(b.text.toUpperCase(), { font: 'F2', size: 8.8, gap: 14, maxChars: 100, color: '6B7280' }); break;
+      case 'note': textBlock(b.text, {
+        font: 'F2', size: 9.2, gap: 19, maxChars: 96,
+        color: resource.status === 'reviewed' ? '166534' : '9A5B00'
+      }); break;
+      case 'h': y -= 7; textBlock(b.text, { font: 'F2', size: 13.5, gap: 18, maxChars: 70, color: '8A6200' }); break;
+      case 'p': textBlock(b.text, { font: 'F1', size: 10.5, gap: 14, color: '283548' }); y -= 4; break;
+      case 'li': textBlock(`-  ${b.text}`, { font: 'F1', size: 10.5, gap: 14, indent: 10, maxChars: 84, color: '283548' }); break;
+      case 'oli': textBlock(`${b.index}.  ${b.text}`, { font: 'F1', size: 10.5, gap: 14, indent: 10, maxChars: 84, color: '283548' }); break;
+      case 'footer': y -= 10; textBlock(b.text, { font: 'F1', size: 8.5, gap: 12, maxChars: 110, color: '7B8494' }); break;
       default: break;
     }
   }
@@ -499,10 +702,22 @@ export function buildPdf(resource) {
   const fontBoldNum = addObject('<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>');
 
   const pageNums = [];
-  for (const page of pages) {
-    let stream = 'BT\n';
+  const pdfRgb = (hex) => {
+    const value = String(hex || '000000').replace('#', '');
+    return [0, 2, 4].map((offset) => (parseInt(value.slice(offset, offset + 2), 16) / 255).toFixed(3)).join(' ');
+  };
+
+  for (let pageIndex = 0; pageIndex < pages.length; pageIndex++) {
+    const page = pages[pageIndex];
+    let stream = `0.090 0.125 0.200 rg 0 ${pageH - 42} ${pageW} 42 re f\n`;
+    stream += `0.957 0.784 0.290 rg 0 ${pageH - 45} ${pageW} 3 re f\n`;
+    stream += `0.850 0.870 0.910 RG 0.5 w ${marginX} 42 m ${(pageW - marginX).toFixed(1)} 42 l S\n`;
+    stream += 'BT\n/F2 9 Tf\n0.957 0.784 0.290 rg\n';
+    stream += `1 0 0 1 ${marginX} ${pageH - 27} Tm (AMPLIFYHUB  |  PRACTICAL RESOURCE LIBRARY) Tj\n`;
+    stream += 'ET\nBT\n';
     let curFont = '';
     let curSize = 0;
+    let curColor = '';
     for (const line of page.lines) {
       for (const seg of line.segments) {
         if (!seg.text) continue;
@@ -510,10 +725,16 @@ export function buildPdf(resource) {
           stream += `/${seg.font} ${seg.size} Tf\n`;
           curFont = seg.font; curSize = seg.size;
         }
+        if (seg.color !== curColor) {
+          stream += `${pdfRgb(seg.color)} rg\n`;
+          curColor = seg.color;
+        }
         stream += `1 0 0 1 ${seg.x.toFixed(1)} ${line.y.toFixed(1)} Tm (${pdfEscape(seg.text)}) Tj\n`;
       }
     }
-    stream += 'ET';
+    stream += `ET\nBT\n/F1 8 Tf\n0.450 0.490 0.560 rg\n`;
+    stream += `1 0 0 1 ${marginX} 25 Tm (AmplifyHub Professional Edition) Tj\n`;
+    stream += `1 0 0 1 ${(pageW - marginX - 42).toFixed(1)} 25 Tm (Page ${pageIndex + 1} of ${pages.length}) Tj\nET`;
     // Table rules (light gray under rows, darker under headers) after the text block.
     if (page.rules.length) {
       stream += '\n0.7 w\n';

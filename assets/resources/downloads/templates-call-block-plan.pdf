@@ -4,7 +4,7 @@
 << /Type /Catalog /Pages 2 0 R >>
 endobj
 2 0 obj
-<< /Type /Pages /Kids [6 0 R] /Count 1 >>
+<< /Type /Pages /Kids [6 0 R 8 0 R] /Count 2 >>
 endobj
 3 0 obj
 << /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>
@@ -13,95 +13,233 @@ endobj
 << /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>
 endobj
 5 0 obj
-<< /Length 3131 >>
+<< /Length 3558 >>
 stream
+0.090 0.125 0.200 rg 0 750 612 42 re f
+0.957 0.784 0.290 rg 0 747 612 3 re f
+0.850 0.870 0.910 RG 0.5 w 58 42 m 554.0 42 l S
 BT
-/F2 19 Tf
-1 0 0 1 56.0 786.0 Tm (Call-Block Preparation Plan) Tj
-/F1 9.5 Tf
-1 0 0 1 56.0 762.0 Tm (Template - Skill: planning - Difficulty: beginner - Est. 8 min) Tj
+/F2 9 Tf
+0.957 0.784 0.290 rg
+1 0 0 1 58 765 Tm (AMPLIFYHUB  |  PRACTICAL RESOURCE LIBRARY) Tj
+ET
+BT
+/F2 22 Tf
+0.090 0.125 0.200 rg
+1 0 0 1 58.0 724.0 Tm (Call-Block Preparation Plan) Tj
+/F2 8.8 Tf
+0.420 0.447 0.502 rg
+1 0 0 1 58.0 697.0 Tm (TEMPLATE | SKILL: PLANNING | DIFFICULTY: BEGINNER | EST. 8 MIN) Tj
+/F2 9.2 Tf
+0.086 0.396 0.204 rg
+1 0 0 1 58.0 683.0 Tm (Reviewed professional resource - AmplifyHub Practical Resource Library) Tj
+/F2 13.5 Tf
+0.541 0.384 0.000 rg
+1 0 0 1 58.0 657.0 Tm (Overview) Tj
+/F1 10.5 Tf
+0.157 0.208 0.282 rg
+1 0 0 1 58.0 639.0 Tm (A simple planning grid for a focused block of calls: who you will call, why, what you) Tj
+1 0 0 1 58.0 625.0 Tm (want to happen, and a space to record the real outcome - so practice stays deliberate.) Tj
+/F2 13.5 Tf
+0.541 0.384 0.000 rg
+1 0 0 1 58.0 600.0 Tm (Learning objectives) Tj
+/F1 10.5 Tf
+0.157 0.208 0.282 rg
+1 0 0 1 68.0 582.0 Tm (- Plan a realistic number of calls for one focused block) Tj
+1 0 0 1 68.0 568.0 Tm (- Set one clear intention for the block) Tj
+1 0 0 1 68.0 554.0 Tm (- Record real outcomes without prospect personal data) Tj
+1 0 0 1 68.0 540.0 Tm (- Choose one adjustment for next time) Tj
+/F2 13.5 Tf
+0.541 0.384 0.000 rg
+1 0 0 1 58.0 519.0 Tm (How to use it) Tj
+/F1 10.5 Tf
+0.157 0.208 0.282 rg
+1 0 0 1 58.0 501.0 Tm (Before a call block, fill in the plan rows with the companies and roles you will call) Tj
+1 0 0 1 58.0 487.0 Tm (and your reason for each. During or after, record only the outcome and a short note.) Tj
+1 0 0 1 58.0 473.0 Tm (Afterward, write one thing you will change next time.) Tj
+/F2 13.5 Tf
+0.541 0.384 0.000 rg
+1 0 0 1 58.0 448.0 Tm (Plan grid) Tj
 /F2 9.5 Tf
-1 0 0 1 56.0 748.0 Tm (Draft resource pending human editorial review - not yet professionally verified.) Tj
-/F1 10.5 Tf
-1 0 0 1 56.0 730.0 Tm (A simple planning grid for a focused block of calls: who you will call, why, what you) Tj
-1 0 0 1 56.0 716.0 Tm (want to happen, and a space to record the real outcome - so practice stays deliberate.) Tj
-/F2 13 Tf
-1 0 0 1 56.0 692.0 Tm (Learning objectives) Tj
-/F1 10.5 Tf
-1 0 0 1 66.0 675.0 Tm (- Plan a realistic number of calls for one focused block) Tj
-1 0 0 1 66.0 661.0 Tm (- Set one clear intention for the block) Tj
-1 0 0 1 66.0 647.0 Tm (- Record real outcomes without prospect personal data) Tj
-1 0 0 1 66.0 633.0 Tm (- Choose one adjustment for next time) Tj
-/F2 13 Tf
-1 0 0 1 56.0 613.0 Tm (How to use it) Tj
-/F1 10.5 Tf
-1 0 0 1 56.0 596.0 Tm (Before a call block, fill in the plan rows with the companies and roles you will call) Tj
-1 0 0 1 56.0 582.0 Tm (and your reason for each. During or after, record only the outcome and a short note.) Tj
-1 0 0 1 56.0 568.0 Tm (Afterward, write one thing you will change next time.) Tj
-/F2 13 Tf
-1 0 0 1 56.0 544.0 Tm (Plan grid) Tj
-/F2 9.5 Tf
-1 0 0 1 56.0 527.0 Tm (#) Tj
-1 0 0 1 136.5 527.0 Tm (Company / role) Tj
-1 0 0 1 217.0 527.0 Tm (Reason for) Tj
-1 0 0 1 297.5 527.0 Tm (Goal) Tj
-1 0 0 1 378.0 527.0 Tm (Outcome) Tj
-1 0 0 1 458.5 527.0 Tm (Note) Tj
-1 0 0 1 217.0 515.0 Tm (calling) Tj
+0.420 0.310 0.000 rg
+1 0 0 1 58.0 430.0 Tm (#) Tj
+1 0 0 1 140.7 430.0 Tm (Company / role) Tj
+1 0 0 1 223.3 430.0 Tm (Reason for) Tj
+1 0 0 1 306.0 430.0 Tm (Goal) Tj
+1 0 0 1 388.7 430.0 Tm (Outcome) Tj
+1 0 0 1 471.3 430.0 Tm (Note) Tj
+1 0 0 1 223.3 418.0 Tm (calling) Tj
 /F1 9.5 Tf
-1 0 0 1 56.0 500.0 Tm (1) Tj
-1 0 0 1 136.5 500.0 Tm (Regional) Tj
-1 0 0 1 217.0 500.0 Tm (Public) Tj
-1 0 0 1 297.5 500.0 Tm (Reach ops lead) Tj
-1 0 0 1 136.5 488.0 Tm (courier / ops) Tj
-1 0 0 1 217.0 488.0 Tm (driver-hiring) Tj
-1 0 0 1 136.5 476.0 Tm (lead) Tj
-1 0 0 1 217.0 476.0 Tm (signal) Tj
-1 0 0 1 56.0 461.0 Tm (2) Tj
-/F2 13 Tf
-1 0 0 1 56.0 256.0 Tm (Worked example \(block intention\)) Tj
+0.157 0.208 0.282 rg
+1 0 0 1 58.0 403.0 Tm (1) Tj
+1 0 0 1 140.7 403.0 Tm (Regional) Tj
+1 0 0 1 223.3 403.0 Tm (Public) Tj
+1 0 0 1 306.0 403.0 Tm (Reach ops lead) Tj
+1 0 0 1 140.7 391.0 Tm (courier / ops) Tj
+1 0 0 1 223.3 391.0 Tm (driver-hiring) Tj
+1 0 0 1 140.7 379.0 Tm (lead) Tj
+1 0 0 1 223.3 379.0 Tm (signal) Tj
+1 0 0 1 58.0 364.0 Tm (2) Tj
+/F2 13.5 Tf
+0.541 0.384 0.000 rg
+1 0 0 1 58.0 158.0 Tm (Professional standard) Tj
 /F1 10.5 Tf
-1 0 0 1 56.0 239.0 Tm (Intention for this block: "Pause for a full second after my opener before asking my) Tj
-1 0 0 1 56.0 225.0 Tm (question." Calls planned: 8. Outcome recorded per call: reached / voicemail / not now /) Tj
-1 0 0 1 56.0 211.0 Tm (booked. One adjustment after: "I rushed two openers - slow the first sentence.") Tj
-/F2 13 Tf
-1 0 0 1 56.0 187.0 Tm (Safe-practice note) Tj
+0.157 0.208 0.282 rg
+1 0 0 1 58.0 140.0 Tm (Professional planning converts a time block into a small set of controllable actions,) Tj
+1 0 0 1 58.0 126.0 Tm (clear priorities, and a review point. The plan should support focused work without) Tj
+1 0 0 1 58.0 112.0 Tm (rewarding activity that has no learning value.) Tj
+/F2 13.5 Tf
+0.541 0.384 0.000 rg
+1 0 0 1 58.0 87.0 Tm (Professional workflow) Tj
 /F1 10.5 Tf
-1 0 0 1 56.0 170.0 Tm (Record only company-level notes and outcomes. Do not log personal contact details or) Tj
-1 0 0 1 56.0 156.0 Tm (anything a prospect shared in confidence. This plan is for your practice, not a contact) Tj
-1 0 0 1 56.0 142.0 Tm (database.) Tj
-/F1 8.5 Tf
-1 0 0 1 56.0 114.0 Tm (Last reviewed: 2026-07-19 - AmplifyHub Practical Resource Library) Tj
+0.157 0.208 0.282 rg
+1 0 0 1 68.0 69.0 Tm (1. Define the recipient, business context, and single desired next step before) Tj
+ET
+BT
+/F1 8 Tf
+0.450 0.490 0.560 rg
+1 0 0 1 58 25 Tm (AmplifyHub Professional Edition) Tj
+1 0 0 1 512.0 25 Tm (Page 1 of 2) Tj
 ET
 0.7 w
-0.45 G 56 506.0 m 539.0 506.0 l S
-0.8 G 56 467.0 m 539.0 467.0 l S
-0.8 G 56 452.0 m 539.0 452.0 l S
-0.8 G 56 430.0 m 539.0 430.0 l S
-0.8 G 56 408.0 m 539.0 408.0 l S
-0.8 G 56 386.0 m 539.0 386.0 l S
-0.8 G 56 364.0 m 539.0 364.0 l S
-0.8 G 56 342.0 m 539.0 342.0 l S
-0.8 G 56 320.0 m 539.0 320.0 l S
-0.8 G 56 298.0 m 539.0 298.0 l S
-0.8 G 56 276.0 m 539.0 276.0 l S
+0.45 G 58 409.0 m 554.0 409.0 l S
+0.8 G 58 370.0 m 554.0 370.0 l S
+0.8 G 58 355.0 m 554.0 355.0 l S
+0.8 G 58 333.0 m 554.0 333.0 l S
+0.8 G 58 311.0 m 554.0 311.0 l S
+0.8 G 58 289.0 m 554.0 289.0 l S
+0.8 G 58 267.0 m 554.0 267.0 l S
+0.8 G 58 245.0 m 554.0 245.0 l S
+0.8 G 58 223.0 m 554.0 223.0 l S
+0.8 G 58 201.0 m 554.0 201.0 l S
+0.8 G 58 179.0 m 554.0 179.0 l S
 
 endstream
 endobj
 6 0 obj
-<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 5 0 R >>
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 5 0 R >>
+endobj
+7 0 obj
+<< /Length 4619 >>
+stream
+0.090 0.125 0.200 rg 0 750 612 42 re f
+0.957 0.784 0.290 rg 0 747 612 3 re f
+0.850 0.870 0.910 RG 0.5 w 58 42 m 554.0 42 l S
+BT
+/F2 9 Tf
+0.957 0.784 0.290 rg
+1 0 0 1 58 765 Tm (AMPLIFYHUB  |  PRACTICAL RESOURCE LIBRARY) Tj
+ET
+BT
+/F1 10.5 Tf
+0.157 0.208 0.282 rg
+1 0 0 1 68.0 724.0 Tm (completing the template. A template without a clear decision is only extra text.) Tj
+1 0 0 1 68.0 710.0 Tm (2. Use specific evidence from public, business-level sources. Separate confirmed) Tj
+1 0 0 1 68.0 696.0 Tm (facts from hypotheses so you never present an assumption as something you know.) Tj
+1 0 0 1 68.0 682.0 Tm (3. Draft quickly, then edit for relevance, brevity, and natural language. Remove any) Tj
+1 0 0 1 68.0 668.0 Tm (field that does not help the recipient understand or decide.) Tj
+1 0 0 1 68.0 654.0 Tm (4. Run a final quality check for correct names, dates, links, time zones, and) Tj
+1 0 0 1 68.0 640.0 Tm (promised attachments before sending or using the finished version.) Tj
+1 0 0 1 68.0 626.0 Tm (5. Keep one clean master copy and duplicate it for each use. Review response quality) Tj
+1 0 0 1 68.0 612.0 Tm (monthly and improve the underlying template rather than adding more volume.) Tj
+/F2 13.5 Tf
+0.541 0.384 0.000 rg
+1 0 0 1 58.0 591.0 Tm (Quality-control review) Tj
+/F2 9.5 Tf
+0.420 0.310 0.000 rg
+1 0 0 1 58.0 573.0 Tm (Review point) Tj
+1 0 0 1 223.3 573.0 Tm (Professional standard) Tj
+1 0 0 1 388.7 573.0 Tm (Warning sign) Tj
+/F1 9.5 Tf
+0.157 0.208 0.282 rg
+1 0 0 1 58.0 558.0 Tm (Objective) Tj
+1 0 0 1 223.3 558.0 Tm (The block has one outcome and) Tj
+1 0 0 1 388.7 558.0 Tm (The goal is a vague) Tj
+1 0 0 1 223.3 546.0 Tm (a realistic definition of) Tj
+1 0 0 1 388.7 546.0 Tm (instruction to make more) Tj
+1 0 0 1 223.3 534.0 Tm (done.) Tj
+1 0 0 1 388.7 534.0 Tm (calls.) Tj
+1 0 0 1 58.0 519.0 Tm (Preparation) Tj
+1 0 0 1 223.3 519.0 Tm (Accounts, context, tools, and) Tj
+1 0 0 1 388.7 519.0 Tm (Research and list cleaning) Tj
+1 0 0 1 223.3 507.0 Tm (notes are ready before the) Tj
+1 0 0 1 388.7 507.0 Tm (consume the calling window.) Tj
+1 0 0 1 223.3 495.0 Tm (block begins.) Tj
+1 0 0 1 58.0 480.0 Tm (Execution) Tj
+1 0 0 1 223.3 480.0 Tm (Actions are time-boxed with) Tj
+1 0 0 1 388.7 480.0 Tm (Notifications and unrelated) Tj
+1 0 0 1 223.3 468.0 Tm (protected focus and short) Tj
+1 0 0 1 388.7 468.0 Tm (tasks interrupt the block.) Tj
+1 0 0 1 223.3 456.0 Tm (reset points.) Tj
+1 0 0 1 58.0 441.0 Tm (Review) Tj
+1 0 0 1 223.3 441.0 Tm (The block ends with outcomes,) Tj
+1 0 0 1 388.7 441.0 Tm (Only raw activity volume is) Tj
+1 0 0 1 223.3 429.0 Tm (one insight, and one next) Tj
+1 0 0 1 388.7 429.0 Tm (recorded.) Tj
+1 0 0 1 223.3 417.0 Tm (adjustment.) Tj
+/F2 13.5 Tf
+0.541 0.384 0.000 rg
+1 0 0 1 58.0 387.0 Tm (Evidence and improvement signals) Tj
+/F1 10.5 Tf
+0.157 0.208 0.282 rg
+1 0 0 1 68.0 369.0 Tm (- Compare planned actions with completed actions and record the main cause of) Tj
+1 0 0 1 68.0 355.0 Tm (variance.) Tj
+1 0 0 1 68.0 341.0 Tm (- Separate preparation time, conversation time, follow-up time, and review time.) Tj
+1 0 0 1 68.0 327.0 Tm (- Track one quality indicator such as relevant conversations or completed learning) Tj
+1 0 0 1 68.0 313.0 Tm (notes.) Tj
+1 0 0 1 68.0 299.0 Tm (- Adjust block size and preparation based on evidence from several sessions, not one) Tj
+1 0 0 1 68.0 285.0 Tm (difficult day.) Tj
+/F2 13.5 Tf
+0.541 0.384 0.000 rg
+1 0 0 1 58.0 264.0 Tm (Worked example \(block intention\)) Tj
+/F1 10.5 Tf
+0.157 0.208 0.282 rg
+1 0 0 1 58.0 246.0 Tm (Intention for this block: "Pause for a full second after my opener before asking my) Tj
+1 0 0 1 58.0 232.0 Tm (question." Calls planned: 8. Outcome recorded per call: reached / voicemail / not now /) Tj
+1 0 0 1 58.0 218.0 Tm (booked. One adjustment after: "I rushed two openers - slow the first sentence.") Tj
+/F2 13.5 Tf
+0.541 0.384 0.000 rg
+1 0 0 1 58.0 193.0 Tm (Safe-practice note) Tj
+/F1 10.5 Tf
+0.157 0.208 0.282 rg
+1 0 0 1 58.0 175.0 Tm (Record only company-level notes and outcomes. Do not log personal contact details or) Tj
+1 0 0 1 58.0 161.0 Tm (anything a prospect shared in confidence. This plan is for your practice, not a contact) Tj
+1 0 0 1 58.0 147.0 Tm (database.) Tj
+/F1 8.5 Tf
+0.482 0.518 0.580 rg
+1 0 0 1 58.0 119.0 Tm (Last reviewed: 2026-07-28 | AmplifyHub Practical Resource Library) Tj
+ET
+BT
+/F1 8 Tf
+0.450 0.490 0.560 rg
+1 0 0 1 58 25 Tm (AmplifyHub Professional Edition) Tj
+1 0 0 1 512.0 25 Tm (Page 2 of 2) Tj
+ET
+0.7 w
+0.45 G 58 564.0 m 554.0 564.0 l S
+0.8 G 58 525.0 m 554.0 525.0 l S
+0.8 G 58 486.0 m 554.0 486.0 l S
+0.8 G 58 447.0 m 554.0 447.0 l S
+0.8 G 58 408.0 m 554.0 408.0 l S
+
+endstream
+endobj
+8 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 7 0 R >>
 endobj
 xref
-0 7
+0 9
 0000000000 65535 f 
 0000000015 00000 n 
 0000000064 00000 n 
-0000000121 00000 n 
-0000000218 00000 n 
-0000000320 00000 n 
-0000003503 00000 n 
+0000000127 00000 n 
+0000000224 00000 n 
+0000000326 00000 n 
+0000003936 00000 n 
+0000004072 00000 n 
+0000008743 00000 n 
 trailer
-<< /Size 7 /Root 1 0 R >>
+<< /Size 9 /Root 1 0 R >>
 startxref
-3639
+8879
 %%EOF
