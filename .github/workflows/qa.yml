@@ -55,6 +55,9 @@ jobs:
       - name: QA — coach request security (unit)
         run: node scripts/qa-coach-request-security.mjs
 
+      - name: QA — contact form security (unit + browser)
+        run: node scripts/qa-contact-security.mjs
+
       - name: QA — app smoke (browser)
         run: npm run qa
 
