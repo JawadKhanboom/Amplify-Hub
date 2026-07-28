@@ -75,6 +75,8 @@ try {
   assert.deepEqual(pageErrors,[],`browser errors: ${pageErrors.join(', ')}`);
 
   const migration = await readFile(path.join(siteRoot,'supabase/migrations/20260719030000_practical_challenges.sql'),'utf8');
+  const quotaMigration = await readFile(path.join(siteRoot,'supabase/migrations/20260719010000_coach_api_usage_limits.sql'),'utf8');
+  const hardeningMigration = await readFile(path.join(siteRoot,'supabase/migrations/20260728054454_harden_security_definer_rpcs.sql'),'utf8');
   assert.equal((migration.match(/^\('[-a-z0-9]+','/gm)||[]).length,24,'catalog contains 24 original challenges');
   assert.match(migration,/auth\.uid\(\)/,'RPCs derive the authenticated user');
   assert.match(migration,/one_active_challenge_per_tier/,'daily tiers are unique');
@@ -83,6 +85,53 @@ try {
   assert.match(migration,/char_length\(v_text\) between 30 and 1000/,'evidence length is enforced server-side');
   assert.match(migration,/if v_a\.status='completed'/,'duplicate XP awards are idempotent');
   assert.match(migration,/revoke insert, update, delete on public\.user_challenge_assignments/,'clients cannot mutate assignment state directly');
+
+  const extractFunction = (sql, name) => {
+    const start = sql.indexOf(`create or replace function public.${name}`);
+    assert.notEqual(start,-1,`${name} definition exists`);
+    const end = sql.indexOf('$$;',start);
+    assert.notEqual(end,-1,`${name} definition is complete`);
+    return sql.slice(start,end+3);
+  };
+  const privilegedRpcs = [
+    ['consume_coach_quota',extractFunction(quotaMigration,'consume_coach_quota')],
+    ['get_or_assign_daily_challenges',extractFunction(migration,'get_or_assign_daily_challenges')],
+    ['start_challenge',extractFunction(migration,'start_challenge')],
+    ['submit_challenge',extractFunction(hardeningMigration,'submit_challenge')],
+    ['replace_challenge',extractFunction(hardeningMigration,'replace_challenge')],
+    ['rate_challenge',extractFunction(hardeningMigration,'rate_challenge')],
+  ];
+  for (const [name,definition] of privilegedRpcs) {
+    assert.match(definition,/security definer/i,`${name} is explicitly privileged`);
+    assert.match(definition,/set search_path\s*=\s*''/i,`${name} has an empty search path`);
+    assert.match(definition,/auth\.uid\(\)/,`${name} derives the caller from auth.uid()`);
+    assert.match(definition,/Authentication required/,`${name} rejects missing authentication`);
+    assert.match(definition,/user_id\s*=\s*v_user(?:_id)?/,`${name} scopes protected rows to the caller`);
+  }
+  for (const signature of [
+    'consume_coach_quota(text)',
+    'get_or_assign_daily_challenges()',
+    'start_challenge(uuid)',
+    'submit_challenge(uuid, jsonb)',
+    'replace_challenge(uuid, text)',
+    'rate_challenge(uuid, boolean, text)',
+  ]) {
+    assert.ok(
+      hardeningMigration.includes(`revoke all on function public.${signature} from public, anon;`),
+      `${signature} denies public and anonymous execution`,
+    );
+    assert.ok(
+      hardeningMigration.includes(`grant execute on function public.${signature} to authenticated;`),
+      `${signature} is exposed only to authenticated clients`,
+    );
+  }
+  assert.match(hardeningMigration,/revoke all on function private\.challenge_local_date\(uuid\)[\s\S]*?from public, anon, authenticated, service_role/,'private date helper denies direct client execution');
+  assert.match(hardeningMigration,/revoke all on function private\.challenge_focus_skill\(uuid\)[\s\S]*?from public, anon, authenticated, service_role/,'private focus helper denies direct client execution');
+  assert.match(hardeningMigration,/p_evidence is null or pg_catalog\.pg_column_size\(p_evidence\) > 8192/,'evidence payload size is bounded');
+  assert.match(hardeningMigration,/p_reason is null[\s\S]*?or p_reason not in/,'null replacement reasons are rejected');
+  assert.match(hardeningMigration,/pg_advisory_xact_lock[\s\S]*?:replacement/,'daily replacement checks are serialized');
+  assert.match(hardeningMigration,/if p_helpful is null/,'null feedback ratings are rejected explicitly');
+  assert.match(hardeningMigration,/where public\.user_challenge_feedback\.user_id = v_user/,'feedback conflict updates remain caller-owned');
 
   const dashboard = await readFile(path.join(siteRoot,'dashboard.html'),'utf8');
   assert.match(dashboard,/ChallengeSystem\.getDaily\(\)/,'dashboard loads real daily assignment data');
