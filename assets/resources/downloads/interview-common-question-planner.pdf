@@ -4,7 +4,7 @@
 << /Type /Catalog /Pages 2 0 R >>
 endobj
 2 0 obj
-<< /Type /Pages /Kids [6 0 R] /Count 1 >>
+<< /Type /Pages /Kids [6 0 R 8 0 R] /Count 2 >>
 endobj
 3 0 obj
 << /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>
@@ -13,72 +13,210 @@ endobj
 << /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>
 endobj
 5 0 obj
-<< /Length 2786 >>
+<< /Length 4544 >>
 stream
+0.090 0.125 0.200 rg 0 750 612 42 re f
+0.957 0.784 0.290 rg 0 747 612 3 re f
+0.850 0.870 0.910 RG 0.5 w 58 42 m 554.0 42 l S
 BT
-/F2 19 Tf
-1 0 0 1 56.0 786.0 Tm (Common-Question Answer Planner) Tj
-/F1 9.5 Tf
-1 0 0 1 56.0 762.0 Tm (Interview Prep - Skill: interview - Difficulty: beginner - Est. 15 min) Tj
-/F2 9.5 Tf
-1 0 0 1 56.0 748.0 Tm (Draft resource pending human editorial review - not yet professionally verified.) Tj
-/F1 10.5 Tf
-1 0 0 1 56.0 730.0 Tm (A planner for drafting honest, structured answers to the SDR interview questions you are) Tj
-1 0 0 1 56.0 716.0 Tm (most likely to face, so you sound prepared without sounding rehearsed.) Tj
-/F2 13 Tf
-1 0 0 1 56.0 692.0 Tm (Learning objectives) Tj
-/F1 10.5 Tf
-1 0 0 1 66.0 675.0 Tm (- Draft answers to common SDR interview questions) Tj
-1 0 0 1 66.0 661.0 Tm (- Keep answers honest and specific) Tj
-1 0 0 1 66.0 647.0 Tm (- Structure each answer so it is easy to follow) Tj
-1 0 0 1 66.0 633.0 Tm (- Practice out loud before the interview) Tj
-/F2 13 Tf
-1 0 0 1 56.0 613.0 Tm (Questions to prepare) Tj
-/F1 10.5 Tf
-1 0 0 1 66.0 596.0 Tm (- "Why do you want to be an SDR?") Tj
-1 0 0 1 66.0 582.0 Tm (- "How do you handle rejection?") Tj
-1 0 0 1 66.0 568.0 Tm (- "Walk me through how you would research a prospect.") Tj
-1 0 0 1 66.0 554.0 Tm (- "Tell me about a time you were persistent.") Tj
-1 0 0 1 66.0 540.0 Tm (- "What do you know about our company and who we sell to?") Tj
-/F2 13 Tf
-1 0 0 1 56.0 520.0 Tm (For each question, plan) Tj
-/F1 10.5 Tf
-1 0 0 1 66.0 503.0 Tm (- One honest sentence that answers directly: ______________________________) Tj
-1 0 0 1 66.0 489.0 Tm (- One specific example or detail that supports it: ______________________________) Tj
-1 0 0 1 66.0 475.0 Tm (- One sentence connecting it to the SDR role: ______________________________) Tj
-1 0 0 1 66.0 461.0 Tm (- A note of anything you must not overstate: ______________________________) Tj
-/F2 13 Tf
-1 0 0 1 56.0 441.0 Tm (Worked example) Tj
-/F1 10.5 Tf
-1 0 0 1 56.0 424.0 Tm (Q: "How do you handle rejection?" Direct: "I treat it as information, not a verdict.") Tj
-1 0 0 1 56.0 410.0 Tm (Support: "In practice roleplays I keep a short log and adjust one thing each time.") Tj
-1 0 0 1 56.0 396.0 Tm (Connection: "That habit is exactly what daily prospecting needs." Honest note: keep it) Tj
-1 0 0 1 56.0 382.0 Tm (to practice experience - do not imply a sales job you have not held.) Tj
-/F2 13 Tf
-1 0 0 1 56.0 358.0 Tm (Safe-practice note) Tj
-/F1 10.5 Tf
-1 0 0 1 56.0 341.0 Tm (Prepare honest answers, not a script that inflates your experience. If you have) Tj
-1 0 0 1 56.0 327.0 Tm (practised rather than worked in a sales role, say so plainly - genuine preparation is a) Tj
-1 0 0 1 56.0 313.0 Tm (strength. The AI Coach can flag anything that sounds overstated.) Tj
-/F1 8.5 Tf
-1 0 0 1 56.0 285.0 Tm (Last reviewed: 2026-07-19 - AmplifyHub Practical Resource Library) Tj
+/F2 9 Tf
+0.957 0.784 0.290 rg
+1 0 0 1 58 765 Tm (AMPLIFYHUB  |  PRACTICAL RESOURCE LIBRARY) Tj
 ET
+BT
+/F2 22 Tf
+0.090 0.125 0.200 rg
+1 0 0 1 58.0 724.0 Tm (Common-Question Answer Planner) Tj
+/F2 8.8 Tf
+0.420 0.447 0.502 rg
+1 0 0 1 58.0 697.0 Tm (INTERVIEW PREP | SKILL: INTERVIEW | DIFFICULTY: BEGINNER | EST. 15 MIN) Tj
+/F2 9.2 Tf
+0.086 0.396 0.204 rg
+1 0 0 1 58.0 683.0 Tm (Reviewed professional resource - AmplifyHub Practical Resource Library) Tj
+/F2 13.5 Tf
+0.541 0.384 0.000 rg
+1 0 0 1 58.0 657.0 Tm (Overview) Tj
+/F1 10.5 Tf
+0.157 0.208 0.282 rg
+1 0 0 1 58.0 639.0 Tm (A planner for drafting honest, structured answers to the SDR interview questions you are) Tj
+1 0 0 1 58.0 625.0 Tm (most likely to face, so you sound prepared without sounding rehearsed.) Tj
+/F2 13.5 Tf
+0.541 0.384 0.000 rg
+1 0 0 1 58.0 600.0 Tm (Learning objectives) Tj
+/F1 10.5 Tf
+0.157 0.208 0.282 rg
+1 0 0 1 68.0 582.0 Tm (- Draft answers to common SDR interview questions) Tj
+1 0 0 1 68.0 568.0 Tm (- Keep answers honest and specific) Tj
+1 0 0 1 68.0 554.0 Tm (- Structure each answer so it is easy to follow) Tj
+1 0 0 1 68.0 540.0 Tm (- Practice out loud before the interview) Tj
+/F2 13.5 Tf
+0.541 0.384 0.000 rg
+1 0 0 1 58.0 519.0 Tm (Questions to prepare) Tj
+/F1 10.5 Tf
+0.157 0.208 0.282 rg
+1 0 0 1 68.0 501.0 Tm (- "Why do you want to be an SDR?") Tj
+1 0 0 1 68.0 487.0 Tm (- "How do you handle rejection?") Tj
+1 0 0 1 68.0 473.0 Tm (- "Walk me through how you would research a prospect.") Tj
+1 0 0 1 68.0 459.0 Tm (- "Tell me about a time you were persistent.") Tj
+1 0 0 1 68.0 445.0 Tm (- "What do you know about our company and who we sell to?") Tj
+/F2 13.5 Tf
+0.541 0.384 0.000 rg
+1 0 0 1 58.0 424.0 Tm (For each question, plan) Tj
+/F1 10.5 Tf
+0.157 0.208 0.282 rg
+1 0 0 1 68.0 406.0 Tm (- One honest sentence that answers directly: ______________________________) Tj
+1 0 0 1 68.0 392.0 Tm (- One specific example or detail that supports it: ______________________________) Tj
+1 0 0 1 68.0 378.0 Tm (- One sentence connecting it to the SDR role: ______________________________) Tj
+1 0 0 1 68.0 364.0 Tm (- A note of anything you must not overstate: ______________________________) Tj
+/F2 13.5 Tf
+0.541 0.384 0.000 rg
+1 0 0 1 58.0 343.0 Tm (Professional standard) Tj
+/F1 10.5 Tf
+0.157 0.208 0.282 rg
+1 0 0 1 58.0 325.0 Tm (Professional interview preparation connects honest evidence to the employer's real) Tj
+1 0 0 1 58.0 311.0 Tm (requirements. Answers should be structured enough to follow, flexible enough for) Tj
+1 0 0 1 58.0 297.0 Tm (dialogue, and precise about what you personally did and learned.) Tj
+/F2 13.5 Tf
+0.541 0.384 0.000 rg
+1 0 0 1 58.0 272.0 Tm (Professional workflow) Tj
+/F1 10.5 Tf
+0.157 0.208 0.282 rg
+1 0 0 1 68.0 254.0 Tm (1. Study the job description and company before completing the resource. Match your) Tj
+1 0 0 1 68.0 240.0 Tm (preparation to the actual role rather than a generic sales interview.) Tj
+1 0 0 1 68.0 226.0 Tm (2. Build answers from real evidence: work, study, volunteering, projects, or) Tj
+1 0 0 1 68.0 212.0 Tm (deliberate practice. Label estimates honestly and never invent experience.) Tj
+1 0 0 1 68.0 198.0 Tm (3. Practise aloud with a timer, then repeat with a follow-up question or) Tj
+1 0 0 1 68.0 184.0 Tm (interruption. Strong answers stay clear when the conversation changes.) Tj
+1 0 0 1 68.0 170.0 Tm (4. Ask a reviewer or the AI Coach to score clarity, evidence, relevance, and) Tj
+1 0 0 1 68.0 156.0 Tm (concision. Convert broad feedback into one specific revision.) Tj
+1 0 0 1 68.0 142.0 Tm (5. Prepare a concise version and a fuller version of each answer. Use the concise) Tj
+1 0 0 1 68.0 128.0 Tm (version first and add detail only when the interviewer asks.) Tj
+/F2 13.5 Tf
+0.541 0.384 0.000 rg
+1 0 0 1 58.0 107.0 Tm (Quality-control review) Tj
+/F2 9.5 Tf
+0.420 0.310 0.000 rg
+1 0 0 1 58.0 89.0 Tm (Review point) Tj
+1 0 0 1 223.3 89.0 Tm (Professional standard) Tj
+1 0 0 1 388.7 89.0 Tm (Warning sign) Tj
+/F1 9.5 Tf
+0.157 0.208 0.282 rg
+1 0 0 1 58.0 74.0 Tm (Relevance) Tj
+1 0 0 1 223.3 74.0 Tm (The answer addresses the role) Tj
+1 0 0 1 388.7 74.0 Tm (A polished story is used even) Tj
+1 0 0 1 223.3 62.0 Tm (requirement and the exact) Tj
+1 0 0 1 388.7 62.0 Tm (when it does not answer the) Tj
+ET
+BT
+/F1 8 Tf
+0.450 0.490 0.560 rg
+1 0 0 1 58 25 Tm (AmplifyHub Professional Edition) Tj
+1 0 0 1 512.0 25 Tm (Page 1 of 2) Tj
+ET
+0.7 w
+0.45 G 58 80.0 m 554.0 80.0 l S
+
 endstream
 endobj
 6 0 obj
-<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 5 0 R >>
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 5 0 R >>
+endobj
+7 0 obj
+<< /Length 3187 >>
+stream
+0.090 0.125 0.200 rg 0 750 612 42 re f
+0.957 0.784 0.290 rg 0 747 612 3 re f
+0.850 0.870 0.910 RG 0.5 w 58 42 m 554.0 42 l S
+BT
+/F2 9 Tf
+0.957 0.784 0.290 rg
+1 0 0 1 58 765 Tm (AMPLIFYHUB  |  PRACTICAL RESOURCE LIBRARY) Tj
+ET
+BT
+/F1 9.5 Tf
+0.157 0.208 0.282 rg
+1 0 0 1 223.3 724.0 Tm (question asked.) Tj
+1 0 0 1 388.7 724.0 Tm (question.) Tj
+1 0 0 1 58.0 709.0 Tm (Evidence) Tj
+1 0 0 1 223.3 709.0 Tm (Actions, decisions, and) Tj
+1 0 0 1 388.7 709.0 Tm (Team outcomes are claimed as) Tj
+1 0 0 1 223.3 697.0 Tm (results are specific and) Tj
+1 0 0 1 388.7 697.0 Tm (personal achievements.) Tj
+1 0 0 1 223.3 685.0 Tm (attributable.) Tj
+1 0 0 1 58.0 670.0 Tm (Structure) Tj
+1 0 0 1 223.3 670.0 Tm (The answer has a clear) Tj
+1 0 0 1 388.7 670.0 Tm (Context expands while the) Tj
+1 0 0 1 223.3 658.0 Tm (beginning, evidence, and) Tj
+1 0 0 1 388.7 658.0 Tm (important action remains) Tj
+1 0 0 1 223.3 646.0 Tm (conclusion.) Tj
+1 0 0 1 388.7 646.0 Tm (vague.) Tj
+1 0 0 1 58.0 631.0 Tm (Reflection) Tj
+1 0 0 1 223.3 631.0 Tm (Learning and future) Tj
+1 0 0 1 388.7 631.0 Tm (The answer ends with a result) Tj
+1 0 0 1 223.3 619.0 Tm (application are stated) Tj
+1 0 0 1 388.7 619.0 Tm (but shows no self-awareness.) Tj
+1 0 0 1 223.3 607.0 Tm (honestly.) Tj
+/F2 13.5 Tf
+0.541 0.384 0.000 rg
+1 0 0 1 58.0 577.0 Tm (Evidence and improvement signals) Tj
+/F1 10.5 Tf
+0.157 0.208 0.282 rg
+1 0 0 1 68.0 559.0 Tm (- Time both a 60-90 second version and a fuller two-minute version of key answers.) Tj
+1 0 0 1 68.0 545.0 Tm (- Map every prepared example to the job requirement it supports.) Tj
+1 0 0 1 68.0 531.0 Tm (- Record follow-up questions you struggled with and strengthen the underlying) Tj
+1 0 0 1 68.0 517.0 Tm (evidence.) Tj
+1 0 0 1 68.0 503.0 Tm (- Review accuracy, clarity, and relevance before trying to sound more impressive.) Tj
+/F2 13.5 Tf
+0.541 0.384 0.000 rg
+1 0 0 1 58.0 482.0 Tm (Worked example) Tj
+/F1 10.5 Tf
+0.157 0.208 0.282 rg
+1 0 0 1 58.0 464.0 Tm (Q: "How do you handle rejection?" Direct: "I treat it as information, not a verdict.") Tj
+1 0 0 1 58.0 450.0 Tm (Support: "In practice roleplays I keep a short log and adjust one thing each time.") Tj
+1 0 0 1 58.0 436.0 Tm (Connection: "That habit is exactly what daily prospecting needs." Honest note: keep it) Tj
+1 0 0 1 58.0 422.0 Tm (to practice experience - do not imply a sales job you have not held.) Tj
+/F2 13.5 Tf
+0.541 0.384 0.000 rg
+1 0 0 1 58.0 397.0 Tm (Safe-practice note) Tj
+/F1 10.5 Tf
+0.157 0.208 0.282 rg
+1 0 0 1 58.0 379.0 Tm (Prepare honest answers, not a script that inflates your experience. If you have) Tj
+1 0 0 1 58.0 365.0 Tm (practised rather than worked in a sales role, say so plainly - genuine preparation is a) Tj
+1 0 0 1 58.0 351.0 Tm (strength. The AI Coach can flag anything that sounds overstated.) Tj
+/F1 8.5 Tf
+0.482 0.518 0.580 rg
+1 0 0 1 58.0 323.0 Tm (Last reviewed: 2026-07-28 | AmplifyHub Practical Resource Library) Tj
+ET
+BT
+/F1 8 Tf
+0.450 0.490 0.560 rg
+1 0 0 1 58 25 Tm (AmplifyHub Professional Edition) Tj
+1 0 0 1 512.0 25 Tm (Page 2 of 2) Tj
+ET
+0.7 w
+0.8 G 58 715.0 m 554.0 715.0 l S
+0.8 G 58 676.0 m 554.0 676.0 l S
+0.8 G 58 637.0 m 554.0 637.0 l S
+0.8 G 58 598.0 m 554.0 598.0 l S
+
+endstream
+endobj
+8 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 7 0 R >>
 endobj
 xref
-0 7
+0 9
 0000000000 65535 f 
 0000000015 00000 n 
 0000000064 00000 n 
-0000000121 00000 n 
-0000000218 00000 n 
-0000000320 00000 n 
-0000003158 00000 n 
+0000000127 00000 n 
+0000000224 00000 n 
+0000000326 00000 n 
+0000004922 00000 n 
+0000005058 00000 n 
+0000008297 00000 n 
 trailer
-<< /Size 7 /Root 1 0 R >>
+<< /Size 9 /Root 1 0 R >>
 startxref
-3294
+8433
 %%EOF

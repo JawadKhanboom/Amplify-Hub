@@ -4,7 +4,7 @@
 << /Type /Catalog /Pages 2 0 R >>
 endobj
 2 0 obj
-<< /Type /Pages /Kids [6 0 R] /Count 1 >>
+<< /Type /Pages /Kids [6 0 R 8 0 R] /Count 2 >>
 endobj
 3 0 obj
 << /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>
@@ -13,96 +13,231 @@ endobj
 << /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>
 endobj
 5 0 obj
-<< /Length 3110 >>
+<< /Length 3674 >>
 stream
+0.090 0.125 0.200 rg 0 750 612 42 re f
+0.957 0.784 0.290 rg 0 747 612 3 re f
+0.850 0.870 0.910 RG 0.5 w 58 42 m 554.0 42 l S
 BT
-/F2 19 Tf
-1 0 0 1 56.0 786.0 Tm (Rejection Log) Tj
-/F1 9.5 Tf
-1 0 0 1 56.0 762.0 Tm (Worksheet - Skill: mindset - Difficulty: beginner - Est. 8 min) Tj
+/F2 9 Tf
+0.957 0.784 0.290 rg
+1 0 0 1 58 765 Tm (AMPLIFYHUB  |  PRACTICAL RESOURCE LIBRARY) Tj
+ET
+BT
+/F2 22 Tf
+0.090 0.125 0.200 rg
+1 0 0 1 58.0 724.0 Tm (Rejection Log) Tj
+/F2 8.8 Tf
+0.420 0.447 0.502 rg
+1 0 0 1 58.0 697.0 Tm (WORKSHEET | SKILL: MINDSET | DIFFICULTY: BEGINNER | EST. 8 MIN) Tj
+/F2 9.2 Tf
+0.086 0.396 0.204 rg
+1 0 0 1 58.0 683.0 Tm (Reviewed professional resource - AmplifyHub Practical Resource Library) Tj
+/F2 13.5 Tf
+0.541 0.384 0.000 rg
+1 0 0 1 58.0 657.0 Tm (Overview) Tj
+/F1 10.5 Tf
+0.157 0.208 0.282 rg
+1 0 0 1 58.0 639.0 Tm (A simple log that turns rejections into data: what happened, what you said, how they) Tj
+1 0 0 1 58.0 625.0 Tm (responded, and one neutral lesson - so a hard call becomes something you can learn from.) Tj
+/F2 13.5 Tf
+0.541 0.384 0.000 rg
+1 0 0 1 58.0 600.0 Tm (Learning objectives) Tj
+/F1 10.5 Tf
+0.157 0.208 0.282 rg
+1 0 0 1 68.0 582.0 Tm (- Record rejections without self-criticism) Tj
+1 0 0 1 68.0 568.0 Tm (- Separate what happened from what it means) Tj
+1 0 0 1 68.0 554.0 Tm (- Extract one neutral lesson per entry) Tj
+1 0 0 1 68.0 540.0 Tm (- Spot patterns across a week) Tj
+/F2 13.5 Tf
+0.541 0.384 0.000 rg
+1 0 0 1 58.0 519.0 Tm (How to use it) Tj
+/F1 10.5 Tf
+0.157 0.208 0.282 rg
+1 0 0 1 58.0 501.0 Tm (After a rejection, jot a short, factual entry. Keep the lesson neutral and) Tj
+1 0 0 1 58.0 487.0 Tm (behaviour-focused \("my opener was vague"\) rather than personal \("I am bad at this"\).) Tj
+1 0 0 1 58.0 473.0 Tm (Review the log weekly to spot patterns.) Tj
+/F2 13.5 Tf
+0.541 0.384 0.000 rg
+1 0 0 1 58.0 448.0 Tm (Log) Tj
 /F2 9.5 Tf
-1 0 0 1 56.0 748.0 Tm (Draft resource pending human editorial review - not yet professionally verified.) Tj
-/F1 10.5 Tf
-1 0 0 1 56.0 730.0 Tm (A simple log that turns rejections into data: what happened, what you said, how they) Tj
-1 0 0 1 56.0 716.0 Tm (responded, and one neutral lesson - so a hard call becomes something you can learn from.) Tj
-/F2 13 Tf
-1 0 0 1 56.0 692.0 Tm (Learning objectives) Tj
-/F1 10.5 Tf
-1 0 0 1 66.0 675.0 Tm (- Record rejections without self-criticism) Tj
-1 0 0 1 66.0 661.0 Tm (- Separate what happened from what it means) Tj
-1 0 0 1 66.0 647.0 Tm (- Extract one neutral lesson per entry) Tj
-1 0 0 1 66.0 633.0 Tm (- Spot patterns across a week) Tj
-/F2 13 Tf
-1 0 0 1 56.0 613.0 Tm (How to use it) Tj
-/F1 10.5 Tf
-1 0 0 1 56.0 596.0 Tm (After a rejection, jot a short, factual entry. Keep the lesson neutral and) Tj
-1 0 0 1 56.0 582.0 Tm (behaviour-focused \("my opener was vague"\) rather than personal \("I am bad at this"\).) Tj
-1 0 0 1 56.0 568.0 Tm (Review the log weekly to spot patterns.) Tj
-/F2 13 Tf
-1 0 0 1 56.0 544.0 Tm (Log) Tj
-/F2 9.5 Tf
-1 0 0 1 56.0 527.0 Tm (Date) Tj
-1 0 0 1 136.5 527.0 Tm (What happened) Tj
-1 0 0 1 217.0 527.0 Tm (What I said) Tj
-1 0 0 1 297.5 527.0 Tm (Their response) Tj
-1 0 0 1 378.0 527.0 Tm (Neutral lesson) Tj
-1 0 0 1 458.5 527.0 Tm (Next test) Tj
+0.420 0.310 0.000 rg
+1 0 0 1 58.0 430.0 Tm (Date) Tj
+1 0 0 1 140.7 430.0 Tm (What happened) Tj
+1 0 0 1 223.3 430.0 Tm (What I said) Tj
+1 0 0 1 306.0 430.0 Tm (Their response) Tj
+1 0 0 1 388.7 430.0 Tm (Neutral lesson) Tj
+1 0 0 1 471.3 430.0 Tm (Next test) Tj
 /F1 9.5 Tf
-1 0 0 1 56.0 512.0 Tm (2026-07-19) Tj
-1 0 0 1 136.5 512.0 Tm (Hung up after) Tj
-1 0 0 1 217.0 512.0 Tm (Long intro, no) Tj
-1 0 0 1 297.5 512.0 Tm (Not interested) Tj
-1 0 0 1 378.0 512.0 Tm (Opener was too) Tj
-1 0 0 1 458.5 512.0 Tm (Cut to one) Tj
-1 0 0 1 136.5 500.0 Tm (opener) Tj
-1 0 0 1 217.0 500.0 Tm (question) Tj
-1 0 0 1 378.0 500.0 Tm (long) Tj
-1 0 0 1 458.5 500.0 Tm (reason +) Tj
-1 0 0 1 458.5 488.0 Tm (question) Tj
-/F2 13 Tf
-1 0 0 1 56.0 261.0 Tm (Worked example \(reframe\)) Tj
+0.157 0.208 0.282 rg
+1 0 0 1 58.0 415.0 Tm (2026-07-19) Tj
+1 0 0 1 140.7 415.0 Tm (Hung up after) Tj
+1 0 0 1 223.3 415.0 Tm (Long intro, no) Tj
+1 0 0 1 306.0 415.0 Tm (Not interested) Tj
+1 0 0 1 388.7 415.0 Tm (Opener was too) Tj
+1 0 0 1 471.3 415.0 Tm (Cut to one) Tj
+1 0 0 1 140.7 403.0 Tm (opener) Tj
+1 0 0 1 223.3 403.0 Tm (question) Tj
+1 0 0 1 388.7 403.0 Tm (long) Tj
+1 0 0 1 471.3 403.0 Tm (reason +) Tj
+1 0 0 1 471.3 391.0 Tm (question) Tj
+/F2 13.5 Tf
+0.541 0.384 0.000 rg
+1 0 0 1 58.0 163.0 Tm (Professional standard) Tj
 /F1 10.5 Tf
-1 0 0 1 56.0 244.0 Tm (Instead of "I am terrible at cold calls," write: "My opener ran 40 seconds before I) Tj
-1 0 0 1 56.0 230.0 Tm (asked anything. Next test: reason plus question in under 15 seconds." Same call, but now) Tj
-1 0 0 1 56.0 216.0 Tm (it points to a specific, fixable behaviour.) Tj
-/F2 13 Tf
-1 0 0 1 56.0 192.0 Tm (Safe-practice note) Tj
+0.157 0.208 0.282 rg
+1 0 0 1 58.0 145.0 Tm (Professional resilience treats rejection as information about fit, timing, message, or) Tj
+1 0 0 1 58.0 131.0 Tm (context - not as a verdict on personal worth. Reflection should be specific, private,) Tj
+1 0 0 1 58.0 117.0 Tm (and directed toward a controllable next action.) Tj
+/F2 13.5 Tf
+0.541 0.384 0.000 rg
+1 0 0 1 58.0 92.0 Tm (Professional workflow) Tj
 /F1 10.5 Tf
-1 0 0 1 56.0 175.0 Tm (Record only your own actions and general outcomes - no prospect names, numbers, or) Tj
-1 0 0 1 56.0 161.0 Tm (private details. This log is a learning tool, not a place to store personal data or to) Tj
-1 0 0 1 56.0 147.0 Tm (punish yourself.) Tj
-/F1 8.5 Tf
-1 0 0 1 56.0 119.0 Tm (Last reviewed: 2026-07-19 - AmplifyHub Practical Resource Library) Tj
+0.157 0.208 0.282 rg
+1 0 0 1 68.0 74.0 Tm (1. Complete one real practice example before adding multiple rows. This reveals) Tj
+1 0 0 1 68.0 60.0 Tm (unclear fields and prevents the worksheet from becoming busywork.) Tj
+ET
+BT
+/F1 8 Tf
+0.450 0.490 0.560 rg
+1 0 0 1 58 25 Tm (AmplifyHub Professional Edition) Tj
+1 0 0 1 512.0 25 Tm (Page 1 of 2) Tj
 ET
 0.7 w
-0.45 G 56 518.0 m 539.0 518.0 l S
-0.8 G 56 479.0 m 539.0 479.0 l S
-0.8 G 56 457.0 m 539.0 457.0 l S
-0.8 G 56 435.0 m 539.0 435.0 l S
-0.8 G 56 413.0 m 539.0 413.0 l S
-0.8 G 56 391.0 m 539.0 391.0 l S
-0.8 G 56 369.0 m 539.0 369.0 l S
-0.8 G 56 347.0 m 539.0 347.0 l S
-0.8 G 56 325.0 m 539.0 325.0 l S
-0.8 G 56 303.0 m 539.0 303.0 l S
-0.8 G 56 281.0 m 539.0 281.0 l S
+0.45 G 58 421.0 m 554.0 421.0 l S
+0.8 G 58 382.0 m 554.0 382.0 l S
+0.8 G 58 360.0 m 554.0 360.0 l S
+0.8 G 58 338.0 m 554.0 338.0 l S
+0.8 G 58 316.0 m 554.0 316.0 l S
+0.8 G 58 294.0 m 554.0 294.0 l S
+0.8 G 58 272.0 m 554.0 272.0 l S
+0.8 G 58 250.0 m 554.0 250.0 l S
+0.8 G 58 228.0 m 554.0 228.0 l S
+0.8 G 58 206.0 m 554.0 206.0 l S
+0.8 G 58 184.0 m 554.0 184.0 l S
 
 endstream
 endobj
 6 0 obj
-<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 5 0 R >>
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 5 0 R >>
+endobj
+7 0 obj
+<< /Length 4306 >>
+stream
+0.090 0.125 0.200 rg 0 750 612 42 re f
+0.957 0.784 0.290 rg 0 747 612 3 re f
+0.850 0.870 0.910 RG 0.5 w 58 42 m 554.0 42 l S
+BT
+/F2 9 Tf
+0.957 0.784 0.290 rg
+1 0 0 1 58 765 Tm (AMPLIFYHUB  |  PRACTICAL RESOURCE LIBRARY) Tj
+ET
+BT
+/F1 10.5 Tf
+0.157 0.208 0.282 rg
+1 0 0 1 68.0 724.0 Tm (2. Use observable facts and your own behaviour rather than assumptions about a) Tj
+1 0 0 1 68.0 710.0 Tm (prospect, interviewer, or colleague. Leave a field blank when you do not know.) Tj
+1 0 0 1 68.0 696.0 Tm (3. Write short, decision-ready notes: what happened, what it means, and the next) Tj
+1 0 0 1 68.0 682.0 Tm (action. Avoid long diary entries that are difficult to review.) Tj
+1 0 0 1 68.0 668.0 Tm (4. Review the completed sheet on a fixed cadence and choose one improvement) Tj
+1 0 0 1 68.0 654.0 Tm (priority. Do not change several behaviours at once.) Tj
+1 0 0 1 68.0 640.0 Tm (5. Store only business-appropriate information and remove personal identifiers that) Tj
+1 0 0 1 68.0 626.0 Tm (are not required for learning or planning.) Tj
+/F2 13.5 Tf
+0.541 0.384 0.000 rg
+1 0 0 1 58.0 605.0 Tm (Quality-control review) Tj
+/F2 9.5 Tf
+0.420 0.310 0.000 rg
+1 0 0 1 58.0 587.0 Tm (Review point) Tj
+1 0 0 1 223.3 587.0 Tm (Professional standard) Tj
+1 0 0 1 388.7 587.0 Tm (Warning sign) Tj
+/F1 9.5 Tf
+0.157 0.208 0.282 rg
+1 0 0 1 58.0 572.0 Tm (Accuracy) Tj
+1 0 0 1 223.3 572.0 Tm (The log separates what) Tj
+1 0 0 1 388.7 572.0 Tm (A single rejection becomes a) Tj
+1 0 0 1 223.3 560.0 Tm (happened from the story you) Tj
+1 0 0 1 388.7 560.0 Tm (broad claim about ability.) Tj
+1 0 0 1 223.3 548.0 Tm (told yourself.) Tj
+1 0 0 1 58.0 533.0 Tm (Privacy) Tj
+1 0 0 1 223.3 533.0 Tm (Only general outcomes and your) Tj
+1 0 0 1 388.7 533.0 Tm (Names, numbers, or unnecessary) Tj
+1 0 0 1 223.3 521.0 Tm (own actions are recorded.) Tj
+1 0 0 1 388.7 521.0 Tm (personal details are stored.) Tj
+1 0 0 1 58.0 506.0 Tm (Reflection) Tj
+1 0 0 1 223.3 506.0 Tm (One lesson is connected to) Tj
+1 0 0 1 388.7 506.0 Tm (The review becomes) Tj
+1 0 0 1 223.3 494.0 Tm (observable evidence.) Tj
+1 0 0 1 388.7 494.0 Tm (self-criticism without a) Tj
+1 0 0 1 388.7 482.0 Tm (testable insight.) Tj
+1 0 0 1 58.0 467.0 Tm (Recovery) Tj
+1 0 0 1 223.3 467.0 Tm (A small next action is) Tj
+1 0 0 1 388.7 467.0 Tm (The plan demands an) Tj
+1 0 0 1 223.3 455.0 Tm (selected before returning to) Tj
+1 0 0 1 388.7 455.0 Tm (unrealistic emotional reset or) Tj
+1 0 0 1 223.3 443.0 Tm (work.) Tj
+1 0 0 1 388.7 443.0 Tm (more volume.) Tj
+/F2 13.5 Tf
+0.541 0.384 0.000 rg
+1 0 0 1 58.0 413.0 Tm (Evidence and improvement signals) Tj
+/F1 10.5 Tf
+0.157 0.208 0.282 rg
+1 0 0 1 68.0 395.0 Tm (- Review patterns across several attempts rather than reacting to one outcome.) Tj
+1 0 0 1 68.0 381.0 Tm (- Track recovery habits and process consistency alongside results.) Tj
+1 0 0 1 68.0 367.0 Tm (- Notice whether the same message issue appears across different accounts.) Tj
+1 0 0 1 68.0 353.0 Tm (- Escalate persistent distress to a trusted person; a worksheet is not a substitute) Tj
+1 0 0 1 68.0 339.0 Tm (for professional support.) Tj
+/F2 13.5 Tf
+0.541 0.384 0.000 rg
+1 0 0 1 58.0 318.0 Tm (Worked example \(reframe\)) Tj
+/F1 10.5 Tf
+0.157 0.208 0.282 rg
+1 0 0 1 58.0 300.0 Tm (Instead of "I am terrible at cold calls," write: "My opener ran 40 seconds before I) Tj
+1 0 0 1 58.0 286.0 Tm (asked anything. Next test: reason plus question in under 15 seconds." Same call, but now) Tj
+1 0 0 1 58.0 272.0 Tm (it points to a specific, fixable behaviour.) Tj
+/F2 13.5 Tf
+0.541 0.384 0.000 rg
+1 0 0 1 58.0 247.0 Tm (Safe-practice note) Tj
+/F1 10.5 Tf
+0.157 0.208 0.282 rg
+1 0 0 1 58.0 229.0 Tm (Record only your own actions and general outcomes - no prospect names, numbers, or) Tj
+1 0 0 1 58.0 215.0 Tm (private details. This log is a learning tool, not a place to store personal data or to) Tj
+1 0 0 1 58.0 201.0 Tm (punish yourself.) Tj
+/F1 8.5 Tf
+0.482 0.518 0.580 rg
+1 0 0 1 58.0 173.0 Tm (Last reviewed: 2026-07-28 | AmplifyHub Practical Resource Library) Tj
+ET
+BT
+/F1 8 Tf
+0.450 0.490 0.560 rg
+1 0 0 1 58 25 Tm (AmplifyHub Professional Edition) Tj
+1 0 0 1 512.0 25 Tm (Page 2 of 2) Tj
+ET
+0.7 w
+0.45 G 58 578.0 m 554.0 578.0 l S
+0.8 G 58 539.0 m 554.0 539.0 l S
+0.8 G 58 512.0 m 554.0 512.0 l S
+0.8 G 58 473.0 m 554.0 473.0 l S
+0.8 G 58 434.0 m 554.0 434.0 l S
+
+endstream
+endobj
+8 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 7 0 R >>
 endobj
 xref
-0 7
+0 9
 0000000000 65535 f 
 0000000015 00000 n 
 0000000064 00000 n 
-0000000121 00000 n 
-0000000218 00000 n 
-0000000320 00000 n 
-0000003482 00000 n 
+0000000127 00000 n 
+0000000224 00000 n 
+0000000326 00000 n 
+0000004052 00000 n 
+0000004188 00000 n 
+0000008546 00000 n 
 trailer
-<< /Size 7 /Root 1 0 R >>
+<< /Size 9 /Root 1 0 R >>
 startxref
-3618
+8682
 %%EOF

@@ -4,7 +4,7 @@
 << /Type /Catalog /Pages 2 0 R >>
 endobj
 2 0 obj
-<< /Type /Pages /Kids [6 0 R] /Count 1 >>
+<< /Type /Pages /Kids [6 0 R 8 0 R] /Count 2 >>
 endobj
 3 0 obj
 << /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>
@@ -13,97 +13,232 @@ endobj
 << /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>
 endobj
 5 0 obj
-<< /Length 3096 >>
+<< /Length 3426 >>
 stream
+0.090 0.125 0.200 rg 0 750 612 42 re f
+0.957 0.784 0.290 rg 0 747 612 3 re f
+0.850 0.870 0.910 RG 0.5 w 58 42 m 554.0 42 l S
 BT
-/F2 19 Tf
-1 0 0 1 56.0 786.0 Tm (Prospect Qualification Sheet) Tj
-/F1 9.5 Tf
-1 0 0 1 56.0 762.0 Tm (Worksheet - Skill: prospecting - Difficulty: intermediate - Est. 12 min) Tj
+/F2 9 Tf
+0.957 0.784 0.290 rg
+1 0 0 1 58 765 Tm (AMPLIFYHUB  |  PRACTICAL RESOURCE LIBRARY) Tj
+ET
+BT
+/F2 22 Tf
+0.090 0.125 0.200 rg
+1 0 0 1 58.0 724.0 Tm (Prospect Qualification Sheet) Tj
+/F2 8.8 Tf
+0.420 0.447 0.502 rg
+1 0 0 1 58.0 697.0 Tm (WORKSHEET | SKILL: PROSPECTING | DIFFICULTY: INTERMEDIATE | EST. 12 MIN) Tj
+/F2 9.2 Tf
+0.086 0.396 0.204 rg
+1 0 0 1 58.0 683.0 Tm (Reviewed professional resource - AmplifyHub Practical Resource Library) Tj
+/F2 13.5 Tf
+0.541 0.384 0.000 rg
+1 0 0 1 58.0 657.0 Tm (Overview) Tj
+/F1 10.5 Tf
+0.157 0.208 0.282 rg
+1 0 0 1 58.0 639.0 Tm (A scoring sheet that applies the same five criteria to every prospect - fit, trigger,) Tj
+1 0 0 1 58.0 625.0 Tm (need, timing, and reachable role - so you spend your energy on the best opportunities.) Tj
+/F2 13.5 Tf
+0.541 0.384 0.000 rg
+1 0 0 1 58.0 600.0 Tm (Learning objectives) Tj
+/F1 10.5 Tf
+0.157 0.208 0.282 rg
+1 0 0 1 68.0 582.0 Tm (- Score prospects against consistent criteria) Tj
+1 0 0 1 68.0 568.0 Tm (- Compare opportunities fairly) Tj
+1 0 0 1 68.0 554.0 Tm (- Disqualify weak fits quickly and kindly) Tj
+1 0 0 1 68.0 540.0 Tm (- Explain why your top prospect is strongest) Tj
+/F2 13.5 Tf
+0.541 0.384 0.000 rg
+1 0 0 1 58.0 519.0 Tm (How to score) Tj
+/F1 10.5 Tf
+0.157 0.208 0.282 rg
+1 0 0 1 58.0 501.0 Tm (Rate each criterion 0-2 \(0 = no, 1 = maybe, 2 = clear yes\) using public information. Add) Tj
+1 0 0 1 58.0 487.0 Tm (the column for a simple total out of 10. Use the same rules for every prospect so the) Tj
+1 0 0 1 58.0 473.0 Tm (scores mean something.) Tj
+/F2 13.5 Tf
+0.541 0.384 0.000 rg
+1 0 0 1 58.0 448.0 Tm (Scoring grid) Tj
 /F2 9.5 Tf
-1 0 0 1 56.0 748.0 Tm (Draft resource pending human editorial review - not yet professionally verified.) Tj
-/F1 10.5 Tf
-1 0 0 1 56.0 730.0 Tm (A scoring sheet that applies the same five criteria to every prospect - fit, trigger,) Tj
-1 0 0 1 56.0 716.0 Tm (need, timing, and reachable role - so you spend your energy on the best opportunities.) Tj
-/F2 13 Tf
-1 0 0 1 56.0 692.0 Tm (Learning objectives) Tj
-/F1 10.5 Tf
-1 0 0 1 66.0 675.0 Tm (- Score prospects against consistent criteria) Tj
-1 0 0 1 66.0 661.0 Tm (- Compare opportunities fairly) Tj
-1 0 0 1 66.0 647.0 Tm (- Disqualify weak fits quickly and kindly) Tj
-1 0 0 1 66.0 633.0 Tm (- Explain why your top prospect is strongest) Tj
-/F2 13 Tf
-1 0 0 1 56.0 613.0 Tm (How to score) Tj
-/F1 10.5 Tf
-1 0 0 1 56.0 596.0 Tm (Rate each criterion 0-2 \(0 = no, 1 = maybe, 2 = clear yes\) using public information. Add) Tj
-1 0 0 1 56.0 582.0 Tm (the column for a simple total out of 10. Use the same rules for every prospect so the) Tj
-1 0 0 1 56.0 568.0 Tm (scores mean something.) Tj
-/F2 13 Tf
-1 0 0 1 56.0 544.0 Tm (Scoring grid) Tj
-/F2 9.5 Tf
-1 0 0 1 56.0 527.0 Tm (Prospect) Tj
-1 0 0 1 125.0 527.0 Tm (Fit) Tj
-1 0 0 1 194.0 527.0 Tm (Trigger) Tj
-1 0 0 1 263.0 527.0 Tm (Need) Tj
-1 0 0 1 332.0 527.0 Tm (Timing) Tj
-1 0 0 1 401.0 527.0 Tm (Role) Tj
-1 0 0 1 470.0 527.0 Tm (Total) Tj
-1 0 0 1 56.0 515.0 Tm (\(company /) Tj
-1 0 0 1 56.0 503.0 Tm (role\)) Tj
+0.420 0.310 0.000 rg
+1 0 0 1 58.0 430.0 Tm (Prospect) Tj
+1 0 0 1 128.9 430.0 Tm (Fit) Tj
+1 0 0 1 199.7 430.0 Tm (Trigger) Tj
+1 0 0 1 270.6 430.0 Tm (Need) Tj
+1 0 0 1 341.4 430.0 Tm (Timing) Tj
+1 0 0 1 412.3 430.0 Tm (Role) Tj
+1 0 0 1 483.1 430.0 Tm (Total) Tj
+1 0 0 1 58.0 418.0 Tm (\(company /) Tj
+1 0 0 1 58.0 406.0 Tm (role\)) Tj
 /F1 9.5 Tf
-1 0 0 1 56.0 488.0 Tm (Regional) Tj
-1 0 0 1 125.0 488.0 Tm (2) Tj
-1 0 0 1 194.0 488.0 Tm (2) Tj
-1 0 0 1 263.0 488.0 Tm (1) Tj
-1 0 0 1 332.0 488.0 Tm (1) Tj
-1 0 0 1 401.0 488.0 Tm (2) Tj
-1 0 0 1 470.0 488.0 Tm (8) Tj
-1 0 0 1 56.0 476.0 Tm (courier /) Tj
-1 0 0 1 56.0 464.0 Tm (ops lead) Tj
-/F2 13 Tf
-1 0 0 1 56.0 237.0 Tm (Worked example) Tj
+0.157 0.208 0.282 rg
+1 0 0 1 58.0 391.0 Tm (Regional) Tj
+1 0 0 1 128.9 391.0 Tm (2) Tj
+1 0 0 1 199.7 391.0 Tm (2) Tj
+1 0 0 1 270.6 391.0 Tm (1) Tj
+1 0 0 1 341.4 391.0 Tm (1) Tj
+1 0 0 1 412.3 391.0 Tm (2) Tj
+1 0 0 1 483.1 391.0 Tm (8) Tj
+1 0 0 1 58.0 379.0 Tm (courier /) Tj
+1 0 0 1 58.0 367.0 Tm (ops lead) Tj
+/F2 13.5 Tf
+0.541 0.384 0.000 rg
+1 0 0 1 58.0 139.0 Tm (Professional standard) Tj
 /F1 10.5 Tf
-1 0 0 1 56.0 220.0 Tm (Fit 2 \(matches ICP\), Trigger 2 \(public driver-hiring post\), Need 1 \(likely but) Tj
-1 0 0 1 56.0 206.0 Tm (unconfirmed\), Timing 1 \(unknown\), Role 2 \(ops lead is reachable\) = 8/10. A prospect) Tj
-1 0 0 1 56.0 192.0 Tm (scoring 3/10 goes to the bottom of the list, not the top.) Tj
-/F2 13 Tf
-1 0 0 1 56.0 168.0 Tm (Safe-practice note) Tj
-/F1 10.5 Tf
-1 0 0 1 56.0 151.0 Tm (Score on observable business criteria only - never on personal or protected) Tj
-1 0 0 1 56.0 137.0 Tm (characteristics. Qualification helps you focus and disqualify respectfully; it is not a) Tj
-1 0 0 1 56.0 123.0 Tm (reason to treat lower scores rudely.) Tj
-/F1 8.5 Tf
-1 0 0 1 56.0 95.0 Tm (Last reviewed: 2026-07-19 - AmplifyHub Practical Resource Library) Tj
+0.157 0.208 0.282 rg
+1 0 0 1 58.0 121.0 Tm (Professional prospecting converts public business evidence into a respectful hypothesis.) Tj
+1 0 0 1 58.0 107.0 Tm (It never treats a signal as proof of a problem, and it avoids personal or sensitive) Tj
+1 0 0 1 58.0 93.0 Tm (information that is irrelevant to the business conversation.) Tj
+/F2 13.5 Tf
+0.541 0.384 0.000 rg
+1 0 0 1 58.0 68.0 Tm (Professional workflow) Tj
+ET
+BT
+/F1 8 Tf
+0.450 0.490 0.560 rg
+1 0 0 1 58 25 Tm (AmplifyHub Professional Edition) Tj
+1 0 0 1 512.0 25 Tm (Page 1 of 2) Tj
 ET
 0.7 w
-0.45 G 56 494.0 m 539.0 494.0 l S
-0.8 G 56 455.0 m 539.0 455.0 l S
-0.8 G 56 433.0 m 539.0 433.0 l S
-0.8 G 56 411.0 m 539.0 411.0 l S
-0.8 G 56 389.0 m 539.0 389.0 l S
-0.8 G 56 367.0 m 539.0 367.0 l S
-0.8 G 56 345.0 m 539.0 345.0 l S
-0.8 G 56 323.0 m 539.0 323.0 l S
-0.8 G 56 301.0 m 539.0 301.0 l S
-0.8 G 56 279.0 m 539.0 279.0 l S
-0.8 G 56 257.0 m 539.0 257.0 l S
+0.45 G 58 397.0 m 554.0 397.0 l S
+0.8 G 58 358.0 m 554.0 358.0 l S
+0.8 G 58 336.0 m 554.0 336.0 l S
+0.8 G 58 314.0 m 554.0 314.0 l S
+0.8 G 58 292.0 m 554.0 292.0 l S
+0.8 G 58 270.0 m 554.0 270.0 l S
+0.8 G 58 248.0 m 554.0 248.0 l S
+0.8 G 58 226.0 m 554.0 226.0 l S
+0.8 G 58 204.0 m 554.0 204.0 l S
+0.8 G 58 182.0 m 554.0 182.0 l S
+0.8 G 58 160.0 m 554.0 160.0 l S
 
 endstream
 endobj
 6 0 obj
-<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 5 0 R >>
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 5 0 R >>
+endobj
+7 0 obj
+<< /Length 4592 >>
+stream
+0.090 0.125 0.200 rg 0 750 612 42 re f
+0.957 0.784 0.290 rg 0 747 612 3 re f
+0.850 0.870 0.910 RG 0.5 w 58 42 m 554.0 42 l S
+BT
+/F2 9 Tf
+0.957 0.784 0.290 rg
+1 0 0 1 58 765 Tm (AMPLIFYHUB  |  PRACTICAL RESOURCE LIBRARY) Tj
+ET
+BT
+/F1 10.5 Tf
+0.157 0.208 0.282 rg
+1 0 0 1 68.0 724.0 Tm (1. Complete one real practice example before adding multiple rows. This reveals) Tj
+1 0 0 1 68.0 710.0 Tm (unclear fields and prevents the worksheet from becoming busywork.) Tj
+1 0 0 1 68.0 696.0 Tm (2. Use observable facts and your own behaviour rather than assumptions about a) Tj
+1 0 0 1 68.0 682.0 Tm (prospect, interviewer, or colleague. Leave a field blank when you do not know.) Tj
+1 0 0 1 68.0 668.0 Tm (3. Write short, decision-ready notes: what happened, what it means, and the next) Tj
+1 0 0 1 68.0 654.0 Tm (action. Avoid long diary entries that are difficult to review.) Tj
+1 0 0 1 68.0 640.0 Tm (4. Review the completed sheet on a fixed cadence and choose one improvement) Tj
+1 0 0 1 68.0 626.0 Tm (priority. Do not change several behaviours at once.) Tj
+1 0 0 1 68.0 612.0 Tm (5. Store only business-appropriate information and remove personal identifiers that) Tj
+1 0 0 1 68.0 598.0 Tm (are not required for learning or planning.) Tj
+/F2 13.5 Tf
+0.541 0.384 0.000 rg
+1 0 0 1 58.0 577.0 Tm (Quality-control review) Tj
+/F2 9.5 Tf
+0.420 0.310 0.000 rg
+1 0 0 1 58.0 559.0 Tm (Review point) Tj
+1 0 0 1 223.3 559.0 Tm (Professional standard) Tj
+1 0 0 1 388.7 559.0 Tm (Warning sign) Tj
+/F1 9.5 Tf
+0.157 0.208 0.282 rg
+1 0 0 1 58.0 544.0 Tm (Evidence) Tj
+1 0 0 1 223.3 544.0 Tm (The trigger or fit signal has) Tj
+1 0 0 1 388.7 544.0 Tm (A vague assumption is) Tj
+1 0 0 1 223.3 532.0 Tm (a named public business) Tj
+1 0 0 1 388.7 532.0 Tm (presented as researched fact.) Tj
+1 0 0 1 223.3 520.0 Tm (source.) Tj
+1 0 0 1 58.0 505.0 Tm (Hypothesis) Tj
+1 0 0 1 223.3 505.0 Tm (The possible problem is framed) Tj
+1 0 0 1 388.7 505.0 Tm (The message claims to know) Tj
+1 0 0 1 223.3 493.0 Tm (as a question the prospect can) Tj
+1 0 0 1 388.7 493.0 Tm (internal conditions without) Tj
+1 0 0 1 223.3 481.0 Tm (correct.) Tj
+1 0 0 1 388.7 481.0 Tm (evidence.) Tj
+1 0 0 1 58.0 466.0 Tm (Fit) Tj
+1 0 0 1 223.3 466.0 Tm (The account and role plausibly) Tj
+1 0 0 1 388.7 466.0 Tm (Targeting is based only on job) Tj
+1 0 0 1 223.3 454.0 Tm (connect to the problem you) Tj
+1 0 0 1 388.7 454.0 Tm (title or company size.) Tj
+1 0 0 1 223.3 442.0 Tm (solve.) Tj
+1 0 0 1 58.0 427.0 Tm (Privacy) Tj
+1 0 0 1 223.3 427.0 Tm (Notes contain only necessary) Tj
+1 0 0 1 388.7 427.0 Tm (Personal, sensitive, or) Tj
+1 0 0 1 223.3 415.0 Tm (business-level information.) Tj
+1 0 0 1 388.7 415.0 Tm (unrelated details are) Tj
+1 0 0 1 388.7 403.0 Tm (collected.) Tj
+/F2 13.5 Tf
+0.541 0.384 0.000 rg
+1 0 0 1 58.0 373.0 Tm (Evidence and improvement signals) Tj
+/F1 10.5 Tf
+0.157 0.208 0.282 rg
+1 0 0 1 68.0 355.0 Tm (- Track the percentage of researched hypotheses the prospect confirms, corrects, or) Tj
+1 0 0 1 68.0 341.0 Tm (rejects.) Tj
+1 0 0 1 68.0 327.0 Tm (- Review sources for recency and distinguish company facts from your interpretation.) Tj
+1 0 0 1 68.0 313.0 Tm (- Measure conversation quality by relevance, not by the amount of information) Tj
+1 0 0 1 68.0 299.0 Tm (collected.) Tj
+1 0 0 1 68.0 285.0 Tm (- Update your ICP when repeated evidence shows a segment is a poor fit.) Tj
+/F2 13.5 Tf
+0.541 0.384 0.000 rg
+1 0 0 1 58.0 264.0 Tm (Worked example) Tj
+/F1 10.5 Tf
+0.157 0.208 0.282 rg
+1 0 0 1 58.0 246.0 Tm (Fit 2 \(matches ICP\), Trigger 2 \(public driver-hiring post\), Need 1 \(likely but) Tj
+1 0 0 1 58.0 232.0 Tm (unconfirmed\), Timing 1 \(unknown\), Role 2 \(ops lead is reachable\) = 8/10. A prospect) Tj
+1 0 0 1 58.0 218.0 Tm (scoring 3/10 goes to the bottom of the list, not the top.) Tj
+/F2 13.5 Tf
+0.541 0.384 0.000 rg
+1 0 0 1 58.0 193.0 Tm (Safe-practice note) Tj
+/F1 10.5 Tf
+0.157 0.208 0.282 rg
+1 0 0 1 58.0 175.0 Tm (Score on observable business criteria only - never on personal or protected) Tj
+1 0 0 1 58.0 161.0 Tm (characteristics. Qualification helps you focus and disqualify respectfully; it is not a) Tj
+1 0 0 1 58.0 147.0 Tm (reason to treat lower scores rudely.) Tj
+/F1 8.5 Tf
+0.482 0.518 0.580 rg
+1 0 0 1 58.0 119.0 Tm (Last reviewed: 2026-07-28 | AmplifyHub Practical Resource Library) Tj
+ET
+BT
+/F1 8 Tf
+0.450 0.490 0.560 rg
+1 0 0 1 58 25 Tm (AmplifyHub Professional Edition) Tj
+1 0 0 1 512.0 25 Tm (Page 2 of 2) Tj
+ET
+0.7 w
+0.45 G 58 550.0 m 554.0 550.0 l S
+0.8 G 58 511.0 m 554.0 511.0 l S
+0.8 G 58 472.0 m 554.0 472.0 l S
+0.8 G 58 433.0 m 554.0 433.0 l S
+0.8 G 58 394.0 m 554.0 394.0 l S
+
+endstream
+endobj
+8 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 7 0 R >>
 endobj
 xref
-0 7
+0 9
 0000000000 65535 f 
 0000000015 00000 n 
 0000000064 00000 n 
-0000000121 00000 n 
-0000000218 00000 n 
-0000000320 00000 n 
-0000003468 00000 n 
+0000000127 00000 n 
+0000000224 00000 n 
+0000000326 00000 n 
+0000003804 00000 n 
+0000003940 00000 n 
+0000008584 00000 n 
 trailer
-<< /Size 7 /Root 1 0 R >>
+<< /Size 9 /Root 1 0 R >>
 startxref
-3604
+8720
 %%EOF

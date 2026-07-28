@@ -19,7 +19,7 @@
 (function (root) {
   'use strict';
 
-  var REVIEW_DATE = '2026-07-19';
+  var REVIEW_DATE = '2026-07-28';
 
   var CATEGORY_META = {
     script: { label: 'Script', plural: 'Scripts', icon: '📝' },
@@ -1509,6 +1509,257 @@
       downloads: [{ format: 'pdf' }, { format: 'docx' }]
     }
   ];
+
+  /*
+   * Professional-edition enrichment
+   *
+   * Every reviewed resource keeps its focused, resource-specific core content
+   * above, then receives a practical operating layer based on its format and
+   * skill. This makes each download useful beyond a single example: members
+   * get preparation steps, a quality-control standard, and an improvement loop.
+   * The same enriched sections are used by the web reader, PDF, DOCX/XLSX
+   * generators, and the forward-only Supabase content migration.
+   */
+  var CATEGORY_WORKFLOWS = {
+    script: [
+      'Research the account and role before editing the script. Record one observable business signal, one plausible problem to test, and the source that supports the signal.',
+      'Replace every bracketed placeholder with plain language you would genuinely use. Remove claims, customer names, statistics, and urgency that you cannot verify.',
+      'Read the script aloud at normal speed. Shorten any sentence that forces you to rush, breathe in the middle, or sound as if you are reading.',
+      'Practise three variations: the intended flow, an early interruption, and a clear no. The goal is calm adaptation, not perfect memorisation.',
+      'After use, record only the outcome category and one learning point. Adjust one line at a time so you know which change improved clarity or relevance.'
+    ],
+    template: [
+      'Define the recipient, business context, and single desired next step before completing the template. A template without a clear decision is only extra text.',
+      'Use specific evidence from public, business-level sources. Separate confirmed facts from hypotheses so you never present an assumption as something you know.',
+      'Draft quickly, then edit for relevance, brevity, and natural language. Remove any field that does not help the recipient understand or decide.',
+      'Run a final quality check for correct names, dates, links, time zones, and promised attachments before sending or using the finished version.',
+      'Keep one clean master copy and duplicate it for each use. Review response quality monthly and improve the underlying template rather than adding more volume.'
+    ],
+    cheatsheet: [
+      'Read the full guide once, then highlight only the two or three prompts that match the situation you are practising today.',
+      'Keep the cheat sheet visible as a reminder, not as a script. Look away from it while speaking so your attention stays on the conversation.',
+      'Rehearse the decision points, especially where the other person can redirect, disagree, or end the interaction.',
+      'Mark the guidance you actually used and write one short note about what happened. Real observations are more useful than trying to memorise every line.',
+      'Retire prompts that feel unnatural or do not fit your market. A smaller personalised reference is more professional than a crowded universal one.'
+    ],
+    worksheet: [
+      'Complete one real practice example before adding multiple rows. This reveals unclear fields and prevents the worksheet from becoming busywork.',
+      'Use observable facts and your own behaviour rather than assumptions about a prospect, interviewer, or colleague. Leave a field blank when you do not know.',
+      'Write short, decision-ready notes: what happened, what it means, and the next action. Avoid long diary entries that are difficult to review.',
+      'Review the completed sheet on a fixed cadence and choose one improvement priority. Do not change several behaviours at once.',
+      'Store only business-appropriate information and remove personal identifiers that are not required for learning or planning.'
+    ],
+    interview: [
+      'Study the job description and company before completing the resource. Match your preparation to the actual role rather than a generic sales interview.',
+      'Build answers from real evidence: work, study, volunteering, projects, or deliberate practice. Label estimates honestly and never invent experience.',
+      'Practise aloud with a timer, then repeat with a follow-up question or interruption. Strong answers stay clear when the conversation changes.',
+      'Ask a reviewer or the AI Coach to score clarity, evidence, relevance, and concision. Convert broad feedback into one specific revision.',
+      'Prepare a concise version and a fuller version of each answer. Use the concise version first and add detail only when the interviewer asks.'
+    ]
+  };
+
+  var SKILL_GUIDANCE = {
+    opening: {
+      standard: 'A professional opening removes uncertainty quickly: the listener knows who is calling, why the call may be relevant, and that they can decline. The purpose is not to force attention; it is to earn enough trust for one useful question.',
+      checks: [
+        ['Clarity', 'Identity and purpose are understandable on the first listen.', 'The listener must ask who you are or why you called.'],
+        ['Relevance', 'The reason is tied to a verified business signal or role-level problem.', 'The opener relies on a generic claim that could apply to anyone.'],
+        ['Brevity', 'The opening reaches a genuine question in roughly 20-35 seconds.', 'A product explanation begins before the listener has responded.'],
+        ['Control', 'The listener has an honest, easy way to continue or end the call.', 'Permission language is used but a no is ignored.']
+      ],
+      measures: [
+        'Track how often the listener understands the reason for the call without asking for clarification.',
+        'Review whether the first response is a real answer, a request for context, a timing objection, or a firm no.',
+        'Listen for rushed delivery, filler words, and sentences that are too long to say naturally.',
+        'Improve the relevance line before changing tone or adding more words.'
+      ]
+    },
+    objections: {
+      standard: 'Professional objection handling is diagnosis, not debate. Acknowledge the concern, clarify it once, and respond only when there is useful information to add. Repeated or firm rejection ends the conversation.',
+      checks: [
+        ['Acknowledgement', 'The response recognises the concern before asking another question.', 'The answer begins with a rebuttal or correction.'],
+        ['Diagnosis', 'One neutral question identifies timing, fit, value, authority, or information needs.', 'Several questions are stacked to wear down resistance.'],
+        ['Response', 'The reply addresses the stated concern with verifiable information.', 'The reply changes the subject or uses an unsupported claim.'],
+        ['Exit discipline', 'A clear no is thanked and respected immediately.', 'The same objection is challenged more than once.']
+      ],
+      measures: [
+        'Classify objections by underlying reason instead of memorising a separate comeback for every phrase.',
+        'Review whether your clarifying question produced new information or simply prolonged the call.',
+        'Track calmness and listening quality, not only meetings booked after an objection.',
+        'Add a response to your playbook only after you can support it with accurate product or process information.'
+      ]
+    },
+    booking: {
+      standard: 'A high-quality meeting is a mutually understood next step with a clear purpose, the right people, and realistic timing. Booking volume is not useful when the attendee does not understand why the meeting exists.',
+      checks: [
+        ['Interest', 'The prospect has confirmed a relevant reason to continue.', 'Calendar options are offered before interest is established.'],
+        ['Purpose', 'The invite states the decision, problem, or question the meeting will cover.', 'The invite uses vague language such as quick chat or touch base.'],
+        ['Logistics', 'Date, time zone, duration, attendees, and joining details are correct.', 'Important details are missing or left to assumption.'],
+        ['Commitment', 'Rescheduling and declining are easy and pressure-free.', 'Confirmation language implies the attendee owes you the meeting.']
+      ],
+      measures: [
+        'Compare meetings booked with meetings attended and meetings that reached the stated purpose.',
+        'Record the most common reason for rescheduling or no-show without blaming the prospect.',
+        'Review whether the calendar description matches what was promised in the conversation.',
+        'Improve qualification and meeting purpose before increasing reminder frequency.'
+      ]
+    },
+    'follow-up': {
+      standard: 'Professional follow-up adds context or value each time and makes the next decision easy. It is a planned sequence with sensible spacing, not repeated reminders that create pressure.',
+      checks: [
+        ['Continuity', 'The message accurately references the previous interaction or public event.', 'It implies a conversation, promise, or relationship that did not occur.'],
+        ['New value', 'Each touch adds a useful detail, answer, or relevant resource.', 'Every message repeats the same request with different wording.'],
+        ['Timing', 'Spacing reflects the buying context and urgency is genuine.', 'Daily or rapid contact is used to force a response.'],
+        ['Closure', 'The sequence has a clear, respectful stopping point.', 'Silence automatically triggers indefinite outreach.']
+      ],
+      measures: [
+        'Track positive replies, negative replies, no response, and timing deferrals separately.',
+        'Compare which touch earns a response and what new information it contained.',
+        'Review whether every promised email, resource, or callback was delivered accurately.',
+        'Optimise message usefulness and spacing before adding another step to the sequence.'
+      ]
+    },
+    prospecting: {
+      standard: 'Professional prospecting converts public business evidence into a respectful hypothesis. It never treats a signal as proof of a problem, and it avoids personal or sensitive information that is irrelevant to the business conversation.',
+      checks: [
+        ['Evidence', 'The trigger or fit signal has a named public business source.', 'A vague assumption is presented as researched fact.'],
+        ['Hypothesis', 'The possible problem is framed as a question the prospect can correct.', 'The message claims to know internal conditions without evidence.'],
+        ['Fit', 'The account and role plausibly connect to the problem you solve.', 'Targeting is based only on job title or company size.'],
+        ['Privacy', 'Notes contain only necessary business-level information.', 'Personal, sensitive, or unrelated details are collected.']
+      ],
+      measures: [
+        'Track the percentage of researched hypotheses the prospect confirms, corrects, or rejects.',
+        'Review sources for recency and distinguish company facts from your interpretation.',
+        'Measure conversation quality by relevance, not by the amount of information collected.',
+        'Update your ICP when repeated evidence shows a segment is a poor fit.'
+      ]
+    },
+    discovery: {
+      standard: 'Professional discovery helps both sides understand the current situation, impact, priorities, and decision process. Questions should follow what the person says rather than forcing a predetermined qualification path.',
+      checks: [
+        ['Agenda', 'Purpose, available time, and desired outcome are confirmed together.', 'The seller starts interrogating without setting context.'],
+        ['Question quality', 'Questions are open, neutral, and connected to the previous answer.', 'Questions are leading, stacked, or designed to trap agreement.'],
+        ['Depth', 'Specific examples and consequences are explored with permission.', 'The conversation stays abstract or rushes to a solution.'],
+        ['Recap', 'Facts, assumptions, priorities, and next steps are summarised accurately.', 'The seller paraphrases the answer into a stronger claim than was made.']
+      ],
+      measures: [
+        'Review talk balance alongside question quality; a lower talk ratio is not automatically better.',
+        'Count how many important facts were confirmed in the final recap rather than assumed.',
+        'Note unanswered questions and agree whether they matter before scheduling another step.',
+        'Evaluate whether the proposed next step follows logically from the stated priority.'
+      ]
+    },
+    planning: {
+      standard: 'Professional planning converts a time block into a small set of controllable actions, clear priorities, and a review point. The plan should support focused work without rewarding activity that has no learning value.',
+      checks: [
+        ['Objective', 'The block has one outcome and a realistic definition of done.', 'The goal is a vague instruction to make more calls.'],
+        ['Preparation', 'Accounts, context, tools, and notes are ready before the block begins.', 'Research and list cleaning consume the calling window.'],
+        ['Execution', 'Actions are time-boxed with protected focus and short reset points.', 'Notifications and unrelated tasks interrupt the block.'],
+        ['Review', 'The block ends with outcomes, one insight, and one next adjustment.', 'Only raw activity volume is recorded.']
+      ],
+      measures: [
+        'Compare planned actions with completed actions and record the main cause of variance.',
+        'Separate preparation time, conversation time, follow-up time, and review time.',
+        'Track one quality indicator such as relevant conversations or completed learning notes.',
+        'Adjust block size and preparation based on evidence from several sessions, not one difficult day.'
+      ]
+    },
+    communication: {
+      standard: 'Professional delivery sounds clear, calm, and responsive to the other person. Tonality supports meaning; it should never manufacture urgency, confidence, or intimacy that the facts do not justify.',
+      checks: [
+        ['Pace', 'Important words are easy to follow and pauses allow a response.', 'Speed increases to prevent interruption or hide uncertainty.'],
+        ['Emphasis', 'Vocal emphasis clarifies the reason, question, and next step.', 'Every sentence sounds equally rehearsed or dramatic.'],
+        ['Listening', 'Tone changes naturally in response to the other person.', 'Delivery continues unchanged after concern or confusion.'],
+        ['Authenticity', 'Language and energy match the speaker and context.', 'A borrowed persona or manipulative tone replaces clear meaning.']
+      ],
+      measures: [
+        'Record practice audio and review pace, clarity, pauses, and filler words separately.',
+        'Ask whether a listener can repeat the main point after one hearing.',
+        'Compare your delivery before and after shortening the wording.',
+        'Prioritise understandable speech over sounding energetic or polished.'
+      ]
+    },
+    script: {
+      standard: 'A professional personalised script protects the core message while adapting evidence, vocabulary, and the question to a real audience. Personalisation must improve relevance without becoming intrusive.',
+      checks: [
+        ['Core message', 'Identity, reason, relevance, and question remain easy to find.', 'Extra personalisation hides the purpose of the call.'],
+        ['Evidence', 'Every specific detail is accurate, current, and business-relevant.', 'A guessed or personal detail is used for surprise value.'],
+        ['Language', 'The wording matches how you naturally speak.', 'Copied jargon or long sentences make delivery sound scripted.'],
+        ['Adaptability', 'Alternative paths exist for interruption, correction, and no.', 'The script works only when the prospect follows the expected flow.']
+      ],
+      measures: [
+        'Time the opening and remove words before adding new personalised details.',
+        'Mark which lines are facts, hypotheses, questions, and optional language.',
+        'Track corrections from prospects as useful research signals.',
+        'Keep versions so you can compare one controlled change at a time.'
+      ]
+    },
+    mindset: {
+      standard: 'Professional resilience treats rejection as information about fit, timing, message, or context - not as a verdict on personal worth. Reflection should be specific, private, and directed toward a controllable next action.',
+      checks: [
+        ['Accuracy', 'The log separates what happened from the story you told yourself.', 'A single rejection becomes a broad claim about ability.'],
+        ['Privacy', 'Only general outcomes and your own actions are recorded.', 'Names, numbers, or unnecessary personal details are stored.'],
+        ['Reflection', 'One lesson is connected to observable evidence.', 'The review becomes self-criticism without a testable insight.'],
+        ['Recovery', 'A small next action is selected before returning to work.', 'The plan demands an unrealistic emotional reset or more volume.']
+      ],
+      measures: [
+        'Review patterns across several attempts rather than reacting to one outcome.',
+        'Track recovery habits and process consistency alongside results.',
+        'Notice whether the same message issue appears across different accounts.',
+        'Escalate persistent distress to a trusted person; a worksheet is not a substitute for professional support.'
+      ]
+    },
+    improvement: {
+      standard: 'Professional improvement uses observable criteria, a consistent scoring method, and one focused experiment at a time. Scores support coaching decisions; they are not labels of talent or potential.',
+      checks: [
+        ['Criteria', 'Each score describes behaviour that a reviewer can hear or see.', 'Labels such as good or confident are used without evidence.'],
+        ['Consistency', 'The same scale and conditions are used across comparable sessions.', 'The standard changes according to mood or outcome.'],
+        ['Feedback', 'Notes name one strength, one priority, and one specific next action.', 'A long list of faults leaves no practical focus.'],
+        ['Retest', 'The chosen behaviour is practised and reviewed again.', 'Scores are recorded but never used to guide practice.']
+      ],
+      measures: [
+        'Use trend direction across multiple sessions instead of chasing a perfect score.',
+        'Separate delivery, listening, relevance, and next-step skills so feedback is diagnostic.',
+        'Invite a second reviewer periodically to check scoring consistency.',
+        'Promote a new focus only after the current behaviour is reliably demonstrated.'
+      ]
+    },
+    interview: {
+      standard: 'Professional interview preparation connects honest evidence to the employer\'s real requirements. Answers should be structured enough to follow, flexible enough for dialogue, and precise about what you personally did and learned.',
+      checks: [
+        ['Relevance', 'The answer addresses the role requirement and the exact question asked.', 'A polished story is used even when it does not answer the question.'],
+        ['Evidence', 'Actions, decisions, and results are specific and attributable.', 'Team outcomes are claimed as personal achievements.'],
+        ['Structure', 'The answer has a clear beginning, evidence, and conclusion.', 'Context expands while the important action remains vague.'],
+        ['Reflection', 'Learning and future application are stated honestly.', 'The answer ends with a result but shows no self-awareness.']
+      ],
+      measures: [
+        'Time both a 60-90 second version and a fuller two-minute version of key answers.',
+        'Map every prepared example to the job requirement it supports.',
+        'Record follow-up questions you struggled with and strengthen the underlying evidence.',
+        'Review accuracy, clarity, and relevance before trying to sound more impressive.'
+      ]
+    }
+  };
+
+  RESOURCES.forEach(function (r) {
+    var workflow = CATEGORY_WORKFLOWS[r.category] || CATEGORY_WORKFLOWS.cheatsheet;
+    var guidance = SKILL_GUIDANCE[r.skill] || SKILL_GUIDANCE.improvement;
+    var existingHeadings = (r.sections || []).map(function (section) { return section.heading; });
+    if (existingHeadings.indexOf('Professional standard') === -1) {
+      r.sections = (r.sections || []).concat([
+        { type: 'paragraph', heading: 'Professional standard', text: guidance.standard },
+        { type: 'steps', heading: 'Professional workflow', items: workflow.slice() },
+        {
+          type: 'table',
+          heading: 'Quality-control review',
+          columns: ['Review point', 'Professional standard', 'Warning sign'],
+          rows: guidance.checks.map(function (row) { return row.slice(); })
+        },
+        { type: 'list', heading: 'Evidence and improvement signals', items: guidance.measures.slice() }
+      ]);
+    }
+    r.reviewDate = REVIEW_DATE;
+  });
 
   // Publication gate: a resource is member-visible only when it is BOTH
   // active and editorially reviewed. `status` defaults to 'draft' here so a

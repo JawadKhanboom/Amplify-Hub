@@ -55,6 +55,18 @@ for (const r of resources) {
   }
   assert.ok(Array.isArray(r.objectives) && r.objectives.length >= 3, `${r.id} has objectives`);
   assert.ok(Array.isArray(r.sections) && r.sections.length >= 1, `${r.id} has content sections`);
+  assert.ok(r.sections.length >= 6, `${r.id} contains the complete professional-edition section set`);
+  const sectionHeadings = new Set(r.sections.map((section) => section.heading));
+  for (const requiredHeading of [
+    'Professional standard',
+    'Professional workflow',
+    'Quality-control review',
+    'Evidence and improvement signals',
+  ]) {
+    assert.ok(sectionHeadings.has(requiredHeading), `${r.id} contains ${requiredHeading}`);
+  }
+  const resourceWordCount = (JSON.stringify(r).match(/[A-Za-z0-9'-]+/g) || []).length;
+  assert.ok(resourceWordCount >= 500, `${r.id} contains rich professional guidance (${resourceWordCount} words)`);
   assert.ok(r.example && (r.example.text || typeof r.example === 'string'), `${r.id} has a worked example`);
   assert.ok(r.safePractice && r.safePractice.trim(), `${r.id} has a safe-practice note`);
   assert.ok(r.related && r.related.route, `${r.id} has a related action route`);
@@ -106,8 +118,27 @@ for (const r of resources) {
     if (format === 'pdf') {
       assert.ok(fd.subarray(0, 7).toString('latin1') === '%PDF-1.', `${r.id}.pdf has a PDF header`);
       assert.ok(fd.subarray(-8).toString('latin1').includes('%%EOF'), `${r.id}.pdf ends with %%EOF`);
+      if (r.status === 'reviewed') {
+        assert.doesNotMatch(
+          fd.toString('latin1'),
+          /Draft resource pending human editorial review/,
+          `${r.id}.pdf does not carry a false draft warning`,
+        );
+        assert.match(
+          fd.toString('latin1'),
+          /Reviewed professional resource/,
+          `${r.id}.pdf carries the reviewed professional-edition label`,
+        );
+      }
     } else {
       assert.equal(fd.readUInt32LE(0), 0x04034b50, `${r.id}.${format} is a valid ZIP (docx/xlsx)`);
+      if (r.status === 'reviewed') {
+        assert.doesNotMatch(
+          fd.toString('latin1'),
+          /Draft resource pending human editorial review/,
+          `${r.id}.${format} does not carry a false draft warning`,
+        );
+      }
     }
     checkedFiles++;
   }
@@ -169,6 +200,10 @@ for (const r of resources) {
 
 // Phase 2 schema, grants, RPC safety, and static-client integration.
 const catalogSyncMigration = await readFile(path.join(siteRoot, 'supabase/migrations/20260726104712_resource_catalog_sync.sql'), 'utf8');
+const professionalContentMigration = await readFile(
+  path.join(siteRoot, 'supabase/migrations/20260728133215_professional_resource_content.sql'),
+  'utf8',
+);
 const phase2Migration = await readFile(path.join(siteRoot, 'supabase/migrations/20260726104713_resources_phase_2.sql'), 'utf8');
 const activityClient = await readFile(path.join(siteRoot, 'assets/resource-activity.js'), 'utf8');
 const privateResourceClient = await readFile(path.join(siteRoot, 'assets/private-resource-store.js'), 'utf8');
@@ -234,6 +269,30 @@ assert.doesNotMatch(
   catalogSyncCode,
   /^\s*(?:create|alter|drop)\s+table\b/gim,
   'catalog sync contains no table DDL',
+);
+const professionalIds = [...professionalContentMigration.matchAll(/^ {2}\('([^']+)'/gm)]
+  .map((match) => match[1]);
+assert.equal(professionalIds.length, TOTAL, 'professional content migration contains exactly 40 rows');
+assert.equal(new Set(professionalIds).size, TOTAL, 'professional content migration resource IDs are unique');
+assert.deepEqual(
+  [...professionalIds].sort(),
+  resources.map((resource) => resource.id).sort(),
+  'professional content migration carries every authoritative catalog ID',
+);
+assert.match(
+  professionalContentMigration,
+  /professional content refresh/i,
+  'professional migration is clearly identified as a forward-only content refresh',
+);
+assert.match(
+  professionalContentMigration,
+  /"path":/i,
+  'professional migration preserves private Storage object paths',
+);
+assert.doesNotMatch(
+  professionalContentMigration.replace(/^--.*$/gm, ''),
+  /^\s*(?:create|alter|drop)\s+(?:table|policy)\b/gim,
+  'professional content migration contains no schema or policy changes',
 );
 assert.doesNotMatch(
   catalogSyncCode,

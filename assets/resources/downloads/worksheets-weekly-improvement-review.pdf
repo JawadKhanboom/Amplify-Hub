@@ -4,7 +4,7 @@
 << /Type /Catalog /Pages 2 0 R >>
 endobj
 2 0 obj
-<< /Type /Pages /Kids [6 0 R] /Count 1 >>
+<< /Type /Pages /Kids [6 0 R 8 0 R] /Count 2 >>
 endobj
 3 0 obj
 << /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>
@@ -13,86 +13,221 @@ endobj
 << /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>
 endobj
 5 0 obj
-<< /Length 2918 >>
+<< /Length 3854 >>
 stream
+0.090 0.125 0.200 rg 0 750 612 42 re f
+0.957 0.784 0.290 rg 0 747 612 3 re f
+0.850 0.870 0.910 RG 0.5 w 58 42 m 554.0 42 l S
 BT
-/F2 19 Tf
-1 0 0 1 56.0 786.0 Tm (Weekly Improvement Review) Tj
-/F1 9.5 Tf
-1 0 0 1 56.0 762.0 Tm (Worksheet - Skill: improvement - Difficulty: beginner - Est. 10 min) Tj
+/F2 9 Tf
+0.957 0.784 0.290 rg
+1 0 0 1 58 765 Tm (AMPLIFYHUB  |  PRACTICAL RESOURCE LIBRARY) Tj
+ET
+BT
+/F2 22 Tf
+0.090 0.125 0.200 rg
+1 0 0 1 58.0 724.0 Tm (Weekly Improvement Review) Tj
+/F2 8.8 Tf
+0.420 0.447 0.502 rg
+1 0 0 1 58.0 697.0 Tm (WORKSHEET | SKILL: IMPROVEMENT | DIFFICULTY: BEGINNER | EST. 10 MIN) Tj
+/F2 9.2 Tf
+0.086 0.396 0.204 rg
+1 0 0 1 58.0 683.0 Tm (Reviewed professional resource - AmplifyHub Practical Resource Library) Tj
+/F2 13.5 Tf
+0.541 0.384 0.000 rg
+1 0 0 1 58.0 657.0 Tm (Overview) Tj
+/F1 10.5 Tf
+0.157 0.208 0.282 rg
+1 0 0 1 58.0 639.0 Tm (A short weekly review that captures what you practised, what improved, what got in the) Tj
+1 0 0 1 58.0 625.0 Tm (way, and the one thing you will focus on next week - to keep progress deliberate.) Tj
+/F2 13.5 Tf
+0.541 0.384 0.000 rg
+1 0 0 1 58.0 600.0 Tm (Learning objectives) Tj
+/F1 10.5 Tf
+0.157 0.208 0.282 rg
+1 0 0 1 68.0 582.0 Tm (- Summarise a week of practice honestly) Tj
+1 0 0 1 68.0 568.0 Tm (- Name one clear improvement) Tj
+1 0 0 1 68.0 554.0 Tm (- Identify one obstacle and a response to it) Tj
+1 0 0 1 68.0 540.0 Tm (- Set a single focus for the next week) Tj
+/F2 13.5 Tf
+0.541 0.384 0.000 rg
+1 0 0 1 58.0 519.0 Tm (This week) Tj
+/F1 10.5 Tf
+0.157 0.208 0.282 rg
+1 0 0 1 68.0 501.0 Tm (- What I practised most \(calls, roleplays, lessons\): ______________________________) Tj
+1 0 0 1 68.0 487.0 Tm (- One thing that clearly improved: ______________________________) Tj
+1 0 0 1 68.0 473.0 Tm (- One thing that got in the way: ______________________________) Tj
+1 0 0 1 68.0 459.0 Tm (- What I will do differently about that obstacle: ______________________________) Tj
+1 0 0 1 68.0 445.0 Tm (- My single focus for next week: ______________________________) Tj
+/F2 13.5 Tf
+0.541 0.384 0.000 rg
+1 0 0 1 58.0 424.0 Tm (Simple weekly tracker) Tj
 /F2 9.5 Tf
-1 0 0 1 56.0 748.0 Tm (Draft resource pending human editorial review - not yet professionally verified.) Tj
-/F1 10.5 Tf
-1 0 0 1 56.0 730.0 Tm (A short weekly review that captures what you practised, what improved, what got in the) Tj
-1 0 0 1 56.0 716.0 Tm (way, and the one thing you will focus on next week - to keep progress deliberate.) Tj
-/F2 13 Tf
-1 0 0 1 56.0 692.0 Tm (Learning objectives) Tj
-/F1 10.5 Tf
-1 0 0 1 66.0 675.0 Tm (- Summarise a week of practice honestly) Tj
-1 0 0 1 66.0 661.0 Tm (- Name one clear improvement) Tj
-1 0 0 1 66.0 647.0 Tm (- Identify one obstacle and a response to it) Tj
-1 0 0 1 66.0 633.0 Tm (- Set a single focus for the next week) Tj
-/F2 13 Tf
-1 0 0 1 56.0 613.0 Tm (This week) Tj
-/F1 10.5 Tf
-1 0 0 1 66.0 596.0 Tm (- What I practised most \(calls, roleplays, lessons\): ______________________________) Tj
-1 0 0 1 66.0 582.0 Tm (- One thing that clearly improved: ______________________________) Tj
-1 0 0 1 66.0 568.0 Tm (- One thing that got in the way: ______________________________) Tj
-1 0 0 1 66.0 554.0 Tm (- What I will do differently about that obstacle: ______________________________) Tj
-1 0 0 1 66.0 540.0 Tm (- My single focus for next week: ______________________________) Tj
-/F2 13 Tf
-1 0 0 1 56.0 520.0 Tm (Simple weekly tracker) Tj
-/F2 9.5 Tf
-1 0 0 1 56.0 503.0 Tm (Metric) Tj
-1 0 0 1 217.0 503.0 Tm (This week) Tj
-1 0 0 1 378.0 503.0 Tm (Note) Tj
+0.420 0.310 0.000 rg
+1 0 0 1 58.0 406.0 Tm (Metric) Tj
+1 0 0 1 223.3 406.0 Tm (This week) Tj
+1 0 0 1 388.7 406.0 Tm (Note) Tj
 /F1 9.5 Tf
-1 0 0 1 56.0 488.0 Tm (Practice sessions completed) Tj
-1 0 0 1 56.0 473.0 Tm (Roleplays completed) Tj
-1 0 0 1 56.0 458.0 Tm (Lessons completed) Tj
-1 0 0 1 56.0 443.0 Tm (Focus skill) Tj
-/F2 13 Tf
-1 0 0 1 56.0 326.0 Tm (Worked example \(focus\)) Tj
+0.157 0.208 0.282 rg
+1 0 0 1 58.0 391.0 Tm (Practice sessions completed) Tj
+1 0 0 1 58.0 376.0 Tm (Roleplays completed) Tj
+1 0 0 1 58.0 361.0 Tm (Lessons completed) Tj
+1 0 0 1 58.0 346.0 Tm (Focus skill) Tj
+/F2 13.5 Tf
+0.541 0.384 0.000 rg
+1 0 0 1 58.0 228.0 Tm (Professional standard) Tj
 /F1 10.5 Tf
-1 0 0 1 56.0 309.0 Tm (Improved: "openers feel more natural." Obstacle: "I skipped practice on busy days.") Tj
-1 0 0 1 56.0 295.0 Tm (Response: "attach one five-minute roleplay to my morning coffee." Next week focus:) Tj
-1 0 0 1 56.0 281.0 Tm ("pausing after questions." One focus is enough to actually move.) Tj
-/F2 13 Tf
-1 0 0 1 56.0 257.0 Tm (Safe-practice note) Tj
+0.157 0.208 0.282 rg
+1 0 0 1 58.0 210.0 Tm (Professional improvement uses observable criteria, a consistent scoring method, and one) Tj
+1 0 0 1 58.0 196.0 Tm (focused experiment at a time. Scores support coaching decisions; they are not labels of) Tj
+1 0 0 1 58.0 182.0 Tm (talent or potential.) Tj
+/F2 13.5 Tf
+0.541 0.384 0.000 rg
+1 0 0 1 58.0 157.0 Tm (Professional workflow) Tj
 /F1 10.5 Tf
-1 0 0 1 56.0 240.0 Tm (Review your own effort and behaviours, not vanity metrics or prospect data. Be honest) Tj
-1 0 0 1 56.0 226.0 Tm (but kind - the point is steady progress, not a perfect week. Keep only one focus so it) Tj
-1 0 0 1 56.0 212.0 Tm (is achievable.) Tj
-/F1 8.5 Tf
-1 0 0 1 56.0 184.0 Tm (Last reviewed: 2026-07-19 - AmplifyHub Practical Resource Library) Tj
+0.157 0.208 0.282 rg
+1 0 0 1 68.0 139.0 Tm (1. Complete one real practice example before adding multiple rows. This reveals) Tj
+1 0 0 1 68.0 125.0 Tm (unclear fields and prevents the worksheet from becoming busywork.) Tj
+1 0 0 1 68.0 111.0 Tm (2. Use observable facts and your own behaviour rather than assumptions about a) Tj
+1 0 0 1 68.0 97.0 Tm (prospect, interviewer, or colleague. Leave a field blank when you do not know.) Tj
+1 0 0 1 68.0 83.0 Tm (3. Write short, decision-ready notes: what happened, what it means, and the next) Tj
+1 0 0 1 68.0 69.0 Tm (action. Avoid long diary entries that are difficult to review.) Tj
+ET
+BT
+/F1 8 Tf
+0.450 0.490 0.560 rg
+1 0 0 1 58 25 Tm (AmplifyHub Professional Edition) Tj
+1 0 0 1 512.0 25 Tm (Page 1 of 2) Tj
 ET
 0.7 w
-0.45 G 56 494.0 m 539.0 494.0 l S
-0.8 G 56 479.0 m 539.0 479.0 l S
-0.8 G 56 464.0 m 539.0 464.0 l S
-0.8 G 56 449.0 m 539.0 449.0 l S
-0.8 G 56 434.0 m 539.0 434.0 l S
-0.8 G 56 412.0 m 539.0 412.0 l S
-0.8 G 56 390.0 m 539.0 390.0 l S
-0.8 G 56 368.0 m 539.0 368.0 l S
-0.8 G 56 346.0 m 539.0 346.0 l S
+0.45 G 58 397.0 m 554.0 397.0 l S
+0.8 G 58 382.0 m 554.0 382.0 l S
+0.8 G 58 367.0 m 554.0 367.0 l S
+0.8 G 58 352.0 m 554.0 352.0 l S
+0.8 G 58 337.0 m 554.0 337.0 l S
+0.8 G 58 315.0 m 554.0 315.0 l S
+0.8 G 58 293.0 m 554.0 293.0 l S
+0.8 G 58 271.0 m 554.0 271.0 l S
+0.8 G 58 249.0 m 554.0 249.0 l S
 
 endstream
 endobj
 6 0 obj
-<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 5 0 R >>
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 5 0 R >>
+endobj
+7 0 obj
+<< /Length 3901 >>
+stream
+0.090 0.125 0.200 rg 0 750 612 42 re f
+0.957 0.784 0.290 rg 0 747 612 3 re f
+0.850 0.870 0.910 RG 0.5 w 58 42 m 554.0 42 l S
+BT
+/F2 9 Tf
+0.957 0.784 0.290 rg
+1 0 0 1 58 765 Tm (AMPLIFYHUB  |  PRACTICAL RESOURCE LIBRARY) Tj
+ET
+BT
+/F1 10.5 Tf
+0.157 0.208 0.282 rg
+1 0 0 1 68.0 724.0 Tm (4. Review the completed sheet on a fixed cadence and choose one improvement) Tj
+1 0 0 1 68.0 710.0 Tm (priority. Do not change several behaviours at once.) Tj
+1 0 0 1 68.0 696.0 Tm (5. Store only business-appropriate information and remove personal identifiers that) Tj
+1 0 0 1 68.0 682.0 Tm (are not required for learning or planning.) Tj
+/F2 13.5 Tf
+0.541 0.384 0.000 rg
+1 0 0 1 58.0 661.0 Tm (Quality-control review) Tj
+/F2 9.5 Tf
+0.420 0.310 0.000 rg
+1 0 0 1 58.0 643.0 Tm (Review point) Tj
+1 0 0 1 223.3 643.0 Tm (Professional standard) Tj
+1 0 0 1 388.7 643.0 Tm (Warning sign) Tj
+/F1 9.5 Tf
+0.157 0.208 0.282 rg
+1 0 0 1 58.0 628.0 Tm (Criteria) Tj
+1 0 0 1 223.3 628.0 Tm (Each score describes behaviour) Tj
+1 0 0 1 388.7 628.0 Tm (Labels such as good or) Tj
+1 0 0 1 223.3 616.0 Tm (that a reviewer can hear or) Tj
+1 0 0 1 388.7 616.0 Tm (confident are used without) Tj
+1 0 0 1 223.3 604.0 Tm (see.) Tj
+1 0 0 1 388.7 604.0 Tm (evidence.) Tj
+1 0 0 1 58.0 589.0 Tm (Consistency) Tj
+1 0 0 1 223.3 589.0 Tm (The same scale and conditions) Tj
+1 0 0 1 388.7 589.0 Tm (The standard changes according) Tj
+1 0 0 1 223.3 577.0 Tm (are used across comparable) Tj
+1 0 0 1 388.7 577.0 Tm (to mood or outcome.) Tj
+1 0 0 1 223.3 565.0 Tm (sessions.) Tj
+1 0 0 1 58.0 550.0 Tm (Feedback) Tj
+1 0 0 1 223.3 550.0 Tm (Notes name one strength, one) Tj
+1 0 0 1 388.7 550.0 Tm (A long list of faults leaves) Tj
+1 0 0 1 223.3 538.0 Tm (priority, and one specific) Tj
+1 0 0 1 388.7 538.0 Tm (no practical focus.) Tj
+1 0 0 1 223.3 526.0 Tm (next action.) Tj
+1 0 0 1 58.0 511.0 Tm (Retest) Tj
+1 0 0 1 223.3 511.0 Tm (The chosen behaviour is) Tj
+1 0 0 1 388.7 511.0 Tm (Scores are recorded but never) Tj
+1 0 0 1 223.3 499.0 Tm (practised and reviewed again.) Tj
+1 0 0 1 388.7 499.0 Tm (used to guide practice.) Tj
+/F2 13.5 Tf
+0.541 0.384 0.000 rg
+1 0 0 1 58.0 469.0 Tm (Evidence and improvement signals) Tj
+/F1 10.5 Tf
+0.157 0.208 0.282 rg
+1 0 0 1 68.0 451.0 Tm (- Use trend direction across multiple sessions instead of chasing a perfect score.) Tj
+1 0 0 1 68.0 437.0 Tm (- Separate delivery, listening, relevance, and next-step skills so feedback is) Tj
+1 0 0 1 68.0 423.0 Tm (diagnostic.) Tj
+1 0 0 1 68.0 409.0 Tm (- Invite a second reviewer periodically to check scoring consistency.) Tj
+1 0 0 1 68.0 395.0 Tm (- Promote a new focus only after the current behaviour is reliably demonstrated.) Tj
+/F2 13.5 Tf
+0.541 0.384 0.000 rg
+1 0 0 1 58.0 374.0 Tm (Worked example \(focus\)) Tj
+/F1 10.5 Tf
+0.157 0.208 0.282 rg
+1 0 0 1 58.0 356.0 Tm (Improved: "openers feel more natural." Obstacle: "I skipped practice on busy days.") Tj
+1 0 0 1 58.0 342.0 Tm (Response: "attach one five-minute roleplay to my morning coffee." Next week focus:) Tj
+1 0 0 1 58.0 328.0 Tm ("pausing after questions." One focus is enough to actually move.) Tj
+/F2 13.5 Tf
+0.541 0.384 0.000 rg
+1 0 0 1 58.0 303.0 Tm (Safe-practice note) Tj
+/F1 10.5 Tf
+0.157 0.208 0.282 rg
+1 0 0 1 58.0 285.0 Tm (Review your own effort and behaviours, not vanity metrics or prospect data. Be honest) Tj
+1 0 0 1 58.0 271.0 Tm (but kind - the point is steady progress, not a perfect week. Keep only one focus so it) Tj
+1 0 0 1 58.0 257.0 Tm (is achievable.) Tj
+/F1 8.5 Tf
+0.482 0.518 0.580 rg
+1 0 0 1 58.0 229.0 Tm (Last reviewed: 2026-07-28 | AmplifyHub Practical Resource Library) Tj
+ET
+BT
+/F1 8 Tf
+0.450 0.490 0.560 rg
+1 0 0 1 58 25 Tm (AmplifyHub Professional Edition) Tj
+1 0 0 1 512.0 25 Tm (Page 2 of 2) Tj
+ET
+0.7 w
+0.45 G 58 634.0 m 554.0 634.0 l S
+0.8 G 58 595.0 m 554.0 595.0 l S
+0.8 G 58 556.0 m 554.0 556.0 l S
+0.8 G 58 517.0 m 554.0 517.0 l S
+0.8 G 58 490.0 m 554.0 490.0 l S
+
+endstream
+endobj
+8 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 7 0 R >>
 endobj
 xref
-0 7
+0 9
 0000000000 65535 f 
 0000000015 00000 n 
 0000000064 00000 n 
-0000000121 00000 n 
-0000000218 00000 n 
-0000000320 00000 n 
-0000003290 00000 n 
+0000000127 00000 n 
+0000000224 00000 n 
+0000000326 00000 n 
+0000004232 00000 n 
+0000004368 00000 n 
+0000008321 00000 n 
 trailer
-<< /Size 7 /Root 1 0 R >>
+<< /Size 9 /Root 1 0 R >>
 startxref
-3426
+8457
 %%EOF

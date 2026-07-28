@@ -4,7 +4,7 @@
 << /Type /Catalog /Pages 2 0 R >>
 endobj
 2 0 obj
-<< /Type /Pages /Kids [6 0 R] /Count 1 >>
+<< /Type /Pages /Kids [6 0 R 8 0 R] /Count 2 >>
 endobj
 3 0 obj
 << /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>
@@ -13,96 +13,231 @@ endobj
 << /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>
 endobj
 5 0 obj
-<< /Length 3173 >>
+<< /Length 4473 >>
 stream
+0.090 0.125 0.200 rg 0 750 612 42 re f
+0.957 0.784 0.290 rg 0 747 612 3 re f
+0.850 0.870 0.910 RG 0.5 w 58 42 m 554.0 42 l S
 BT
-/F2 19 Tf
-1 0 0 1 56.0 786.0 Tm (Cold-Call Flow Cheat Sheet) Tj
-/F1 9.5 Tf
-1 0 0 1 56.0 762.0 Tm (Cheat Sheet - Skill: opening - Difficulty: beginner - Est. 5 min) Tj
+/F2 9 Tf
+0.957 0.784 0.290 rg
+1 0 0 1 58 765 Tm (AMPLIFYHUB  |  PRACTICAL RESOURCE LIBRARY) Tj
+ET
+BT
+/F2 22 Tf
+0.090 0.125 0.200 rg
+1 0 0 1 58.0 724.0 Tm (Cold-Call Flow Cheat Sheet) Tj
+/F2 8.8 Tf
+0.420 0.447 0.502 rg
+1 0 0 1 58.0 697.0 Tm (CHEAT SHEET | SKILL: OPENING | DIFFICULTY: BEGINNER | EST. 5 MIN) Tj
+/F2 9.2 Tf
+0.086 0.396 0.204 rg
+1 0 0 1 58.0 683.0 Tm (Reviewed professional resource - AmplifyHub Practical Resource Library) Tj
+/F2 13.5 Tf
+0.541 0.384 0.000 rg
+1 0 0 1 58.0 657.0 Tm (Overview) Tj
+/F1 10.5 Tf
+0.157 0.208 0.282 rg
+1 0 0 1 58.0 639.0 Tm (A one-glance map of a cold call from hello to next step, so you always know which stage) Tj
+1 0 0 1 58.0 625.0 Tm (you are in and what the goal of that stage is.) Tj
+/F2 13.5 Tf
+0.541 0.384 0.000 rg
+1 0 0 1 58.0 600.0 Tm (Learning objectives) Tj
+/F1 10.5 Tf
+0.157 0.208 0.282 rg
+1 0 0 1 68.0 582.0 Tm (- Recognise the five stages of a cold call) Tj
+1 0 0 1 68.0 568.0 Tm (- Know the single goal of each stage) Tj
+1 0 0 1 68.0 554.0 Tm (- Keep moving without rushing the prospect) Tj
+1 0 0 1 68.0 540.0 Tm (- Exit gracefully at any stage) Tj
+/F2 13.5 Tf
+0.541 0.384 0.000 rg
+1 0 0 1 58.0 519.0 Tm (The flow) Tj
 /F2 9.5 Tf
-1 0 0 1 56.0 748.0 Tm (Draft resource pending human editorial review - not yet professionally verified.) Tj
-/F1 10.5 Tf
-1 0 0 1 56.0 730.0 Tm (A one-glance map of a cold call from hello to next step, so you always know which stage) Tj
-1 0 0 1 56.0 716.0 Tm (you are in and what the goal of that stage is.) Tj
-/F2 13 Tf
-1 0 0 1 56.0 692.0 Tm (Learning objectives) Tj
-/F1 10.5 Tf
-1 0 0 1 66.0 675.0 Tm (- Recognise the five stages of a cold call) Tj
-1 0 0 1 66.0 661.0 Tm (- Know the single goal of each stage) Tj
-1 0 0 1 66.0 647.0 Tm (- Keep moving without rushing the prospect) Tj
-1 0 0 1 66.0 633.0 Tm (- Exit gracefully at any stage) Tj
-/F2 13 Tf
-1 0 0 1 56.0 613.0 Tm (The flow) Tj
-/F2 9.5 Tf
-1 0 0 1 56.0 596.0 Tm (Stage) Tj
-1 0 0 1 217.0 596.0 Tm (Goal) Tj
-1 0 0 1 378.0 596.0 Tm (One prompt) Tj
+0.420 0.310 0.000 rg
+1 0 0 1 58.0 501.0 Tm (Stage) Tj
+1 0 0 1 223.3 501.0 Tm (Goal) Tj
+1 0 0 1 388.7 501.0 Tm (One prompt) Tj
 /F1 9.5 Tf
-1 0 0 1 56.0 581.0 Tm (Open) Tj
-1 0 0 1 217.0 581.0 Tm (Earn a few seconds) Tj
-1 0 0 1 378.0 581.0 Tm (Identity + permission +) Tj
-1 0 0 1 378.0 569.0 Tm (reason) Tj
-1 0 0 1 56.0 554.0 Tm (Relevance) Tj
-1 0 0 1 217.0 554.0 Tm (Connect to a real problem) Tj
-1 0 0 1 378.0 554.0 Tm ("A lot of teams like yours) Tj
-1 0 0 1 378.0 542.0 Tm (run into...") Tj
-1 0 0 1 56.0 527.0 Tm (Question) Tj
-1 0 0 1 217.0 527.0 Tm (Learn if it applies) Tj
-1 0 0 1 378.0 527.0 Tm ("Is that something you deal) Tj
-1 0 0 1 378.0 515.0 Tm (with?") Tj
-1 0 0 1 56.0 500.0 Tm (Next step) Tj
-1 0 0 1 217.0 500.0 Tm (Propose something small) Tj
-1 0 0 1 378.0 500.0 Tm ("Worth 20 minutes to look) Tj
-1 0 0 1 378.0 488.0 Tm (at?") Tj
-1 0 0 1 56.0 473.0 Tm (Close out) Tj
-1 0 0 1 217.0 473.0 Tm (Leave a good impression) Tj
-1 0 0 1 378.0 473.0 Tm (Thank them, confirm or step) Tj
-1 0 0 1 378.0 461.0 Tm (back) Tj
-/F2 13 Tf
-1 0 0 1 56.0 432.0 Tm (Reminders) Tj
+0.157 0.208 0.282 rg
+1 0 0 1 58.0 486.0 Tm (Open) Tj
+1 0 0 1 223.3 486.0 Tm (Earn a few seconds) Tj
+1 0 0 1 388.7 486.0 Tm (Identity + permission + reason) Tj
+1 0 0 1 58.0 471.0 Tm (Relevance) Tj
+1 0 0 1 223.3 471.0 Tm (Connect to a real problem) Tj
+1 0 0 1 388.7 471.0 Tm ("A lot of teams like yours run) Tj
+1 0 0 1 388.7 459.0 Tm (into...") Tj
+1 0 0 1 58.0 444.0 Tm (Question) Tj
+1 0 0 1 223.3 444.0 Tm (Learn if it applies) Tj
+1 0 0 1 388.7 444.0 Tm ("Is that something you deal) Tj
+1 0 0 1 388.7 432.0 Tm (with?") Tj
+1 0 0 1 58.0 417.0 Tm (Next step) Tj
+1 0 0 1 223.3 417.0 Tm (Propose something small) Tj
+1 0 0 1 388.7 417.0 Tm ("Worth 20 minutes to look at?") Tj
+1 0 0 1 58.0 402.0 Tm (Close out) Tj
+1 0 0 1 223.3 402.0 Tm (Leave a good impression) Tj
+1 0 0 1 388.7 402.0 Tm (Thank them, confirm or step) Tj
+1 0 0 1 388.7 390.0 Tm (back) Tj
+/F2 13.5 Tf
+0.541 0.384 0.000 rg
+1 0 0 1 58.0 360.0 Tm (Reminders) Tj
 /F1 10.5 Tf
-1 0 0 1 66.0 415.0 Tm (- One goal per stage - do not try to close in the opener.) Tj
-1 0 0 1 66.0 401.0 Tm (- A question beats a monologue at every stage.) Tj
-1 0 0 1 66.0 387.0 Tm (- A firm no ends the flow; thank them and move on.) Tj
-/F2 13 Tf
-1 0 0 1 56.0 367.0 Tm (Worked example) Tj
+0.157 0.208 0.282 rg
+1 0 0 1 68.0 342.0 Tm (- One goal per stage - do not try to close in the opener.) Tj
+1 0 0 1 68.0 328.0 Tm (- A question beats a monologue at every stage.) Tj
+1 0 0 1 68.0 314.0 Tm (- A firm no ends the flow; thank them and move on.) Tj
+/F2 13.5 Tf
+0.541 0.384 0.000 rg
+1 0 0 1 58.0 293.0 Tm (Professional standard) Tj
 /F1 10.5 Tf
-1 0 0 1 56.0 350.0 Tm (Open: "Hi Jordan, Sam with Northlight - can I borrow 30 seconds?" Relevance: "Teams your) Tj
-1 0 0 1 56.0 336.0 Tm (size tell me weekend coverage slips." Question: "Does that happen to you?" Next step:) Tj
-1 0 0 1 56.0 322.0 Tm ("Worth 20 minutes to see how two others fixed it?" Close out: "Thanks either way.") Tj
-/F2 13 Tf
-1 0 0 1 56.0 298.0 Tm (Safe-practice note) Tj
+0.157 0.208 0.282 rg
+1 0 0 1 58.0 275.0 Tm (A professional opening removes uncertainty quickly: the listener knows who is calling,) Tj
+1 0 0 1 58.0 261.0 Tm (why the call may be relevant, and that they can decline. The purpose is not to force) Tj
+1 0 0 1 58.0 247.0 Tm (attention; it is to earn enough trust for one useful question.) Tj
+/F2 13.5 Tf
+0.541 0.384 0.000 rg
+1 0 0 1 58.0 222.0 Tm (Professional workflow) Tj
 /F1 10.5 Tf
-1 0 0 1 56.0 281.0 Tm (This is a map, not a script to force. Let the prospect skip or end stages. Do not) Tj
-1 0 0 1 56.0 267.0 Tm (fabricate the relevance line - only claim patterns you can honestly stand behind.) Tj
-/F1 8.5 Tf
-1 0 0 1 56.0 239.0 Tm (Last reviewed: 2026-07-19 - AmplifyHub Practical Resource Library) Tj
+0.157 0.208 0.282 rg
+1 0 0 1 68.0 204.0 Tm (1. Read the full guide once, then highlight only the two or three prompts that match) Tj
+1 0 0 1 68.0 190.0 Tm (the situation you are practising today.) Tj
+1 0 0 1 68.0 176.0 Tm (2. Keep the cheat sheet visible as a reminder, not as a script. Look away from it) Tj
+1 0 0 1 68.0 162.0 Tm (while speaking so your attention stays on the conversation.) Tj
+1 0 0 1 68.0 148.0 Tm (3. Rehearse the decision points, especially where the other person can redirect,) Tj
+1 0 0 1 68.0 134.0 Tm (disagree, or end the interaction.) Tj
+1 0 0 1 68.0 120.0 Tm (4. Mark the guidance you actually used and write one short note about what happened.) Tj
+1 0 0 1 68.0 106.0 Tm (Real observations are more useful than trying to memorise every line.) Tj
+1 0 0 1 68.0 92.0 Tm (5. Retire prompts that feel unnatural or do not fit your market. A smaller) Tj
+1 0 0 1 68.0 78.0 Tm (personalised reference is more professional than a crowded universal one.) Tj
+ET
+BT
+/F1 8 Tf
+0.450 0.490 0.560 rg
+1 0 0 1 58 25 Tm (AmplifyHub Professional Edition) Tj
+1 0 0 1 512.0 25 Tm (Page 1 of 2) Tj
 ET
 0.7 w
-0.45 G 56 587.0 m 539.0 587.0 l S
-0.8 G 56 560.0 m 539.0 560.0 l S
-0.8 G 56 533.0 m 539.0 533.0 l S
-0.8 G 56 506.0 m 539.0 506.0 l S
-0.8 G 56 479.0 m 539.0 479.0 l S
-0.8 G 56 452.0 m 539.0 452.0 l S
+0.45 G 58 492.0 m 554.0 492.0 l S
+0.8 G 58 477.0 m 554.0 477.0 l S
+0.8 G 58 450.0 m 554.0 450.0 l S
+0.8 G 58 423.0 m 554.0 423.0 l S
+0.8 G 58 408.0 m 554.0 408.0 l S
+0.8 G 58 381.0 m 554.0 381.0 l S
 
 endstream
 endobj
 6 0 obj
-<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 5 0 R >>
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 5 0 R >>
+endobj
+7 0 obj
+<< /Length 3657 >>
+stream
+0.090 0.125 0.200 rg 0 750 612 42 re f
+0.957 0.784 0.290 rg 0 747 612 3 re f
+0.850 0.870 0.910 RG 0.5 w 58 42 m 554.0 42 l S
+BT
+/F2 9 Tf
+0.957 0.784 0.290 rg
+1 0 0 1 58 765 Tm (AMPLIFYHUB  |  PRACTICAL RESOURCE LIBRARY) Tj
+ET
+BT
+/F2 13.5 Tf
+0.541 0.384 0.000 rg
+1 0 0 1 58.0 724.0 Tm (Quality-control review) Tj
+/F2 9.5 Tf
+0.420 0.310 0.000 rg
+1 0 0 1 58.0 706.0 Tm (Review point) Tj
+1 0 0 1 223.3 706.0 Tm (Professional standard) Tj
+1 0 0 1 388.7 706.0 Tm (Warning sign) Tj
+/F1 9.5 Tf
+0.157 0.208 0.282 rg
+1 0 0 1 58.0 691.0 Tm (Clarity) Tj
+1 0 0 1 223.3 691.0 Tm (Identity and purpose are) Tj
+1 0 0 1 388.7 691.0 Tm (The listener must ask who you) Tj
+1 0 0 1 223.3 679.0 Tm (understandable on the first) Tj
+1 0 0 1 388.7 679.0 Tm (are or why you called.) Tj
+1 0 0 1 223.3 667.0 Tm (listen.) Tj
+1 0 0 1 58.0 652.0 Tm (Relevance) Tj
+1 0 0 1 223.3 652.0 Tm (The reason is tied to a) Tj
+1 0 0 1 388.7 652.0 Tm (The opener relies on a generic) Tj
+1 0 0 1 223.3 640.0 Tm (verified business signal or) Tj
+1 0 0 1 388.7 640.0 Tm (claim that could apply to) Tj
+1 0 0 1 223.3 628.0 Tm (role-level problem.) Tj
+1 0 0 1 388.7 628.0 Tm (anyone.) Tj
+1 0 0 1 58.0 613.0 Tm (Brevity) Tj
+1 0 0 1 223.3 613.0 Tm (The opening reaches a genuine) Tj
+1 0 0 1 388.7 613.0 Tm (A product explanation begins) Tj
+1 0 0 1 223.3 601.0 Tm (question in roughly 20-35) Tj
+1 0 0 1 388.7 601.0 Tm (before the listener has) Tj
+1 0 0 1 223.3 589.0 Tm (seconds.) Tj
+1 0 0 1 388.7 589.0 Tm (responded.) Tj
+1 0 0 1 58.0 574.0 Tm (Control) Tj
+1 0 0 1 223.3 574.0 Tm (The listener has an honest,) Tj
+1 0 0 1 388.7 574.0 Tm (Permission language is used) Tj
+1 0 0 1 223.3 562.0 Tm (easy way to continue or end) Tj
+1 0 0 1 388.7 562.0 Tm (but a no is ignored.) Tj
+1 0 0 1 223.3 550.0 Tm (the call.) Tj
+/F2 13.5 Tf
+0.541 0.384 0.000 rg
+1 0 0 1 58.0 520.0 Tm (Evidence and improvement signals) Tj
+/F1 10.5 Tf
+0.157 0.208 0.282 rg
+1 0 0 1 68.0 502.0 Tm (- Track how often the listener understands the reason for the call without asking) Tj
+1 0 0 1 68.0 488.0 Tm (for clarification.) Tj
+1 0 0 1 68.0 474.0 Tm (- Review whether the first response is a real answer, a request for context, a) Tj
+1 0 0 1 68.0 460.0 Tm (timing objection, or a firm no.) Tj
+1 0 0 1 68.0 446.0 Tm (- Listen for rushed delivery, filler words, and sentences that are too long to say) Tj
+1 0 0 1 68.0 432.0 Tm (naturally.) Tj
+1 0 0 1 68.0 418.0 Tm (- Improve the relevance line before changing tone or adding more words.) Tj
+/F2 13.5 Tf
+0.541 0.384 0.000 rg
+1 0 0 1 58.0 397.0 Tm (Worked example) Tj
+/F1 10.5 Tf
+0.157 0.208 0.282 rg
+1 0 0 1 58.0 379.0 Tm (Open: "Hi Jordan, Sam with Northlight - can I borrow 30 seconds?" Relevance: "Teams your) Tj
+1 0 0 1 58.0 365.0 Tm (size tell me weekend coverage slips." Question: "Does that happen to you?" Next step:) Tj
+1 0 0 1 58.0 351.0 Tm ("Worth 20 minutes to see how two others fixed it?" Close out: "Thanks either way.") Tj
+/F2 13.5 Tf
+0.541 0.384 0.000 rg
+1 0 0 1 58.0 326.0 Tm (Safe-practice note) Tj
+/F1 10.5 Tf
+0.157 0.208 0.282 rg
+1 0 0 1 58.0 308.0 Tm (This is a map, not a script to force. Let the prospect skip or end stages. Do not) Tj
+1 0 0 1 58.0 294.0 Tm (fabricate the relevance line - only claim patterns you can honestly stand behind.) Tj
+/F1 8.5 Tf
+0.482 0.518 0.580 rg
+1 0 0 1 58.0 266.0 Tm (Last reviewed: 2026-07-28 | AmplifyHub Practical Resource Library) Tj
+ET
+BT
+/F1 8 Tf
+0.450 0.490 0.560 rg
+1 0 0 1 58 25 Tm (AmplifyHub Professional Edition) Tj
+1 0 0 1 512.0 25 Tm (Page 2 of 2) Tj
+ET
+0.7 w
+0.45 G 58 697.0 m 554.0 697.0 l S
+0.8 G 58 658.0 m 554.0 658.0 l S
+0.8 G 58 619.0 m 554.0 619.0 l S
+0.8 G 58 580.0 m 554.0 580.0 l S
+0.8 G 58 541.0 m 554.0 541.0 l S
+
+endstream
+endobj
+8 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 7 0 R >>
 endobj
 xref
-0 7
+0 9
 0000000000 65535 f 
 0000000015 00000 n 
 0000000064 00000 n 
-0000000121 00000 n 
-0000000218 00000 n 
-0000000320 00000 n 
-0000003545 00000 n 
+0000000127 00000 n 
+0000000224 00000 n 
+0000000326 00000 n 
+0000004851 00000 n 
+0000004987 00000 n 
+0000008696 00000 n 
 trailer
-<< /Size 7 /Root 1 0 R >>
+<< /Size 9 /Root 1 0 R >>
 startxref
-3681
+8832
 %%EOF

@@ -4,7 +4,7 @@
 << /Type /Catalog /Pages 2 0 R >>
 endobj
 2 0 obj
-<< /Type /Pages /Kids [6 0 R] /Count 1 >>
+<< /Type /Pages /Kids [6 0 R 8 0 R] /Count 2 >>
 endobj
 3 0 obj
 << /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>
@@ -13,89 +13,229 @@ endobj
 << /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>
 endobj
 5 0 obj
-<< /Length 3038 >>
+<< /Length 4368 >>
 stream
+0.090 0.125 0.200 rg 0 750 612 42 re f
+0.957 0.784 0.290 rg 0 747 612 3 re f
+0.850 0.870 0.910 RG 0.5 w 58 42 m 554.0 42 l S
 BT
-/F2 19 Tf
-1 0 0 1 56.0 786.0 Tm (Discovery Question Map) Tj
-/F1 9.5 Tf
-1 0 0 1 56.0 762.0 Tm (Cheat Sheet - Skill: discovery - Difficulty: intermediate - Est. 6 min) Tj
+/F2 9 Tf
+0.957 0.784 0.290 rg
+1 0 0 1 58 765 Tm (AMPLIFYHUB  |  PRACTICAL RESOURCE LIBRARY) Tj
+ET
+BT
+/F2 22 Tf
+0.090 0.125 0.200 rg
+1 0 0 1 58.0 724.0 Tm (Discovery Question Map) Tj
+/F2 8.8 Tf
+0.420 0.447 0.502 rg
+1 0 0 1 58.0 697.0 Tm (CHEAT SHEET | SKILL: DISCOVERY | DIFFICULTY: INTERMEDIATE | EST. 6 MIN) Tj
+/F2 9.2 Tf
+0.086 0.396 0.204 rg
+1 0 0 1 58.0 683.0 Tm (Reviewed professional resource - AmplifyHub Practical Resource Library) Tj
+/F2 13.5 Tf
+0.541 0.384 0.000 rg
+1 0 0 1 58.0 657.0 Tm (Overview) Tj
+/F1 10.5 Tf
+0.157 0.208 0.282 rg
+1 0 0 1 58.0 639.0 Tm (A map of open questions across five areas - situation, problem, impact, goal, and next) Tj
+1 0 0 1 58.0 625.0 Tm (step - for a scheduled discovery conversation, so you explore instead of interrogate.) Tj
+/F2 13.5 Tf
+0.541 0.384 0.000 rg
+1 0 0 1 58.0 600.0 Tm (Learning objectives) Tj
+/F1 10.5 Tf
+0.157 0.208 0.282 rg
+1 0 0 1 68.0 582.0 Tm (- Cover five discovery areas with open questions) Tj
+1 0 0 1 68.0 568.0 Tm (- Move from facts to impact naturally) Tj
+1 0 0 1 68.0 554.0 Tm (- Avoid yes/no and leading questions) Tj
+1 0 0 1 68.0 540.0 Tm (- Follow the prospect rather than a checklist) Tj
+/F2 13.5 Tf
+0.541 0.384 0.000 rg
+1 0 0 1 58.0 519.0 Tm (The map) Tj
 /F2 9.5 Tf
-1 0 0 1 56.0 748.0 Tm (Draft resource pending human editorial review - not yet professionally verified.) Tj
-/F1 10.5 Tf
-1 0 0 1 56.0 730.0 Tm (A map of open questions across five areas - situation, problem, impact, goal, and next) Tj
-1 0 0 1 56.0 716.0 Tm (step - for a scheduled discovery conversation, so you explore instead of interrogate.) Tj
-/F2 13 Tf
-1 0 0 1 56.0 692.0 Tm (Learning objectives) Tj
-/F1 10.5 Tf
-1 0 0 1 66.0 675.0 Tm (- Cover five discovery areas with open questions) Tj
-1 0 0 1 66.0 661.0 Tm (- Move from facts to impact naturally) Tj
-1 0 0 1 66.0 647.0 Tm (- Avoid yes/no and leading questions) Tj
-1 0 0 1 66.0 633.0 Tm (- Follow the prospect rather than a checklist) Tj
-/F2 13 Tf
-1 0 0 1 56.0 613.0 Tm (The map) Tj
-/F2 9.5 Tf
-1 0 0 1 56.0 596.0 Tm (Area) Tj
-1 0 0 1 297.5 596.0 Tm (Example question) Tj
+0.420 0.310 0.000 rg
+1 0 0 1 58.0 501.0 Tm (Area) Tj
+1 0 0 1 306.0 501.0 Tm (Example question) Tj
 /F1 9.5 Tf
-1 0 0 1 56.0 581.0 Tm (Situation) Tj
-1 0 0 1 297.5 581.0 Tm ("How is this handled today?") Tj
-1 0 0 1 56.0 566.0 Tm (Problem) Tj
-1 0 0 1 297.5 566.0 Tm ("Where does that tend to break down?") Tj
-1 0 0 1 56.0 551.0 Tm (Impact) Tj
-1 0 0 1 297.5 551.0 Tm ("When it breaks, what does it cost you in) Tj
-1 0 0 1 297.5 539.0 Tm (time or stress?") Tj
-1 0 0 1 56.0 524.0 Tm (Goal) Tj
-1 0 0 1 297.5 524.0 Tm ("What would good look like six months from) Tj
-1 0 0 1 297.5 512.0 Tm (now?") Tj
-1 0 0 1 56.0 497.0 Tm (Next step) Tj
-1 0 0 1 297.5 497.0 Tm ("What would make it worth exploring further?") Tj
-/F2 13 Tf
-1 0 0 1 56.0 468.0 Tm (Use it well) Tj
+0.157 0.208 0.282 rg
+1 0 0 1 58.0 486.0 Tm (Situation) Tj
+1 0 0 1 306.0 486.0 Tm ("How is this handled today?") Tj
+1 0 0 1 58.0 471.0 Tm (Problem) Tj
+1 0 0 1 306.0 471.0 Tm ("Where does that tend to break down?") Tj
+1 0 0 1 58.0 456.0 Tm (Impact) Tj
+1 0 0 1 306.0 456.0 Tm ("When it breaks, what does it cost you in time) Tj
+1 0 0 1 306.0 444.0 Tm (or stress?") Tj
+1 0 0 1 58.0 429.0 Tm (Goal) Tj
+1 0 0 1 306.0 429.0 Tm ("What would good look like six months from) Tj
+1 0 0 1 306.0 417.0 Tm (now?") Tj
+1 0 0 1 58.0 402.0 Tm (Next step) Tj
+1 0 0 1 306.0 402.0 Tm ("What would make it worth exploring further?") Tj
+/F2 13.5 Tf
+0.541 0.384 0.000 rg
+1 0 0 1 58.0 372.0 Tm (Use it well) Tj
 /F1 10.5 Tf
-1 0 0 1 66.0 451.0 Tm (- This is for a booked discovery call, not a cold-call interrogation.) Tj
-1 0 0 1 66.0 437.0 Tm (- Ask one question, then actually listen and follow the answer.) Tj
-1 0 0 1 66.0 423.0 Tm (- You do not need every question - depth beats coverage.) Tj
-/F2 13 Tf
-1 0 0 1 56.0 403.0 Tm (Worked example) Tj
+0.157 0.208 0.282 rg
+1 0 0 1 68.0 354.0 Tm (- This is for a booked discovery call, not a cold-call interrogation.) Tj
+1 0 0 1 68.0 340.0 Tm (- Ask one question, then actually listen and follow the answer.) Tj
+1 0 0 1 68.0 326.0 Tm (- You do not need every question - depth beats coverage.) Tj
+/F2 13.5 Tf
+0.541 0.384 0.000 rg
+1 0 0 1 58.0 305.0 Tm (Professional standard) Tj
 /F1 10.5 Tf
-1 0 0 1 56.0 386.0 Tm (Situation: "How do you schedule drivers now?" -> "Spreadsheets." Problem: "Where does) Tj
-1 0 0 1 56.0 372.0 Tm (that get painful?" -> "Last-minute changes." Impact: "What does a bad week cost you?" ->) Tj
-1 0 0 1 56.0 358.0 Tm ("Overtime and missed pickups." That thread is worth more than firing all five questions) Tj
-1 0 0 1 56.0 344.0 Tm (in order.) Tj
-/F2 13 Tf
-1 0 0 1 56.0 320.0 Tm (Safe-practice note) Tj
+0.157 0.208 0.282 rg
+1 0 0 1 58.0 287.0 Tm (Professional discovery helps both sides understand the current situation, impact,) Tj
+1 0 0 1 58.0 273.0 Tm (priorities, and decision process. Questions should follow what the person says rather) Tj
+1 0 0 1 58.0 259.0 Tm (than forcing a predetermined qualification path.) Tj
+/F2 13.5 Tf
+0.541 0.384 0.000 rg
+1 0 0 1 58.0 234.0 Tm (Professional workflow) Tj
 /F1 10.5 Tf
-1 0 0 1 56.0 303.0 Tm (Discovery is a conversation, not a checklist to power through. Do not use it to trap) Tj
-1 0 0 1 56.0 289.0 Tm (someone with leading questions. Only use it when a discovery call is actually scheduled) Tj
-1 0 0 1 56.0 275.0 Tm (and welcome.) Tj
-/F1 8.5 Tf
-1 0 0 1 56.0 247.0 Tm (Last reviewed: 2026-07-19 - AmplifyHub Practical Resource Library) Tj
+0.157 0.208 0.282 rg
+1 0 0 1 68.0 216.0 Tm (1. Read the full guide once, then highlight only the two or three prompts that match) Tj
+1 0 0 1 68.0 202.0 Tm (the situation you are practising today.) Tj
+1 0 0 1 68.0 188.0 Tm (2. Keep the cheat sheet visible as a reminder, not as a script. Look away from it) Tj
+1 0 0 1 68.0 174.0 Tm (while speaking so your attention stays on the conversation.) Tj
+1 0 0 1 68.0 160.0 Tm (3. Rehearse the decision points, especially where the other person can redirect,) Tj
+1 0 0 1 68.0 146.0 Tm (disagree, or end the interaction.) Tj
+1 0 0 1 68.0 132.0 Tm (4. Mark the guidance you actually used and write one short note about what happened.) Tj
+1 0 0 1 68.0 118.0 Tm (Real observations are more useful than trying to memorise every line.) Tj
+1 0 0 1 68.0 104.0 Tm (5. Retire prompts that feel unnatural or do not fit your market. A smaller) Tj
+1 0 0 1 68.0 90.0 Tm (personalised reference is more professional than a crowded universal one.) Tj
+/F2 13.5 Tf
+0.541 0.384 0.000 rg
+1 0 0 1 58.0 69.0 Tm (Quality-control review) Tj
+ET
+BT
+/F1 8 Tf
+0.450 0.490 0.560 rg
+1 0 0 1 58 25 Tm (AmplifyHub Professional Edition) Tj
+1 0 0 1 512.0 25 Tm (Page 1 of 2) Tj
 ET
 0.7 w
-0.45 G 56 587.0 m 539.0 587.0 l S
-0.8 G 56 572.0 m 539.0 572.0 l S
-0.8 G 56 557.0 m 539.0 557.0 l S
-0.8 G 56 530.0 m 539.0 530.0 l S
-0.8 G 56 503.0 m 539.0 503.0 l S
-0.8 G 56 488.0 m 539.0 488.0 l S
+0.45 G 58 492.0 m 554.0 492.0 l S
+0.8 G 58 477.0 m 554.0 477.0 l S
+0.8 G 58 462.0 m 554.0 462.0 l S
+0.8 G 58 435.0 m 554.0 435.0 l S
+0.8 G 58 408.0 m 554.0 408.0 l S
+0.8 G 58 393.0 m 554.0 393.0 l S
 
 endstream
 endobj
 6 0 obj
-<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 5 0 R >>
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 5 0 R >>
+endobj
+7 0 obj
+<< /Length 3762 >>
+stream
+0.090 0.125 0.200 rg 0 750 612 42 re f
+0.957 0.784 0.290 rg 0 747 612 3 re f
+0.850 0.870 0.910 RG 0.5 w 58 42 m 554.0 42 l S
+BT
+/F2 9 Tf
+0.957 0.784 0.290 rg
+1 0 0 1 58 765 Tm (AMPLIFYHUB  |  PRACTICAL RESOURCE LIBRARY) Tj
+ET
+BT
+/F2 9.5 Tf
+0.420 0.310 0.000 rg
+1 0 0 1 58.0 724.0 Tm (Review point) Tj
+1 0 0 1 223.3 724.0 Tm (Professional standard) Tj
+1 0 0 1 388.7 724.0 Tm (Warning sign) Tj
+/F1 9.5 Tf
+0.157 0.208 0.282 rg
+1 0 0 1 58.0 709.0 Tm (Agenda) Tj
+1 0 0 1 223.3 709.0 Tm (Purpose, available time, and) Tj
+1 0 0 1 388.7 709.0 Tm (The seller starts) Tj
+1 0 0 1 223.3 697.0 Tm (desired outcome are confirmed) Tj
+1 0 0 1 388.7 697.0 Tm (interrogating without setting) Tj
+1 0 0 1 223.3 685.0 Tm (together.) Tj
+1 0 0 1 388.7 685.0 Tm (context.) Tj
+1 0 0 1 58.0 670.0 Tm (Question quality) Tj
+1 0 0 1 223.3 670.0 Tm (Questions are open, neutral,) Tj
+1 0 0 1 388.7 670.0 Tm (Questions are leading,) Tj
+1 0 0 1 223.3 658.0 Tm (and connected to the previous) Tj
+1 0 0 1 388.7 658.0 Tm (stacked, or designed to trap) Tj
+1 0 0 1 223.3 646.0 Tm (answer.) Tj
+1 0 0 1 388.7 646.0 Tm (agreement.) Tj
+1 0 0 1 58.0 631.0 Tm (Depth) Tj
+1 0 0 1 223.3 631.0 Tm (Specific examples and) Tj
+1 0 0 1 388.7 631.0 Tm (The conversation stays) Tj
+1 0 0 1 223.3 619.0 Tm (consequences are explored with) Tj
+1 0 0 1 388.7 619.0 Tm (abstract or rushes to a) Tj
+1 0 0 1 223.3 607.0 Tm (permission.) Tj
+1 0 0 1 388.7 607.0 Tm (solution.) Tj
+1 0 0 1 58.0 592.0 Tm (Recap) Tj
+1 0 0 1 223.3 592.0 Tm (Facts, assumptions,) Tj
+1 0 0 1 388.7 592.0 Tm (The seller paraphrases the) Tj
+1 0 0 1 223.3 580.0 Tm (priorities, and next steps are) Tj
+1 0 0 1 388.7 580.0 Tm (answer into a stronger claim) Tj
+1 0 0 1 223.3 568.0 Tm (summarised accurately.) Tj
+1 0 0 1 388.7 568.0 Tm (than was made.) Tj
+/F2 13.5 Tf
+0.541 0.384 0.000 rg
+1 0 0 1 58.0 538.0 Tm (Evidence and improvement signals) Tj
+/F1 10.5 Tf
+0.157 0.208 0.282 rg
+1 0 0 1 68.0 520.0 Tm (- Review talk balance alongside question quality; a lower talk ratio is not) Tj
+1 0 0 1 68.0 506.0 Tm (automatically better.) Tj
+1 0 0 1 68.0 492.0 Tm (- Count how many important facts were confirmed in the final recap rather than) Tj
+1 0 0 1 68.0 478.0 Tm (assumed.) Tj
+1 0 0 1 68.0 464.0 Tm (- Note unanswered questions and agree whether they matter before scheduling another) Tj
+1 0 0 1 68.0 450.0 Tm (step.) Tj
+1 0 0 1 68.0 436.0 Tm (- Evaluate whether the proposed next step follows logically from the stated) Tj
+1 0 0 1 68.0 422.0 Tm (priority.) Tj
+/F2 13.5 Tf
+0.541 0.384 0.000 rg
+1 0 0 1 58.0 401.0 Tm (Worked example) Tj
+/F1 10.5 Tf
+0.157 0.208 0.282 rg
+1 0 0 1 58.0 383.0 Tm (Situation: "How do you schedule drivers now?" -> "Spreadsheets." Problem: "Where does) Tj
+1 0 0 1 58.0 369.0 Tm (that get painful?" -> "Last-minute changes." Impact: "What does a bad week cost you?" ->) Tj
+1 0 0 1 58.0 355.0 Tm ("Overtime and missed pickups." That thread is worth more than firing all five questions) Tj
+1 0 0 1 58.0 341.0 Tm (in order.) Tj
+/F2 13.5 Tf
+0.541 0.384 0.000 rg
+1 0 0 1 58.0 316.0 Tm (Safe-practice note) Tj
+/F1 10.5 Tf
+0.157 0.208 0.282 rg
+1 0 0 1 58.0 298.0 Tm (Discovery is a conversation, not a checklist to power through. Do not use it to trap) Tj
+1 0 0 1 58.0 284.0 Tm (someone with leading questions. Only use it when a discovery call is actually scheduled) Tj
+1 0 0 1 58.0 270.0 Tm (and welcome.) Tj
+/F1 8.5 Tf
+0.482 0.518 0.580 rg
+1 0 0 1 58.0 242.0 Tm (Last reviewed: 2026-07-28 | AmplifyHub Practical Resource Library) Tj
+ET
+BT
+/F1 8 Tf
+0.450 0.490 0.560 rg
+1 0 0 1 58 25 Tm (AmplifyHub Professional Edition) Tj
+1 0 0 1 512.0 25 Tm (Page 2 of 2) Tj
+ET
+0.7 w
+0.45 G 58 715.0 m 554.0 715.0 l S
+0.8 G 58 676.0 m 554.0 676.0 l S
+0.8 G 58 637.0 m 554.0 637.0 l S
+0.8 G 58 598.0 m 554.0 598.0 l S
+0.8 G 58 559.0 m 554.0 559.0 l S
+
+endstream
+endobj
+8 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 7 0 R >>
 endobj
 xref
-0 7
+0 9
 0000000000 65535 f 
 0000000015 00000 n 
 0000000064 00000 n 
-0000000121 00000 n 
-0000000218 00000 n 
-0000000320 00000 n 
-0000003410 00000 n 
+0000000127 00000 n 
+0000000224 00000 n 
+0000000326 00000 n 
+0000004746 00000 n 
+0000004882 00000 n 
+0000008696 00000 n 
 trailer
-<< /Size 7 /Root 1 0 R >>
+<< /Size 9 /Root 1 0 R >>
 startxref
-3546
+8832
 %%EOF
