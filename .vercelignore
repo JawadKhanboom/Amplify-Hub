@@ -17,6 +17,11 @@ docs/
 # Legacy hand-run SQL tombstones kept in the repo by choice
 assets/*.sql
 
+# Private Resource Library source files. Catalog rows are served through
+# authenticated Postgres RLS and files through signed Storage URLs.
+assets/resource-catalog.js
+assets/resources/downloads/
+
 # Tooling state
 .github/
 .vscode/

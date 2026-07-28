@@ -139,7 +139,7 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(-
   </nav>
   <div class="sb-cta">
     <a id="resourceSaveCta" href="signin.html?redirect=resources.html">Sign in to save</a>
-    <p id="resourceSaveCopy">Reading and downloads are free and open. Sign in to bookmark resources and sync recent views.</p>
+    <p id="resourceSaveCopy">Your private resources, bookmarks, and recent views are available while you are signed in.</p>
   </div>
 </aside>
 
@@ -190,20 +190,35 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(-
 </div>
 
 <script src="assets/resource-activity.js"></script>
-<script src="assets/resource-catalog.js"></script>
+<script src="assets/private-resource-store.js"></script>
 <script>
-(function(){
+(async function(){
   'use strict';
-  var catalog = window.ResourceCatalog;
+  var store = window.PrivateResourceStore;
+  var SOURCE;
+  try {
+    SOURCE = await store.listPublished();
+  } catch (error) {
+    console.warn('Unable to load the private resource catalog.', error);
+    document.getElementById('modeBannerText').textContent = 'The private Resource Library could not be loaded. Refresh the page or sign in again.';
+    document.getElementById('resourceSaveCopy').textContent = 'No resource content was exposed.';
+    return;
+  }
+  var byId = Object.create(null);
+  SOURCE.forEach(function(resource){ byId[resource.id] = resource; });
+  var catalog = {
+    categoryMeta: store.categoryMeta,
+    published: function(){ return SOURCE.slice(); },
+    byId: function(id){ return byId[id] || null; },
+    isPublished: function(resource){ return !!resource && resource.active === true && resource.status === 'reviewed'; }
+  };
   var meta = catalog.categoryMeta;
 
-  // Publication gate: the public library lists only active + reviewed resources.
-  // ?preview=review is an explicit editorial mode that also shows drafts, always
-  // labelled as such. Drafts never render publicly just because they are active.
+  // Postgres RLS returns only active + reviewed resources to verified members.
+  // Legacy preview parameters cannot widen this authenticated result set.
   var params = new URLSearchParams(window.location.search);
-  var previewMode = params.get('preview') === 'review';
-  var SOURCE = previewMode ? catalog.resources.filter(function(r){ return r.active !== false; }) : catalog.published();
-  var previewDraftCount = SOURCE.filter(function(r){ return r.status !== 'reviewed'; }).length;
+  var previewMode = false;
+  var previewDraftCount = 0;
   var counts = {};
   Object.keys(meta).forEach(function(k){ counts[k] = 0; });
   SOURCE.forEach(function(r){ counts[r.category] = (counts[r.category]||0) + 1; });
@@ -347,17 +362,17 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(-
     } else if(activityStatus === 'signed_out'){
       link.textContent = 'Sign in to save';
       link.href = 'signin.html?redirect=resources.html';
-      copy.textContent = 'Reading and downloads are free and open. Sign in to bookmark resources and sync recent views.';
+      copy.textContent = 'Sign in again to access private resources and saved activity.';
     } else if(activityStatus === 'error' || activityStatus === 'unavailable'){
       link.textContent = 'Saved activity unavailable';
       link.removeAttribute('href');
       link.setAttribute('aria-disabled','true');
-      copy.textContent = 'The resource library is still available. Saved activity could not be loaded right now.';
+      copy.textContent = 'Saved activity could not be loaded right now.';
     } else {
       link.textContent = 'Loading saved activity…';
       link.removeAttribute('href');
       link.setAttribute('aria-disabled','true');
-      copy.textContent = 'Reading and downloads remain free and open.';
+      copy.textContent = 'Loading your private resource activity.';
     }
   }
 

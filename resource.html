@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AmplifyHub — Resource</title>
 <meta name="description" content="A practical, original SDR resource from the AmplifyHub library. Read it, copy sections, print to PDF, or download an editable file.">
+<meta name="robots" content="noindex">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
@@ -112,23 +113,41 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-off
 
 <script src="assets/vendor/supabase-2.110.8.min.js"></script>
 <script src="auth-config.js"></script>
+<script src="auth.js"></script>
+<script>requireAuth();</script>
 <script src="assets/resource-activity.js"></script>
-<script src="assets/resource-catalog.js"></script>
+<script src="assets/private-resource-store.js"></script>
 <script>
-(function(){
+(async function(){
   'use strict';
-  var catalog = window.ResourceCatalog;
+  var store = window.PrivateResourceStore;
   var main = document.getElementById('main');
   var params = new URLSearchParams(window.location.search);
   var id = params.get('id') || '';
-  var resource = catalog.byId(id);
-  var meta = catalog.categoryMeta;
-
-  // Publication gate: draft resources are only rendered in the explicit
-  // ?preview=review editorial mode. Publicly they behave as unpublished.
-  var previewMode = params.get('preview') === 'review';
-  if (resource && !catalog.isPublished(resource) && !previewMode) resource = null;
-  var isDraft = resource && resource.status !== 'reviewed';
+  var resource = null;
+  try {
+    resource = await store.getPublished(id);
+  } catch (error) {
+    console.warn('Unable to load private resource.', error);
+    var failed = document.createElement('div');
+    failed.className = 'notfound';
+    var failedTitle = document.createElement('h1');
+    failedTitle.textContent = 'Resource unavailable';
+    var failedCopy = document.createElement('p');
+    failedCopy.textContent = 'We could not verify access to this private resource. Refresh the page or sign in again.';
+    failed.appendChild(failedTitle);
+    failed.appendChild(failedCopy);
+    main.appendChild(failed);
+    return;
+  }
+  var meta = store.categoryMeta;
+  var previewMode = false;
+  var isDraft = false;
+  var catalog = {
+    reviewDate: resource && resource.reviewDate,
+    byId: function(){ return null; },
+    isPublished: function(value){ return !!value && value.active === true && value.status === 'reviewed'; }
+  };
 
   function el(tag, className, text){ var n=document.createElement(tag); if(className)n.className=className; if(text!=null)n.textContent=String(text); return n; }
   function cap(s){ return s ? s.charAt(0).toUpperCase()+s.slice(1) : s; }
@@ -193,13 +212,32 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-off
   var printBtn = el('button','tb','🖨 Print / Save as PDF');
   toolbar.appendChild(printBtn);
   (resource.downloads||[]).forEach(function(d){
-    var a = el('a','tb dl');
-    a.href = 'assets/resources/downloads/' + resource.id + '.' + d.format;
-    a.setAttribute('download','');
-    a.appendChild(el('span',null,'⬇ Download'));
-    a.appendChild(el('span','fmt', d.format.toUpperCase()));
-    a.addEventListener('click', trackDownload);
-    toolbar.appendChild(a);
+    var button = el('button','tb dl');
+    button.type = 'button';
+    button.appendChild(el('span',null,'⬇ Download'));
+    button.appendChild(el('span','fmt', d.format.toUpperCase()));
+    button.addEventListener('click', async function(){
+      button.disabled = true;
+      button.setAttribute('aria-busy','true');
+      try {
+        var signedUrl = await store.createSignedDownload(resource.id, d.format);
+        var link = document.createElement('a');
+        link.href = signedUrl;
+        link.download = resource.id + '.' + d.format;
+        link.rel = 'noopener';
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        trackDownload();
+      } catch (error) {
+        console.warn('Secure resource download failed.', error);
+        toast('Download unavailable. Please sign in again or retry.');
+      } finally {
+        button.disabled = false;
+        button.removeAttribute('aria-busy');
+      }
+    });
+    toolbar.appendChild(button);
   });
   main.appendChild(toolbar);
 

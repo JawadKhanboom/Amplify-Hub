@@ -15,7 +15,7 @@
 <script src="coach-config.js"></script>
 <script src="coach-store.js"></script>
 <script src="assets/challenge-system.js"></script>
-<script src="assets/resource-catalog.js"></script>
+<script src="assets/private-resource-store.js"></script>
 <script src="assets/user-stats.js"></script>
 <script>requireAuth();</script>
 <style>
@@ -420,11 +420,19 @@ document.querySelectorAll('.sb-item').forEach(item => { item.addEventListener('c
 // Resources: build cards from published (active + reviewed) counts only — drafts
 // never surface here, and no counts are invented. Falls back to an honest
 // in-review card while nothing has passed editorial review yet.
-(function(){
+(async function(){
   var grid = document.getElementById('resourceGrid');
-  if (!grid || !window.ResourceCatalog) return;
-  var meta = window.ResourceCatalog.categoryMeta;
-  var counts = window.ResourceCatalog.publishedCounts();
+  if (!grid || !window.PrivateResourceStore) return;
+  var meta = window.PrivateResourceStore.categoryMeta;
+  var counts = {};
+  Object.keys(meta).forEach(function(key){ counts[key] = 0; });
+  try {
+    var resources = await window.PrivateResourceStore.listPublished();
+    resources.forEach(function(resource){ counts[resource.category] = (counts[resource.category] || 0) + 1; });
+  } catch (error) {
+    console.warn('Unable to load private resource counts.', error);
+    return;
+  }
   var total = Object.keys(counts).reduce(function(sum,k){ return sum + (counts[k]||0); }, 0);
   function card(icon, name, desc, countText, category){
     var a = document.createElement('a');

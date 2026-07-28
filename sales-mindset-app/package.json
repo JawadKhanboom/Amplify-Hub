@@ -19,6 +19,7 @@
     "qa:routes": "node scripts/qa-routes.mjs",
     "generate:resources": "node scripts/generate-resource-files.mjs",
     "generate:resource-migration": "node scripts/generate-resource-migration.mjs",
+    "upload:private-resources": "node scripts/upload-private-resources.mjs",
     "qa:profile-progress": "node scripts/qa-profile-progress.mjs",
     "qa:account-trust": "node scripts/qa-account-trust.mjs",
     "qa:ui-polish": "node scripts/qa-ui-polish.mjs",

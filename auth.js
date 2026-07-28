@@ -97,8 +97,8 @@ async function getCurrentUser(expectedUserId, expectedVersion) {
 async function requireAuth() {
   const session = await getSession();
   if (!session) {
-    const currentPage = window.location.pathname.split('/').pop();
-    window.location.href = `signin.html?redirect=${currentPage}`;
+    const currentPage = window.location.pathname.split('/').pop() + window.location.search;
+    window.location.href = `signin.html?redirect=${encodeURIComponent(currentPage)}`;
     return null;
   }
   // getUser() verifies the owner before any browser cache is selected.
