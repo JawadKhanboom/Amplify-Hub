@@ -411,6 +411,47 @@ footer::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;back
   .steps-path i{width:100%!important;height:100%!important}
   .stats-rule i{width:80%;left:10%}
 }
+/* Premium motion polish inspired by modern SaaS microinteractions. */
+.sec-h2,.hero h1{text-wrap:balance}
+.hero-sub,.feat-card p{text-wrap:pretty}
+body{
+  background-image:
+    linear-gradient(rgba(245,182,10,.025) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(245,182,10,.025) 1px,transparent 1px);
+  background-size:40px 40px;
+  background-position:center top;
+}
+.grad-text{background-size:200% auto;animation:gradShine 4.5s linear infinite}
+@keyframes gradShine{to{background-position:200% center}}
+.orb{filter:blur(90px);opacity:.72;mix-blend-mode:screen}
+.orb-1{background:radial-gradient(circle,rgba(245,182,10,.2) 0%,transparent 70%);animation:orb1 20s ease-in-out infinite alternate}
+.orb-2{background:radial-gradient(circle,rgba(99,102,241,.14) 0%,transparent 70%);animation:orb2 25s ease-in-out infinite alternate-reverse}
+.rv{transform:translateY(40px) scale(.98);filter:blur(8px);transition:opacity .8s cubic-bezier(.2,1,.3,1),transform .8s cubic-bezier(.2,1,.3,1),filter .8s ease-out}
+.rv.in,.rv-l.in,.rv-r.in{transform:none;filter:none}
+.btn-hero.gold{position:relative;overflow:hidden;border:1px solid rgba(255,255,255,.12);transform:translateZ(0)}
+.btn-hero.gold::after{content:'';position:absolute;top:0;left:-100%;width:50%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.32),transparent);transform:skewX(-20deg);pointer-events:none}
+.btn-hero.gold:hover::after{animation:buttonSweep .65s ease-out forwards}
+@keyframes buttonSweep{to{left:200%}}
+.demo{--demo-x:50%;--demo-y:50%;transition:border-color .3s,transform .2s ease-out}
+@media (hover:hover) and (pointer:fine){
+  .demo::before{
+    background:radial-gradient(800px circle at var(--demo-x) var(--demo-y),rgba(255,255,255,.065),transparent 40%);
+    z-index:10;
+    mix-blend-mode:screen;
+    opacity:0;
+    transition:opacity .3s;
+  }
+  .demo:hover::before{opacity:1}
+}
+.feat-card{transition:transform .4s cubic-bezier(.2,1,.3,1),border-color .4s,box-shadow .4s}
+.feat-card:hover{transform:translateY(-10px) scale(1.02);box-shadow:0 20px 40px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.1)}
+.parallax-bg{position:fixed;inset:-10% 0 auto 0;height:70vh;z-index:0;pointer-events:none;background:radial-gradient(circle at 50% 0%,rgba(245,182,10,.055),transparent 60%);will-change:transform}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
+  .rv{opacity:1;transform:none;filter:none}
+  .demo{transform:none!important}
+  .parallax-bg{display:none}
+}
 </style>
 </head>
 <body>
@@ -840,6 +881,73 @@ footer::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;back
 'use strict';
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+function initLandingMotionPolish(){
+  if (reducedMotion) return;
+
+  const hero = document.querySelector('.hero');
+  if (hero && window.matchMedia('(hover:hover) and (pointer:fine)').matches) {
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    canvas.setAttribute('aria-hidden','true');
+    canvas.style.cssText = 'position:absolute;inset:0;z-index:1;pointer-events:none';
+    hero.insertBefore(canvas, hero.firstChild);
+
+    let width = 0, height = 0;
+    const particles = [];
+    function resizeParticles(){
+      width = hero.offsetWidth;
+      height = hero.offsetHeight;
+      canvas.width = width;
+      canvas.height = height;
+      particles.length = 0;
+      const count = Math.min(42, Math.max(18, Math.floor(width / 34)));
+      for (let i = 0; i < count; i++) {
+        particles.push({
+          x: Math.random() * width,
+          y: Math.random() * height,
+          r: Math.random() * 1.4 + .45,
+          vx: (Math.random() - .5) * .24,
+          vy: -Math.random() * .28 - .08,
+          a: Math.random() * .38 + .08
+        });
+      }
+    }
+    function drawParticles(){
+      ctx.clearRect(0,0,width,height);
+      particles.forEach(p => {
+        p.x += p.vx;
+        p.y += p.vy;
+        if (p.y < -8) p.y = height + 8;
+        if (p.x < -8) p.x = width + 8;
+        if (p.x > width + 8) p.x = -8;
+        ctx.beginPath();
+        ctx.arc(p.x,p.y,p.r,0,Math.PI * 2);
+        ctx.fillStyle = `rgba(245,182,10,${p.a})`;
+        ctx.fill();
+      });
+      requestAnimationFrame(drawParticles);
+    }
+    resizeParticles();
+    window.addEventListener('resize', resizeParticles, { passive:true });
+    drawParticles();
+  }
+
+  const parallaxBg = document.createElement('div');
+  parallaxBg.className = 'parallax-bg';
+  parallaxBg.setAttribute('aria-hidden','true');
+  document.body.prepend(parallaxBg);
+  let ticking = false;
+  window.addEventListener('scroll', () => {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(() => {
+      parallaxBg.style.transform = `translateY(${window.scrollY * .12}px)`;
+      ticking = false;
+    });
+  }, { passive:true });
+}
+initLandingMotionPolish();
+
 // ── Header scrolled state ──
 const hd = document.getElementById('hd');
 addEventListener('scroll', () => hd.classList.toggle('scrolled', scrollY > 20), { passive: true });
@@ -965,11 +1073,14 @@ document.querySelectorAll('.stat-num').forEach(el => statObs.observe(el));
 
   // 3D tilt
   const demo = document.getElementById('demoCard');
-  if (!reducedMotion) {
+  if (!reducedMotion && window.matchMedia('(hover:hover) and (pointer:fine)').matches) {
     demo.addEventListener('mousemove', e => {
       const r = demo.getBoundingClientRect();
-      const x = ((e.clientX - r.left) / r.width - .5) * 15, y = ((e.clientY - r.top) / r.height - .5) * -15;
-      demo.style.transform = `perspective(1000px) rotateX(${y}deg) rotateY(${x}deg)`;
+      const localX = e.clientX - r.left, localY = e.clientY - r.top;
+      demo.style.setProperty('--demo-x', `${localX}px`);
+      demo.style.setProperty('--demo-y', `${localY}px`);
+      const x = (localX / r.width - .5) * 12, y = (localY / r.height - .5) * -12;
+      demo.style.transform = `perspective(1000px) rotateX(${y}deg) rotateY(${x}deg) scale3d(1.02,1.02,1.02)`;
     });
     demo.addEventListener('mouseleave', () => { demo.style.transform = ''; });
   }
