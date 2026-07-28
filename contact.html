@@ -112,6 +112,7 @@ footer::before{content:'';position:absolute;top:-30%;left:8%;width:420px;height:
 .field input:focus,.field textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-dim)}
 .field textarea{resize:vertical;min-height:120px}
 .field input::placeholder,.field textarea::placeholder{color:var(--muted)}
+.turnstile-wrap{min-height:65px;margin:0 0 18px}
 .contact-info-item{display:flex;align-items:flex-start;gap:14px;margin-bottom:22px}
 .cii-icon{width:40px;height:40px;min-width:40px;border-radius:11px;background:var(--accent-dim);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:17px}
 .cii-label{font-size:11px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:1px;margin-bottom:3px}
@@ -182,6 +183,9 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
         <div style="position:absolute;left:-9999px;top:auto;height:1px;overflow:hidden" aria-hidden="true">
           <label for="cWebsite">Website</label><input id="cWebsite" type="text" tabindex="-1" autocomplete="off">
         </div>
+        <div class="turnstile-wrap">
+          <div class="cf-turnstile" data-sitekey="0x4AAAAAAD_tqmWYRjbPHntw" data-action="contact" data-theme="dark" data-size="flexible"></div>
+        </div>
         <p id="formError" style="display:none;color:#ff6b6b;font-size:13px;margin:0 0 14px"></p>
         <button type="submit" class="btn-primary" style="width:100%;justify-content:center;border:none;cursor:pointer">Send Message →</button>
       </form>
@@ -212,15 +216,17 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
 </div>
 <script src="assets/vendor/supabase-2.110.8.min.js"></script>
 <script src="auth-config.js"></script>
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 <script>
 // Sidebar mobile toggle
 document.getElementById('mobMenuBtn').addEventListener('click',()=>document.getElementById('sidebar').classList.add('open'));
 document.getElementById('sbClose').addEventListener('click',()=>document.getElementById('sidebar').classList.remove('open'));
 
-// Contact form — inserts into the write-only contact_messages table
-// (see supabase/migrations/20260722160000_contact_messages.sql).
+// Contact submissions go through the Turnstile-protected Edge Function. The
+// browser intentionally has no direct INSERT permission on contact_messages.
 const contactForm = document.getElementById('contactForm');
 const formError = document.getElementById('formError');
+const contactEndpoint = 'https://dsuahpcqrrlbudomjrye.supabase.co/functions/v1/submit-contact';
 
 function showFormError(msg) {
   formError.textContent = msg;
@@ -246,9 +252,13 @@ contactForm.addEventListener('submit', async function(e){
   const email = document.getElementById('cEmail').value.trim();
   const subject = document.getElementById('cSubject').value.trim();
   const message = document.getElementById('cMessage').value.trim();
+  const turnstileToken = document.querySelector('[name="cf-turnstile-response"]')?.value
+    || window.turnstile?.getResponse?.()
+    || '';
 
   if (!name || !email || !message) { showFormError('Please fill in your name, email, and message.'); return; }
   if (message.length < 10) { showFormError('Please write at least a sentence (10+ characters) so we can actually help.'); return; }
+  if (!turnstileToken) { showFormError('Please complete the security check before sending.'); return; }
 
   const btn = contactForm.querySelector('button[type=submit]');
   sendingMessage = true;
@@ -257,18 +267,35 @@ contactForm.addEventListener('submit', async function(e){
   const originalLabel = btn.textContent;
   btn.textContent = 'Sending…';
 
-  let failed = false;
+  let failureMessage = '';
   try {
-    const { error } = await supabaseClient.from('contact_messages').insert({ name, email, subject, message });
-    failed = !!error;
+    const response = await fetch(contactEndpoint, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'omit',
+      body: JSON.stringify({
+        name,
+        email,
+        subject,
+        message,
+        website: document.getElementById('cWebsite').value,
+        turnstileToken,
+      }),
+    });
+    const result = await response.json().catch(() => null);
+    if (!response.ok || result?.ok !== true) {
+      failureMessage = typeof result?.error === 'string'
+        ? result.error
+        : "Couldn't send your message right now.";
+    }
   } catch (_) {
-    // Covers a blocked/failed supabase-js CDN load or a thrown network error —
-    // never leave the button stuck on "Sending…".
-    failed = true;
+    // Network and script failures must never leave the button stuck.
+    failureMessage = "Couldn't send your message right now.";
   }
 
-  if (failed) {
-    showFormError("Couldn't send your message right now. Please try again in a minute, or email hello@amplifyhub.app directly.");
+  if (failureMessage) {
+    showFormError(`${failureMessage} Please try again, or email hello@amplifyhub.app directly.`);
+    window.turnstile?.reset?.();
     sendingMessage = false;
     btn.disabled = false;
     btn.style.opacity = '';
