@@ -14,7 +14,7 @@
     "sales-mindset-8.html": "e376b3d8d7f98578c4bcfd56a3ce71524202b2e6d7caf26f3aeb6d25184ad115",
     "sales-mindset-app/index.html": "556a57d3d6cea72f73a7dc29de3bae40e64903e5d26a5b1999739604e8a232d0",
     "sales-mindset-app/package-lock.json": "240ef33ef7a438b6391fcb78d024553d4ddd771b69dbc7b5eb84674e72d47a9b",
-    "sales-mindset-app/package.json": "b100fc71ae4e9bc3df8d685f2ad6734eed2692719a0b81163b57aa906cc0036d",
+    "sales-mindset-app/package.json": "f36ca95e6b3db4956667a31c8a1c80097a598168db1312af59269979268684a6",
     "sales-mindset-app/scripts/build-fingerprint.mjs": "d124ad2b1110290466a0bb5af01fa379da2f120d49f9730825a97d4a4ac72203",
     "sales-mindset-app/src/App.tsx": "39da63a8096d03a1795565581155e08c6c580cedb92b41bcb5e87fdffeed3de4",
     "sales-mindset-app/src/lessons.ts": "b655ae4c47beaa43053230ff2e580721cdeffe0172165f5688b0589a61c436f3",
@@ -26,5 +26,5 @@
     "sales-mindset-app/tsconfig.json": "cc32a3c2be133425d30e112e3dc863c9dbe1ecbbdd81123abf6d6a0300a8ae5c",
     "sales-mindset-app/vite.config.ts": "a91e9873d866967fe73ed55b9695da471d81737f2e29d05fe4ff5ca1b9a64a1f"
   },
-  "digest": "15bd411d8761b3bd547d081c7e8f3eeb57e771f011147d6fd68813885d1406d1"
+  "digest": "db2fdae30b9837d14568bbf8fd35b68a9a9e7dfda7d414fa10d1d4114d0ee380"
 }

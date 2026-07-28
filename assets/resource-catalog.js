@@ -1,10 +1,9 @@
 /*
  * AmplifyHub Practical Resource Library — static, version-controlled catalog.
  *
- * This file is the single source of truth for the browser (resources.html,
- * resource.html), the download generators (scripts/generate-resource-files.mjs),
- * and the Supabase seed migration (scripts/generate-resource-migration.mjs).
- * Keep those consumers in sync by regenerating after any edit here.
+ * This internal file is the source for download generators and Supabase seed
+ * migrations. Production browsers load reviewed rows through authenticated
+ * Postgres RLS; this file is excluded from deployment.
  *
  * DRAFT CONTENT: every entry is a first draft written for human editorial
  * review. Do not describe this content as professionally reviewed until a
@@ -1511,7 +1510,7 @@
     }
   ];
 
-  // Publication gate: a resource is publicly visible only when it is BOTH
+  // Publication gate: a resource is member-visible only when it is BOTH
   // active and editorially reviewed. `status` defaults to 'draft' here so a
   // new entry can never leak into the public UI just by being active; a human
   // reviewer flips an entry to status:'reviewed' after the editorial pass.

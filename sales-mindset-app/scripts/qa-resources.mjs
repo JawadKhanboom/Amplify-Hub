@@ -12,6 +12,28 @@ const downloadsDir = path.join(siteRoot, 'assets', 'resources', 'downloads');
 const catalogModule = await import(pathToFileURL(path.join(siteRoot, 'assets', 'resource-catalog.js')).href);
 const catalog = catalogModule.default || catalogModule.ResourceCatalog;
 const resources = catalog.resources;
+const catalogRows = resources.map((resource) => ({
+  id: resource.id,
+  title: resource.title,
+  category: resource.category,
+  skill: resource.skill,
+  difficulty: resource.difficulty,
+  duration_minutes: resource.duration,
+  summary: resource.summary,
+  objectives: resource.objectives,
+  content: resource.sections,
+  example: resource.example,
+  safe_practice: resource.safePractice,
+  related_label: resource.related?.label || '',
+  related_route: resource.related?.route || '',
+  downloads: (resource.downloads || []).map((download) => ({
+    format: download.format,
+    path: `${resource.id}.${download.format}`,
+  })),
+  review_date: resource.reviewDate || catalog.reviewDate,
+  status: resource.status,
+  active: resource.active === true,
+}));
 
 /* ---------------------------------------------- Part A: static / structural */
 
@@ -149,12 +171,38 @@ for (const r of resources) {
 const catalogSyncMigration = await readFile(path.join(siteRoot, 'supabase/migrations/20260726104712_resource_catalog_sync.sql'), 'utf8');
 const phase2Migration = await readFile(path.join(siteRoot, 'supabase/migrations/20260726104713_resources_phase_2.sql'), 'utf8');
 const activityClient = await readFile(path.join(siteRoot, 'assets/resource-activity.js'), 'utf8');
+const privateResourceClient = await readFile(path.join(siteRoot, 'assets/private-resource-store.js'), 'utf8');
 const resourceDetailSource = await readFile(path.join(siteRoot, 'resource.html'), 'utf8');
 const resourceLibrarySource = await readFile(path.join(siteRoot, 'resources.html'), 'utf8');
 const interviewPrepSource = await readFile(path.join(siteRoot, 'interview-prep.html'), 'utf8');
+const privateMigration = await readFile(path.join(siteRoot, 'supabase/migrations/20260727201707_privatize_resource_library.sql'), 'utf8');
+const vercelIgnore = await readFile(path.join(siteRoot, '.vercelignore'), 'utf8');
+const vercelConfig = JSON.parse(await readFile(path.join(siteRoot, 'vercel.json'), 'utf8'));
 
 assert.match(resourceLibrarySource, /<script src="auth\.js"><\/script>/, 'resource library loads the shared auth guard');
 assert.match(resourceLibrarySource, /<script>requireAuth\(\);<\/script>/, 'resource library requires a signed-in session');
+assert.match(resourceDetailSource, /<script src="auth\.js"><\/script>/, 'resource detail loads the shared auth guard');
+assert.match(resourceDetailSource, /<script>requireAuth\(\);<\/script>/, 'resource detail requires a signed-in session');
+for (const [label, source] of [['resource library', resourceLibrarySource], ['resource detail', resourceDetailSource]]) {
+  assert.match(source, /assets\/private-resource-store\.js/, `${label} loads the authenticated catalog client`);
+  assert.doesNotMatch(source, /assets\/resource-catalog\.js/, `${label} does not ship the static catalog`);
+  assert.doesNotMatch(source, /assets\/resources\/downloads\//, `${label} contains no public artifact URL`);
+}
+assert.match(privateResourceClient, /\.from\('resource_catalog'\)/, 'private catalog client reads resource_catalog');
+assert.match(privateResourceClient, /\.eq\('active', true\)/, 'private catalog client enforces active rows');
+assert.match(privateResourceClient, /\.eq\('status', 'reviewed'\)/, 'private catalog client enforces reviewed rows');
+assert.match(privateResourceClient, /createSignedUrl\(objectPath, SIGNED_URL_TTL_SECONDS/, 'downloads use short-lived signed URLs');
+assert.match(privateResourceClient, /SIGNED_URL_TTL_SECONDS\s*=\s*60/, 'signed URLs expire after 60 seconds');
+assert.match(privateMigration, /revoke all privileges on public\.resource_catalog\s+from anon;/, 'anon loses catalog privileges');
+assert.match(privateMigration, /for select\s+to authenticated\s+using \(active = true and status = 'reviewed'\)/, 'catalog RLS is authenticated and publication-gated');
+assert.match(privateMigration, /'resource-downloads',\s*'resource-downloads',\s*false/, 'resource bucket is private');
+assert.match(privateMigration, /on storage\.objects\s+for select\s+to authenticated\s+using \(bucket_id = 'resource-downloads'\)/, 'private objects are readable only by authenticated members');
+assert.match(vercelIgnore, /^assets\/resource-catalog\.js$/m, 'static catalog is excluded from deployment');
+assert.match(vercelIgnore, /^assets\/resources\/downloads\/$/m, 'download source artifacts are excluded from deployment');
+assert.ok(
+  vercelConfig.redirects.some((redirect) => redirect.source === '/assets/resources/downloads/:path*' && redirect.permanent === false),
+  'legacy public artifact paths have a defensive temporary redirect',
+);
 
 assert.equal((migration.match(/^ {2}\('/gm) || []).length, 40, 'catalog migration stays synchronized with all 40 catalog rows');
 const catalogSyncIds = [...catalogSyncMigration.matchAll(/^ {2}\('([^']+)'/gm)].map((match) => match[1]);
@@ -208,7 +256,7 @@ assert.match(
   'resource activity uses the catalog text key with cascading cleanup',
 );
 assert.doesNotMatch(phase2Migration, /resource_id uuid/, 'resource activity never guesses a uuid catalog key');
-assert.match(phase2Migration, /\n  helpful boolean,\n/, 'helpful is nullable for the one-way useful affordance');
+assert.match(phase2Migration, /\r?\n  helpful boolean,\r?\n/, 'helpful is nullable for the one-way useful affordance');
 assert.doesNotMatch(phase2Migration, /helpful boolean not null/, 'helpful remains nullable');
 assert.match(phase2Migration, /primary key \(user_id, resource_id\)/, 'resource activity is unique per user and resource');
 assert.match(
@@ -320,6 +368,7 @@ function mockSupabaseScript(fixture = {}) {
   const initial = {
     user: fixture.user || null,
     tables: {
+      resource_catalog: fixture.catalogRows || catalogRows,
       user_resource_activity: fixture.activityRows || [],
       user_interview_prep: fixture.interviewRows || [],
       user_lesson_progress: [],
@@ -331,6 +380,7 @@ function mockSupabaseScript(fixture = {}) {
       rpcCalls: 0,
       rpcWrites: 0,
       rpcByName: {},
+      signedUrlCalls: 0,
     },
   };
 
@@ -585,6 +635,23 @@ function mockSupabaseScript(fixture = {}) {
         },
         from(table) { return makeBuilder(table); },
         rpc,
+        storage: {
+          from(bucket) {
+            return {
+              async createSignedUrl(objectPath, expiresIn) {
+                const state = readState();
+                if (!state.user) return { data: null, error: { message: 'Authentication required' } };
+                state.calls.signedUrlCalls += 1;
+                state.calls.lastSignedUrl = { bucket, objectPath, expiresIn };
+                writeState(state);
+                return {
+                  data: { signedUrl: location.origin + '/__qa-private-download/' + encodeURIComponent(objectPath) },
+                  error: null,
+                };
+              },
+            };
+          },
+        },
       };
 
       window.supabase = { createClient: () => db };
@@ -596,6 +663,12 @@ async function installMockSupabase(page, fixture) {
   await page.route('**/assets/vendor/supabase-*.min.js', (route) => route.fulfill({
     contentType: 'application/javascript',
     body: mockSupabaseScript(fixture),
+  }));
+  await page.route('**/__qa-private-download/**', (route) => route.fulfill({
+    status: 200,
+    contentType: 'application/octet-stream',
+    headers: { 'Content-Disposition': 'attachment; filename="private-resource.bin"' },
+    body: 'private resource qa payload',
   }));
 }
 
@@ -641,6 +714,13 @@ try {
     /signin\.html\?redirect=resources\.html$/,
     'anonymous library visit redirects to sign-in and preserves the destination',
   );
+  await page.goto(`${baseUrl}resource.html?id=${encodeURIComponent(resources[0].id)}`, { waitUntil: 'domcontentloaded' });
+  await page.waitForURL(/signin\.html\?redirect=resource\.html%3Fid%3D/);
+  assert.match(
+    page.url(),
+    /signin\.html\?redirect=resource\.html%3Fid%3D/,
+    'anonymous detail visit redirects before content loads and preserves the resource id',
+  );
   await page.evaluate(() => window.__setQaUser({
     id: 'resource-library-viewer',
     email: 'resource-library-viewer@example.test',
@@ -658,15 +738,15 @@ try {
   }
   assert.match(await page.locator('.flt', { hasText: 'All' }).innerText(), new RegExp(`All \\(${publishedCount}\\)`), 'public All count is derived from published resources only');
 
-  // --- EDITORIAL PREVIEW: all drafts visible, clearly labelled ---
+  // Query parameters cannot bypass the authenticated, reviewed-only query.
   await page.goto(`${baseUrl}resources.html?preview=review`, { waitUntil: 'domcontentloaded' });
   await page.waitForSelector('.res');
-  assert.equal(await page.locator('.res').count(), TOTAL, `preview mode renders all ${TOTAL} resources`);
-  assert.match(await page.locator('#modeBannerText').innerText(), /Editorial preview/i, 'preview mode is explicitly labelled');
-  assert.equal(await page.locator('.res-draft').count(), draftCount, 'every draft carries a Draft chip');
+  assert.equal(await page.locator('.res').count(), publishedCount, 'preview parameter cannot expose unpublished rows');
+  assert.match(await page.locator('#modeBannerText').innerText(), /Reviewed resources/i, 'member banner describes the reviewed catalog');
+  assert.equal(await page.locator('.res-draft').count(), 0, 'the member response contains no draft chips');
 
   // Catalog-derived counts.
-  assert.match(await page.locator('.flt', { hasText: 'All' }).innerText(), new RegExp(`All \\(${TOTAL}\\)`), 'preview All filter shows real total');
+  assert.match(await page.locator('.flt', { hasText: 'All' }).innerText(), new RegExp(`All \\(${publishedCount}\\)`), 'All filter shows the authenticated catalog total');
   assert.match(await page.locator('.flt', { hasText: 'Scripts' }).innerText(), new RegExp(`\\(${EXPECTED.script}\\)`), 'Scripts chip shows derived count');
   assert.equal(await page.locator('.type-card').count(), 5, 'five category type cards (videos removed)');
   assert.equal(await page.locator('.type-card').evaluateAll((cards) => cards.every((card) => card.tagName === 'BUTTON')), true, 'category cards are semantic buttons');
@@ -679,8 +759,8 @@ try {
   const scriptsCard = page.locator('.type-card', { hasText: 'Scripts' });
   assert.equal(await scriptsCard.getAttribute('aria-pressed'), 'true', 'Scripts category control exposes its selected state');
 
-  // Return to the complete editorial view for the remaining preview-only checks.
-  await page.goto(`${baseUrl}resources.html?preview=review`, { waitUntil: 'domcontentloaded' });
+  // Return to the complete member view.
+  await page.goto(`${baseUrl}resources.html`, { waitUntil: 'domcontentloaded' });
   await page.waitForSelector('.res');
 
   // No fake/removed content.
@@ -700,27 +780,22 @@ try {
   const searchHits = await page.locator('.res').count();
   assert.ok(searchHits >= 1 && searchHits < TOTAL, `search narrows results (${searchHits})`);
   await page.locator('#searchInput').fill('');
-  await page.waitForFunction((n) => document.querySelectorAll('.res').length === n, TOTAL);
+  await page.waitForFunction((n) => document.querySelectorAll('.res').length === n, publishedCount);
 
-  // Cards keep the reviewer in preview mode.
+  // Cards stay on the private member route.
   const firstHref = await page.locator('.res').first().getAttribute('href');
-  assert.match(firstHref, /^resource\.html\?id=.+&preview=review$/, 'preview cards link into preview detail pages');
+  assert.match(firstHref, /^resource\.html\?id=.+$/, 'member cards link into private detail pages');
 
-  await page.evaluate(() => window.__setQaUser(null));
-
-  // --- Every resource opens on the detail page (preview mode) ---
-  for (const r of resources) {
-    await page.goto(`${baseUrl}resource.html?id=${encodeURIComponent(r.id)}&preview=review`, { waitUntil: 'domcontentloaded' });
+  // --- Every published resource opens on the private detail page ---
+  for (const r of resources.filter((resource) => resource.status === 'reviewed' && resource.active === true)) {
+    await page.goto(`${baseUrl}resource.html?id=${encodeURIComponent(r.id)}`, { waitUntil: 'domcontentloaded' });
     await page.waitForSelector('h1.title');
     const heading = await page.locator('h1.title').innerText();
     assert.ok(heading.trim().length > 0, `${r.id} renders a title`);
     assert.equal(await page.locator('.tb.dl').count(), (r.downloads || []).length, `${r.id} shows its download buttons`);
-    if (r.status !== 'reviewed') {
-      assert.equal(await page.locator('.draft-banner').count(), 1, `${r.id} (draft) shows the draft banner in preview`);
-    }
   }
 
-  // --- PUBLIC detail page: drafts are blocked, invalid ids are distinct ---
+  // --- Member detail page: drafts are blocked by the catalog query ---
   const draftSample = resources.find((r) => r.status !== 'reviewed');
   if (draftSample) {
     await page.goto(`${baseUrl}resource.html?id=${encodeURIComponent(draftSample.id)}`, { waitUntil: 'domcontentloaded' });
@@ -732,9 +807,9 @@ try {
   await page.waitForSelector('.notfound');
   assert.match(await page.locator('.notfound').innerText(), /Resource not found/i, 'invalid id shows the not-found state');
 
-  // --- Detail page behaviour on one representative resource (preview) ---
+  // --- Detail page behaviour on one representative private resource ---
   const sample = resources[0];
-  await page.goto(`${baseUrl}resource.html?id=${encodeURIComponent(sample.id)}&preview=review`, { waitUntil: 'domcontentloaded' });
+  await page.goto(`${baseUrl}resource.html?id=${encodeURIComponent(sample.id)}`, { waitUntil: 'domcontentloaded' });
   assert.equal(await page.locator('h1.title').innerText(), sample.title, 'detail title matches catalog');
   assert.ok(await page.locator('.toolbar .tb', { hasText: 'Copy' }).count() === 1, 'Copy action present');
   assert.ok(await page.locator('.toolbar .tb', { hasText: 'Print' }).count() === 1, 'Print/Save-as-PDF action present');
@@ -742,29 +817,7 @@ try {
   const relHref = await page.locator('.related a').getAttribute('href');
   assert.equal(relHref, sample.related.route, 'related action points at the catalog route');
 
-  // Public download actually serves the file.
-  const dlHref = await page.locator('.tb.dl').first().getAttribute('href');
-  const dlResp = await page.request.get(`${baseUrl}${dlHref}`);
-  assert.equal(dlResp.status(), 200, 'download file is publicly served');
-  assert.ok((await dlResp.body()).length > 300, 'served download is non-empty');
-
-  // Anonymous visitors keep the prompt path and never reach a table/RPC write.
-  await page.waitForFunction(() => {
-    const buttons = Array.from(document.querySelectorAll('.save-row button'));
-    return buttons.length === 2 && buttons.every((button) => !button.disabled);
-  });
-  await page.getByRole('button', { name: /Bookmark/i }).click();
-  await page.waitForSelector('.save-note', { state: 'visible' });
-  const signHref = await page.locator('.save-note a').getAttribute('href');
-  assert.match(signHref, /signin\.html\?redirect=/, 'bookmark prompts sign-in');
-  await page.locator('.save-note').evaluate((note) => { note.style.display = 'none'; });
-  await page.getByRole('button', { name: /useful/i }).click();
-  await page.waitForSelector('.save-note', { state: 'visible' });
-  assert.equal(await page.locator('.save-note').isVisible(), true, 'useful independently prompts sign-in');
-  const signedOutBackend = await readMockState(page);
-  assert.equal(signedOutBackend.calls.tableWrites, 0, 'signed-out resource actions make zero table writes');
-  assert.equal(signedOutBackend.calls.rpcWrites, 0, 'signed-out resource actions make zero RPC writes');
-  assert.deepEqual(signedOutBackend.tables.user_resource_activity, [], 'signed-out resource actions persist no activity row');
+  assert.equal(await page.locator('.tb.dl').first().getAttribute('href'), null, 'download control contains no reusable public href');
 
   // --- Authenticated resource activity: view, bookmark, useful, download, reload, library ---
   const qaUser = { id: 'resource-qa-user', email: 'resource-qa@example.test', user_metadata: { full_name: 'Resource QA' } };
@@ -838,11 +891,18 @@ try {
         state.calls.rpcByName.record_resource_download === 1;
     }, { key: QA_BACKEND_KEY, id: sample.id });
 
-    const persistedActivity = (await readMockState(signedIn.page)).tables.user_resource_activity
+    const postDownloadState = await readMockState(signedIn.page);
+    const persistedActivity = postDownloadState.tables.user_resource_activity
       .find((row) => row.resource_id === sample.id);
     assert.equal(persistedActivity.bookmarked, true, 'later activity writes preserve the bookmark');
     assert.ok(persistedActivity.last_viewed_at, 'detail view records a recent-view timestamp');
     assert.equal(persistedActivity.download_count, 1, 'download invokes the atomic counter RPC');
+    assert.equal(postDownloadState.calls.signedUrlCalls, 1, 'download requests one signed Storage URL');
+    assert.deepEqual(
+      postDownloadState.calls.lastSignedUrl,
+      { bucket: 'resource-downloads', objectPath: `${sample.id}.pdf`, expiresIn: 60 },
+      'signed URL targets the private bucket, canonical object path, and 60-second lifetime',
+    );
 
     const detailOtherUser = { id: 'resource-detail-user-b', email: 'resource-detail-b@example.test', user_metadata: {} };
     const detailClearedSynchronously = await signedIn.page.evaluate((user) => {
@@ -1076,27 +1136,31 @@ try {
     await freshLegacy.context.close();
   }
 
-  // --- Rendering safety: catalog content is rendered as text, never HTML ---
-  // The stub resource is marked reviewed so this also exercises the PUBLIC path.
-  await page.route('**/assets/resource-catalog.js', (route) => route.fulfill({
-    contentType: 'application/javascript',
-    body: `(function(root){
-      var payload='<img src=x onerror="window.__xss=1">PWN';
-      var RES=[{id:'xss-1',title:payload,category:'script',skill:'opening',difficulty:'beginner',duration:5,
-        status:'reviewed',active:true,
-        summary:payload,objectives:[payload],sections:[{type:'list',heading:payload,items:[payload]}],
-        example:{title:'x',text:payload},safePractice:payload,related:{label:'x',route:'coach-home.html'},
-        downloads:[{format:'pdf'}]}];
-      var META={script:{label:'Script',plural:'Scripts',icon:'S'},template:{label:'Template',plural:'Templates',icon:'T'},cheatsheet:{label:'Cheat Sheet',plural:'Cheat Sheets',icon:'C'},worksheet:{label:'Worksheet',plural:'Worksheets',icon:'W'},interview:{label:'Interview Prep',plural:'Interview Prep',icon:'I'}};
-      function isPublished(r){return !!r && r.active===true && r.status==='reviewed';}
-      root.ResourceCatalog={reviewDate:'2026-07-19',categoryMeta:META,resources:RES,
-        isPublished:isPublished,
-        published:function(){return RES.filter(isPublished);},
-        byId:function(id){return RES[0];},
-        categoryCounts:function(){return {script:1,template:0,cheatsheet:0,worksheet:0,interview:0};},
-        publishedCounts:function(){return {script:1,template:0,cheatsheet:0,worksheet:0,interview:0};}};
-    })(window);`
-  }));
+  // --- Rendering safety: database catalog content is rendered as text, never HTML ---
+  const xssPayload = '<img src=x onerror="window.__xss=1">PWN';
+  await page.evaluate(({ key, payload }) => {
+    const state = JSON.parse(localStorage.getItem(key));
+    state.tables.resource_catalog = [{
+      id: 'xss-1',
+      title: payload,
+      category: 'script',
+      skill: 'opening',
+      difficulty: 'beginner',
+      duration_minutes: 5,
+      status: 'reviewed',
+      active: true,
+      summary: payload,
+      objectives: [payload],
+      content: [{ type: 'list', heading: payload, items: [payload] }],
+      example: { title: 'x', text: payload },
+      safe_practice: payload,
+      related_label: 'x',
+      related_route: 'coach-home.html',
+      downloads: [{ format: 'pdf', path: 'xss-1.pdf' }],
+      review_date: '2026-07-19',
+    }];
+    localStorage.setItem(key, JSON.stringify(state));
+  }, { key: QA_BACKEND_KEY, payload: xssPayload });
   await page.goto(`${baseUrl}resource.html?id=xss-1`, { waitUntil: 'domcontentloaded' });
   await page.waitForSelector('h1.title');
   assert.equal(await page.evaluate(() => window.__xss || 0), 0, 'catalog HTML never executes');
@@ -1108,11 +1172,11 @@ try {
   // Dashboard integration (published-only counts, no fake video card).
   const dashboard = await readFile(path.join(siteRoot, 'dashboard.html'), 'utf8');
   assert.match(dashboard, /href="resources\.html">Browse Library/, 'dashboard links to the real library');
-  assert.match(dashboard, /publishedCounts\(\)/, 'dashboard derives counts from published resources only');
+  assert.match(dashboard, /PrivateResourceStore\.listPublished\(\)/, 'dashboard derives counts from the authenticated catalog');
   assert.match(dashboard, /resources\.html\?category=/, 'dashboard category cards deep-link to filtered resource lists');
   assert.doesNotMatch(dashboard, /36 videos|18 templates|24 scripts/, 'dashboard no longer shows invented counts');
 
-  console.log(`Browser QA passed: signed-in reviewed-only library, draft blocking, search/filter, ${TOTAL} detail pages, anonymous write blocking, signed-in activity round-trips, personalized lists, atomic downloads, one-time legacy migration, safe rendering, and honest dashboard.`);
+  console.log(`Browser QA passed: anonymous route blocking, signed-in reviewed-only library, search/filter, ${TOTAL} private detail pages, signed URL downloads, activity round-trips, personalized lists, one-time legacy migration, safe rendering, and honest dashboard.`);
 } finally {
   await browser.close();
   await server.close();

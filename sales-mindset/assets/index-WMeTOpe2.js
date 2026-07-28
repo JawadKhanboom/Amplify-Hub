@@ -338,7 +338,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
   <div class="bnav">\r
     <a href="journey.html" class="bnav-btn bnav-prev">← Back to Journey</a>\r
     <button class="bnav-btn bnav-complete" id="completeBtn">Mark as Complete ✓</button>\r
-    <a href="sales-mindset/index.html#lesson-2" class="bnav-btn bnav-next">Next Lesson →</a>
+    <a href="sales-mindset/index.html#lesson-2" class="bnav-btn bnav-next">Next Lesson →</a>\r
   </div>\r
 </div>\r
 \r
@@ -398,7 +398,7 @@ document.getElementById('sbX').addEventListener('click',()=>document.getElementB
 <\/script>\r
 <script src="assets/sidebar-user.js"><\/script>\r
 </body>\r
-</html>
+</html>\r
 `},{id:`m0l1`,number:2,title:`Rejection is Information`,shortTitle:`Rejection is Information`,duration:`~8 min`,xp:50,answers:[1,2,1,1],source:`<!DOCTYPE html>\r
 <html lang="en">\r
 <head>\r
@@ -654,9 +654,9 @@ details[open] summary{border-bottom:1px solid var(--border)}\r
 \r
   <!-- BOTTOM NAV -->\r
   <div class="bnav">\r
-    <a href="sales-mindset/index.html#lesson-1" class="bnav-btn bnav-prev">← Previous Lesson</a>
+    <a href="sales-mindset/index.html#lesson-1" class="bnav-btn bnav-prev">← Previous Lesson</a>\r
     <button class="bnav-btn bnav-complete" id="completeBtn">Mark as Complete ✓</button>\r
-    <a href="sales-mindset/index.html#lesson-3" class="bnav-btn bnav-next">Next Lesson →</a>
+    <a href="sales-mindset/index.html#lesson-3" class="bnav-btn bnav-next">Next Lesson →</a>\r
   </div>\r
 </div>\r
 \r
@@ -718,7 +718,7 @@ document.getElementById('sbX').addEventListener('click',()=>document.getElementB
 <\/script>\r
 <script src="assets/sidebar-user.js"><\/script>\r
 </body>\r
-</html>
+</html>\r
 `},{id:`m0l2`,number:3,title:`Confidence Comes From Repetition`,shortTitle:`Confidence Through Repetition`,duration:`~8 min`,xp:50,answers:[2,2,1,2],source:`<!DOCTYPE html>\r
 <html lang="en">\r
 <head>\r
@@ -965,9 +965,9 @@ details[open] summary{border-bottom:1px solid var(--border)}\r
 \r
   <!-- BOTTOM NAV -->\r
   <div class="bnav">\r
-    <a href="sales-mindset/index.html#lesson-2" class="bnav-btn bnav-prev">← Previous Lesson</a>
+    <a href="sales-mindset/index.html#lesson-2" class="bnav-btn bnav-prev">← Previous Lesson</a>\r
     <button class="bnav-btn bnav-complete" id="completeBtn">Mark as Complete ✓</button>\r
-    <a href="sales-mindset/index.html#lesson-4" class="bnav-btn bnav-next">Next Lesson →</a>
+    <a href="sales-mindset/index.html#lesson-4" class="bnav-btn bnav-next">Next Lesson →</a>\r
   </div>\r
 </div>\r
 \r
@@ -1029,7 +1029,7 @@ document.getElementById('sbX').addEventListener('click',()=>document.getElementB
 <\/script>\r
 <script src="assets/sidebar-user.js"><\/script>\r
 </body>\r
-</html>
+</html>\r
 `},{id:`m0l3`,number:4,title:`Curiosity Beats Persuasion`,shortTitle:`Curiosity Beats Persuasion`,duration:`~8 min`,xp:50,answers:[1,2,1,1],source:`<!DOCTYPE html>\r
 <html lang="en">\r
 <head>\r
@@ -1284,9 +1284,9 @@ details[open] summary{border-bottom:1px solid var(--border)}\r
 \r
   <!-- BOTTOM NAV -->\r
   <div class="bnav">\r
-    <a href="sales-mindset/index.html#lesson-3" class="bnav-btn bnav-prev">← Previous Lesson</a>
+    <a href="sales-mindset/index.html#lesson-3" class="bnav-btn bnav-prev">← Previous Lesson</a>\r
     <button class="bnav-btn bnav-complete" id="completeBtn">Mark as Complete ✓</button>\r
-    <a href="sales-mindset/index.html#lesson-5" class="bnav-btn bnav-next">Next Lesson →</a>
+    <a href="sales-mindset/index.html#lesson-5" class="bnav-btn bnav-next">Next Lesson →</a>\r
   </div>\r
 </div>\r
 \r
@@ -1348,7 +1348,7 @@ document.getElementById('sbX').addEventListener('click',()=>document.getElementB
 <\/script>\r
 <script src="assets/sidebar-user.js"><\/script>\r
 </body>\r
-</html>
+</html>\r
 `},{id:`m0l4`,number:5,title:`Activity Creates Opportunity`,shortTitle:`Activity Creates Opportunity`,duration:`~7 min`,xp:50,answers:[1,2,1,0],source:`<!DOCTYPE html>\r
 <html lang="en">\r
 <head>\r
@@ -1592,9 +1592,9 @@ details[open] summary{border-bottom:1px solid var(--border)}\r
 \r
   <!-- BOTTOM NAV -->\r
   <div class="bnav">\r
-    <a href="sales-mindset/index.html#lesson-4" class="bnav-btn bnav-prev">← Previous Lesson</a>
+    <a href="sales-mindset/index.html#lesson-4" class="bnav-btn bnav-prev">← Previous Lesson</a>\r
     <button class="bnav-btn bnav-complete" id="completeBtn">Mark as Complete ✓</button>\r
-    <a href="sales-mindset/index.html#lesson-6" class="bnav-btn bnav-next">Next Lesson →</a>
+    <a href="sales-mindset/index.html#lesson-6" class="bnav-btn bnav-next">Next Lesson →</a>\r
   </div>\r
 </div>\r
 \r
@@ -1656,7 +1656,7 @@ document.getElementById('sbX').addEventListener('click',()=>document.getElementB
 <\/script>\r
 <script src="assets/sidebar-user.js"><\/script>\r
 </body>\r
-</html>
+</html>\r
 `},{id:`m0l5`,number:6,title:`Consistency Beats Motivation`,shortTitle:`Consistency Beats Motivation`,duration:`~7 min`,xp:50,answers:[1,2,1,1],source:`<!DOCTYPE html>\r
 <html lang="en">\r
 <head>\r
@@ -1836,9 +1836,9 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
 \r
   <!-- BOTTOM NAV -->\r
   <div class="bnav">\r
-    <a href="sales-mindset/index.html#lesson-5" class="bnav-btn bnav-prev">← Previous Lesson</a>
+    <a href="sales-mindset/index.html#lesson-5" class="bnav-btn bnav-prev">← Previous Lesson</a>\r
     <button class="bnav-btn bnav-complete" id="completeBtn">Mark as Complete ✓</button>\r
-    <a href="sales-mindset/index.html#lesson-7" class="bnav-btn bnav-next">Next Lesson →</a>
+    <a href="sales-mindset/index.html#lesson-7" class="bnav-btn bnav-next">Next Lesson →</a>\r
   </div>\r
 </div>\r
 \r
@@ -1900,7 +1900,7 @@ document.getElementById('sbX').addEventListener('click',()=>document.getElementB
 <\/script>\r
 <script src="assets/sidebar-user.js"><\/script>\r
 </body>\r
-</html>
+</html>\r
 `},{id:`m0l6`,number:7,title:`Think Like a Consultant`,shortTitle:`Think Like a Consultant`,duration:`~8 min`,xp:50,answers:[1,2,1,1],source:`<!DOCTYPE html>\r
 <html lang="en">\r
 <head>\r
@@ -2080,9 +2080,9 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
 \r
   <!-- BOTTOM NAV -->\r
   <div class="bnav">\r
-    <a href="sales-mindset/index.html#lesson-6" class="bnav-btn bnav-prev">← Previous Lesson</a>
+    <a href="sales-mindset/index.html#lesson-6" class="bnav-btn bnav-prev">← Previous Lesson</a>\r
     <button class="bnav-btn bnav-complete" id="completeBtn">Mark as Complete ✓</button>\r
-    <a href="sales-mindset/index.html#lesson-8" class="bnav-btn bnav-next">Next Lesson →</a>
+    <a href="sales-mindset/index.html#lesson-8" class="bnav-btn bnav-next">Next Lesson →</a>\r
   </div>\r
 </div>\r
 \r
@@ -2144,7 +2144,7 @@ document.getElementById('sbX').addEventListener('click',()=>document.getElementB
 <\/script>\r
 <script src="assets/sidebar-user.js"><\/script>\r
 </body>\r
-</html>
+</html>\r
 `},{id:`m0l7`,number:8,title:`Becoming Interview Ready`,shortTitle:`Becoming Interview Ready`,duration:`~10 min`,xp:50,answers:[2,1,1,1],source:`<!DOCTYPE html>\r
 <html lang="en">\r
 <head>\r
@@ -2329,7 +2329,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
 \r
   <!-- BOTTOM NAV -->\r
   <div class="bnav">\r
-    <a href="sales-mindset/index.html#lesson-7" class="bnav-btn bnav-prev">← Previous Lesson</a>
+    <a href="sales-mindset/index.html#lesson-7" class="bnav-btn bnav-prev">← Previous Lesson</a>\r
     <button class="bnav-btn bnav-complete" id="completeBtn">Mark as Complete ✓</button>\r
     <a href="interview-prep.html" class="bnav-btn bnav-next">Build Your SDR Portfolio →</a>\r
   </div>\r
