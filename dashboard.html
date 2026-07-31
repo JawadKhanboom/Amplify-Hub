@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AmplifyHub — Dashboard</title>
-<meta name="description" content="Your AmplifyHub dashboard.">
+<title>Boostivity Digital — Dashboard</title>
+<meta name="description" content="Your Boostivity Digital dashboard.">
 <meta name="robots" content="noindex">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -239,14 +239,14 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
 
 <!-- MOBILE HEADER -->
 <div class="mob-header">
-  <div class="logo">Amplify<span>Hub</span></div>
+  <div class="logo">Boostivity <span>Digital</span></div>
   <button class="mob-menu-btn" id="mobMenuBtn" aria-label="Open navigation menu"><span></span><span></span><span></span></button>
 </div>
 
 <!-- SIDEBAR -->
 <aside class="sidebar" id="sidebar">
   <button class="sb-close" id="sbClose" aria-label="Close navigation menu">✕</button>
-  <div class="sb-logo">Amplify<span>Hub</span></div>
+  <div class="sb-logo">Boostivity <span>Digital</span></div>
   <nav class="sb-nav">
     <a class="sb-item active" href="dashboard.html"><span class="sb-icon">🏠</span>Dashboard</a>
     <a class="sb-item" href="journey.html"><span class="sb-icon">🛤</span>Journey</a>
@@ -538,7 +538,7 @@ async function loadDashboard() {
     const firstName = user && user.user_metadata && user.user_metadata.full_name ? user.user_metadata.full_name.split(' ')[0] : null;
 
     if (!hasActivity) {
-      document.querySelector('.w-greeting h1').textContent = 'Welcome to AmplifyHub \u{1F44B}';
+      document.querySelector('.w-greeting h1').textContent = 'Welcome to Boostivity Digital \u{1F44B}';
       document.querySelector('.w-greeting p').textContent = 'Your journey starts today — one call at a time.';
       document.querySelector('.w-streak').textContent = '\u{1F331} Day 1';
       document.getElementById('wCta').textContent = 'Start Your Journey \u2192';
