@@ -1,0 +1,59 @@
+:root {
+  /* System font stacks (No Google Fonts) */
+  --ah-font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+  --ah-font-display: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --ah-font-mono: ui-monospace, 'Cascadia Code', 'Fira Mono', 'Courier New', monospace;
+
+  /* Core Palette */
+  --ah-bg: #07070e;
+  --ah-bg-elevated: #0b0b16;
+  --ah-bg-card: #13132a;
+  --ah-gold: #FFD54A;
+  --ah-gold-dim: rgba(255, 213, 74, 0.1);
+  --ah-gold-glow: rgba(255, 213, 74, 0.25);
+  
+  --ah-white: #ffffff;
+  --ah-text-main: #b0b0c8;
+  --ah-text-muted: #8a8aa4;
+  
+  --ah-border-subtle: rgba(255, 213, 74, 0.07);
+  --ah-border-hover: rgba(255, 213, 74, 0.22);
+  --ah-glass-bg: rgba(19, 19, 42, 0.55);
+
+  /* Status Colors */
+  --ah-status-success: #00e696;
+  --ah-status-success-bg: rgba(0, 230, 150, 0.1);
+  --ah-status-error: #ff6b6b;
+  --ah-status-error-bg: rgba(255, 107, 107, 0.1);
+  --ah-status-warning: #FFA726;
+  --ah-status-info: #64B5F6;
+
+  /* Metrics & Layout */
+  --ah-sidebar-width: 240px;
+  --ah-touch-target: 44px;
+  
+  /* Spacing */
+  --ah-space-1: 4px;
+  --ah-space-2: 8px;
+  --ah-space-3: 12px;
+  --ah-space-4: 16px;
+  --ah-space-5: 24px;
+  --ah-space-6: 32px;
+  --ah-space-8: 48px;
+  --ah-space-10: 64px;
+
+  /* Radii */
+  --ah-radius-sm: 8px;
+  --ah-radius-md: 12px;
+  --ah-radius-lg: 16px;
+  --ah-radius-xl: 24px;
+  --ah-radius-pill: 999px;
+
+  /* Animation */
+  --ah-transition-fast: 0.15s ease-out;
+  --ah-transition-std: 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  
+  /* Shadows */
+  --ah-shadow-card: 0 16px 40px rgba(0, 0, 0, 0.4);
+  --ah-shadow-glow: 0 8px 28px var(--ah-gold-glow);
+}

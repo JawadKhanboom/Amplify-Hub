@@ -3,6 +3,10 @@ import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { HttpError, MAX_BODY_BYTES, validateRequest } from '../../supabase/functions/coach-chat/request-security.ts';
+import {
+  OUT_OF_SCOPE_REPLY,
+  isConversationInCoachScope,
+} from '../../supabase/functions/coach-chat/scope-policy.ts';
 import { buildCorsHeaders, parseAllowedOrigins } from '../../supabase/functions/coach-chat/cors-security.ts';
 
 const appDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -39,6 +43,26 @@ assert.equal(validateRequest({ action: 'feedback', messages: feedbackMessages },
 expectError(() => validateRequest({ action: 'feedback', messages: feedbackMessages.slice(0, 6) }, catalog), 400, 'INSUFFICIENT_FEEDBACK_TURNS');
 expectError(() => validateRequest({ action: 'feedback', messages: Array.from({ length: 81 }, (_, i) => message(i % 2 ? 'coach' : 'user')) }, catalog), 400, 'INVALID_MESSAGES');
 
+assert.equal(isConversationInCoachScope('ask', [message('user', 'How do I handle a pricing objection?')]), true);
+assert.equal(isConversationInCoachScope('ask', [message('user', 'I get nervous before sales calls')]), true);
+assert.equal(isConversationInCoachScope('ask', [message('user', 'Hello!')]), true);
+assert.equal(isConversationInCoachScope('ask', [
+  message('user', 'Help me improve my cold-call opener'),
+  message('coach', 'Keep it concise.'),
+  message('user', 'What should I say instead?'),
+]), true);
+assert.equal(isConversationInCoachScope('ask', [message('user', 'Write a Python sorting function')]), false);
+assert.equal(isConversationInCoachScope('ask', [message('user', 'What is the weather tomorrow?')]), false);
+assert.equal(isConversationInCoachScope('ask', [message('user', 'Give me a pasta recipe')]), false);
+assert.equal(isConversationInCoachScope('ask', [message('user', 'What is 2 + 2?')]), false);
+assert.equal(isConversationInCoachScope('ask', [
+  message('user', 'Help me improve my cold-call opener'),
+  message('coach', 'Keep it concise.'),
+  message('user', 'Now write a Python sorting function'),
+]), false);
+assert.equal(isConversationInCoachScope('roleplay', [message('user', 'Hi, is this a bad time?')]), true);
+assert.match(OUT_OF_SCOPE_REPLY, /only help with cold calling/);
+
 assert.equal(MAX_BODY_BYTES, 64 * 1024);
 
 const allowedOrigins = parseAllowedOrigins('http://localhost:8742/, https://amplify-hub-six.vercel.app/');
@@ -51,6 +75,11 @@ assert.match(edgeSource, /req\.method !== 'POST'/, 'Edge Function rejects non-PO
 assert.match(edgeSource, /PAYLOAD_TOO_LARGE/, 'Edge Function rejects oversized bodies');
 assert.match(edgeSource, /consumeQuota\(supabaseClient, action\)/, 'Edge Function consumes quota before Gemini');
 assert.match(edgeSource, /'Retry-After'/, 'rate-limit responses include Retry-After');
+assert.match(edgeSource, /!isConversationInCoachScope\(mode, messages\)/, 'Edge Function rejects out-of-scope Ask Coach requests');
+assert.ok(
+  edgeSource.indexOf('!isConversationInCoachScope(mode, messages)') < edgeSource.indexOf('consumeQuota(supabaseClient, action)'),
+  'Out-of-scope requests do not consume AI quota',
+);
 
 const migration = await readFile(path.join(siteRoot, 'supabase/migrations/20260719010000_coach_api_usage_limits.sql'), 'utf8');
 assert.match(migration, /pg_advisory_xact_lock/, 'quota consumption is concurrency serialized');

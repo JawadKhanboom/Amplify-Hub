@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AmplifyHub — Resource</title>
-<meta name="description" content="A practical, original SDR resource from the AmplifyHub library. Read it, copy sections, print to PDF, or download an editable file.">
+<title>Boostivity Digital — Resource</title>
+<meta name="description" content="A practical, original SDR resource from the Boostivity Digital library. Read it, copy sections, print to PDF, or download an editable file.">
 <meta name="robots" content="noindex">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -100,7 +100,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-off
 <body>
 
 <header class="top">
-  <a class="brand" href="index.html">Amplify<span>Hub</span></a>
+  <a class="brand" href="index.html">Boostivity <span>Digital</span></a>
   <nav class="top-nav">
     <a href="resources.html">Library</a>
     <a href="dashboard.html">Dashboard</a>
@@ -160,7 +160,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-off
   if(!resource){
     var raw = catalog.byId(id);
     var unpublished = !!raw; // exists in the catalog but has not passed editorial review
-    document.title = 'AmplifyHub — ' + (unpublished ? 'Resource not yet published' : 'Resource not found');
+    document.title = 'Boostivity Digital — ' + (unpublished ? 'Resource not yet published' : 'Resource not found');
     var nf = el('div','notfound');
     nf.appendChild(el('h1','', unpublished ? 'This resource is not published yet' : 'Resource not found'));
     nf.appendChild(el('p','', unpublished
@@ -172,7 +172,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-off
     return;
   }
 
-  document.title = 'AmplifyHub — ' + resource.title;
+  document.title = 'Boostivity Digital — ' + resource.title;
   var cmeta = meta[resource.category] || { label: resource.category, icon:'📄' };
 
   // Back link
@@ -185,7 +185,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-off
     banner.appendChild(el('span',null,'📝'));
     var bt = el('div');
     bt.appendChild(el('b',null,'Draft — pending editorial review. '));
-    bt.appendChild(document.createTextNode('You are viewing this in editorial preview. It is an original first draft written for AmplifyHub, has not yet been approved by a human editor, and is not visible in the public library.'));
+    bt.appendChild(document.createTextNode('You are viewing this in editorial preview. It is an original first draft written for Boostivity Digital, has not yet been approved by a human editor, and is not visible in the public library.'));
     banner.appendChild(bt);
     main.appendChild(banner);
   }
@@ -527,8 +527,8 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-off
 
   // Review line
   main.appendChild(el('div','review-line', isDraft
-    ? 'Original AmplifyHub draft · Status: pending human editorial review · Category: '+cmeta.label
-    : 'Original AmplifyHub resource · Editorially reviewed '+(resource.reviewDate||catalog.reviewDate)+' · Category: '+cmeta.label));
+    ? 'Original Boostivity Digital draft · Status: pending human editorial review · Category: '+cmeta.label
+    : 'Original Boostivity Digital resource · Editorially reviewed '+(resource.reviewDate||catalog.reviewDate)+' · Category: '+cmeta.label));
 
   // Copy: assemble plain text from the structured content.
   function plainText(){
@@ -556,7 +556,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-off
     });
     if(resource.example){ lines.push((resource.example.title)||'Worked example'); lines.push((resource.example.text)||String(resource.example)); lines.push(''); }
     if(resource.safePractice){ lines.push('Safe-practice note'); lines.push(resource.safePractice); lines.push(''); }
-    lines.push('AmplifyHub Practical Resource Library · '+(resource.reviewDate||catalog.reviewDate));
+    lines.push('Boostivity Digital Practical Resource Library · '+(resource.reviewDate||catalog.reviewDate));
     return lines.join('\n');
   }
 

@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AmplifyHub — Settings</title>
-<meta name="description" content="Your AmplifyHub settings.">
+<title>Boostivity Digital — Settings</title>
+<meta name="description" content="Your Boostivity Digital settings.">
 <meta name="robots" content="noindex">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -176,11 +176,11 @@ body.no-animations *{animation-duration:.01ms!important;transition-duration:.01m
 </head>
 <body>
 
-<div class="mh"><div class="logo">Amplify<span>Hub</span></div><button class="mb" id="mobBtn" aria-label="Open navigation menu"><span></span><span></span><span></span></button></div>
+<div class="mh"><div class="logo">Boostivity <span>Digital</span></div><button class="mb" id="mobBtn" aria-label="Open navigation menu"><span></span><span></span><span></span></button></div>
 
 <aside class="sb" id="sb">
   <button class="sb-x" id="sbX" aria-label="Close navigation menu">✕</button>
-  <div class="sb-logo">Amplify<span>Hub</span></div>
+  <div class="sb-logo">Boostivity <span>Digital</span></div>
   <nav class="sb-nav">
     <a class="si" href="dashboard.html"><span class="si-ic">🏠</span>Dashboard</a>
     <a class="si" href="journey.html"><span class="si-ic">🛤</span>Journey</a>
@@ -225,7 +225,7 @@ body.no-animations *{animation-duration:.01ms!important;transition-duration:.01m
         <div class="field"><label>Bio</label><textarea id="bioInput" class="track"></textarea></div>
         <button class="btn btn-gold" id="accountSaveBtn">Save Changes</button>
       </div>
-      <div class="card fu"><div class="t-row"><div class="t-info"><h4>Log Out</h4><p>Sign out of AmplifyHub on this device</p></div><button class="btn btn-outline" id="logoutBtn">Log Out</button></div></div>
+      <div class="card fu"><div class="t-row"><div class="t-info"><h4>Log Out</h4><p>Sign out of Boostivity Digital on this device</p></div><button class="btn btn-outline" id="logoutBtn">Log Out</button></div></div>
     </div>
 
     <!-- SECURITY -->
@@ -268,7 +268,7 @@ body.no-animations *{animation-duration:.01ms!important;transition-duration:.01m
 
     <!-- APPEARANCE -->
     <div class="panel" id="p-appearance">
-      <div class="p-h fu"><h2>Appearance</h2><p>Customize how AmplifyHub looks for you.</p></div>
+      <div class="p-h fu"><h2>Appearance</h2><p>Customize how Boostivity Digital looks for you.</p></div>
       <div class="card fu">
         <div class="card-t">Theme</div>
         <div class="theme-row">
@@ -340,7 +340,7 @@ body.no-animations *{animation-duration:.01ms!important;transition-duration:.01m
     <div class="panel" id="p-advanced">
       <div class="p-h fu"><h2>Advanced</h2><p>Data management and account controls.</p></div>
       <div class="card fu">
-        <div class="adv-item"><div class="t-info"><h4>Export Data</h4><p>Download a JSON file of all your AmplifyHub data</p></div><button class="btn btn-outline" id="exportDataBtn">Export</button></div>
+        <div class="adv-item"><div class="t-info"><h4>Export Data</h4><p>Download a JSON file of all your Boostivity Digital data</p></div><button class="btn btn-outline" id="exportDataBtn">Export</button></div>
         <div class="adv-item"><div class="t-info"><h4>Download Progress</h4><p>Print or save your journey and stats as a report</p></div><button class="btn btn-outline" id="downloadProgressBtn">Download</button></div>
         <div class="adv-item"><div class="t-info"><h4>Clear Cache</h4><p>Free up local storage space</p></div><button class="btn btn-outline" id="clearCacheBtn">Clear</button></div>
         <div class="adv-item adv-danger"><div class="t-info"><h4>Delete Account</h4><p>Permanently remove your account and data</p></div><button class="btn btn-danger" id="deleteAccountBtn">Delete</button></div>
@@ -869,7 +869,7 @@ document.getElementById('exportDataBtn').addEventListener('click', async () => {
     var url = URL.createObjectURL(blob);
     var a = document.createElement('a');
     var dateStr = new Date().toISOString().slice(0, 10);
-    a.href = url; a.download = 'amplifyhub-data-' + dateStr + '.json';
+    a.href = url; a.download = 'boostivity-digital-data-' + dateStr + '.json';
     document.body.appendChild(a); a.click(); a.remove();
     URL.revokeObjectURL(url);
     showToast('Export downloaded.');
@@ -888,7 +888,7 @@ document.getElementById('downloadProgressBtn').addEventListener('click', async (
   if (!win) { showToast('Please allow pop-ups to download your progress.'); return; }
   var rows = sessions.map(function(s) { return '<tr><td>' + (s.started_at ? new Date(s.started_at).toLocaleDateString() : '') +
     '<\/td><td>' + esc(s.mode) + '<\/td><td>' + s.turns + '<\/td><td>' + (s.score != null ? s.score : '—') + '<\/td><\/tr>'; }).join('');
-  win.document.write('<html><head><title>AmplifyHub Progress<\/title><style>body{font-family:sans-serif;padding:32px}h1{margin-bottom:4px}table{width:100%;border-collapse:collapse;margin-top:20px}td,th{border-bottom:1px solid #ddd;padding:8px;text-align:left;font-size:13px}<\/style><\/head><body><h1>AmplifyHub — Progress Report<\/h1><p>Generated ' +
+  win.document.write('<html><head><title>Boostivity Digital Progress<\/title><style>body{font-family:sans-serif;padding:32px}h1{margin-bottom:4px}table{width:100%;border-collapse:collapse;margin-top:20px}td,th{border-bottom:1px solid #ddd;padding:8px;text-align:left;font-size:13px}<\/style><\/head><body><h1>Boostivity Digital — Progress Report<\/h1><p>Generated ' +
     new Date().toLocaleString() + '<\/p><table><thead><tr><th>Date<\/th><th>Mode<\/th><th>Turns<\/th><th>Score<\/th><\/tr><\/thead><tbody>' +
     (rows || '<tr><td colspan="4">No sessions yet.<\/td><\/tr>') + '<\/tbody><\/table><\/body><\/html>');
   win.document.close();

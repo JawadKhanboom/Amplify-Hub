@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact — AmplifyHub [PROTOTYPE]</title>
+  
+  <link rel="stylesheet" href="styles/tokens.css">
+  <link rel="stylesheet" href="styles/base.css">
+  <link rel="stylesheet" href="styles/components.css">
+  <link rel="stylesheet" href="styles/sidebar.css">
+</head>
+<body class="ah-app-layout">
+  <div class="ah-prototype-banner">▲ Visual Prototype — Not the live site</div>
+  
+  <a href="#main-content" class="ah-skip">Skip to main content</a>
+
+  <!-- Mobile Header -->
+  <div class="ah-mob-header">
+    <a href="index.html" class="ah-mob-header-logo">Amplify<span>Hub</span></a>
+    <button class="ah-mob-toggle" id="mobToggle" aria-label="Open menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+
+  <!-- Sidebar -->
+  <aside class="ah-sidebar" id="sidebar">
+    <button class="ah-sidebar-close" id="sidebarClose" aria-label="Close menu">
+      <svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg>
+    </button>
+    
+    <a href="index.html" class="ah-sidebar-logo">Amplify<span>Hub</span></a>
+    
+    <nav class="ah-sidebar-nav">
+      <a href="dashboard.html" class="ah-sidebar-item">
+        <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        Dashboard
+      </a>
+      <a href="journey.html" class="ah-sidebar-item">
+        <svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+        Journey
+      </a>
+      <a href="resources.html" class="ah-sidebar-item">
+        <svg viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+        Resources
+      </a>
+      <a href="contact.html" class="ah-sidebar-item" aria-current="page">
+        <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        Contact
+      </a>
+    </nav>
+    
+    <div class="ah-sidebar-user">
+      <div class="ah-sidebar-avatar">AR</div>
+      <div class="ah-sidebar-user-info">
+        <span class="ah-sidebar-username">Alex Rivera</span>
+        <span class="ah-sidebar-role">Free Beta</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main id="main-content" class="ah-main-content">
+    <div style="margin-bottom: var(--ah-space-6);">
+      <h1>Contact Us</h1>
+      <p style="margin-top: var(--ah-space-2);">Need help or want to provide feedback?</p>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1fr; gap: var(--ah-space-6); max-width: 900px;">
+      
+      <!-- Visual Prototype Note -->
+      <div class="ah-alert ah-alert--success" style="border-color: var(--ah-gold); background: var(--ah-gold-dim);">
+        <svg style="width: 24px; height: 24px; stroke: var(--ah-gold); fill: none; stroke-width: 2;" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+        <div>
+          <h4 style="color: var(--ah-gold); margin-bottom: 4px;">Form disabled in prototype</h4>
+          <p style="font-size: 14px; color: var(--ah-text-main);">This form is a visual mock only. Zero network requests will be made.</p>
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: var(--ah-space-6);">
+        <!-- Form -->
+        <div class="ah-card">
+          <form onsubmit="event.preventDefault(); alert('[Visual Prototype] Form submitted locally.');">
+            <div class="ah-field">
+              <label for="name">Name</label>
+              <input type="text" id="name" class="ah-input" placeholder="Your name" value="Alex Rivera">
+            </div>
+            <div class="ah-field">
+              <label for="email">Email</label>
+              <input type="email" id="email" class="ah-input" placeholder="you@example.com" value="alex@example.com">
+            </div>
+            
+            <!-- Error State Demo -->
+            <div class="ah-field">
+              <label for="message">Message</label>
+              <textarea id="message" class="ah-textarea ah-input-error" placeholder="How can we help?" aria-describedby="msg-error" aria-invalid="true"></textarea>
+              <p id="msg-error" class="ah-error-message" role="alert">Please enter a message.</p>
+            </div>
+
+            <!-- Turnstile Placeholder -->
+            <div style="padding: 16px; border: 1px dashed var(--ah-border-hover); border-radius: var(--ah-radius-sm); margin-bottom: var(--ah-space-4); text-align: center; font-size: 13px; color: var(--ah-text-muted); background: rgba(0,0,0,0.2);">
+              [Visual Placeholder for Turnstile Widget]
+            </div>
+
+            <button type="submit" class="ah-btn ah-btn--primary" style="width: 100%;" disabled>Send Message</button>
+          </form>
+        </div>
+
+        <!-- Fictional Contact Info -->
+        <div>
+          <h2 style="font-size: 20px; margin-bottom: var(--ah-space-4);">Get in touch</h2>
+          
+          <div style="display: flex; flex-direction: column; gap: var(--ah-space-4); margin-bottom: var(--ah-space-6);">
+            <div style="display: flex; gap: var(--ah-space-3);">
+              <svg style="width: 24px; height: 24px; stroke: var(--ah-gold); fill: none; stroke-width: 2; flex-shrink: 0;" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+              <div>
+                <strong style="display: block; font-size: 14px; margin-bottom: 2px;">Email</strong>
+                <span style="color: var(--ah-text-muted); font-size: 14px;">hello@example-prototype.invalid</span>
+              </div>
+            </div>
+            
+            <div style="display: flex; gap: var(--ah-space-3);">
+              <svg style="width: 24px; height: 24px; stroke: var(--ah-gold); fill: none; stroke-width: 2; flex-shrink: 0;" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              <div>
+                <strong style="display: block; font-size: 14px; margin-bottom: 2px;">Location</strong>
+                <span style="color: var(--ah-text-muted); font-size: 14px;">Prototype City, Example</span>
+              </div>
+            </div>
+
+            <div style="display: flex; gap: var(--ah-space-3);">
+              <svg style="width: 24px; height: 24px; stroke: var(--ah-gold); fill: none; stroke-width: 2; flex-shrink: 0;" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              <div>
+                <strong style="display: block; font-size: 14px; margin-bottom: 2px;">Response Time</strong>
+                <span style="color: var(--ah-text-muted); font-size: 14px;">[Response time TBC by owner]</span>
+              </div>
+            </div>
+          </div>
+
+          <h3 style="font-size: 16px; margin-bottom: var(--ah-space-3);">Social</h3>
+          <div style="display: flex; flex-wrap: wrap; gap: var(--ah-space-3);">
+            <!-- Mock Buttons -->
+            <button class="ah-btn ah-btn--secondary" disabled style="padding: 8px 12px; min-height: auto; font-size: 13px;">LinkedIn</button>
+            <button class="ah-btn ah-btn--secondary" disabled style="padding: 8px 12px; min-height: auto; font-size: 13px;">X</button>
+            <button class="ah-btn ah-btn--secondary" disabled style="padding: 8px 12px; min-height: auto; font-size: 13px;">Instagram</button>
+            <button class="ah-btn ah-btn--secondary" disabled style="padding: 8px 12px; min-height: auto; font-size: 13px;">YouTube</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="js/app-shell.js"></script>
+</body>
+</html>

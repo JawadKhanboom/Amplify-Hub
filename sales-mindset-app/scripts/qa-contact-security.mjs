@@ -19,6 +19,11 @@ import {
   parseAllowedHostnames,
   validateTurnstileResult,
 } from '../../supabase/functions/submit-contact/turnstile-security.ts';
+import {
+  buildContactNotification,
+  getContactNotificationConfig,
+  sendContactNotification,
+} from '../../supabase/functions/submit-contact/contact-notification.ts';
 
 const appDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const siteRoot = path.resolve(appDir, '..');
@@ -98,6 +103,71 @@ for (const result of [
   assert.equal(validateTurnstileResult(result, allowedHostnames), false);
 }
 
+const notificationEnvironment = new Map([
+  ['RESEND_API_KEY', 're_test_key'],
+  ['CONTACT_NOTIFICATION_TO', 'Owner@Example.com, backup@example.com'],
+  ['CONTACT_NOTIFICATION_FROM', 'AmplifyHub <onboarding@resend.dev>'],
+]);
+const notificationConfig = getContactNotificationConfig(
+  name => notificationEnvironment.get(name),
+);
+assert.deepEqual(notificationConfig, {
+  apiKey: 're_test_key',
+  from: 'AmplifyHub <onboarding@resend.dev>',
+  to: ['owner@example.com', 'backup@example.com'],
+});
+assert.equal(getContactNotificationConfig(() => undefined), null);
+assert.equal(
+  getContactNotificationConfig(name => name === 'RESEND_API_KEY'
+    ? 'invalid-key'
+    : name === 'CONTACT_NOTIFICATION_TO'
+      ? 'owner@example.com'
+      : 'AmplifyHub <onboarding@resend.dev>'),
+  null,
+);
+
+const notificationMessage = {
+  id: 'message-123',
+  name: '<script>Ada</script>',
+  email: 'ada@example.com',
+  subject: 'Partnership\r\nBcc: attacker@example.com',
+  message: '<img src=x onerror=alert(1)>',
+};
+const notification = buildContactNotification(notificationMessage);
+assert.doesNotMatch(notification.subject, /[\r\n]/);
+assert.doesNotMatch(notification.html, /<script>|<img/);
+assert.match(notification.html, /&lt;script&gt;Ada&lt;\/script&gt;/);
+assert.match(notification.html, /&lt;img src=x onerror=alert\(1\)&gt;/);
+
+let resendRequest = null;
+const notificationResult = await sendContactNotification(
+  notificationConfig,
+  notificationMessage,
+  async (url, options) => {
+    resendRequest = { url, options };
+    return new Response(JSON.stringify({ id: 'email-123' }), { status: 200 });
+  },
+);
+assert.deepEqual(notificationResult, { ok: true, status: 200 });
+assert.equal(resendRequest.url, 'https://api.resend.com/emails');
+assert.equal(resendRequest.options.headers.Authorization, 'Bearer re_test_key');
+assert.equal(
+  resendRequest.options.headers['Idempotency-Key'],
+  'contact-notification/message-123',
+);
+const resendBody = JSON.parse(resendRequest.options.body);
+assert.deepEqual(resendBody.to, ['owner@example.com', 'backup@example.com']);
+assert.equal(resendBody.reply_to, 'ada@example.com');
+assert.doesNotMatch(resendBody.subject, /[\r\n]/);
+assert.deepEqual(
+  await sendContactNotification(
+    notificationConfig,
+    notificationMessage,
+    async () => new Response('provider unavailable', { status: 503 }),
+  ),
+  { ok: false, status: 503 },
+);
+
 const [edgeSource, contactHtml, migration, config, vercel] = await Promise.all([
   readFile(path.join(siteRoot, 'supabase/functions/submit-contact/index.ts'), 'utf8'),
   readFile(path.join(siteRoot, 'contact.html'), 'utf8'),
@@ -113,6 +183,8 @@ assert.match(edgeSource,/getAllowedOrigin/,'server rejects unapproved origins');
 assert.match(edgeSource,/SUPABASE_SERVICE_ROLE_KEY/,'server performs the privileged insert');
 assert.match(edgeSource,/insertError\?\.code === '42501'/,'pre-migration deployments retain a safe server-only insert bridge');
 assert.match(edgeSource,/insertError\.code === '23514'/,'database rate limits become HTTP 429');
+assert.match(edgeSource,/sendContactNotification/,'server sends a post-insert email notification');
+assert.match(edgeSource,/email notification failed/,'notification failures are logged without losing the message');
 
 assert.match(contactHtml,/data-sitekey="0x4AAAAAAD_tqmWYRjbPHntw"/,'contact page uses the approved public site key');
 assert.match(contactHtml,/data-action="contact"/,'contact token is scoped to the contact action');
@@ -259,4 +331,4 @@ try {
   await server.close();
 }
 
-console.log('Contact security QA passed: validated requests, Turnstile enforcement, server-only inserts, CSP, and browser success/failure flows.');
+console.log('Contact security QA passed: validated requests, Turnstile enforcement, server-only inserts, email notifications, CSP, and browser success/failure flows.');
