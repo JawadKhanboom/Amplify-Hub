@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Resources — AmplifyHub [PROTOTYPE]</title>
+  
+  <link rel="stylesheet" href="styles/tokens.css">
+  <link rel="stylesheet" href="styles/base.css">
+  <link rel="stylesheet" href="styles/components.css">
+  <link rel="stylesheet" href="styles/sidebar.css">
+</head>
+<body class="ah-app-layout">
+  <div class="ah-prototype-banner">▲ Visual Prototype — Not the live site</div>
+  
+  <a href="#main-content" class="ah-skip">Skip to main content</a>
+
+  <!-- Mobile Header -->
+  <div class="ah-mob-header">
+    <a href="index.html" class="ah-mob-header-logo">Amplify<span>Hub</span></a>
+    <button class="ah-mob-toggle" id="mobToggle" aria-label="Open menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+
+  <!-- Sidebar -->
+  <aside class="ah-sidebar" id="sidebar">
+    <button class="ah-sidebar-close" id="sidebarClose" aria-label="Close menu">
+      <svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg>
+    </button>
+    
+    <a href="index.html" class="ah-sidebar-logo">Amplify<span>Hub</span></a>
+    
+    <nav class="ah-sidebar-nav">
+      <a href="dashboard.html" class="ah-sidebar-item">
+        <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        Dashboard
+      </a>
+      <a href="journey.html" class="ah-sidebar-item">
+        <svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+        Journey
+      </a>
+      <a href="resources.html" class="ah-sidebar-item" aria-current="page">
+        <svg viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+        Resources
+      </a>
+      <a href="contact.html" class="ah-sidebar-item">
+        <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        Contact
+      </a>
+    </nav>
+    
+    <div class="ah-sidebar-user">
+      <div class="ah-sidebar-avatar">AR</div>
+      <div class="ah-sidebar-user-info">
+        <span class="ah-sidebar-username">Alex Rivera</span>
+        <span class="ah-sidebar-role">Free Beta</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main id="main-content" class="ah-main-content">
+    <div style="margin-bottom: var(--ah-space-6);">
+      <h1 style="margin-bottom: var(--ah-space-2);">Resource Library</h1>
+      <p>Scripts, templates, and frameworks.</p>
+    </div>
+
+    <!-- Search & Filters -->
+    <div role="search" aria-label="Resources" style="margin-bottom: var(--ah-space-5);">
+      <div class="ah-field" style="max-width: 400px; margin-bottom: var(--ah-space-4);">
+        <label for="resSearch" class="ah-sr-only">Search resources</label>
+        <div style="position: relative;">
+          <svg style="position: absolute; left: 16px; top: 14px; width: 20px; height: 20px; stroke: var(--ah-text-muted); fill: none; stroke-width: 2;" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" id="resSearch" class="ah-input" placeholder="Search 40 resources..." style="padding-left: 48px;">
+        </div>
+      </div>
+      
+      <!-- Overflow-x scroll on mobile -->
+      <div style="display: flex; gap: var(--ah-space-2); overflow-x: auto; padding-bottom: var(--ah-space-2); scrollbar-width: none;">
+        <button class="ah-badge ah-badge--gold" aria-pressed="true" style="cursor: pointer; border: 1px solid var(--ah-gold);">All</button>
+        <button class="ah-badge" aria-pressed="false" style="cursor: pointer; background: rgba(255,255,255,0.05); border: 1px solid var(--ah-border-subtle); color: var(--ah-text-main);">Scripts</button>
+        <button class="ah-badge" aria-pressed="false" style="cursor: pointer; background: rgba(255,255,255,0.05); border: 1px solid var(--ah-border-subtle); color: var(--ah-text-main);">Templates</button>
+        <button class="ah-badge" aria-pressed="false" style="cursor: pointer; background: rgba(255,255,255,0.05); border: 1px solid var(--ah-border-subtle); color: var(--ah-text-main);">Cheat Sheets</button>
+      </div>
+    </div>
+
+    <div aria-live="polite" class="ah-sr-only">Showing 2 resources</div>
+
+    <!-- Grid -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: var(--ah-space-4);">
+      
+      <!-- Resource Card -->
+      <div class="ah-card" style="display: flex; flex-direction: column;">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: var(--ah-space-3);">
+          <span class="ah-badge" style="background: rgba(100, 181, 246, 0.1); color: var(--ah-status-info); border: 1px solid rgba(100, 181, 246, 0.2);">Script</span>
+          <button style="background: none; border: none; cursor: pointer; color: var(--ah-gold); width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; margin: -10px -10px 0 0;" aria-label="Remove bookmark">
+            <svg style="width: 20px; height: 20px; fill: currentColor;" viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+          </button>
+        </div>
+        <h3 style="font-size: 18px; margin-bottom: var(--ah-space-2);">Permission-Based Opener</h3>
+        <p style="font-size: 14px; margin-bottom: var(--ah-space-4); flex: 1;">The standard 30-second permission opener script with variations for different tones.</p>
+        <button class="ah-btn ah-btn--secondary" style="width: 100%;">View Resource</button>
+      </div>
+
+      <!-- Resource Card 2 -->
+      <div class="ah-card" style="display: flex; flex-direction: column;">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: var(--ah-space-3);">
+          <span class="ah-badge" style="background: rgba(255, 167, 38, 0.1); color: var(--ah-status-warning); border: 1px solid rgba(255, 167, 38, 0.2);">Template</span>
+          <button style="background: none; border: none; cursor: pointer; color: var(--ah-text-muted); width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; margin: -10px -10px 0 0;" aria-label="Add bookmark">
+            <svg style="width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2;" viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+          </button>
+        </div>
+        <h3 style="font-size: 18px; margin-bottom: var(--ah-space-2);">Pre-Call Research Matrix</h3>
+        <p style="font-size: 14px; margin-bottom: var(--ah-space-4); flex: 1;">A 3x3 grid for researching a prospect in under 3 minutes.</p>
+        <button class="ah-btn ah-btn--secondary" style="width: 100%;">View Resource</button>
+      </div>
+
+    </div>
+
+  </main>
+
+  <script src="js/app-shell.js"></script>
+</body>
+</html>

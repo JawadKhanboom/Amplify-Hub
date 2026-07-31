@@ -13,6 +13,10 @@ import {
   parseAllowedHostnames,
   validateTurnstileResult,
 } from './turnstile-security.ts'
+import {
+  getContactNotificationConfig,
+  sendContactNotification,
+} from './contact-notification.ts'
 
 const TURNSTILE_VERIFY_URL =
   'https://challenges.cloudflare.com/turnstile/v0/siteverify'
@@ -159,7 +163,9 @@ Deno.serve(async (req: Request) => {
         persistSession: false,
       },
     })
+    const contactId = crypto.randomUUID()
     const contactRow = {
+      id: contactId,
       name: contact.name,
       email: contact.email,
       subject: contact.subject,
@@ -212,6 +218,35 @@ Deno.serve(async (req: Request) => {
         },
         503,
       )
+    }
+
+    const notificationConfig = getContactNotificationConfig(
+      (name) => Deno.env.get(name),
+    )
+    if (!notificationConfig) {
+      console.warn(
+        'submit-contact: email notification secrets are not configured',
+      )
+    } else {
+      try {
+        const notificationResult = await sendContactNotification(
+          notificationConfig,
+          contactRow,
+        )
+        if (!notificationResult.ok) {
+          console.error(
+            'submit-contact: email notification failed',
+            notificationResult.status,
+          )
+        }
+      } catch (notificationError: unknown) {
+        console.error(
+          'submit-contact: email notification failed',
+          notificationError instanceof Error
+            ? notificationError.name
+            : 'unknown',
+        )
+      }
     }
 
     return respond({ ok: true }, 201)

@@ -2,6 +2,11 @@ import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2"
 import { HttpError, MAX_BODY_BYTES, validateRequest } from "./request-security.ts"
 import { buildCorsHeaders, parseAllowedOrigins } from "./cors-security.ts"
+import {
+  COACH_SCOPE_POLICY,
+  OUT_OF_SCOPE_REPLY,
+  isConversationInCoachScope,
+} from "./scope-policy.ts"
 
 // ALLOWED_ORIGINS is a comma-separated exact allowlist. The legacy singular
 // secret remains a fallback so existing deployments fail closed during rollout.
@@ -213,13 +218,14 @@ function buildSystemInstruction(mode: string, prefs: any): string {
     if (prefs.feedbackDetail && FEEDBACK_MODIFIERS[prefs.feedbackDetail]) parts.push(FEEDBACK_MODIFIERS[prefs.feedbackDetail])
     if (prefs.language && prefs.language !== 'english') parts.push(`Respond in ${prefs.language}.`)
     parts.push('Keep your responses short — 1 to 3 sentences maximum, like a real person on a phone call. Never write long paragraphs.Stay fully in character as this persona. Only break character to give brief coaching feedback if the rep explicitly asks for it.')
+    parts.push(COACH_SCOPE_POLICY)
     return parts.join(' ')
   }
 
   const base = SYSTEM_PROMPTS[mode] || DEFAULT_PROMPT
-  if (!prefs) return base
+  if (!prefs) return `${base} ${COACH_SCOPE_POLICY}`
 
-  const parts = [base]
+  const parts = [base, COACH_SCOPE_POLICY]
   if (prefs.difficulty && DIFFICULTY_MODIFIERS[prefs.difficulty]) parts.push(DIFFICULTY_MODIFIERS[prefs.difficulty])
   if (prefs.style && STYLE_MODIFIERS[prefs.style]) parts.push(STYLE_MODIFIERS[prefs.style])
   if (prefs.feedbackDetail && FEEDBACK_MODIFIERS[prefs.feedbackDetail]) parts.push(FEEDBACK_MODIFIERS[prefs.feedbackDetail])
@@ -351,6 +357,11 @@ serve(async (req: Request) => {
       personas: Object.keys(PERSONAS),
       scenarios: Object.keys(SCENARIOS),
     })
+
+    if (action === 'chat' && !isConversationInCoachScope(mode, messages)) {
+      return respond({ html: OUT_OF_SCOPE_REPLY })
+    }
+
     const apiKey = Deno.env.get('GEMINI_API_KEY')
 
     // Minimal debug trace — mode/action/count only, never message content.

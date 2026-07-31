@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AmplifyHub [PROTOTYPE] — Master Cold Calling</title>
+  
+  <link rel="stylesheet" href="styles/tokens.css">
+  <link rel="stylesheet" href="styles/base.css">
+  <link rel="stylesheet" href="styles/components.css">
+  <link rel="stylesheet" href="styles/landing.css">
+</head>
+<body>
+  <div class="ah-prototype-banner">▲ Visual Prototype — Not the live site</div>
+  
+  <a href="#main-content" class="ah-skip">Skip to main content</a>
+
+  <header class="landing-header">
+    <div class="landing-container landing-nav-row">
+      <a href="index.html" class="landing-logo">
+        <div class="landing-logo-icon">
+          <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        </div>
+        <div class="landing-logo-text">Amplify<span>Hub</span></div>
+      </a>
+      
+      <nav class="landing-links">
+        <a href="#features">Features</a>
+        <a href="#how-it-works">How it works</a>
+        <a href="#faq">FAQ</a>
+      </nav>
+
+      <div class="landing-actions">
+        <a href="dashboard.html" class="landing-signin">Sign In</a>
+        <a href="dashboard.html" class="ah-btn ah-btn--primary">Start Free</a>
+        <button class="landing-mob-toggle" id="landingMobToggle" aria-label="Menu" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <nav id="landingMobMenu" class="landing-mob-menu" aria-label="Mobile Navigation">
+    <a href="#features">Features</a>
+    <a href="#how-it-works">How it works</a>
+    <a href="#faq">FAQ</a>
+    <a href="dashboard.html" style="color: var(--ah-gold);">Sign In</a>
+  </nav>
+
+  <main id="main-content">
+    <section class="hero-section">
+      <div class="hero-bg-glow hero-glow-1"></div>
+      <div class="hero-bg-glow hero-glow-2"></div>
+      
+      <div class="landing-container hero-grid">
+        <div class="hero-content">
+          <div class="hero-badge rv">
+            <span class="hero-badge-dot"></span>
+            <span class="hero-badge-text">Open Beta Available Now</span>
+          </div>
+          <h1 class="hero-title rv">Let's Master <em>Cold Calling</em>.</h1>
+          <p class="hero-subtitle rv">Practice with realistic AI roleplays. Get instant, honest feedback. Build muscle memory before you ever pick up the real phone.</p>
+          <div class="hero-actions rv">
+            <a href="dashboard.html" class="ah-btn ah-btn--primary" style="padding: 16px 28px; font-size: 16px;">Start Practicing Free</a>
+          </div>
+        </div>
+
+        <div class="demo-widget rv" aria-label="Guided practice demo">
+          <div class="demo-header">
+            <div class="demo-mac-dots"><span></span><span></span><span></span></div>
+            <div style="font-family: var(--ah-font-mono); color: var(--ah-gold); font-size: 12px; font-weight: 700;">LIVE DEMO</div>
+          </div>
+          <div class="demo-chat">
+            <div class="demo-msg demo-msg--user">
+              <div class="demo-avatar demo-avatar--user">YOU</div>
+              <div class="demo-bubble">Hi Jordan, this is Sam with Northlight. Can I borrow 30 seconds to tell you why I called?</div>
+            </div>
+            <div class="demo-msg demo-msg--ai">
+              <div class="demo-avatar demo-avatar--ai">AI</div>
+              <div class="demo-bubble">I'm literally walking into a meeting right now. What is this regarding?</div>
+            </div>
+          </div>
+          <p style="text-align: center; font-size: 11px; color: var(--ah-text-muted); margin-top: var(--ah-space-4);">*Guided example. AI Coach requires a free account.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="stats-section" id="features">
+      <div class="landing-container">
+        <div class="stats-grid">
+          <div class="stat-item rv">
+            <h3>10</h3>
+            <p>Guided Modules</p>
+          </div>
+          <div class="stat-item rv">
+            <h3>40</h3>
+            <p>Structured Lessons</p>
+          </div>
+          <div class="stat-item rv">
+            <h3>40</h3>
+            <p>Downloadable Resources</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="marquee-section rv">
+      <div class="marquee-content">
+        <span class="ah-badge ah-badge--gold">10 Modules</span>
+        <span class="ah-badge">40 Lessons</span>
+        <span class="ah-badge ah-badge--green">Zero Fluff</span>
+        <span class="ah-badge ah-badge--gold">10 Modules</span>
+        <span class="ah-badge">40 Lessons</span>
+        <span class="ah-badge ah-badge--green">Zero Fluff</span>
+        <span class="ah-badge ah-badge--gold">10 Modules</span>
+        <span class="ah-badge">40 Lessons</span>
+        <span class="ah-badge ah-badge--green">Zero Fluff</span>
+        <span class="ah-badge ah-badge--gold">10 Modules</span>
+        <span class="ah-badge">40 Lessons</span>
+        <span class="ah-badge ah-badge--green">Zero Fluff</span>
+      </div>
+    </section>
+
+    <section class="hiw-section">
+      <div class="landing-container">
+        <div class="section-header rv">
+          <span class="section-eyebrow">How it works</span>
+          <h2>The complete playbook</h2>
+        </div>
+        <div class="hiw-grid">
+          <div class="hiw-step rv">
+            <div class="hiw-step-num">1</div>
+            <h3 style="margin-bottom:8px">Learn</h3>
+            <p style="color:var(--ah-text-muted);font-size:14px">Master the fundamentals of cold outreach, objection handling, and tone.</p>
+          </div>
+          <div class="hiw-step rv">
+            <div class="hiw-step-num">2</div>
+            <h3 style="margin-bottom:8px">Practice</h3>
+            <p style="color:var(--ah-text-muted);font-size:14px">Use interactive flashcards and frameworks to build muscle memory.</p>
+          </div>
+          <div class="hiw-step rv">
+            <div class="hiw-step-num">3</div>
+            <h3 style="margin-bottom:8px">Execute</h3>
+            <p style="color:var(--ah-text-muted);font-size:14px">Download scripts and templates to book your first meeting.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="ba-section">
+      <div class="landing-container">
+        <div class="section-header rv">
+          <span class="section-eyebrow">Transformation</span>
+          <h2>Ditch the script anxiety</h2>
+        </div>
+        <div class="ba-grid">
+          <div class="ba-card before rv">
+            <h3 style="color:#ff6b6b;margin-bottom:16px">Before</h3>
+            <ul class="pricing-list" style="margin:0">
+              <li style="color:#ff6b6b"><svg viewBox="0 0 24 24" style="stroke:#ff6b6b;fill:none;stroke-width:2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg> Fear of the phone</li>
+              <li style="color:#ff6b6b"><svg viewBox="0 0 24 24" style="stroke:#ff6b6b;fill:none;stroke-width:2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg> Winging objections</li>
+              <li style="color:#ff6b6b"><svg viewBox="0 0 24 24" style="stroke:#ff6b6b;fill:none;stroke-width:2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg> Burnout and low confidence</li>
+            </ul>
+          </div>
+          <div class="ba-card after rv">
+            <h3 style="color:var(--ah-status-success);margin-bottom:16px">After</h3>
+            <ul class="pricing-list" style="margin:0">
+              <li><svg viewBox="0 0 24 24" style="fill:none;stroke:currentColor;stroke-width:2"><polyline points="20 6 9 17 4 12"/></svg> Systemized approach</li>
+              <li><svg viewBox="0 0 24 24" style="fill:none;stroke:currentColor;stroke-width:2"><polyline points="20 6 9 17 4 12"/></svg> Handling objections clearly</li>
+              <li><svg viewBox="0 0 24 24" style="fill:none;stroke:currentColor;stroke-width:2"><polyline points="20 6 9 17 4 12"/></svg> Following a consistent outreach process</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="pricing-section">
+      <div class="landing-container">
+        <div class="section-header rv">
+          <span class="section-eyebrow">Pricing</span>
+          <h2>Accessible for everyone</h2>
+        </div>
+        <div class="pricing-card rv">
+          <h3>Free Beta</h3>
+          <div class="pricing-price">Free<span> during beta</span></div>
+          <p style="color:var(--ah-text-muted)">Help us shape the product.</p>
+          <ul class="pricing-list">
+            <li><svg viewBox="0 0 24 24" style="fill:none;stroke-width:2;stroke:currentColor"><polyline points="20 6 9 17 4 12"/></svg> Full access to 10 modules</li>
+            <li><svg viewBox="0 0 24 24" style="fill:none;stroke-width:2;stroke:currentColor"><polyline points="20 6 9 17 4 12"/></svg> 40+ structured lessons</li>
+            <li><svg viewBox="0 0 24 24" style="fill:none;stroke-width:2;stroke:currentColor"><polyline points="20 6 9 17 4 12"/></svg> Resource library access</li>
+            <li><svg viewBox="0 0 24 24" style="fill:none;stroke-width:2;stroke:currentColor"><polyline points="20 6 9 17 4 12"/></svg> Progress tracking</li>
+          </ul>
+          <a href="dashboard.html" class="ah-btn ah-btn--primary" style="width:100%;margin-top:24px">Join Free Beta</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="cta-section">
+      <div class="landing-container rv">
+        <h2 style="font-size:36px;margin-bottom:24px">Ready to start dialing?</h2>
+        <a href="dashboard.html" class="ah-btn ah-btn--primary">Get Started Now</a>
+      </div>
+    </section>
+
+    <section class="faq-section" id="faq">
+      <div class="landing-container">
+        <div class="section-header rv">
+          <span class="section-eyebrow">FAQ</span>
+          <h2>Questions before your first call</h2>
+        </div>
+        
+        <div class="faq-list">
+          <div class="faq-item rv">
+            <button class="faq-button" aria-expanded="false" aria-controls="faq1">
+              Is this for beginners? <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-content" id="faq1">
+              <div class="faq-content-inner">
+                <p>Yes — AmplifyHub was built specifically for students, career switchers, and beginner SDRs with zero cold-calling experience.</p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="faq-item rv">
+            <button class="faq-button" aria-expanded="false" aria-controls="faq2">
+              Is it really free? <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-content" id="faq2">
+              <div class="faq-content-inner">
+                <p>Yes, 100% free during our public beta. We do not ask for a credit card.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="landing-footer">
+    <div class="landing-container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="landing-logo-text">Amplify<span>Hub</span></div>
+          <p>Helping the next generation of SDRs master cold calling through guided learning.</p>
+        </div>
+        <div class="footer-col">
+          <h4>Product</h4>
+          <ul>
+            <li><a href="journey.html">Journey</a></li>
+            <li><a href="dashboard.html">Dashboard</a></li>
+            <li><a href="resources.html">Resources</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Company</h4>
+          <ul>
+            <li><a href="contact.html">Contact</a></li>
+            <li><a href="#terms">Terms</a></li>
+            <li><a href="#privacy">Privacy</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 AmplifyHub Prototype. All rights reserved.</span>
+        <span class="ah-badge ah-badge--gold">Free beta — building in public</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/landing.js"></script>
+</body>
+</html>
